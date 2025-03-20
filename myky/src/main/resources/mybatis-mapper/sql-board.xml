@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="teamgyodong.myky.mapper.BoardMapper">
+<mapper namespace="teamgyodong.myky.board.mapper.BoardMapper">
 	
 	
-	<select id="getFreeBoard" parameterType="hashmap" resultType="teamgyodong.myky.model.member">
+	<select id="getFreeBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 			
-			select * from Free_board
+			select * from FREE_BOARD
 			
 	</select>
 	

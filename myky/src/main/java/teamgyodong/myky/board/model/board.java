@@ -1,4 +1,4 @@
-package teamgyodong.myky.model;
+package teamgyodong.myky.board.model;
 
 import lombok.Data;
 

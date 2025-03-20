@@ -1,4 +1,4 @@
-package teamgyodong.myky.controller;
+package teamgyodong.myky.board.controller;
 
 import java.util.HashMap;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import teamgyodong.myky.dao.BoardService;
-import teamgyodong.myky.mapper.BoardMapper;
+import teamgyodong.myky.board.dao.BoardService;
+import teamgyodong.myky.board.mapper.BoardMapper;
 
 @Controller
 public class BoardControlloer {

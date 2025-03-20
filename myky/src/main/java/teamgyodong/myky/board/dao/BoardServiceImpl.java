@@ -1,4 +1,4 @@
-package teamgyodong.myky.dao;
+package teamgyodong.myky.board.dao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import teamgyodong.myky.mapper.BoardMapper;
-import teamgyodong.myky.model.board;
+import teamgyodong.myky.board.mapper.BoardMapper;
+import teamgyodong.myky.board.model.board;
 
 @Service
 public class BoardServiceImpl implements BoardService {

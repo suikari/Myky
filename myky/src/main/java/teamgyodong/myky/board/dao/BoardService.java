@@ -1,4 +1,4 @@
-package teamgyodong.myky.dao;
+package teamgyodong.myky.board.dao;
 
 import java.util.HashMap;
 
