@@ -1,4 +1,4 @@
-package teamgyodong.myky.member.dao;
+package teamgyodong.myky.manager.dao;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 @Service
-public class MemberServiceImpl implements MemberService {
+public class ManagerServiceImpl implements ManagerService {
 
 
 	

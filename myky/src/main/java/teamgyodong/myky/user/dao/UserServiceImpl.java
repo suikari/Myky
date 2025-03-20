@@ -1,4 +1,4 @@
-package teamgyodong.myky.donation.dao;
+package teamgyodong.myky.user.dao;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 @Service
-public class DonationServiceImpl implements DonationService {
+public class UserServiceImpl implements UserService {
 
 
 	

@@ -1,4 +1,4 @@
-package teamgyodong.myky.member.model;
+package teamgyodong.myky.user.model;
 
 import java.util.List;
 

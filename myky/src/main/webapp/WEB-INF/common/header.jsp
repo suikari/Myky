@@ -32,7 +32,7 @@
                 </div>
             </nav>
         
-            <div class="login">로그인</div>
+            <div @click="fnLogin" class="login">로그인</div>
         </header>
 
     </div>
@@ -73,6 +73,9 @@
                     };
                 },
                 methods: {
+                	fnLogin : function () {
+                		window.location.href = "/user/login.do";
+                	}
                 },
                 mounted() {
                 }
