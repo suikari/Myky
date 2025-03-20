@@ -181,8 +181,22 @@
                     			console.log(data);
                     		}
                     	});
+                    },
+                    fntest : function() {
+                    	var self = this;
+                    	var nparmap = {
+                    	};
+                    	$.ajax({
+                    		url: "board/list.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log(data);
+                    		}
+                    	});
+                    	
                     }
-                    
                     
                 },
                 mounted() {
@@ -217,7 +231,7 @@
                     	//console.log(self.code);
 						
                 	}
-                	
+                	self.fntest();
                 }
             });
 
