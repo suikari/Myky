@@ -1,0 +1,1 @@
+package teamgyodong.myky.partner;

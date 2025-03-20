@@ -187,7 +187,7 @@
                     	var nparmap = {
                     	};
                     	$.ajax({
-                    		url: "board/list.dox",
+                    		url: "partner/list.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
