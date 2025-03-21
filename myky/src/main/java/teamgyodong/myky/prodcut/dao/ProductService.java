@@ -1,5 +1,7 @@
 package teamgyodong.myky.prodcut.dao;
 
+import java.util.HashMap;
+
 public interface ProductService {
-//..... 테스트 2번째
+  HashMap<String, Object> getProductList(HashMap<String, Object> map);
 }
