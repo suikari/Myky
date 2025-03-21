@@ -23,8 +23,9 @@ public class PartnerControlloer {
 	
 	@RequestMapping("/partner/list.do") 
     public String map(Model model) throws Exception{
+		
 
-        return "/partner"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
+        return "partner/partner"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
     }
 	
 	

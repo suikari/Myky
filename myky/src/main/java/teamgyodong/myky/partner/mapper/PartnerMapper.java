@@ -11,4 +11,10 @@ import teamgyodong.myky.partner.model.partnerdetail;
 public interface PartnerMapper {
 	List<partnerdetail> getPartnerDetailList(HashMap<String, Object> map);
 
+	List<partnerdetail> getPartnerGuList(HashMap<String, Object> map);
+
+	List<partnerdetail> getPartnerDongList(HashMap<String, Object> map);
+
+	List<partnerdetail> getPartnerSiList(HashMap<String, Object> map);
+
 }
