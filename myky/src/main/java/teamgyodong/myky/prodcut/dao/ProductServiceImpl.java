@@ -24,4 +24,16 @@ public class ProductServiceImpl implements ProductService {
 
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> getProduct(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Product info = productMapper.selectProduct(map);
+		List<Product> imgList = productMapper.selectProductImg(map);
+		resultMap.put("result", "success");
+		resultMap.put("info", info);
+		resultMap.put("imgList", imgList);
+
+		return resultMap;
+	}
 }

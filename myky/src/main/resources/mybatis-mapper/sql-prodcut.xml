@@ -2,9 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.test1.mapper.ShopMapper">
+<mapper namespace="teamgyodong.myky.prodcut.mapper.ProductMapper">
 
-	
+	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.prodcut.model.Product">
+		SELECT * 
+		FROM PRODUCT P
+		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'	
+	</select>
+	 
+	 <select id="selectProduct" parameterType="hashmap" resultType="teamgyodong.myky.prodcut.model.Product">
+	 	SELECT * 
+		FROM PRODUCT P 
+		INNER JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID 
+		WHERE P.PRODUCT_ID = #{productId}
+	 </select>
+	 
+	 <select id="selectProductImg" parameterType="hashmap" resultType="teamgyodong.myky.prodcut.model.Product">
+	 	SELECT * 
+		FROM PRODUCT_FILE
+		WHERE PRODUCT_ID = #{productId}
+	 </select>
 </mapper>
 
 
