@@ -22,10 +22,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpSession;
+import teamgyodong.myky.user.dao.UserService;
 
 
 @Controller
 public class UserController {
+	
+	@Autowired
+	UserService userService;
 
 
 	@Autowired
@@ -47,9 +51,16 @@ public class UserController {
         return "user/login"; 
     }
 	
+	//유저 로그인 작동
+	@RequestMapping(value = "/user/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String login(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.userLogin(map); //memberLogin은 재사용은 안할꺼임
+		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+	}
     
-    
-	
+	// 카카오 로그인 작동
 	@RequestMapping(value = "user/kakao.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String pwd(Model model, @RequestParam HashMap<String, Object> map , HttpSession session) throws Exception {
@@ -99,5 +110,14 @@ public class UserController {
 	        return null; // 예외 발생 시 null 반환
 	    }
 	}
+	
+//	  //오류해결 필요 '//'확인 필요	
+//    @RequestMapping("/user/resetPwd.do") 
+//    public String searchPwd(Model model) throws Exception{
+//		
+//        return "/user/pwd-reset"; 
+//    }
+	
+
 
 }
