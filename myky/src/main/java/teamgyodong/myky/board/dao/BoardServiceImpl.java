@@ -16,13 +16,14 @@ public class BoardServiceImpl implements BoardService {
 	BoardMapper boardMapper;
 	
 	@Override
-	public HashMap<String, Object> getFreeBoard(HashMap<String, Object> map) {
+	//게시글 목록 출력
+	public HashMap<String, Object> getBoardList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		String result = "";
 		
 		try {
-			List<board> board = boardMapper.getFreeBoard(map);
+			List<board> board = boardMapper.selectBoardList(map);
 			
 			//result = board != null ? "success" : "fail";
 			//System.out.print(result);
@@ -35,9 +36,6 @@ public class BoardServiceImpl implements BoardService {
 			resultMap.put("result", "fail");			
 
 		}
-				
-
-
 
 		return resultMap;
 	}

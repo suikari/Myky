@@ -5,7 +5,7 @@
 <mapper namespace="teamgyodong.myky.board.mapper.BoardMapper">
 	
 	
-	<select id="getFreeBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
+	<select id="selectBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 			
 			select * from FREE_BOARD
 			

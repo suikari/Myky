@@ -9,6 +9,7 @@ import teamgyodong.myky.board.model.board;
 
 @Mapper
 public interface BoardMapper {
-	List<board> getFreeBoard(HashMap<String, Object> map);
+	
+	List<board> selectBoardList(HashMap<String, Object> map);
 
 }

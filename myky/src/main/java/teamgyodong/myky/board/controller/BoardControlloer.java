@@ -16,19 +16,25 @@ import teamgyodong.myky.board.dao.BoardService;
 import teamgyodong.myky.board.mapper.BoardMapper;
 
 @Controller
-public class BoardControlloer {//..
+public class BoardControlloer {
 
 	@Autowired
 	BoardService boardService;
 	
+	@RequestMapping("/board/list.do") 
+    public String login(Model model) throws Exception{
+
+        return "board/board-list";
+    }
+	
 	@RequestMapping(value = "board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String boardupdate(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String boardList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		//System.out.print(map);
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = boardService.getFreeBoard(map);
+		resultMap = boardService.getBoardList(map);
 		
 		return new Gson().toJson(resultMap);
 	}
