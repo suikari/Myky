@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public interface BoardService {
 	
-	HashMap<String, Object> getFreeBoard(HashMap<String, Object> map);
+	HashMap<String, Object> getBoardList(HashMap<String, Object> map);
 
 
 }
