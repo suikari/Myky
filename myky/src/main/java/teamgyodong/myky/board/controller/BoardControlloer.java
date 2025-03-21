@@ -16,7 +16,7 @@ import teamgyodong.myky.board.dao.BoardService;
 import teamgyodong.myky.board.mapper.BoardMapper;
 
 @Controller
-public class BoardControlloer {
+public class BoardControlloer {//..
 
 	@Autowired
 	BoardService boardService;
