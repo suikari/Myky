@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-public class ProdcutController { //.........
+public class ProdcutController { //????
 
 
 	@Autowired
