@@ -11,7 +11,18 @@
 			
 	</select>
 	
-		
+	<select id="selectBoardCnt" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
+		SELECT COUNT(*) AS CNT
+		FROM FREE_BOARD
+	</select>
+	
+	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
+		SELECT *
+		FROM FREE_BOARD
+		WHERE BOARD_ID = #{boardId}
+	</select>
+
+
 </mapper>
 
 

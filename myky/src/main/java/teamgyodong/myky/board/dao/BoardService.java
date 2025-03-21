@@ -6,5 +6,7 @@ public interface BoardService {
 	
 	HashMap<String, Object> getBoardList(HashMap<String, Object> map);
 
+	HashMap<String, Object> boardView(HashMap<String, Object> map);
+
 
 }
