@@ -21,6 +21,13 @@ public class PartnerControlloer {
 	@Autowired
 	PartnerService partnerService;
 	
+	@RequestMapping("/partner/list.do") 
+    public String map(Model model) throws Exception{
+
+        return "/partner"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
+    }
+	
+	
 	@RequestMapping(value = "partner/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
