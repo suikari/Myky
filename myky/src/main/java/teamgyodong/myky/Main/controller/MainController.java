@@ -61,8 +61,8 @@ public class MainController {
             System.out.println(visitData);
 
     		resultMap = mainService.InsertVisitLog(visitData);
-    		
             System.out.println(resultMap);
+
 
 
         } else {
