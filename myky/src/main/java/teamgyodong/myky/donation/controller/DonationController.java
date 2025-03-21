@@ -3,6 +3,8 @@ package teamgyodong.myky.donation.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,9 +24,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpSession;
+import teamgyodong.myky.donation.dao.DonationService;
 
 
 @Controller
 public class DonationController {
 
+	@Autowired
+	DonationService donationService;
+	
+	@RequestMapping("/center.do") 
+	public String center(Model model) throws Exception{
+		
+		return "/donation/center";
+	}
+	
+	@RequestMapping("/donation.do") 
+	public String donation(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		request.setAttribute("map", map);
+		return "/donation/donation";
+	}
+	
+	// centerList
+	@RequestMapping(value = "/center/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = donationService.getCenterList(map);
+		return new Gson().toJson(resultMap);
+	}
 }
