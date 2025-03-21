@@ -25,7 +25,7 @@ public class ProdcutController {
 	//상품 리스트 가져오기
 	@RequestMapping("/product/list.do") 
     public String result(Model model) throws Exception{
-        return "/product/product-list"; 
+        return "product/product-list"; 
     }
 
 	
@@ -40,6 +40,16 @@ public class ProdcutController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap = productService.getProductList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//상품 가져오기
+	@RequestMapping(value = "/product/get.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String get(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.getProduct(map);
 		return new Gson().toJson(resultMap);
 	}
 }
