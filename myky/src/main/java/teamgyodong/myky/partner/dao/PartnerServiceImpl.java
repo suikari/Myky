@@ -23,13 +23,18 @@ public class PartnerServiceImpl implements PartnerService {
 		String result = "";
 		
 		try {
-			List<partnerdetail> board = partnerMapper.getPartnerDetailList(map);
+			List<partnerdetail> gulist = partnerMapper.getPartnerGuList(map);
+			List<partnerdetail> donglist = partnerMapper.getPartnerDongList(map);
+			List<partnerdetail> silist = partnerMapper.getPartnerSiList(map);
 			
 			//result = board != null ? "success" : "fail";
 			//System.out.print(result);
 			 
+			resultMap.put("gulist", gulist);
+			resultMap.put("donglist", donglist);
+			resultMap.put("silist", silist);
 			resultMap.put("result", "success");			
-			resultMap.put("board", board);
+			
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
