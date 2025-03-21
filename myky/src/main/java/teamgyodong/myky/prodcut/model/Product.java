@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 
-public class product {
+public class Product {
 
 }
