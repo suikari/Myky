@@ -11,7 +11,7 @@
 </head>
 <body class="body">
 
-    <footer class="footer">
+    <div id="footer" class="footer">
         <div class="nav">
 	        <a class="nav-link" href="#">회사소개</a>
 	        <a class="nav-link" href="#">이용약관</a>
@@ -35,7 +35,7 @@
         <div class="image-container">
             <img src="image.png" alt="결제 서비스 이미지">
         </div>
-    </footer>
+    </div>
 
     <script>
         const footer = Vue.createApp({
@@ -52,6 +52,7 @@
                 };
             }
         });
+        
         footer.mount('#footer');
     </script>
 </body>
