@@ -1,9 +1,15 @@
 package teamgyodong.myky.prodcut.mapper;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
+import teamgyodong.myky.prodcut.model.Product;
 
+@Mapper
 public interface ProductMapper {
+
+	List<Product> selectProductList(HashMap<String, Object> map);
 
 }
