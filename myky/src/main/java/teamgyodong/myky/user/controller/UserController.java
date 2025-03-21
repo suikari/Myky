@@ -1,4 +1,4 @@
-package teamgyodong.myky.member.controller;
+package teamgyodong.myky.user.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-public class MemberController {
+public class UserController {
 
 
 	@Autowired
@@ -39,18 +39,18 @@ public class MemberController {
     private String redirect_uri;
 	
 	
-    @RequestMapping("/member/login.do") 
+    @RequestMapping("/user/login.do") 
     public String login(Model model) throws Exception{
 		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+client_id+"&redirect_uri="+redirect_uri;
         model.addAttribute("location", location);
 
-        return "member/login"; 
+        return "user/login"; 
     }
 	
     
     
 	
-	@RequestMapping(value = "member/kakao.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "user/kakao.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String pwd(Model model, @RequestParam HashMap<String, Object> map , HttpSession session) throws Exception {
 			

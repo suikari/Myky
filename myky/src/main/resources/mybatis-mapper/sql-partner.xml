@@ -6,7 +6,7 @@
 
 	<select id="getPartnerDetailList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 			
-			select * from partner_deatil
+			select * from partner_detail
 			
 	</select>
 	

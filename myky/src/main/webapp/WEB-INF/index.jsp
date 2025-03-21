@@ -173,7 +173,7 @@
                     		code : self.code
                     	};
                     	$.ajax({
-                    		url: "member/kakao.dox",
+                    		url: "user/kakao.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
@@ -226,7 +226,7 @@
                 	const queryParams = new URLSearchParams(window.location.search);
                 	self.code = queryParams.get('code') || ''; 
                 	
-                	if ( self.code != '') { 
+                	if ( self.code != "" ) { 
                 		self.kakaotest();
                     	//console.log(self.code);
 						
