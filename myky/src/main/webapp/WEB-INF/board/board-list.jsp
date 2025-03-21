@@ -9,7 +9,6 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	<script src="js/swiper8.js"></script>
-    <script src="/js/page-Change.js"></script>
 	
     <link rel="stylesheet" href="css/main.css">
     <style>
@@ -38,6 +37,21 @@
 <body>
     <jsp:include page="../common/header.jsp"/>
     <div id="app" class="container">
+            <!-- <div>
+                <select v-model="searchOption">
+                    <option value="all"> ::전체:: </option>
+                    <option value="title"> 제목 </option>
+                    <option value="userId"> 작성자 </option>
+                </select>
+                    <input v-model="keyword" @keyup.enter="fnListView" placeholder="검색어">
+                    <button @click="fnListView">검색</button>
+            </div>
+                <select @change="fnListView" v-model="pageSize" >
+                    <option value="5">5개씩</option>
+                    <option value="10">10개씩</option>
+                    <option value="15">15개씩</option>
+                    <option value="20">20개씩</option>
+                </select> -->
             <table>
                 <tr>
                     <th>번호</th>
@@ -46,11 +60,11 @@
                     <th>작성일</th>
                     <th>조회수</th>
                 </tr>
-                <tr v-for="item in list">
+                <tr v-for="(item, index) in list">
                     <td>{{item.boardId}}</td>
-                    <a href="javacript:;" @click="fnView(item.boardId)">
-                        <td>{{item.title}}</td>
-                    </a>
+                    <td>
+                        <a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}</a>
+                    </td>
                     <td>{{item.userId}}</td>
                     <td>{{item.createdAt}}</td>
                     <td>{{item.cnt}}</td>
@@ -58,6 +72,14 @@
                 <tr>
                 </tr>
             </table>
+            <div v-if="index > 0">
+                <a href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1"> < </a>
+                <a href="javascript:;" v-for="num in index" @click="fnPage(num)">
+                    <span v-if="page == num">{{num}}</span>
+                    <span v-else >{{num}}</span>
+                </a>
+                <a href="javascript:;" @click="fnPageMove('next')"  v-if="page != index">> </a> 
+            </div>
             <button class="button" @click="fnAdd">글쓰기</button>
 
     </div>
@@ -75,6 +97,11 @@
                     return {
                        list : [],
                        boardId : "",
+                       index : 0,
+                       PageSize : 5,
+                       page : 1,
+                       searchOption: "",
+
                     };
                 },
                 computed: {
@@ -83,12 +110,11 @@
                 methods: {
                     fnBoardList(){
                         let self= this;
+
                         let nparmap = {
-                            boardId : self.boardId,
-                            title : self.title,
-                            userId : self.userId,
-                            createdAt : self.createdAt,
-                            cnt : self.cnt,
+                            searchOption : self.searchOption,
+                            page : (self.page -1) * self.pageSize,
+                            pageSize : self.pageSize,
                         };
                     $.ajax({
 				    	url:"/board/list.dox",
@@ -98,20 +124,32 @@
 				    	success : function(data) { 
 				    		console.log(data);
                             self.list = data.board;
-                            console.log(self.list);
-
-				    	    }
+                            self.index = Math.ceil(data.count.cnt / self.pageSize);
+                            console.log(data.count.cnt);
+                        }
 				        });
                     },
                     fnAdd : function (){   
                         let self= this;
-                        pageChange("/board/edit.do",{boardId : self.boardId});
+                        pageChange("/board/edit.do", {});
                     },
-                    fnView : function (){
-                        pageChange("/board/view.do", {boardId : self.boardId});
-                    },
-                    fnPage : function (){
+                    fnView : function (boardId){
                         let self = this;
+                        pageChange("/board/view.do", {boardId : boardId});
+                    },
+                    fnPage : function (num){
+                        let self = this;
+                        self.page = num;
+                        self.fnBoardList();
+                    },
+                    fnPageMove : function(direction){
+                        let self = this;
+                        if (direction == "next"){
+                            self.page++;
+                        } else {
+                            self.page--;
+                        }
+                        self.fnBoardList();
                     }
                 },               
                 mounted() {
