@@ -36,18 +36,18 @@ public class DonationController {
 	@RequestMapping("/center.do") 
 	public String center(Model model) throws Exception{
 		
-		return "/donation/center";
+		return "donation/center";
 	}
 	
 	@RequestMapping("/donation.do") 
-	public String donation(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+	public String donation(Model model) throws Exception{
 		
-		request.setAttribute("map", map);
-		return "/donation/donation";
+//		request.setAttribute("map", map);
+		return "donation/donation";
 	}
 	
 	// centerList
-	@RequestMapping(value = "/center/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "center/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
