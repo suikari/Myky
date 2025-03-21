@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-public class ProdcutController {
+public class ProdcutController {  //이제 시작해야함;;;
 
 
 	@Autowired
