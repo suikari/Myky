@@ -5,7 +5,9 @@ import lombok.Data;
 @Data
 public class partnerdetail {
 
-	
+	private String SI;
+	private String GU;
+	private String DONG;
 	private String PARTNER_DETAILID;
 	private String NAME;
 	private String ADDRESS;

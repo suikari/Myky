@@ -7,7 +7,7 @@
 		<script src="https://code.jquery.com/jquery-3.7.1.js"
 			integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-		<title>첫번째 페이지</title>
+		<title>Login Page</title>
 	</head>
 	<style>
 	</style>
@@ -23,30 +23,24 @@
 			<div>
 				비밀번호 : <input v-model="pwd" type="password">
 			</div>
-			<button @click="fnLogin">로그인</button>
-			<button @click="fnPasswordReset">비밀번호 찾기</button>
+			<button @click="fnLogin()">로그인</button>
+			<button @click="fnPasswordReset()">비밀번호 찾기</button>
 			<div>
-				<button>
-					<a :href="location">
-						<img src="../img/login/kakao_login_medium_narrow.png" alt="">
-					</a>
-				</button>
+				<a :href="location">
+					<img src="../img/login/kakao_login_medium_narrow.png" alt="">
+				</a>
 			</div>
 
 			<div>
-				<button>
-					<a href="#">
-						<img src="../img/login/naver_login.png" alt="" width=183px height="45px">
-					</a>
-				</button>
+				<a href="#">
+					<img src="../img/login/naver_login.png" alt="" width=183px height="45px">
+				</a>
 			</div>
 
 			<div>
-				<button>
-					<a href="#">
-						<img src="../img/login/google_login.png" alt="" width=183px height="45px">
-					</a>
-				</button>
+				<a href="#">
+					<img src="../img/login/google_login.png" alt="" width=183px height="45px">
+				</a>
 			</div>
 
 		</div>
@@ -67,11 +61,33 @@
 				fnLogin() {
 					var self = this;
 					var nparmap = {
-
+						userId: self.userId,
+						pwd: self.pwd,
 					};
-
+					$.ajax({
+						url: "/user/login.dox", // 얘한테 요청함 'controller'에게 요청
+						dataType: "json",
+						type: "POST",
+						data: nparmap,
+						success: function (data) {
+							console.log(self);
+							if (data.result == "success") {
+								alert(data.user.userName + "님 환영해여!") //service에서 user로 정의 했으니 멤버로..
+								location.href = "/main.do";
+							} else {
+								alert("아이디/패스워드 확인하세요.")
+							}
+						}
+					});
 				},
 				fnPasswordReset() {
+					// location.href="/user/resetPwd.do"; //오류 해결 필요
+				},
+				fnAdd() {
+					var self = this;
+					var nparmap = {
+
+					};
 
 				}
 

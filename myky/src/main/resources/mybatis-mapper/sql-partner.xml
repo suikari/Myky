@@ -10,6 +10,25 @@
 			
 	</select>
 	
+	<select id="getPartnerSiList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		SELECT DISTINCT SI 
+        FROM AREA 
+ 		
+	</select>
+	
+	<select id="getPartnerGuList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		SELECT DISTINCT GU ,NX, NY 
+        FROM AREA 
+        WHERE SI = #{selectsi} AND GU IS NOT NULL
+	</select>
+	
+	<select id="getPartnerDongList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		SELECT DISTINCT GU, DONG  ,NX, NY 
+		FROM AREA 
+		WHERE GU = #{selectgu} AND DONG IS NOT NULL
+	</select>
+	
+
 </mapper>
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import teamgyodong.myky.board.mapper.BoardMapper;
 import teamgyodong.myky.board.model.board;
 
+
 @Service
 public class BoardServiceImpl implements BoardService {
 

@@ -10,18 +10,90 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	<script src="js/swiper8.js"></script>
 	
-    <link rel="stylesheet" href="css/main.css">
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
     <style>
     
+.centerContainer {
+    font-family: Arial, sans-serif;
+    margin: 10px 0 100px 0;
+    padding: 100px 0;
+    text-align: center;
+}
+
+#boardTitle {
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.listContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.centerCard {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 280px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.centerCard:hover {
+    transform: scale(1.05);
+}
+
+.centerImg {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.centerName {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #444;
+}
+
+.centerAddr, .centerTel, .centerIntro {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+div .donationBtn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #FFBC7B;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+div .donationBtn:hover {
+    background-color: #FFA145;
+}
 
 
     </style>
 </head>
 <body>
-    <jsp:include page="common/header.jsp"/>
+    <jsp:include page="../common/header.jsp"/>
     <!-- 헤더 -->
-
-    <div id="app" class="container">
+    
+    <div id="app" class="centerContainer">
         <div id="boardTitle"><h2>동물보호소 소개</h2></div>
 		<div class="listContainer">
             <div class="centerCard" v-for="item in centerList">
@@ -30,12 +102,12 @@
                 <p class="centerAddr">{{item.address}}</p>
                 <p class="centerTel">{{item.tel}}</p>
                 <p class="centerIntro">{{item.description}}</p>
-                <div><a @click="fnSelectCenter({{item.centerId}})">후원하기</a></div>
+                <div><a class="donationBtn" @click="fnSelectCenter(item.centerId)">후원하기</a></div>
             </div>
         </div>
     </div>
 
-    <jsp:include page="common/footer.jsp"/>
+    <jsp:include page="../common/footer.jsp"/>
     <!-- 푸터 -->
     
 </body>
@@ -61,7 +133,7 @@
                             
                         };
                         $.ajax({
-                            url:"center.dox",
+                            url:"/center/list.dox",
                             dataType:"json",	
                             type : "POST", 
                             data : nparmap,
@@ -73,7 +145,8 @@
                         });
                     },
                     fnSelectCenter:function(centerId){
-                        pageChange("/donete.do",{centerId:centerId});
+                        // pageChange("/donation.do",{centerId:centerId});
+                        location.href = "/donation.do";
                     }
                 },
                 mounted() {

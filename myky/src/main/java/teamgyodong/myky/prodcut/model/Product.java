@@ -5,5 +5,20 @@ import lombok.Data;
 @Data
 
 public class Product {
-
+	private String productId;
+	private String productName;
+	private String categoryId;
+	private int price ;
+	private String quantity;
+	private String registrationDate;
+	private String manufacturer;
+	private String productType;
+	private String description;
+	
+	private String fileId;
+	private String filePath ;
+	private String fileName ;
+	private String thumbNail ;
+	private String fileSize ;
+	private String fileType;
 }
