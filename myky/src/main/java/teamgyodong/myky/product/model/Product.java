@@ -1,4 +1,4 @@
-package teamgyodong.myky.prodcut.model;
+package teamgyodong.myky.product.model;
 
 import lombok.Data;
 
@@ -14,6 +14,7 @@ public class Product {
 	private String manufacturer;
 	private String productType;
 	private String description;
+	private String productCode;
 	
 	private String fileId;
 	private String filePath ;
