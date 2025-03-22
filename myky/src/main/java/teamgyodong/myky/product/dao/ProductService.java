@@ -1,4 +1,4 @@
-package teamgyodong.myky.prodcut.dao;
+package teamgyodong.myky.product.dao;
 
 import java.util.HashMap;
 

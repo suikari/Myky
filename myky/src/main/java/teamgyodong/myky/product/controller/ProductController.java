@@ -1,4 +1,4 @@
-package teamgyodong.myky.prodcut.controller;
+package teamgyodong.myky.product.controller;
 
 import java.util.HashMap;
 
@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import teamgyodong.myky.prodcut.dao.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
+import teamgyodong.myky.product.dao.ProductService;
 
 
 @Controller
-public class ProdcutController {
+public class ProductController {
 
 
 	@Autowired
@@ -24,10 +25,17 @@ public class ProdcutController {
 	
 	//상품 리스트 가져오기
 	@RequestMapping("/product/list.do") 
-    public String result(Model model) throws Exception{
-        return "product/product-list"; 
+    public String list(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+		return "product/product-list"; 
+	}
+	
+	//상품 세부사항 가져오기
+	@RequestMapping("/product/view.do") 
+    public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+		return "product/product-view"; 
     }
-
 	
 	
 	
@@ -52,4 +60,6 @@ public class ProdcutController {
 		resultMap = productService.getProduct(map);
 		return new Gson().toJson(resultMap);
 	}
+	
+	
 }
