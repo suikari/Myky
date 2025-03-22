@@ -130,9 +130,9 @@
 	            <p>SAT, SUN, HOLIDAY OFF</p>
 	            <h3 class="section-title">SNS SERVICE</h3>
 	            <div class="sns-links">
-	                <img src="facebook-icon.png" alt="Facebook" width="20">
-	                <img src="instagram-icon.png" alt="Instagram" width="20">
-	                <img src="youtube-icon.png" alt="YouTube" width="20">
+	                <img src="" alt="Facebook" width="20">
+	                <img src="" alt="Instagram" width="20">
+	                <img src="" alt="YouTube" width="20">
 	            </div>
 	        </div>
 	    </div>
