@@ -5,6 +5,7 @@ import java.util.HashMap;
 public interface MainService {
 
 	HashMap<String, Object> InsertVisitLog(HashMap<String, Object> map);
+	HashMap<String, Object> selectCategoryList(HashMap<String, Object> map);
 
 	
 }
