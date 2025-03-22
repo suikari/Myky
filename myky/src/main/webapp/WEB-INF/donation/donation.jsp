@@ -6,11 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>후원 페이지</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	<script src="js/swiper8.js"></script>
 	
-    <link rel="stylesheet" href="css/main.css">
     <style>
     
 .body {
@@ -88,21 +85,41 @@
     font-weight: bold;
 }
 
-.donationInput {
-    margin-right: 10px;
+.donateAmountContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
-.donationInput input[type="number"] {
-    width: 100px;
-    padding: 5px;
+.donateAmountBtn {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.donateAmountBtn.selected {
+    background: #FFBC7B;
+    color: white;
+    font-weight: bold;
+    border: 1px solid #FF8C42;
+}
+
+.customAmountInput {
+    width: 120px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
 }
 
 .donationCheckbox {
     margin-right: 5px;
     margin-left: 30px;
-
 }
 
 .donationButton {
@@ -153,23 +170,34 @@
                                 <td>일시후원</td>
                             </tr>
                             <tr>
-                                <th>후원주기</th>
-                                <td>일시</td>
+                                <th rowspan="3">후원처 정보</th>
+                                <td>{{info.centerName}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{info.address}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{info.tel}}</td>
                             </tr>
                             <tr>
                                 <th>후원금액</th>
                                 <td>
-                                    <label class="donationInput"><input name="donateAmount" type="radio" v-model="donateAmount" value="10000">10,000원</label>
-                                    <label class="donationInput"><input name="donateAmount" type="radio" v-model="donateAmount" value="30000">30,000원</label>
-                                    <label class="donationInput"><input name="donateAmount" type="radio" v-model="donateAmount" value="50000">50,000원</label>
-                                    <label class="donationInput"><input name="donateAmount" type="number" v-model="customAmount" placeholder="직접입력">원</label>
-                                    <!-- 직접 입력 시 천단위마다 ',' 찍어 출력하는 기능 -->
+                                    <div class="donateAmountContainer">
+                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 10000}" @click="selectAmount(10000)">10,000원</button>
+                            
+                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 30000}" @click="selectAmount(30000)">30,000원</button>
+                            
+                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 50000}" @click="selectAmount(50000)">50,000원</button>
+                            
+                                        <input type="text" class="customAmountInput" v-model="customAmount" @input="formatCustomAmount" @focus="clearSelection" placeholder="직접입력">
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>후원 메세지</th>
                                 <td><input class="donationMessage" name="donateMessage" v-model="donateMessage" placeholder="따듯한 마음을 전하세요"></td>
                             </tr>
+                            <!-- 250322 >> 다음에 익명후원 여부 선택 만들기 -->
                         </table>
                     </div>
                 </section>
@@ -178,12 +206,12 @@
                     <p class="sectionContents"><strong>[출금 정책 안내]</strong></p>
                     <p class="sectionContents">※ 일시 납입은 신청 즉시 결제가 이루어집니다.</p>
                     <label class="sectionContents">
-                        <input class="donationCheckbox" name="agree" type="checkbox"> 상기 출금 정책을 모두 이해함
+                        <input class="donationCheckbox" name="policyCheck" type="checkbox"> 상기 출금 정책을 모두 이해함
                     </label>
                 </section>
                 <section>
                     <div class="sectionTitle">
-                        <label><input type="checkbox" name="agree"> 전체 동의하기</label>
+                        <label><input type="checkbox" name="agreeAll" @change="fnToggleAllAgree"> 전체 동의하기</label>
                     </div>
                     <div class="sectionContents">
                         <label><input class="donationCheckbox" name="agree" type="checkbox">[필수] 가입약관 동의 <a>[보기]</a></label>
@@ -192,8 +220,8 @@
                         <label><input class="donationCheckbox" name="agree" type="checkbox">[필수] 개인정보처리방침 동의 <a>[보기]</a></label>
                     </div>
                 </section>
-                <button class="donationButton" @click="">다음</button>
-                <!-- 결제로 이동 -->
+                <button class="donationButton" @click="fnPayment">다음</button>
+                <!-- 250322 >> 결제 서비스 미완성 -->
             </div>
         </div>
     </div>
@@ -205,29 +233,133 @@
 </body>
 </html>
 <script>
+    const userCode = "imp40283074";
     
-    
-        document.addEventListener("DOMContentLoaded", function () {
-            const app = Vue.createApp({
-                data() {
-                    return {
-                        donateAmount:"",
-                        donateMessage:"",
-                        customAmount:""
+    document.addEventListener("DOMContentLoaded", function () {
+
+        if (typeof IMP !== 'undefined') {
+            IMP.init(userCode);  // 결제 시스템 초기화
+        } else {
+            console.error('IMP is not loaded properly');
+        }
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    sessionId: "${sessionId}",
+                    info:{},
+                    centerId:"${map.centerId}",
+                    donateAmount:null,
+                    donateMessage:"",
+                    customAmount:null
+                };
+            },
+            computed: {
+
+            },
+            methods: {
+                fnCenterInfo(){
+                    var self = this;
+                    console.log(self.centerId);
+                    var nparmap = {
+                        centerId : self.centerId
                     };
+                    $.ajax({
+                        url:"/center/info.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) { 
+                            console.log(data);
+                            self.info = data.info;
+                            
+                        }
+                    });
                 },
-                computed: {
+                selectAmount(amount) {
+                    this.donateAmount = amount;
+                    this.customAmount = "";
+                },
 
+                clearSelection() {
+                    this.donateAmount = null;
                 },
-                methods: {
 
+                formatCustomAmount() {
+                    let rawValue = this.customAmount.replace(/[^0-9]/g, "");
+
+                    if (rawValue) {
+                        this.customAmount = parseInt(rawValue, 10).toLocaleString();
+                    } else {
+                        this.customAmount = "";
+                    }
                 },
-                mounted() {
-                	
-                	
+                fnToggleAllAgree:function(event){
+                    let isChecked = event.target.checked;
+                    document.querySelectorAll("input[name='agree']").forEach(checkbox => {
+                        checkbox.checked = isChecked;
+                    });
+                },
+                fnPayment:function(){
+                    var self = this;
+
+                    var policyChecked = document.querySelector("input[name='policyCheck']").checked;
+                    var checkboxes = document.querySelectorAll("input[name='agree']");
+                    var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+                    if (!policyChecked) {
+                        alert("출금 정책에 동의해야 합니다.");
+                        return;
+                    }
+                    if (!allChecked) {
+                        alert("모든 필수 항목에 동의해야 합니다.");
+                        return;
+                    }
+
+                    // 결제 페이지로 이동
+
+                    IMP.request_pay({
+                    channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
+                    pay_method: "card",
+                    merchant_uid: "merchant_"+ new Date().getTime(),
+                    name: self.info.centerName + " 후원 테스트 결제",
+                    amount: 1,
+                    buyer_tel: "010-0000-0000",
+
+                }, function (rsp) { // callback
+                    if (rsp.success) {
+                        alert("성공");
+                        console.log(rsp);
+                    } else {
+                        alert("실패");
+                        console.log(rsp);
+                    }
+                });
+                },
+                fnDonation:function(){
+                    var self = this;
+                    var nparmap = {
+
+                    };
+                    $.ajax({
+                        url:"/center/donate.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) { 
+                            console.log(data);
+                            
+                        }
+                    }); 
                 }
-            });
-
-            app.mount("#app");
+            },
+            mounted() {
+                let self = this;
+                self.fnCenterInfo();
+                
+            }
         });
+
+        app.mount("#app");
+    });
     </script>
