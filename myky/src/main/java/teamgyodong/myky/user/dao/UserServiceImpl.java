@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 	public HashMap<String, Object> userLogin(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		User user =userMapper.getUser(map); // 단일객체로 받음
+		User user = userMapper.getUser(map); // 단일객체로 받음
 		
 //		boolean loginFlg = false; // 해쉬화된 비밀번호 실행// if에서 국한되지 않게 loginFlg를 밖으로 뺴서 선언하자
 		if(user != null) {
@@ -39,6 +39,8 @@ public class UserServiceImpl implements UserService {
 			System.out.println("성공");
 			session.setAttribute("sessionId", user.getUserId()); //member 클래스에서 get으로 꺼내기
 			session.setAttribute("sessionName", user.getUserName());
+			session.setAttribute("sessionRole", user.getRole());
+
 			session.setMaxInactiveInterval(60*60); // 60 * 60초 세션시간 정하기
 			
 			//session.invalidate(); //모든 세션 정보 삭제

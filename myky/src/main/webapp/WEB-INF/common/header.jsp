@@ -298,13 +298,23 @@
                                     { menuId: 203, menuName: "간식", menuUrl: "#" }
                                 ]
                             }
-                        ]
+                        ],
+                        sessionId : '${sessionId}',
+                        sessionName : '${sessionName}',
+                        sessionRole : '${sessionRole}',
                     };
                 },
                 methods: {
                     fnLogin() {
                         window.location.href = "/user/login.do";
                     }
+                },
+                mounted() {
+                	let self = this;
+                	console.log(self.sessionId);
+                	console.log(self.sessionName);
+                	console.log(self.sessionRole);
+
                 }
             });
             

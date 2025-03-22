@@ -8,7 +8,8 @@ import lombok.Data;
 public class Visit {
     private Long visitId;
     private String ipAddress;
-    private String userAgent;
+    private String userAgentBrowser;
+    private String userAgentWindows;
     private String referer;
     private LocalDateTime accessTime;
 }

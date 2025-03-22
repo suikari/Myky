@@ -15,6 +15,6 @@ public class User {
 	private String profileImage;
 	private String phoneNumber;
 	private String birthDate;
-	
-	
+	private String role;
+
 }

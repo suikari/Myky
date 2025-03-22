@@ -4,11 +4,10 @@
 
 <mapper namespace="teamgyodong.myky.Main.mapper.MainMapper">
 
-
     <!-- 방문 기록 추가 -->
     <insert id="insertVisitLog" parameterType="hashmap">
-        INSERT INTO VISIT_LOG (IP_ADDRESS, USER_AGENT, REFERER, ACCESS_TIME)
-        VALUES ( #{ipAddress}, #{userAgent}, #{referer}, #{accessTime} )
+        INSERT INTO VISIT_LOG (IP_ADDRESS, USER_AGENT_BROWSER , USER_AGENT_WINDOWS , REFERER, ACCESS_TIME)
+        VALUES ( #{ipAddress}, #{userAgentBrowser}, #{userAgentWindows}, #{referer}, #{accessTime} )
     </insert>
 
 </mapper>
