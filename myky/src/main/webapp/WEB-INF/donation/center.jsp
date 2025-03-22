@@ -6,16 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>동물보호소 소개 페이지</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	<script src="js/swiper8.js"></script>
 	
-    <!-- <link rel="stylesheet" href="css/main.css"> -->
     <style>
     
 .centerContainer {
+    width: 1280px;
     font-family: Arial, sans-serif;
-    margin: 10px 0 100px 0;
+    margin: 20px auto;
     padding: 100px 0;
     text-align: center;
 }
@@ -72,6 +70,7 @@
 div .donationBtn {
     display: inline-block;
     margin-top: 10px;
+    margin-right: 10px;
     padding: 8px 15px;
     background-color: #FFBC7B;
     color: white;
@@ -102,7 +101,10 @@ div .donationBtn:hover {
                 <p class="centerAddr">{{item.address}}</p>
                 <p class="centerTel">{{item.tel}}</p>
                 <p class="centerIntro">{{item.description}}</p>
-                <div><a class="donationBtn" @click="fnSelectCenter(item.centerId)">후원하기</a></div>
+                <div>
+                    <a class="donationBtn" @click="fnCenterSite(item.websiteUrl)">사이트 방문</a>
+                    <a class="donationBtn" @click="fnSelectCenter(item.centerId)">후원하기</a>
+                </div>
             </div>
         </div>
     </div>
@@ -119,8 +121,8 @@ div .donationBtn:hover {
             const app = Vue.createApp({
                 data() {
                     return {
+                        sessionId:"${sessionId}",
                         centerList:[]  
-                    
                     };
                 },
                 computed: {
@@ -145,8 +147,11 @@ div .donationBtn:hover {
                         });
                     },
                     fnSelectCenter:function(centerId){
-                        // pageChange("/donation.do",{centerId:centerId});
-                        location.href = "/donation.do";
+                        pageChange("/donation.do",{centerId:centerId});
+                    },
+                    fnCenterSite:function(websiteUrl){
+                        // console.log(websiteUrl); >> url 정상 출력 확인
+                        window.open(websiteUrl,"_blank");
                     }
                 },
                 mounted() {

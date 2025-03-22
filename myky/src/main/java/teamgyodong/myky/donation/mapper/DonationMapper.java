@@ -12,4 +12,8 @@ public interface DonationMapper {
 
 	List<donation> selectCenterList(HashMap<String, Object> map);
 
+	donation selectCenter(HashMap<String, Object> map);
+
+	void insertHistory(HashMap<String, Object> map);
+
 }
