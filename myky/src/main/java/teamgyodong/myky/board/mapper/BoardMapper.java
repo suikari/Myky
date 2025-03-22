@@ -12,4 +12,9 @@ public interface BoardMapper {
 	
 	List<board> selectBoardList(HashMap<String, Object> map);
 
+	board selectBoardCnt(HashMap<String, Object> map);
+
+	board selectBoard(HashMap<String, Object> map);
+
+
 }

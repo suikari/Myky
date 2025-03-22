@@ -24,11 +24,11 @@ public class BoardServiceImpl implements BoardService {
 		String result = "";
 		
 		try {
-			List<board> board = boardMapper.selectBoardList(map);
 			
-			//result = board != null ? "success" : "fail";
-			//System.out.print(result);
-			 
+			List<board> board = boardMapper.selectBoardList(map);			
+			board count = boardMapper.selectBoardCnt(map);
+
+			resultMap.put("count", count);
 			resultMap.put("result", "success");			
 			resultMap.put("board", board);
 			
@@ -40,4 +40,15 @@ public class BoardServiceImpl implements BoardService {
 
 		return resultMap;
 	}
+	//게시글 상세보기
+		public HashMap<String, Object> boardView(HashMap<String, Object> map) {
+			// TODO Auto-generated method stub
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			
+			board info = boardMapper.selectBoard(map);
+			
+			resultMap.put("info", info);
+			resultMap.put("result", "success");
+			return resultMap;
+		}
 }

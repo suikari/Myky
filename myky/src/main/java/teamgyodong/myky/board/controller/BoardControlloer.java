@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpServletRequest;
 import teamgyodong.myky.board.dao.BoardService;
-import teamgyodong.myky.board.mapper.BoardMapper;
 
 @Controller
 public class BoardControlloer {
@@ -22,19 +22,35 @@ public class BoardControlloer {
 	BoardService boardService;
 	
 	@RequestMapping("/board/list.do") 
-    public String login(Model model) throws Exception{
+    public String list(Model model) throws Exception{
 
         return "board/board-list";
+    }
+	@RequestMapping("/board/view.do") 
+	public String view(HttpServletRequest request, Model model,  @RequestParam HashMap<String, Object> map) throws Exception{
+			
+		request.setAttribute("map", map);
+		
+        return "board/board-view";
     }
 	
 	@RequestMapping(value = "board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		
-		//System.out.print(map);
+
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = boardService.getBoardList(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	@RequestMapping(value = "board/view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.boardView(map);
 		
 		return new Gson().toJson(resultMap);
 	}

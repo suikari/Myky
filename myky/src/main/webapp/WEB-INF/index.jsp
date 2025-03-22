@@ -449,21 +449,6 @@
                     			console.log(data);
                     		}
                     	});
-                    },
-                    fntest : function() {
-                    	var self = this;
-                    	var nparmap = {
-                    	};
-                    	$.ajax({
-                    		url: "partner/list.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log(data);
-                    		}
-                    	});
-                    	
                     }
                     
                 },
@@ -497,9 +482,8 @@
                 	if ( self.code != "" ) { 
                 		self.kakaotest();
                     	//console.log(self.code);
-						
+						c
                 	}
-                	self.fntest();
                 }
             });
 
