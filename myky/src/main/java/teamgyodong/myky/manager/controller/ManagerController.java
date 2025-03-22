@@ -26,5 +26,11 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ManagerController {
+	
+	@RequestMapping("manager/main.do") 
+    public String blist(Model model) throws Exception{
 
+        return "manager/index";
+    }
+	
 }
