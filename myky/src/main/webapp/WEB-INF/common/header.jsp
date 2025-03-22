@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue3 레이아웃 예제</title>
 	<script src="/js/vue3b.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
+	<script src="/js/main.js"></script>
 	
-		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	
+
 	
     <style>
 		    
@@ -219,17 +220,73 @@
             }
         }
         
+        
+        /*슬라이드 추가*/
+        
+        .search-container {
+		  position: relative;
+		  display: inline-block;
+		  width:100%;
+		}
+		
+		.search-icon {
+		  background: none;
+		  border: none;
+		  font-size: 20px;
+		  cursor: pointer;
+		}
+		
+		.search-box {
+		  position: absolute;
+		  top: 0;
+		  width:100%;
+		  background: white;
+		  padding: 10px;
+		  border-radius: 5px;
+		  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+		  transition: all 0.3s ease-in-out;
+		}
+		
+		.slide-enter-active, .slide-leave-active {
+		  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+		}
+		
+		.slide-enter-from {
+		  transform: translateY(-50px);
+		  opacity: 0;
+		}
+		
+		.slide-leave-to {
+		  transform: translateY(-50px);
+		  opacity: 0;
+		}
+
     </style>
 </head>
 <body>
     <div id="header">
+    
+    
+		    <transition name="slide">
+		      <div v-if="showSearch" class="search-box">
+		        <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요..." />
+		        <button @click="search">검색</button>
+		      </div>
+		    </transition>
+	  
         <div class="top-bar-main">
-        	<div class="top-bar">
+        	<div v-if="!sessionName" class="top-bar">
 	            <a href="/register">회원가입</a> 
-	            | <a href="/user/login.do">로그인</a> 
-	            | <a href="/orders">주문조회</a> 
+	            | <a href="/user/login.do">로그인</a>
 	            | <a href="/notices">공지사항</a> 
-	            <!-- | <a href="/logout">로그아웃</a>  -->
+	        </div>
+	        
+	        <div v-else class="top-bar">
+	            <span>{{sessionName}} 님 환영합니다! </span> 
+	            | <a href="/orders">주문조회</a> 
+	            | <a href="/board/list.do">공지사항</a> 
+	            <a v-if="sessionRole == 'ADMIN' " href="/manager/main.do"> | 관리자콘솔</a> 
+	            | <a href="/member/logout.do">로그아웃</a>
 	        </div>
         </div>
         
@@ -238,12 +295,12 @@
             
             <!-- 네비게이션 메뉴 -->
             <nav class="menu">
-                <div class="dropdown" v-for="menu in categories" :key="menu.menuId">
-                    <a :href="menu.menuUrl">{{ menu.menuName }}</a>
+                <div class="dropdown" v-for="menu in categories" >
+                    <a :href="menu.menuUrl">{{ menu.categoryName }}</a>
                     <div v-if="menu.children && menu.children.length" class="dropdown-menu">
                         <ul>
-                            <li v-for="subMenu in menu.children" :key="subMenu.menuId">
-                                <a :href="subMenu.menuUrl">{{ subMenu.menuName }}</a>
+                            <li v-for="subMenu in menu.children" >
+                                <a :href="subMenu.menuUrl">{{ subMenu.categoryName }}</a>
                             </li>
                         </ul>
                     </div>
@@ -252,7 +309,7 @@
             
             <div class="icons">
                 <span class="icon">💎</span>
-                <span class="icon">🔍</span>
+		    	<button @click="toggleSearch" class="search-icon">🔍</button>
                 <span class="icon">👤</span>
                 <span class="icon">🛒</span>
             </div>
@@ -261,56 +318,75 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
             const headerApp = Vue.createApp({
                 data() {
                     return {
-                        categories: [
-                            { 
-                                menuId: 1, menuName: "강아지용품", menuUrl: "#", 
-                                children: [
-                                    { menuId: 101, menuName: "장난감", menuUrl: "#" },
-                                    { menuId: 102, menuName: "사료", menuUrl: "#" },
-                                    { menuId: 103, menuName: "간식", menuUrl: "#" }
-                                ]
-                            },
-                            { 
-                                menuId: 2, menuName: "고양이용품", menuUrl: "#",
-                                children: [
-                                    { menuId: 201, menuName: "스크래처", menuUrl: "#" },
-                                    { menuId: 202, menuName: "캣타워", menuUrl: "#" },
-                                    { menuId: 203, menuName: "간식", menuUrl: "#" }
-                                ]
-                            },
-                            { 
-                                menuId: 2, menuName: "보호소 소개", menuUrl: "#",
-                                children: [
-                                    { menuId: 201, menuName: "스크래처", menuUrl: "#" },
-                                    { menuId: 202, menuName: "캣타워", menuUrl: "#" },
-                                    { menuId: 203, menuName: "간식", menuUrl: "#" }
-                                ]
-                            },
-                            { 
-                                menuId: 2, menuName: "고양이용품", menuUrl: "#",
-                                children: [
-                                    { menuId: 201, menuName: "스크래처", menuUrl: "#" },
-                                    { menuId: 202, menuName: "캣타워", menuUrl: "#" },
-                                    { menuId: 203, menuName: "간식", menuUrl: "#" }
-                                ]
-                            }
-                        ],
+                    	categories: [ ],
                         sessionId : '${sessionId}',
                         sessionName : '${sessionName}',
                         sessionRole : '${sessionRole}',
+                        showSearch: false,
+                        searchQuery: '',
                     };
                 },
                 methods: {
+                	fnMenuList (){
+                		
+                		var self = this;
+                        var nparmap = { productId: self.productId };
+                        $.ajax({
+                            url: '/menuList.dox',
+                            dataType: 'json',
+                            type: 'POST',
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+
+      					      const map = new Map();
+      					      const result = [];
+    					      
+    					      data.list.forEach(list => {
+    					          map.set(list.categoryId, { ...list, children: [] });
+    					      });
+    						  
+      						  
+      					      //console.log(map);
+
+      					      data.list.forEach(list => {
+      					          if (list.parentId == null) {
+      					              result.push(map.get(list.categoryId));
+      					          } else {
+      					              const parent = map.get(list.parentId);
+      					              if (parent) {
+      					                  parent.children.push(map.get(list.categoryId));  // 자식 메뉴 추가
+      					              }
+      					          }
+      					      });
+      					      
+      					      console.log(result);
+
+
+      					      self.categories = result;
+      					      
+                            },
+                        });
+                        
+                		
+                	},                	
                     fnLogin() {
                         window.location.href = "/user/login.do";
+                    },      
+                    toggleSearch() {
+                        this.showSearch = !this.showSearch;
+                    },
+                    search() {
+                      console.log("검색어:", this.searchQuery);
+                      // 여기에 검색 로직 추가 가능 (API 호출 등)
                     }
                 },
                 mounted() {
                 	let self = this;
+                	self.fnMenuList();
                 	//console.log(self.sessionId);
                 	//console.log(self.sessionName);
                 	//console.log(self.sessionRole);
@@ -319,7 +395,6 @@
             });
             
             headerApp.mount("#header");
-        });
     </script>
 </body>
 </html>

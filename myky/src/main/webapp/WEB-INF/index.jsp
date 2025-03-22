@@ -308,27 +308,27 @@
             <section class="section-grid">
 			      <section class="shortcut-grid">
 				    <div class="shortcut-item">
-				        <a href="/navi/main.do" >
+				        <a href="/partner/list.do" >
 				            <img src="img/quick/menu_black.png" alt="아이콘1">
 				            <span>병원찾기</span>
 				        </a>
 				    </div>
 				    <div class="shortcut-item">
-				        <a href="#">
+				        <a href="/product/list.do">
 				            <img src="img/quick/menu_white.png" alt="아이콘2">
-				            <span>건강식품구매</span>
+				            <span>물품구매</span>
 				        </a>
 				    </div>
 				    <div class="shortcut-item">
-				        <a href="#">
+				        <a href="/center.do">
 				            <img src="img/quick/menu.png" alt="아이콘3">
-				            <span>매거진</span>
+				            <span>후원하기</span>
 				        </a>
 				    </div>
 				    <div class="shortcut-item">
-				        <a href="#">
+				        <a href="/cart/list.do">
 				            <img src="img/quick/menu_toggle.png" alt="아이콘4">
-				            <span>자가진단챗봇</span>
+				            <span>주문조회</span>
 				        </a>
 				    </div>
 				</section>

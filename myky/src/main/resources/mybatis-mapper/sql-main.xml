@@ -10,6 +10,14 @@
         VALUES ( #{ipAddress}, #{userAgentBrowser}, #{userAgentWindows}, #{referer}, #{accessTime} )
     </insert>
 
+
+	<select id="selectCategoryList" parameterType="hashmap" resultType="teamgyodong.myky.Main.model.Category">
+		
+			select * from CATEGORY_MENU
+			
+	</select>
+	
+	
 </mapper>
 
 
