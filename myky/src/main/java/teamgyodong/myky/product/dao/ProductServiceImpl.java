@@ -1,4 +1,4 @@
-package teamgyodong.myky.prodcut.dao;
+package teamgyodong.myky.product.dao;
 
 
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import teamgyodong.myky.prodcut.mapper.ProductMapper;
-import teamgyodong.myky.prodcut.model.Product;
+import teamgyodong.myky.product.mapper.ProductMapper;
+import teamgyodong.myky.product.model.Product;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -19,9 +19,12 @@ public class ProductServiceImpl implements ProductService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		List<Product> list = productMapper.selectProductList(map);
-		resultMap.put("result", "success");
+		int count = productMapper.selectProductCnt(map);
+		
 		resultMap.put("list", list);
-
+		resultMap.put("count", count);
+		resultMap.put("result", "success");
+		
 		return resultMap;
 	}
 	

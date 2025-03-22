@@ -1,4 +1,4 @@
-package teamgyodong.myky.prodcut.model;
+package teamgyodong.myky.product.model;
 
 import lombok.Data;
 
