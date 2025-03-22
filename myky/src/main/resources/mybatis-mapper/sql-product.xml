@@ -19,8 +19,9 @@
 		<if test="searchOption != null and searchOption == 'cat'">
 		    AND P.PRODUCT_NAME LIKE '%' || '고양이' || '%'
 		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%'
-
 		</if>
+		ORDER BY P.PRODUCT_ID ASC
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	 
 	 <select id="selectProduct" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Product">
