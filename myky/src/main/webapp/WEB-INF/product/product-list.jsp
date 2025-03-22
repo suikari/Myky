@@ -96,13 +96,13 @@
         }
 
         .pagination a:hover {
-            text-decoration: underline; /* 번호에 밑줄 추가 */
+            text-decoration: none;
         }
 
         .pagination .active {
             font-weight: bold;
-            color: black; /* 번호 색상 검정 */
-            text-decoration: underline; /* 활성화된 번호에 밑줄 추가 */
+            color: #ff6600;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -112,7 +112,7 @@
 
     <div id="app" class="container">
         <main>
-            <!-- <select v-model="searchOption" id="selectBox">
+             <!-- <select v-model="searchOption" id="selectBox">
                 <option value="all">:: 전체 상품 ::</option>
                 <option value="dog">강아지 상품</option>
                 <option value="cat">고양이 상품</option>
@@ -123,24 +123,20 @@
                         <img :src="item.filePath" :alt="item.fileName" @click="fnView(item.productId)">
                     </template>
                     <template v-else>
-                        <img src="../../img/product/product update.png" alt="이미지 없음"
-                            @click="fnView(item.productId)">
+                        <img src="../../img/product/product update.png" alt="이미지 없음" @click="fnView(item.productId)">
                     </template>
                     <h3>{{ item.productName }}</h3>
                     <p>{{ item.description }}</p>
                     <p class="price">₩ {{ item.price }}</p>
                 </div>
             </section>
-            <div>
-                <!-- 페이징 이전 버튼 -->
-                <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> ◀ </a>
-                <!-- 페이징 번호 -->
-                <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)" :class="{ active: page === num }">
+            <div class="pagination">
+                <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> < </a>
+                <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)" :class="{ active: page === num }">
                     <span v-if="page == num">{{ num }}</span>
                     <span v-else>{{ num }}</span>
                 </a>
-                <!-- 페이징 다음 버튼 -->
-                <a v-if="page != index" id="index" href="javascript:;" @click="fnPageMove('next')"> ▶ </a>
+                <a v-if="page != index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
             </div>
             <!-- <button @click="fnChange">강아지</button>
             <button @click="fnChange2">장난감</button> -->
@@ -157,9 +153,11 @@
         const app = Vue.createApp({
             data() {
                 return {
+                    keyword: "${map.keyword}",
+                    searchOption: '${map.searchOption}',
                     list: [],
                     index: 0,
-                    pageSize: 5,
+                    pageSize: 8,
                     page: 1
                 };
             },
@@ -207,8 +205,7 @@
                         self.page--;
                     }
                     self.fnProductList();
-                },
-                
+                }
             },
             setup() {
                 const params = new URLSearchParams(window.location.search);
