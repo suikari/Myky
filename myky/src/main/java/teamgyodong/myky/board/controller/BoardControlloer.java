@@ -20,12 +20,13 @@ public class BoardControlloer {
 
 	@Autowired
 	BoardService boardService;
-	
+	//게시글 목록출력
 	@RequestMapping("/board/list.do") 
     public String list(Model model) throws Exception{
 
         return "board/board-list";
     }
+	//게시글 보기
 	@RequestMapping("/board/view.do") 
 	public String view(HttpServletRequest request, Model model,  @RequestParam HashMap<String, Object> map) throws Exception{
 			
@@ -33,7 +34,13 @@ public class BoardControlloer {
 		
         return "board/board-view";
     }
-	
+	//게시글 추가
+	@RequestMapping("/board/add.do") 
+    public String add(Model model) throws Exception{
+
+        return "board/board-add";
+    }
+	//게시글 목록출력
 	@RequestMapping(value = "board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -44,6 +51,7 @@ public class BoardControlloer {
 		
 		return new Gson().toJson(resultMap);
 	}
+	//게시글 보기
 	@RequestMapping(value = "board/view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -54,5 +62,15 @@ public class BoardControlloer {
 		
 		return new Gson().toJson(resultMap);
 	}
-	
+	//게시글 추가
+	@RequestMapping(value = "board/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.boardAdd(map);
+		
+		return new Gson().toJson(resultMap);
+	}
 }

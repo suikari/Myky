@@ -11,9 +11,8 @@ public class board {
 	private String content;
 	private String createdAt;
 	private String updatedAt;
-	private String deletedate;
-	
-	private String viewcount;
+	private String deleteDate;
+	private String viewCount;
 	private String dislikes;
 	private String likes;
 	private String isSecret;
