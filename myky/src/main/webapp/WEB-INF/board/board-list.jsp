@@ -5,158 +5,263 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자유게시판</title>
-	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	<script src="js/swiper8.js"></script>
-	
+    <script src="js/swiper8.js"></script>
     <link rel="stylesheet" href="css/main.css">
+    <script src="../js/page-Change.js"></script>
     <style>
-        .content{
-            width: 300px;
-            height: 500px;
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
         }
-        table, tr, th, td {
-	    text-align: center;
-	    border : 2px solid #bbb;
-	    border-collapse: collapse;
-	    padding : 5px;
-	    }
-        .textStyle{
-                font-weight: bold;
-                color : red;
+        .search-wrapper {
+            width: 90%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        .button{
-            width:60px;
-            height: 30px;
-            background-color: rgb(16, 16, 65);
-            color: rgb(222, 115, 38);
+        .search-left,
+        .search-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-left select,
+        .search-left input,
+        .search-left button,
+        .search-right select {
+            height: 38px;
+            font-size: 14px;
+            border-radius: 6px;
+            padding: 0 12px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .search-left input {
+            width: 220px;
+            background-color: #f0f0f0;
+            border: 2px solid #202060;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        .search-left input:focus {
+            background-color: #fff;
+            border-color: #fca311;
+        }
+        .search-left button {
+            background-color: #202060;
+            color: #fca311;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-left button:hover {
+            background-color: #fca311;
+            color: #202060;
+        }
+        .table-wrapper {
+            width: 90%;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        th {
+            background-color: #202060;
+            color: #fca311;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        td {
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fafafa;
+        }
+        tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+        a {
+            color: #202060;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 6px;
+        }
+        a:hover {
+            color: #fca311;
+            text-decoration: underline;
+        }
+        button.button {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #202060;
+            color: #fca311;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button.button:hover {
+            background-color: #fca311;
+            color: #202060;
+        }
+        div {
+            text-align: center;
+            margin-top: 20px;
+        }
+        span {
+            margin: 0 4px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #202060;
+        }
+        span.current-page {
+            color: #fca311;
+            text-decoration: underline;
+            cursor: default;
+        }
+        span:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <jsp:include page="../common/header.jsp"/>
-    <div id="app" class="container">
-            <!-- <div>
-                <select v-model="searchOption">
-                    <option value="all"> ::전체:: </option>
-                    <option value="title"> 제목 </option>
-                    <option value="userId"> 작성자 </option>
-                </select>
-                    <input v-model="keyword" @keyup.enter="fnListView" placeholder="검색어">
-                    <button @click="fnListView">검색</button>
-            </div>
-                <select @change="fnListView" v-model="pageSize" >
-                    <option value="5">5개씩</option>
-                    <option value="10">10개씩</option>
-                    <option value="15">15개씩</option>
-                    <option value="20">20개씩</option>
-                </select> -->
-            <table>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
-                </tr>
-                <tr v-for="(item, index) in list">
-                    <td>{{item.boardId}}</td>
-                    <td>
-                        <a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}</a>
-                    </td>
-                    <td>{{item.userId}}</td>
-                    <td>{{item.createdAt}}</td>
-                    <td>{{item.cnt}}</td>
-                </tr>
-                <tr>
-                </tr>
-            </table>
-            <div v-if="index > 0">
-                <a href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1"> < </a>
-                <a href="javascript:;" v-for="num in index" @click="fnPage(num)">
-                    <span v-if="page == num">{{num}}</span>
-                    <span v-else >{{num}}</span>
-                </a>
-                <a href="javascript:;" @click="fnPageMove('next')"  v-if="page != index">> </a> 
-            </div>
-            <button class="button" @click="fnAdd">글쓰기</button>
-
+<jsp:include page="../common/header.jsp"/>
+<div id="app" class="container">
+    <div class="search-wrapper">
+        <div class="search-left">
+            <select v-model="searchOption">
+                <option value="all">전체</option>
+                <option value="title">제목</option>
+                <option value="userId">작성자</option>
+            </select>
+            <input v-model="keyword" @keyup.enter="fnBoardList" placeholder="🔍 검색어 입력" />
+            <button @click="fnBoardList">검색</button>
+        </div>
+        <div class="search-right">
+            <select v-model="pageSize" @change="fnBoardList">
+                <option value="5">5개씩</option>
+                <option value="10">10개씩</option>
+                <option value="15">15개씩</option>
+                <option value="20">20개씩</option>
+            </select>
+        </div>
     </div>
-    <jsp:include page="../common/footer.jsp"/>
-
-    
+    <table class="table-wrapper">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>조회수</th>
+        </tr>
+        <tr v-for="(item, index) in list">
+            <td>{{item.boardId}}</td>
+            <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}</a></td>
+            <td>{{item.userId}}</td>
+            <td>{{item.createdAt}}</td>
+            <td>{{item.cnt}}</td>
+        </tr>
+    </table>
+    <div v-if="index > 0">
+        <a href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1"> < </a>
+        <a href="javascript:;" v-for="num in index" @click="fnPage(num)">
+            <span :class="{ 'current-page': page === num }">{{ num }}</span>
+        </a>
+        <a href="javascript:;" @click="fnPageMove('next')" v-if="page != index"> > </a>
+    </div>
+    <button class="button" @click="fnAdd">글쓰기</button>
+</div>
+<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>
 <script>
-    
-    
-        document.addEventListener("DOMContentLoaded", function () {
-            const app = Vue.createApp({
-                data() {
-                    return {
-                       list : [],
-                       boardId : "",
-                       index : 0,
-                       PageSize : 5,
-                       page : 1,
-                       searchOption: "",
-
-                    };
-                },
-                computed: {
-                    
-                },
-                methods: {
-                    fnBoardList(){
-                        let self= this;
-
-                        let nparmap = {
-                            searchOption : self.searchOption,
-                            page : (self.page -1) * self.pageSize,
-                            pageSize : self.pageSize,
-                        };
-                    $.ajax({
-				    	url:"/board/list.dox",
-				    	dataType:"json",	
-				    	type : "POST", 
-				    	data : nparmap,
-				    	success : function(data) { 
-				    		console.log(data);
-                            self.list = data.board;
+document.addEventListener("DOMContentLoaded", function () {
+    const app = Vue.createApp({
+        data() {
+            return {
+                list: [],
+                boardId: "",
+                userId: "",
+                index: 0,
+                pageSize: 5,
+                page: 1,
+                searchOption: "all",
+                keyword: "",
+                orderKey: "",
+                orderType: "",
+            };
+        },
+        methods: {
+            fnBoardList() {
+                let self = this;
+                console.log("searchOption:", self.searchOption);
+                let nparmap = {
+                    searchOption: self.searchOption,
+                    page: (self.page - 1) * self.pageSize,
+                    pageSize: self.pageSize,
+                    orderKey: self.orderKey,
+                    orderType: self.orderType,
+                    keyword: self.keyword,
+                    userId: self.userId,
+                };
+                $.ajax({
+                    url: "/board/list.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: nparmap,
+                    success: function (data) {
+                        self.list = data.board;
+                        console.log("data", data);
+                        if (data.count && data.count.cnt !== undefined) {
                             self.index = Math.ceil(data.count.cnt / self.pageSize);
-                            console.log(data.count.cnt);
-                        }
-				        });
-                    },
-                    fnAdd : function (){   
-                        let self= this;
-                        pageChange("/board/edit.do", {});
-                    },
-                    fnView : function (boardId){
-                        let self = this;
-                        pageChange("/board/view.do", {boardId : boardId});
-                    },
-                    fnPage : function (num){
-                        let self = this;
-                        self.page = num;
-                        self.fnBoardList();
-                    },
-                    fnPageMove : function(direction){
-                        let self = this;
-                        if (direction == "next"){
-                            self.page++;
                         } else {
-                            self.page--;
+                            self.index = 0;
+                            console.warn("count 정보 없음!", data);
                         }
-                        self.fnBoardList();
                     }
-                },               
-                mounted() {
-                	let self = this;
-                    self.fnBoardList();
-                }
-            });
-            app.mount("#app");
-        });
-    </script>
+                });
+            },
+            fnAdd() {
+                pageChange("/board/add.do", {});
+            },
+            fnView(boardId) {
+                pageChange("/board/view.do", { boardId: boardId });
+            },
+            fnPage(num) {
+                this.page = num;
+                this.fnBoardList();
+            },
+            fnPageMove(direction) {
+                if (direction === "next") this.page++;
+                else this.page--;
+                this.fnBoardList();
+            },
+            fnOrder(orderKey) {
+                if (this.orderKey !== orderKey) this.orderType = "";
+                this.orderKey = orderKey;
+                this.orderType = this.orderType === "ASC" ? "DESC" : "ASC";
+                this.fnBoardList();
+            },
+        },
+        mounted() {
+            this.fnBoardList();
+        },
+    });
+    app.mount("#app");
+});
+</script>

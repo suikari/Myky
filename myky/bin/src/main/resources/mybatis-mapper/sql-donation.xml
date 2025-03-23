@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="teamgyodong.myky.donation.mapper.DonationMapper">
+	
+	
+	<select id="selectCenterList" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
+		
+		select * from donation_center
+			
+	</select>
+	
+	<select id="selectCenter" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
+		
+		select * from donation_center
+		where center_Id = #{centerId}
+		
+	</select>
+		
+	<insert id="insertHistory" parameterType="hashmap">
+		
+		insert into donation_history
+		values (donation_seq.nextval,#{centerId},#{amount},sysdate,#{message},#{userId})
+		
+	</insert>
+</mapper>
+
+
+
+
