@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자유게시판</title>
+    <title>공지사항</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <script src="js/swiper8.js"></script>
     <link rel="stylesheet" href="css/main.css">
@@ -16,11 +16,40 @@
             margin: 0;
             padding: 0;
         }
+        /* 공지사항 제목 */
+        .section-header {
+            /* background-color: #202060; */
+            color: #202060;
+            font-weight: bold;
+            height: 70px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            align-items: left; /* 세로 중앙 정렬 */
+            justify-content: left; /* 가로 중앙 정렬 */
+            font-size: 30px;
+            margin-top: 80px;
+            margin-left: 80px;
+        } 
+        .section-headerDown {
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+            margin-left: 90px;
+            margin-top: -35px;
+            margin-bottom: 20px;
+        }
         .search-wrapper {
             width: 90%;
             margin: 20px auto;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -29,6 +58,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 3px;
         }
         .search-left select,
         .search-left input,
@@ -119,6 +149,9 @@
             background-color: #fca311;
             color: #202060;
         }
+        .buttonMargin{
+            margin-bottom: 100px;
+        }
         div {
             text-align: center;
             margin-top: 20px;
@@ -142,7 +175,21 @@
 <body>
 <jsp:include page="../common/header.jsp"/>
 <div id="app" class="container">
+    <div class="section-header">
+        NOTICE
+    </div>
+    <div class="section-headerDown">
+        새 소식을 알려드립니다.
+    </div>
     <div class="search-wrapper">
+        <div class="search-right">
+            <select v-model="pageSize" @change="fnBoardList">
+                <option value="5">5개씩</option>
+                <option value="10">10개씩</option>
+                <option value="15">15개씩</option>
+                <option value="20">20개씩</option>
+            </select>
+        </div>
         <div class="search-left">
             <select v-model="searchOption">
                 <option value="all">전체</option>
@@ -151,14 +198,6 @@
             </select>
             <input v-model="keyword" @keyup.enter="fnBoardList" placeholder="🔍 검색어 입력" />
             <button @click="fnBoardList">검색</button>
-        </div>
-        <div class="search-right">
-            <select v-model="pageSize" @change="fnBoardList">
-                <option value="5">5개씩</option>
-                <option value="10">10개씩</option>
-                <option value="15">15개씩</option>
-                <option value="20">20개씩</option>
-            </select>
         </div>
     </div>
     <table class="table-wrapper">
@@ -184,7 +223,7 @@
         </a>
         <a href="javascript:;" @click="fnPageMove('next')" v-if="page != index"> > </a>
     </div>
-    <button class="button" @click="fnAdd">글쓰기</button>
+    <button class="button buttonMargin" @click="fnAdd">글쓰기</button>
 </div>
 <jsp:include page="../common/footer.jsp"/>
 </body>
