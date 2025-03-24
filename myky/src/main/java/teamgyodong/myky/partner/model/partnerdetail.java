@@ -9,8 +9,8 @@ public class partnerdetail {
 	private String GU;
 	private String DONG;
 	private String PARTNER_DETAILID;
-	private String NAME;
-	private String ADDRESS;
+	private String HOS_NAME;
+	private String HOS_ADDRESS;
 	private String PHONENUMBER;
 	private String NX;
 	private String NY;
@@ -19,5 +19,6 @@ public class partnerdetail {
 	private String OPENINGHOURS;
 	private String LUNCHBREAK;
 	private String REGULARHOLIDAY;
+	private int HOSPITAL_NO;
 	
 }

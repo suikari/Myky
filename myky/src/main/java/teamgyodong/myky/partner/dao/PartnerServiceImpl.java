@@ -26,10 +26,12 @@ public class PartnerServiceImpl implements PartnerService {
 			List<partnerdetail> gulist = partnerMapper.getPartnerGuList(map);
 			List<partnerdetail> donglist = partnerMapper.getPartnerDongList(map);
 			List<partnerdetail> silist = partnerMapper.getPartnerSiList(map);
+			List<partnerdetail> hoslist = partnerMapper.getPartnerHosList(map);
 			
 			//result = board != null ? "success" : "fail";
 			//System.out.print(result);
 			 
+			resultMap.put("hoslist", hoslist);
 			resultMap.put("gulist", gulist);
 			resultMap.put("donglist", donglist);
 			resultMap.put("silist", silist);
