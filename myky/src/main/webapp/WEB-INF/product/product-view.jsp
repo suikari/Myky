@@ -604,8 +604,11 @@
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
+
+
+                    
                 }
-            });
+            });   
 
             app.mount("#app");
         });
