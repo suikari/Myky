@@ -115,12 +115,15 @@ public class UserController {
 	    }
 	}
 	
+	//비밀번호 찾기 주소
     @RequestMapping("/user/resetPwd.do") 
     public String searchPwd(Model model) throws Exception{
 		
         return "user/pwd-reset"; 
     }
     
+    
+    // 비밀번호 찾기 기능
 	@RequestMapping(value = "/user/searchPwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String pwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -128,6 +131,13 @@ public class UserController {
 		resultMap = userService.newPwd(map); //userLogin은 재사용은 안할꺼임
 		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
 	}
+	
+    //유저 회원가입 전 동의서 주소
+	@RequestMapping("/user/consent.do") //브라우저 웹주소
+    public String consent(Model model) throws Exception{
+
+        return "user/user-consent"; // member 폴더로 묶임
+        }
 	
     //유저 회원가입 주소
 	@RequestMapping("/user/join.do") //브라우저 웹주소
