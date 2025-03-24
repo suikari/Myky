@@ -44,6 +44,9 @@
                 주소 : {{user.address}}
             </div>
             <div>
+                구분 : {{user.role}}
+            </div>
+            <div>
                 <button @click="fnEdit()">수정</button>
             </div>
 

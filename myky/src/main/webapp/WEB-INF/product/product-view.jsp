@@ -281,14 +281,12 @@
                 max-width: 1100px;
                 margin: 0 auto;
             }
-
             .policy-grid {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 30px 80px;
                 justify-content: space-between;
             }
-
             .policy-box {
                 flex: 1 1 45%;
                 min-width: 280px;
@@ -296,7 +294,6 @@
                 color: #444;
                 line-height: 1.7;
             }
-
             .policy-box h3 {
                 font-size: 18px;
                 font-weight: bold;
@@ -324,7 +321,7 @@
                 color: #fff;
                 font-weight: bold;
             }
-            
+           
             @media (max-width: 768px) {
                 .product-detail {
                     flex-direction: column;
@@ -337,7 +334,6 @@
                     text-align: center;
                 }
             }
-
             @media (max-width: 768px) {
 
                 .buy-btn1,
@@ -457,6 +453,7 @@
                         </div>
                     </div>
                     
+
                     <div v-else-if="activeTab === 2">
                         <p>❓ 상품문의 0개</p>
                     </div>
@@ -547,6 +544,7 @@
                         reviewPageSize: 5,
                         reviewTotal: 0,
                         reviewPages: []
+
                     };
                 },
                 computed: {
