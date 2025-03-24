@@ -18,6 +18,9 @@
 </style>
 <body>
     <!-- 오류 '//' 해결필요 -->
+    <jsp:include page="../common/header.jsp" />
+
+
 	<div id="app"> 
         <div v-if="authFlg==false">
             <div> 
@@ -39,6 +42,8 @@
 
 
 	</div>
+
+    <jsp:include page="/WEB-INF/common/footer.jsp"/>
 </body>
 </html>
 <script>
