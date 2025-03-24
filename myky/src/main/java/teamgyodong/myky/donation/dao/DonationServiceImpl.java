@@ -65,6 +65,7 @@ public class DonationServiceImpl implements DonationService {
 		try {
 			donationMapper.insertHistory(map);
 
+			resultMap.put("donationId", map.get("donationId"));
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
