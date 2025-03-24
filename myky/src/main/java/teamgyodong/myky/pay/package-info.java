@@ -42,10 +42,10 @@ package teamgyodong.myky.pay;
 	                }, function (rsp) {
 	                    if (rsp.success) {
 	                        alert("결제 성공");
-	                        console.log("결제 정보 >>> "+rsp);
+	                        console.log("결제 정보 >>> ",rsp);
 	                    } else {
 	                        alert("결제에 실패했습니다.");
-	                        console.log("결제 정보 >>> "+rsp.error_msg);
+	                        console.log("결제 정보 >>> ",rsp.error_msg);
 	                    }
 	                });
 	            },
@@ -54,12 +54,12 @@ package teamgyodong.myky.pay;
 	                
 	                let paymentMethod = "";
 	                if(rsp.pay_method == "card"){
-	                    paymentMethod = rsp.pay_method+"-"+rsp.card_name;
+	                    paymentMethod = rsp.pay_method,"-",rsp.card_name;
 	                } else {
 	                    paymentMethod = rsp.pay_method;
 	                }
 	                
-	                console.log("paymentMethod >>> "+paymentMethod);
+	                console.log("paymentMethod >>> ",paymentMethod);
 					// ex) paymentMethod >>> card-우리카드
 	
 	                var nparmap = {
@@ -82,7 +82,7 @@ package teamgyodong.myky.pay;
 		                type: "POST",
 		                data: nparmap,
 		                success: function (data) {
-	                    	console.log("결제 정보 저장 여부 >>> "+data.result);
+	                    	console.log("결제 정보 저장 여부 >>> ",data.result);
 	                	}
 	            	});
             	}

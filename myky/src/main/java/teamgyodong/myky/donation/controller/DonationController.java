@@ -56,7 +56,7 @@ public class DonationController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	// centerInfo
+	// 보호소 정보 조회
 	@RequestMapping(value = "/center/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String info(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -66,13 +66,23 @@ public class DonationController {
 		return new Gson().toJson(resultMap);
 	}
 
-	// donate
+	// 후원하기
 	@RequestMapping(value = "/center/donate.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String donate(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = donationService.addDonate(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 후원 내역 조회
+	@RequestMapping(value = "/donation/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String donationInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = donationService.getDonationInfo(map);
 		return new Gson().toJson(resultMap);
 	}
 }
