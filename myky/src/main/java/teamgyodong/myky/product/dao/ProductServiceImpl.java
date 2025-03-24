@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import teamgyodong.myky.product.mapper.ProductMapper;
 import teamgyodong.myky.product.model.Product;
+import teamgyodong.myky.product.model.Review;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -37,6 +38,20 @@ public class ProductServiceImpl implements ProductService {
 		resultMap.put("info", info);
 		resultMap.put("imgList", imgList);
 
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getReviewList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<Review> list = productMapper.selectReviewList(map);
+		int count = productMapper.selectReviewCount(map);
+		
+		
+		resultMap.put("reviewList", list);
+		resultMap.put("count", count);
+		resultMap.put("result", "success");
+		
 		return resultMap;
 	}
 }
