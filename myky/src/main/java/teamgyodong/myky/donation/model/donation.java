@@ -11,4 +11,10 @@ public class donation {
 	private String websiteUrl;
 	private String description;
 	private String imageUrl;
+	
+	private String donationId;
+	private String amount;
+	private String donationDate;
+	private String message;
+	private String userId;
 }

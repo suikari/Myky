@@ -22,9 +22,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpSession;
+import teamgyodong.myky.cart.dao.CartService;
 
 
 @Controller
 public class CartController {
-
+	@Autowired
+	CartService cartService;
+	
+	@RequestMapping("/cart/list.do") 
+	public String list(Model model) throws Exception{
+		
+		return "cart/cart";
+	}
+	
+	// cartList
+	@RequestMapping(value = "/cart/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getCartList(map);
+		return new Gson().toJson(resultMap);
+	}
 }
