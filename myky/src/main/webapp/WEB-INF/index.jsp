@@ -187,6 +187,10 @@
     color: #666;
 }
 
+.product_img {
+	width : 100%;
+	height : 100%;
+}
 /**/
 
         .best-product-container {
@@ -335,9 +339,9 @@
 				
 			    <div class="board-container">
                        <div class="board-title">게시판1</div>
-                       <div v-for="post in freeposts" class="post-item">
+                       <div v-for="post in freeposts"  @click="fnView(post.boardId)" class="post-item">
                            <div>{{ post.title }}</div>
-                           <div class="post-content">{{ post.content }}</div>
+                           <div class="post-content">{{ post.createdAt }}</div>
                        </div>
                                              
                 </div>			  
@@ -359,8 +363,15 @@
                         <div class="best-product-title">베스트 상품</div>
                         <div class="product-list">
                             <div v-for="product in displayedProducts" :key="product.id" class="product-card">
-                                <div class="product-image">{{ product.image }}</div>
-                                <div class="product-name">{{ product.name }}</div>
+                                <div class="product-image">
+                                    <template v-if="product.filePath">
+				                        <img class="product_img" :src="product.filePath" :alt="product.fileName" @click="fnPView(product.productId)">
+				                    </template>
+				                    <template v-else>
+				                        <img class="product_img" src="../../img/product/product update.png" alt="이미지 없음" @click="fnPView(product.productId)">
+				                    </template>
+                                </div> 
+                                <div class="product-name">{{ product.productName }}</div>
                                 <div class="product-price">{{ product.price }}원</div>
                             </div>
                         </div>
@@ -392,26 +403,13 @@
                             'img/banner/banner2.PNG',
                             'img/banner/banner3.PNG'
                         ],
-                        freeposts : [
-                            { id: 1, title: "첫 번째 게시글", content: "이것은 첫 번째 게시글 내용입니다." },
-                            { id: 2, title: "두 번째 게시글", content: "Vue 3을 활용한 게시판 예제입니다." },
-                            { id: 3, title: "세 번째 게시글", content: "JSP 환경에서도 Vue를 쉽게 사용할 수 있습니다." }
-                        ],
+                        freeposts : [],
                         qnposts : [
                             { id: 1, title: "첫 번째 게시글", content: "이것은 두 번째 게시판 게시글 내용입니다." },
                             { id: 2, title: "두 번째 게시글", content: "Vue 3을 활용한 게시판 예제2입니다." },
                             { id: 3, title: "세 번째 게시글", content: "HTML 환경에서도 Vue를 쉽게 할수있습니다. " }
                         ],
-                        products: [
-                            { id: 1, name: "상품 A", price: 25000, image: "이미지 A" },
-                            { id: 2, name: "상품 B", price: 32000, image: "이미지 B" },
-                            { id: 3, name: "상품 C", price: 15000, image: "이미지 C" },
-                            { id: 4, name: "상품 D", price: 27000, image: "이미지 D" },
-                            { id: 5, name: "상품 E", price: 20000, image: "이미지 E" },
-                            { id: 6, name: "상품 F", price: 18000, image: "이미지 F" },
-                            { id: 7, name: "상품 G", price: 31000, image: "이미지 G" },
-                            { id: 8, name: "상품 H", price: 29000, image: "이미지 H" }
-                        ],
+                        products: [],
                         currentPage: 0,
                         itemsPerPage: 5,
                         code : ""
@@ -435,6 +433,58 @@
                     nextPage() {
                         if (this.currentPage < this.maxPage) this.currentPage++;
                     },
+                    fnboardList : function() {
+                    	var self = this;
+                    	var nparmap = {
+                    			page : 0,
+                    			pageSize : 3
+                    	};
+                    	$.ajax({
+                    		url: "board/list.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log(data);
+                    			self.freeposts = data.board;
+
+                    		}
+                    	});
+                    }, 
+                    fnProductList : function() {
+                    	var self = this;
+                    	var nparmap = {
+                    			page : 0,
+                    			pageSize : 10
+                    	};
+                    	$.ajax({
+                    		url: "/product/list.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log(data);
+								self.products = data.list;
+
+                    		}
+                    	});
+                    },
+                    fnDonationList : function() {
+                    	var self = this;
+                    	var nparmap = {
+                    	};
+                    	$.ajax({
+                    		url: "/donation/info.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("dona",data);
+                    		}
+                    	});
+                    },
+                    
+                    
                     kakaotest : function() {
                     	var self = this;
                     	var nparmap = {
@@ -449,8 +499,13 @@
                     			console.log(data);
                     		}
                     	});
-                    }
-                    
+                    },
+                    fnView(boardId) {
+                        pageChange("/board/view.do", { boardId: boardId });
+                    },
+                    fnPView(productId) {
+                        pageChange("/product/view.do", { productId: productId });
+                    },
                 },
                 mounted() {
                 	let self = this;
@@ -482,8 +537,14 @@
                 	if ( self.code != "" ) { 
                 		self.kakaotest();
                     	//console.log(self.code);
-						c
                 	}
+                	self.fnboardList();
+                	self.fnProductList();
+                	self.fnDonationList();
+
+                	
+
+                	
                 }
             });
 

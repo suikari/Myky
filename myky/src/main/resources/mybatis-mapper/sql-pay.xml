@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.test1.mapper.PayMapper">
+<mapper namespace="teamgyodong.myky.pay.mapper.PayMapper">
 
+	<insert id="insertPayment" parameterType="hashmap">
+		
+		insert into payment
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},#{productId},#{donationId},#{userId})
+		
+	</insert>
 
 </mapper>

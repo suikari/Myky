@@ -10,4 +10,6 @@ public interface DonationService {
 
 	HashMap<String, Object> addDonate(HashMap<String, Object> map);
 
+	HashMap<String, Object> getDonationInfo(HashMap<String, Object> map);
+
 }
