@@ -116,9 +116,18 @@ public class MainController {
     
     
     
+	// centerList
+	@RequestMapping(value = "/admin/LogList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String LogList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = mainService.selectLogBrowserList(map);
+		return new Gson().toJson(resultMap);
+	}
     
     
-    
+	
 	// 클라이언트의 실제 IP를 가져오는 메서드
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");

@@ -145,7 +145,7 @@
                 selectdong: {
                     DONG : "",
                 },
-                selectsi: "인천광역시"
+                selectsi: "인천광역시",
             };
         },
         methods: {
