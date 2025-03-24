@@ -51,9 +51,18 @@
 	<insert id="insertBoard" parameterType="hashmap">
 		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, CNT)
 		VALUES(
-			(SELECT NVL(MAX(BOARD_ID), 0) + 1 FROM FREE_BOARD),
+			FREE_BOARD_SEQ.NEXTVAL,
 			#{title}, #{content}, SYSDATE, SYSDATE, #{userId}, 0)
 	</insert>
-
+	
+	<update id="updateBoard" parameterType="hashmap">
+		UPDATE FREE_BOARD
+    	SET
+        TITLE = #{title},
+        CONTENT = #{content}
+		WHERE BOARD_ID = #{boardId}
+	</update>
 </mapper>
+
+
 

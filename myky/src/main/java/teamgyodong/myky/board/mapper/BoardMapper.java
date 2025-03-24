@@ -18,5 +18,7 @@ public interface BoardMapper {
 
 	void insertBoard(HashMap<String, Object> map);
 
+	void updateBoard(HashMap<String, Object> map);
+
 
 }

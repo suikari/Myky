@@ -1,10 +1,14 @@
 package teamgyodong.myky.board.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,6 +44,14 @@ public class BoardControlloer {
 
         return "board/board-add";
     }
+	//게시글 수정
+	@RequestMapping("/board/edit.do") 
+    public String edit(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		request.setAttribute("map", map);
+		
+        return "board/board-edit";
+    }
 	//게시글 목록출력
 	@RequestMapping(value = "board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -73,4 +85,15 @@ public class BoardControlloer {
 		
 		return new Gson().toJson(resultMap);
 	}
+	//게시글 수정하기
+	@RequestMapping(value = "board/edit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardEdit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+			
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.boardEdit(map);
+			
+		return new Gson().toJson(resultMap); 
+	}
+
 }

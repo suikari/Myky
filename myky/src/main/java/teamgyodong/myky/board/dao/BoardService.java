@@ -10,5 +10,7 @@ public interface BoardService {
 
 	HashMap<String, Object> boardAdd(HashMap<String, Object> map);
 
+	HashMap<String, Object> boardEdit(HashMap<String, Object> map);
+
 
 }

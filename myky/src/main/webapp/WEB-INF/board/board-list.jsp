@@ -25,17 +25,16 @@
             width: 100%;
             padding: 10px;
             border-radius: 4px;
-            margin-top: 20px;
-            margin-bottom: 10px;
             text-align: center;
             align-items: center;
             justify-content: center;
             display: flex;
             align-items: left; /* 세로 중앙 정렬 */
             justify-content: left; /* 가로 중앙 정렬 */
-            font-size: 30px;
+            font-size: 40px;
             margin-top: 80px;
             margin-left: 80px;
+            margin-bottom: 20px;
         } 
         .section-headerDown {
             color: #333;
@@ -43,7 +42,7 @@
             text-align: left;
             margin-left: 90px;
             margin-top: -35px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .search-wrapper {
             width: 90%;
@@ -170,6 +169,15 @@
         span:hover {
             text-decoration: underline;
         }
+        .custom-hr {
+            width: 1000px;
+            max-width: 100%;
+            border: none;
+            border-top: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 70px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -181,6 +189,7 @@
     <div class="section-headerDown">
         새 소식을 알려드립니다.
     </div>
+    <hr class="custom-hr">
     <div class="search-wrapper">
         <div class="search-right">
             <select v-model="pageSize" @change="fnBoardList">
@@ -245,6 +254,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 orderType: "",
             };
         },
+        computed: {
+
+        },
         methods: {
             fnBoardList() {
                 let self = this;
@@ -279,6 +291,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 pageChange("/board/add.do", {});
             },
             fnView(boardId) {
+                let self = this;
+                localStorage.setItem("page", self.page);
                 pageChange("/board/view.do", { boardId: boardId });
             },
             fnPage(num) {
@@ -298,7 +312,21 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         },
         mounted() {
-            this.fnBoardList();
+            let self = this;
+            let savedPage;
+
+             if(localStorage.getItem('page') == "undefined"){
+                savedPage  = 1;
+
+             } else {
+                savedPage  = localStorage.getItem('page');
+             }
+             
+             self.page = savedPage ? Number(savedPage) : 1;
+
+
+            self.fnBoardList();
+            localStorage.removeItem('page');
         },
     });
     app.mount("#app");

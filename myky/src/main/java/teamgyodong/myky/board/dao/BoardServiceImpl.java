@@ -65,5 +65,14 @@ public class BoardServiceImpl implements BoardService {
 		
 		return null;
 	}
+	//게시글 수정
+	public HashMap<String, Object> boardEdit(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.updateBoard(map);
+		resultMap.put("result", "success");
+		
+		return resultMap;
+	}
 
 }
