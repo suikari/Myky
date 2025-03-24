@@ -7,31 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 목록 페이지</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <style>
         /* 헤더, 푸터 간격 조정 */
         #app {
             margin: 40px auto;
-            /* 헤더, 푸터와의 간격 */
             max-width: 1200px;
         }
 
         main {
             padding: 20px 0;
-            /* 상단, 하단 여백 */
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             column-gap: 20px;
-            /* 좌우 간격 유지 */
             row-gap: 40px;
-            /* 위아래 간격 증가 */
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            cursor: pointer;
         }
 
         .product-item {
@@ -40,14 +36,12 @@
             align-items: center;
             padding: 10px;
             border-radius: 8px;
-            text-align: center;
             height: 100%;
             transition: all 0.3s ease-in-out;
-
-            /* 배경 박스 제거 */
             background-color: transparent;
             box-shadow: none;
             border: none;
+            text-align: center;
         }
 
         .product-item:hover {
@@ -55,35 +49,57 @@
         }
 
         .product-item img {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             object-fit: contain;
             border-radius: 5px;
             margin-bottom: 10px;
             cursor: pointer;
         }
-
-        .product-item h3 {
-            margin: 10px 0;
-        }
-
-        .product-item p {
-            flex-grow: 1;
-            font-size: 16px;
-            color: #555;
-        }
-
-        .product-item .price {
+        .product-item h3{
+            text-align: left;
+            width: 100%;
             font-size: 18px;
             font-weight: bold;
-            color: #ff6600;
-            margin-top: auto;
+            color: rgb(52, 50, 50);
+            margin-top: 4px; 
+            margin-bottom: 4px;
         }
-
-        /* 페이징 스타일 */
+        .product-item .price{
+            text-align: left;
+            width: 100%;
+            font-size: 15px;
+            font-weight: bold;
+            color: rgb(52, 50, 50);
+            margin-top: 4px; 
+            margin-bottom: 4px;
+        }
+        .product-item {
+            text-align: left;
+            width: 100%;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .del-price{
+            text-align: left;
+            width: 100%;
+            font-size: 12px;
+            color: #868080;
+            margin-top: 4px; 
+            margin-bottom: 4px;
+        }
+        p.discount-info{
+            text-align: left;
+            width: 100%;
+            font-size: 12px;
+            font-weight: bold;
+            color: rgb(142, 36, 4);
+            margin-top: 2px; 
+            margin-bottom: 4px;
+        }
         .pagination {
             display: flex;
-            justify-content: center; /* 가운데 정렬 */
+            justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
@@ -112,7 +128,7 @@
 
     <div id="app" class="container">
         <main>
-             <!-- <select v-model="searchOption" id="selectBox">
+            <!-- <select v-model="searchOption" id="selectBox">
                 <option value="all">:: 전체 상품 ::</option>
                 <option value="dog">강아지 상품</option>
                 <option value="cat">고양이 상품</option>
@@ -126,17 +142,28 @@
                         <img src="../../img/product/product update.png" alt="이미지 없음" @click="fnView(item.productId)">
                     </template>
                     <h3>{{ item.productName }}</h3>
-                    <p>{{ item.description }}</p>
-                    <p class="price">₩ {{ item.price }}</p>
+                    <!-- 일반 가격 -->
+                    <p class="price">{{ formatPrice(item.price) }}</p>
+                    <p class="del-price">배송비 : 2000원</p>
+                    
+                    <!-- 멤버십 회원이면 할인율과 할인 가격을 표시 -->
+                    <template v-if="isMember">
+                        <p class="discount-info">
+                            멤버십 {{ Math.round((1 - membershipDiscountRate) * 100) }}% 할인 : 
+                            {{ formatPrice(Math.floor(item.price * membershipDiscountRate)) }}
+                        </p>
+                    </template>
                 </div>
             </section>
             <div class="pagination">
                 <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> < </a>
+                
                 <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)" :class="{ active: page === num }">
                     <span v-if="page == num">{{ num }}</span>
                     <span v-else>{{ num }}</span>
                 </a>
-                <a v-if="page != index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
+                <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
+
             </div>
             <!-- <button @click="fnChange">강아지</button>
             <button @click="fnChange2">장난감</button> -->
@@ -158,7 +185,9 @@
                     list: [],
                     index: 0,
                     pageSize: 8,
-                    page: 1
+                    page: 1,
+                    isMember: true, // 멤버십 회원 여부 (true면 멤버십, false면 일반 회원)
+                    membershipDiscountRate: 0.9 // 10% 할인 적용
                 };
             },
             methods: {
@@ -182,16 +211,13 @@
                         }
                     });
                 },
+                formatPrice(price) {
+                    if (price == null) return '';
+                    return price.toLocaleString('ko-KR') + '원';
+                },
                 fnView: function (productId) {
                     pageChange("/product/view.do", { productId: productId });
                 },
-                //테스트용용
-                // fnChange : function(){
-                //     pageChange("/product/list.do", {searchOption : "dog" });
-                // },
-                // fnChange2 : function(){
-                //     pageChange("/product/list.do", {searchOption : "dog" ,keyword : "장난감" });
-                // }
                 fnPage: function (num) {
                     let self = this;
                     self.page = num;
