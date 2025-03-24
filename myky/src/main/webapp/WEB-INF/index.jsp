@@ -162,12 +162,20 @@
 
 .board-container {
     width: 300px;
+
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     margin: 10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.board-div {
+    height: 250px; /* 스크롤이 필요한 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+}
+
+
 .board-title {
     font-size: 18px;
     font-weight: bold;
@@ -284,7 +292,14 @@
 	
 
         
-   
+   .scroll {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    
+	}
+	.scroll::-webkit-scrollbar {
+	    display: none; /* Chrome, Safari, Opera*/
+	}
 
     </style>
 </head>
@@ -339,19 +354,24 @@
 				
 			    <div class="board-container">
                        <div class="board-title">게시판1</div>
-                       <div v-for="post in freeposts"  @click="fnView(post.boardId)" class="post-item">
-                           <div>{{ post.title }}</div>
-                           <div class="post-content">{{ post.createdAt }}</div>
-                       </div>
+                       <div class="board-div">
+	                       <div v-for="post in freeposts"  @click="fnView(post.boardId)" class="post-item">
+	                           <div>{{ post.title }}</div>
+	                           <div class="post-content">{{ post.createdAt }}</div>
+	                       </div>
+	                   </div>
                                              
                 </div>			  
                 
                 <div class="board-container">
-	                    <div class="board-title">게시판2</div>
-	                    <div v-for="post in qnposts" class="post-item">
-	                        <div>{{ post.title }}</div>
-	                        <div class="post-content">{{ post.content }}</div>
-	                    </div>
+	                    <div class="board-title">후원내역</div>
+	                    <div class="board-div scroll" id="scrollBox" >
+							<div  v-for="post in donations" class="post-item">
+							    <div>{{ post.userId }} 님이 {{ post.centerName }} 에 </div>
+							    <div class="post-content">{{ post.amount }} 원을 후원 해주셨습니다.</div>
+							    <div class="post-content">{{ post.donationDate }}</div>
+							</div>
+						</div>
                 </div>
                 
 
@@ -404,11 +424,7 @@
                             'img/banner/banner3.PNG'
                         ],
                         freeposts : [],
-                        qnposts : [
-                            { id: 1, title: "첫 번째 게시글", content: "이것은 두 번째 게시판 게시글 내용입니다." },
-                            { id: 2, title: "두 번째 게시글", content: "Vue 3을 활용한 게시판 예제2입니다." },
-                            { id: 3, title: "세 번째 게시글", content: "HTML 환경에서도 Vue를 쉽게 할수있습니다. " }
-                        ],
+                        donations : [],
                         products: [],
                         currentPage: 0,
                         itemsPerPage: 5,
@@ -480,11 +496,10 @@
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("dona",data);
+                    			self.donations = data.info;
                     		}
                     	});
                     },
-                    
-                    
                     kakaotest : function() {
                     	var self = this;
                     	var nparmap = {
@@ -506,6 +521,21 @@
                     fnPView(productId) {
                         pageChange("/product/view.do", { productId: productId });
                     },
+                    autoScroll() {
+                        let container = document.getElementById("scrollBox");
+                        let speed = 1; // 스크롤 속도
+
+                        setInterval(() => {
+                            if (!container) return;
+
+                            container.scrollTop += speed;
+
+                            // **끝까지 스크롤되면 다시 처음으로 이동**
+                            if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+                                    container.scrollTop = 0; // 처음으로 리셋
+                            }
+                        }, 50); // 50ms마다 실행 (속도 조절 가능)
+                    },
                 },
                 mounted() {
                 	let self = this;
@@ -514,7 +544,7 @@
                         new Swiper(this.$refs.swiperContainer, {
                             loop: true, // 반복
                             autoplay: {
-                                delay: 2500,
+                                delay: 3000,
                                 disableOnInteraction: false, // 사용자가 버튼을 눌러도 자동 재생 유지
                             },
                             slidesPerView: "auto", // 자동 너비 조절
@@ -541,6 +571,7 @@
                 	self.fnboardList();
                 	self.fnProductList();
                 	self.fnDonationList();
+                	self.autoScroll();
 
                 	
 
