@@ -17,6 +17,8 @@
 
             main {
                 padding: 20px 0;
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .product-container {
@@ -130,10 +132,9 @@
             /* 상품 정렬 */
             .sort-box {
                 display: flex;
-                justify-content: flex-end;
-                margin-bottom: 15px;
-                margin-right: 20px;
+                align-items: left;
             }
+
             .sort-select {
                 padding: 6px 12px;
                 font-size: 14px;
@@ -143,26 +144,40 @@
                 color: #333;
                 cursor: pointer;
                 appearance: none;
+                background: url("data:image/svg+xml;utf8,<svg fill='black' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 10px center;
+                background-size: 12px;
+                padding-right: 30px;
             }
+
             .sort-select:focus {
                 outline: none;
                 border-color: #888;
             }
-            .top-bar {
+            .product-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding: 0 20px;
                 margin-bottom: 15px;
+                box-sizing: border-box;
             }
             /* 상품 총 개수 */
             .total-count {
                 font-size: 14px;
                 color: #333;
             }
+
             .total-count strong {
                 font-weight: bold;
                 color: #000;
+            }
+
+            @media (max-width: 768px) {
+                .top-bar {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
             }
         </style>
     </head>
@@ -177,7 +192,7 @@
                 <option value="dog">강아지 상품</option>
                 <option value="cat">고양이 상품</option>
             </select> -->
-                <div class="top-bar">
+            <div class="product-header">
                     <div class="total-count">
                         총 <strong>{{ totalCount }}</strong>개의 상품이 있습니다.
                     </div>

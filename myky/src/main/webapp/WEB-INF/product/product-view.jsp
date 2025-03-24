@@ -234,18 +234,61 @@
                 cursor: pointer;
             }
 
-            /* tab 4번 */
+            /* 상품 후기 영역 */
+            .review-section {
+                padding: 30px;
+                font-family: 'Noto Sans KR', sans-serif;
+            }
+
+            .review-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+
+            .review-header h3 {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            .review-buttons .btn {
+                padding: 8px 16px;
+                margin-left: 10px;
+                border: 1px solid #333;
+                background: white;
+                color: #333;
+                cursor: pointer;
+                font-weight: bold;
+                transition: background-color 0.2s;
+            }
+
+            .review-buttons .btn:hover {
+                background-color: #f0f0f0;
+            }
+
+            .review-empty {
+                text-align: center;
+                color: #777;
+                font-size: 14px;
+                margin-top: 100px;
+            }
+
+            /* 배송, 교환, 환불 영역 */
             .policy-section {
                 padding: 30px;
                 max-width: 1100px;
                 margin: 0 auto;
             }
+
             .policy-grid {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 30px 80px;
                 justify-content: space-between;
             }
+
             .policy-box {
                 flex: 1 1 45%;
                 min-width: 280px;
@@ -253,14 +296,35 @@
                 color: #444;
                 line-height: 1.7;
             }
+
             .policy-box h3 {
                 font-size: 18px;
                 font-weight: bold;
                 margin-bottom: 10px;
                 color: #222;
             }
+            /* 페이징징 */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 20px;
+            }
 
+            .pagination a {
+                padding: 5px 10px;
+                text-decoration: none;
+                color: #333;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
 
+            .pagination a.active {
+                background-color: #000;
+                color: #fff;
+                font-weight: bold;
+            }
+            
             @media (max-width: 768px) {
                 .product-detail {
                     flex-direction: column;
@@ -363,13 +427,36 @@
 
                 <div class="tab-content">
                     <div v-if="activeTab === 0">
-                        <div v-html="info.description">
-
+                        <div v-html="info.description"></div>
+                    </div>
+                    <div v-else-if="activeTab === 1" class="review-section">
+                        <div class="review-header">
+                            <h3>REVIEW</h3>
+                            <div class="review-buttons">
+                                <button class="btn" @click="fnReviewList()">상품 후기 목록</button>
+                                <button class="btn" @click="fnReviewWtite()">글쓰기</button>
+                            </div>
+                        </div>
+                        <div v-if="reviewList.length === 0" class="review-empty">
+                            현재 게시물이 없습니다
+                        </div>
+                        <div v-else>
+                            <div v-for="review in reviewList" :key="review.reviewId" class="review-item">
+                                <p><strong>작성자:</strong> {{ review.userId }}</p>
+                                <p><strong>내용:</strong> {{ review.reviewText }}</p>
+                                <p><strong>평점:</strong> {{ review.rating }}</p>
+                            </div>
+                        </div>
+                        <div class="pagination" style="margin-top: 30px;">
+                            <a href="javascript:;" v-if="reviewPage > 1" @click="fnReviewPage(reviewPage - 1)">이전</a>
+                            <a href="javascript:;" v-for="num in reviewPages" :key="num" @click="fnReviewPage(num)"
+                               :class="{ active: reviewPage === num }">
+                                {{ num }}
+                            </a>
+                            <a href="javascript:;" v-if="reviewPage < reviewPages.length" @click="fnReviewPage(reviewPage + 1)">다음</a>
                         </div>
                     </div>
-                    <div v-else-if="activeTab === 1">
-                        <p>📝 상품후기 0개</p>
-                    </div>
+                    
                     <div v-else-if="activeTab === 2">
                         <p>❓ 상품문의 0개</p>
                     </div>
@@ -448,13 +535,18 @@
                         imgList: [],
                         mainImage: '',
                         quantity: 1,
-                        activeTab: 0, // 탭 상태
+                        activeTab: 0,
                         tabs: [
                             { label: '상세정보' },
-                            { label: '상품후기 0' },
+                            { label: '상품후기 개' },
                             { label: '상품문의 0' },
                             { label: '배송/교환/환불 안내' }
-                        ]
+                        ],
+                        reviewList: [],
+                        reviewPage: 1,
+                        reviewPageSize: 5,
+                        reviewTotal: 0,
+                        reviewPages: []
                     };
                 },
                 computed: {
@@ -471,8 +563,9 @@
                             data: nparmap,
                             success: function (data) {
                                 console.log(data);
-                                self.info = data.info; // 서버로부터 받은 정보로 info를 채움
-                                self.imgList = data.imgList; // 이미지 리스트 받아오기
+                                self.info = data.info;
+                                self.imgList = data.imgList;
+                                self.reviewList = data.reviewList || [];
                                 self.mainImage = self.info.filePath || '../../img/product/product update.png';
                             },
                         });
@@ -480,12 +573,37 @@
                     // 클릭된 이미지로 메인 이미지 변경
                     changeImage(filePath) {
                         document.getElementById('mainImage').src = filePath;
+                    },
+                    fnReviewList() {
+                        const self = this;
+                        const nparmap = {
+                            productId: self.productId,
+                            page: (self.reviewPage - 1) * self.reviewPageSize,
+                            pageSize: self.reviewPageSize
+                        };
+
+                        $.ajax({
+                            url: "/product/reviewList.dox", 
+                            type: "POST",
+                            data: nparmap,
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                self.reviewList = data.reviewList;
+                                self.reviewTotal = data.totalCount;
+                                // self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
+                            }
+                        });
+                    },
+                    fnReviewPage(num) {
+                        this.reviewPage = num;
+                        this.fnReviewList();
                     }
                 },
                 mounted() {
                     let self = this;
                     self.fnProduct();
-
+                    self.fnReviewList();
                 }
             });
 
