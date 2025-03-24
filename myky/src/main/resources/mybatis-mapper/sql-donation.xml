@@ -27,7 +27,8 @@
 	
 	<select id="selectDonationInfo" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
 		
-		select * from donation_history
+		select d.* , c.center_name from donation_history d
+		left join donation_center c on d.center_id = c.center_id
 		
 	</select>
 </mapper>
