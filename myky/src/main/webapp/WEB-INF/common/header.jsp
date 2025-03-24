@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue3 레이아웃 예제</title>
 	<script src="/js/vue3b.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
 	<script src="/js/main.js"></script>
-	
-
-	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		
     <style>
 		    
 		/* 전체 레이아웃 스타일 */
@@ -238,6 +236,7 @@
 		
 		.search-box {
 		  position: absolute;
+		  z-index : 999;
 		  top: 0;
 		  width:100%;
 		  background: white;
@@ -245,6 +244,8 @@
 		  border-radius: 5px;
 		  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 		  transition: all 0.3s ease-in-out;
+		    text-align: center;
+		  
 		}
 		
 		.slide-enter-active, .slide-leave-active {
@@ -261,6 +262,79 @@
 		  opacity: 0;
 		}
 
+
+
+
+.search-container {
+  width: 100%;
+  margin: 20px auto;
+  text-align: center;
+  position: relative;
+  background: white;
+  border-radius: 8px;
+}
+
+.search_box {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.search-input {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.popular-search {
+  background: #f5f5f5;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+.close-button {
+  position: absolute;
+  top: -25px;
+  right: 9px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+}
+
+.title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.keyword {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
     </style>
 </head>
 <body>
@@ -269,8 +343,23 @@
     
 		    <transition name="slide">
 		      <div v-if="showSearch" class="search-box">
-		        <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요..." />
-		        <button @click="search">검색</button>
+				 <div class="search-container">
+				    <button class="close-button" @click="toggleSearch">&times;</button>
+				    <div class="search_box">
+				      <input type="text" placeholder="검색어를 입력해주세요" v-for="searchQuery" @keyup.enter="fnSearch()"   class="search-input" />
+				      <button @click="fnSearch" class="search-button">🔍</button>
+				    </div>
+				    <div class="popular-search">
+				      <h3 class="title">인기 검색어</h3>
+				      <div class="keyword-list">
+				        <span Click="" class="keyword">강아지</span>
+				        <span class="keyword">고양이</span>
+				        <span class="keyword">패드</span>
+				        <span class="keyword">사료</span>
+				        <span class="keyword">간식</span>
+				      </div>
+				    </div>
+				  </div>
 		      </div>
 		    </transition>
 	  
@@ -278,7 +367,7 @@
         	<div v-if="!sessionName" class="top-bar">
 	            <a href="/register">회원가입</a> 
 	            | <a href="/user/login.do">로그인</a>
-	            | <a href="/notices">공지사항</a> 
+	            | <a href="/board/list.do">공지사항</a> 
 	        </div>
 	        
 	        <div v-else class="top-bar">
@@ -309,8 +398,8 @@
             
             <div class="icons">
                 <span class="icon">💎</span>
-		    	<button @click="toggleSearch" class="search-icon">🔍</button>
-                <span class="icon">👤</span>
+		    	<span @click="toggleSearch" class="search-icon">🔍</span>
+                <span @cilck="myPage" class="icon">👤</span>
                 <span class="icon">🛒</span>
             </div>
             
@@ -322,7 +411,7 @@
                 data() {
                     return {
                     	categories: [ ],
-                        sessionId : '${sessionId}',
+                        sessionId   : '${sessionId}',
                         sessionName : '${sessionName}',
                         sessionRole : '${sessionRole}',
                         showSearch: false,
@@ -379,9 +468,18 @@
                     toggleSearch() {
                         this.showSearch = !this.showSearch;
                     },
-                    search() {
+                    fnSearch() {
                       console.log("검색어:", this.searchQuery);
+                      
+                  	
+                     pageChange("/product/list.do?searchOption=search&keyword="+this.searchQuery , { });
+                  	
                       // 여기에 검색 로직 추가 가능 (API 호출 등)
+                    },
+                    myPage(){
+                        pageChange("user/info.do" , { });
+
+                    		
                     }
                 },
                 mounted() {

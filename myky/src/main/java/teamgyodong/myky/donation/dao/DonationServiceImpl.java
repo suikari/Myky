@@ -65,6 +65,23 @@ public class DonationServiceImpl implements DonationService {
 		try {
 			donationMapper.insertHistory(map);
 
+			resultMap.put("donationId", map.get("donationId"));
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> getDonationInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<donation> info = donationMapper.selectDonationInfo(map);
+			
+			resultMap.put("info", info);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
