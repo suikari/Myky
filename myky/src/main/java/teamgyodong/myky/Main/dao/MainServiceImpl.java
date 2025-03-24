@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import teamgyodong.myky.Main.mapper.MainMapper;
+import teamgyodong.myky.Main.model.Category;
 import teamgyodong.myky.donation.mapper.DonationMapper;
 import teamgyodong.myky.donation.model.donation;
 
@@ -44,5 +45,23 @@ public class MainServiceImpl implements MainService {
 		
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> selectCategoryList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Category> list = mainMapper.selectCategoryList(map);
+
+			resultMap.put("list", list);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
 	
 }

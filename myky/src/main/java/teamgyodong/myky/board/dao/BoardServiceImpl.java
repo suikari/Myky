@@ -2,6 +2,7 @@ package teamgyodong.myky.board.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,15 @@ public class BoardServiceImpl implements BoardService {
 		String result = "";
 		
 		try {
+			System.out.println("searchOption: " + map.get("searchOption"));
+			System.out.println("keyword: " + map.get("keyword"));
 			
 			List<board> board = boardMapper.selectBoardList(map);			
-			board count = boardMapper.selectBoardCnt(map);
+			int count = boardMapper.selectBoardCnt(map);
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
 
-			resultMap.put("count", count);
+			resultMap.put("count", countMap);
 			resultMap.put("result", "success");			
 			resultMap.put("board", board);
 			
@@ -41,14 +46,24 @@ public class BoardServiceImpl implements BoardService {
 		return resultMap;
 	}
 	//게시글 상세보기
-		public HashMap<String, Object> boardView(HashMap<String, Object> map) {
-			// TODO Auto-generated method stub
-			HashMap<String, Object> resultMap = new HashMap<String, Object>();
-			
-			board info = boardMapper.selectBoard(map);
-			
-			resultMap.put("info", info);
-			resultMap.put("result", "success");
-			return resultMap;
-		}
+	public HashMap<String, Object> boardView(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<board> boardList = boardMapper.selectBoard(map);
+		board info = boardList.isEmpty() ? null : boardList.get(0);
+		
+		resultMap.put("info", info);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//게시글 추가
+	public HashMap<String, Object> boardAdd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.insertBoard(map);
+		resultMap.put("result", "success");
+		
+		return null;
+	}
+
 }

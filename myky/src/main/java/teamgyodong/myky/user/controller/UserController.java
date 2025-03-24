@@ -5,22 +5,26 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.http.*;
-
 import org.springframework.web.client.RestTemplate;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.LinkedMultiValueMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.user.dao.UserService;
 
@@ -111,12 +115,62 @@ public class UserController {
 	    }
 	}
 	
-//	  //오류해결 필요 '//'확인 필요	
-//    @RequestMapping("/user/resetPwd.do") 
-//    public String searchPwd(Model model) throws Exception{
+    @RequestMapping("/user/resetPwd.do") 
+    public String searchPwd(Model model) throws Exception{
+		
+        return "user/pwd-reset"; 
+    }
+    
+	@RequestMapping(value = "/user/searchPwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String pwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.newPwd(map); //userLogin은 재사용은 안할꺼임
+		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+	}
+	
+    //유저 회원가입 주소
+	@RequestMapping("/user/join.do") //브라우저 웹주소
+    public String add(Model model) throws Exception{
+
+        return "user/user-join"; // member 폴더로 묶임
+        }
+	
+	//아이디 중복체크
+//	@RequestMapping(value = "/user/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public String check(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 //		
-//        return "/user/pwd-reset"; 
-//    }
+//		resultMap = userService.searchId(map); // 이름 바꾼이유 아이디 조회는 여러곳에서 활용가능
+//		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+//	}
+	
+	//유저 회원가입
+//	@RequestMapping(value = "/user/join.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public String add(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		
+//		resultMap = userService.memberAdd(map);
+//		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+//	}
+	
+	//유저 상세 정보
+	@RequestMapping("/user/info.do") 
+    public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "user/user-info"; //
+    }
+	
+	//유저 상세 정보 출력
+	@RequestMapping(value = "/user/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String view(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.getview(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 
 

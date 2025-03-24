@@ -6,4 +6,8 @@ public interface DonationService {
 
 	HashMap<String, Object> getCenterList(HashMap<String, Object> map);
 
+	HashMap<String, Object> getCenterInfo(HashMap<String, Object> map);
+
+	HashMap<String, Object> addDonate(HashMap<String, Object> map);
+
 }

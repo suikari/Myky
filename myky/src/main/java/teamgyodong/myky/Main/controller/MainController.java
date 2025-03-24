@@ -3,6 +3,12 @@ package teamgyodong.myky.Main.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.Main.dao.MainService;
@@ -83,9 +89,36 @@ public class MainController {
     }
 	
 	
+    @RequestMapping("/member/logout.do") 
+    public String login(HttpSession session, Model model) throws Exception{
+		
+    	session.removeAttribute("sessionId");	
+    	session.removeAttribute("sessionName");	
+    	session.removeAttribute("sessionRole");	
+    	
+        return "index"; 
+    }
 	
 	
-	
+    
+    
+    
+	// centerList
+	@RequestMapping(value = "/menuList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String menuList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = mainService.selectCategoryList(map);
+		return new Gson().toJson(resultMap);
+	}
+    
+    
+    
+    
+    
+    
+    
 	// 클라이언트의 실제 IP를 가져오는 메서드
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");

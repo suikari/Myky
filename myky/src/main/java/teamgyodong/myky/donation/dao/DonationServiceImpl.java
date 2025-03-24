@@ -42,4 +42,34 @@ public class DonationServiceImpl implements DonationService {
 		return resultMap;
 	}
 	
+	@Override
+	public HashMap<String, Object> getCenterInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			donation info = donationMapper.selectCenter(map);
+			
+			resultMap.put("info", info);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> addDonate(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			donationMapper.insertHistory(map);
+
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

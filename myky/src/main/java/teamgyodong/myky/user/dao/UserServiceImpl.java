@@ -2,13 +2,11 @@ package teamgyodong.myky.user.dao;
 
 import java.util.HashMap;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
-
 import teamgyodong.myky.user.mapper.UserMapper;
 import teamgyodong.myky.user.model.User;
 
@@ -54,7 +52,27 @@ public class UserServiceImpl implements UserService {
 			resultMap.put("result", "fail");
 		}
 		return resultMap;
-	
-	
 	}
+	
+	
+	public HashMap<String, Object> newPwd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int num =userMapper.updatePwd(map); // 중복체크용 재활용
+		if(num > 0) {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getview(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		User user = userMapper.selectUser(map);
+		resultMap.put("user", user);
+		return resultMap;
+	}
+	
 }
