@@ -11,6 +11,6 @@ package teamgyodong.myky.donation;
  * 
  * 25.03.24
  * 결제 완료 및 결제 정보 DB, 후원 히스토리 DB 저장 확인.
- * 후원 페이지 일단 완료.
+ * 콘솔로그 수정. 후원 내역 조회 dox 생성
  * 
  */
