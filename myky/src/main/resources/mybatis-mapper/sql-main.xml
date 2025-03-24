@@ -15,8 +15,39 @@
 		
 			select * from CATEGORY_MENU
 			ORDER BY category_Id
+			
+	</select>
+
+	<select id="selectLogBrowserList" parameterType="hashmap" resultType="teamgyodong.myky.Main.model.Visit">
+	
+			select user_agent_browser, count(*) visit_count from VISIT_LOG 
+			group by user_agent_browser
+			
 	</select>
 	
+	
+	<select id="selectLogDateList" parameterType="hashmap" resultType="teamgyodong.myky.Main.model.Visit">
+	
+			SELECT 
+			     TO_CHAR(TRUNC(access_time), 'YYYY-MM-DD')   AS visitdate, 
+			    COUNT(*) AS visit_count 
+			FROM visit_log
+			GROUP BY TRUNC(access_time)
+			ORDER BY visitdate			
+			
+	</select>
+	
+	<select id="selectLogTimeList" parameterType="hashmap" resultType="teamgyodong.myky.Main.model.Visit">
+	
+			SELECT 
+			    EXTRACT(HOUR FROM access_time) AS visithour, 
+			    COUNT(*) AS visit_count 
+			FROM visit_log
+			GROUP BY EXTRACT(HOUR FROM access_time)
+			ORDER BY visithour	
+			
+	</select>
+
 	
 </mapper>
 

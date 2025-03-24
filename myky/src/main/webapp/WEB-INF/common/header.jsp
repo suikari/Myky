@@ -398,8 +398,8 @@
             <div class="icons">
                 <span class="icon">💎</span>
 		    	<span @click="toggleSearch" class="search-icon">🔍</span>
-                <span @cilck="myPage" class="icon">👤</span>
-                <span class="icon">🛒</span>
+                <span @click="myPage" class="icon">👤</span>
+                <span @click="myCart" class="icon">🛒</span>
             </div>
             
         </header>
@@ -475,17 +475,21 @@
                     	  alert("검색어를 입력해주세요.")
                     	  return;
                       }
-                      
-                  	
                       pageChange("/product/list.do?searchOption=search&keyword="+this.searchQuery , { });
                   	
                       // 여기에 검색 로직 추가 가능 (API 호출 등)
                     },
-                    myPage(){
-                        pageChange("user/info.do" , { });
+                    myPage: function(){
+                    	console.log("cart");
 
-                    		
-                    }
+                        pageChange("/user/info.do" , { });
+
+                    },
+                    myCart: function(){
+                    	console.log("cart");
+                    	pageChange("/cart/list.do" , { });
+                    },
+                    
                 },
                 mounted() {
                 	let self = this;
