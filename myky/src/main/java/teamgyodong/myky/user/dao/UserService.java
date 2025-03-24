@@ -10,6 +10,11 @@ public interface UserService {
 
 	HashMap<String, Object> getview(HashMap<String, Object> map);
 
-//	HashMap<String, Object> searchId(HashMap<String, Object> map);
+	HashMap<String, Object> searchId(HashMap<String, Object> map);
+
+	HashMap<String, Object> searchNick(HashMap<String, Object> map);
+
+	HashMap<String, Object> joinUser(HashMap<String, Object> map);
+
 	
 }

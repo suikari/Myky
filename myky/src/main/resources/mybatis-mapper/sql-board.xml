@@ -42,18 +42,70 @@
 		</choose>
 	</select>
 	
+	<select id="selectCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
+		SELECT *
+		FROM FREE_BOARD_COMMENT
+		WHERE BOARD_ID = #{boardId}
+	</select>
+	
+	<update id="updateCnt" parameterType="hashmap">
+		UPDATE FREE_BOARD
+		SET
+			CNT = CNT + 1
+		WHERE BOARD_ID = #{boardId}
+	</update>
+	
 	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 		SELECT *
 		FROM FREE_BOARD
 		WHERE BOARD_ID = #{boardId} FETCH FIRST 1 ROW ONLY
 	</select>
 	
-	<insert id="insertBoard" parameterType="hashmap">
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="board_Id" keyProperty="boardId">
 		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, CNT)
 		VALUES(
-			(SELECT NVL(MAX(BOARD_ID), 0) + 1 FROM FREE_BOARD),
+			FREE_BOARD_SEQ.NEXTVAL,
 			#{title}, #{content}, SYSDATE, SYSDATE, #{userId}, 0)
 	</insert>
-
+	
+	<update id="updateBoard" parameterType="hashmap">
+		UPDATE FREE_BOARD
+    	SET
+        TITLE = #{title},
+        CONTENT = #{content}
+		WHERE BOARD_ID = #{boardId}
+	</update>
+	
+	<update id="updateRemoveBoard" parameterType="hashmap">
+		UPDATE FREE_BOARD
+		SET
+		IS_DELETED = 'Y'
+		WHERE BOARD_ID = #{boardId}
+	</update>
+	
+	<insert id="insertComment" parameterType="hashmap">
+		INSERT INTO FREE_BOARD_COMMENT (COMMENT_ID, BOARD_ID, USER_ID, CONTENT, CREATED_AT, UPDATED_AT, IS_DELETED)
+		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{content}, SYSDATE, SYSDATE, 'N')
+	</insert>
+		
+	<update id="commentUpdate" parameterType="hashmap">
+		UPDATE FREE_BOARD_COMMENT
+    	SET
+        CONTENT = #{content}
+		WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<delete id="deleteComment" parameterType="hashmap">
+		DELETE FROM FREE_BOARD_COMMENT
+		WHERE COMMENT_ID = #{commentId}
+	</delete>
+	
+	<insert id="insertBoardFile" parameterType="hashmap">
+		INSERT INTO FREE_BOARD_FILE
+		VALUES(FREE_BOARD_FILE_SEQ.NEXTVAL, #{boardId}, #{fileName}, #{filePath}, #{orginalName}, #{fileExt}, #{createdAt}, #{fileSize})
+	</insert>
+	
 </mapper>
+
+
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항</title>
+    <title>자유게시판</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <script src="js/swiper8.js"></script>
     <link rel="stylesheet" href="css/main.css">
@@ -16,34 +16,38 @@
             margin: 0;
             padding: 0;
         }
+        #app {
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         /* 공지사항 제목 */
         .section-header {
             /* background-color: #202060; */
             color: #202060;
             font-weight: bold;
             height: 70px;
-            width: 100%;
             padding: 10px;
             border-radius: 4px;
-            margin-top: 20px;
-            margin-bottom: 10px;
             text-align: center;
             align-items: center;
             justify-content: center;
             display: flex;
             align-items: left; /* 세로 중앙 정렬 */
             justify-content: left; /* 가로 중앙 정렬 */
-            font-size: 30px;
+            font-size: 40px;
             margin-top: 80px;
-            margin-left: 80px;
+            width: 100%;
+            max-width: 1000px;
         } 
         .section-headerDown {
             color: #333;
             font-weight: bold;
             text-align: left;
-            margin-left: 90px;
-            margin-top: -35px;
-            margin-bottom: 20px;
+            margin-top: -10px;
+            width: 100%;
+            max-width: 1000px;
         }
         .search-wrapper {
             width: 90%;
@@ -170,52 +174,71 @@
         span:hover {
             text-decoration: underline;
         }
+        .custom-hr {
+            width: 1000px;
+            max-width: 100%;
+            border: none;
+            border-top: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 70px;
+            width: 100%;
+        }
+        .setCss {
+            width: 100%;
+            max-width: 1000px;
+
+        }
     </style>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
 <div id="app" class="container">
     <div class="section-header">
-        NOTICE
+        자유게시판
     </div>
     <div class="section-headerDown">
-        새 소식을 알려드립니다.
+        여러분의 이야기를 들려주세요
     </div>
-    <div class="search-wrapper">
-        <div class="search-right">
-            <select v-model="pageSize" @change="fnBoardList">
-                <option value="5">5개씩</option>
-                <option value="10">10개씩</option>
-                <option value="15">15개씩</option>
-                <option value="20">20개씩</option>
-            </select>
+    <div class="setCss">
+    <hr class="custom-hr">
+        <div class="search-wrapper">
+            <div class="search-right">
+                <select v-model="pageSize" @change="fnBoardList">
+                    <option value="5">5개씩</option>
+                    <option value="10">10개씩</option>
+                    <option value="15">15개씩</option>
+                    <option value="20">20개씩</option>
+                </select>
+            </div>
+            <div class="search-left">
+                <select v-model="searchOption">
+                    <option value="all">전체</option>
+                    <option value="title">제목</option>
+                    <option value="userId">작성자</option>
+                </select>
+                <input v-model="keyword" @keyup.enter="fnBoardList" placeholder="🔍 검색어 입력" />
+                <button @click="fnBoardList">검색</button>
+            </div>
         </div>
-        <div class="search-left">
-            <select v-model="searchOption">
-                <option value="all">전체</option>
-                <option value="title">제목</option>
-                <option value="userId">작성자</option>
-            </select>
-            <input v-model="keyword" @keyup.enter="fnBoardList" placeholder="🔍 검색어 입력" />
-            <button @click="fnBoardList">검색</button>
-        </div>
+        <table class="table-wrapper">
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+            </tr>
+            <tr v-for="(item, index) in list">
+                <template v-if="item.isDeleted == 'N'">
+                    <td>{{item.boardId}}</td>
+                    <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}</a></td>
+                    <td>{{item.userId}}</td>
+                    <td>{{item.createdAt}}</td>
+                    <td>{{item.cnt}}</td>
+                </template>
+            </tr>
+        </table>
     </div>
-    <table class="table-wrapper">
-        <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성일</th>
-            <th>조회수</th>
-        </tr>
-        <tr v-for="(item, index) in list">
-            <td>{{item.boardId}}</td>
-            <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}</a></td>
-            <td>{{item.userId}}</td>
-            <td>{{item.createdAt}}</td>
-            <td>{{item.cnt}}</td>
-        </tr>
-    </table>
     <div v-if="index > 0">
         <a href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1"> < </a>
         <a href="javascript:;" v-for="num in index" @click="fnPage(num)">
@@ -223,7 +246,7 @@
         </a>
         <a href="javascript:;" @click="fnPageMove('next')" v-if="page != index"> > </a>
     </div>
-    <button class="button buttonMargin" @click="fnAdd">글쓰기</button>
+    <button class="button" @click="fnAdd" v-if="sessionId">글쓰기</button>
 </div>
 <jsp:include page="../common/footer.jsp"/>
 </body>
@@ -243,7 +266,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 keyword: "",
                 orderKey: "",
                 orderType: "",
+                sessionId : "${sessionId}" || ""
             };
+        },
+        computed: {
+
         },
         methods: {
             fnBoardList() {
@@ -279,6 +306,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 pageChange("/board/add.do", {});
             },
             fnView(boardId) {
+                let self = this;
+                localStorage.setItem("page", self.page);
                 pageChange("/board/view.do", { boardId: boardId });
             },
             fnPage(num) {
@@ -298,7 +327,21 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         },
         mounted() {
-            this.fnBoardList();
+            let self = this;
+            let savedPage;
+
+             if(localStorage.getItem('page') == "undefined"){
+                savedPage  = 1;
+
+             } else {
+                savedPage  = localStorage.getItem('page');
+             }
+             
+             self.page = savedPage ? Number(savedPage) : 1;
+
+
+            self.fnBoardList();
+            localStorage.removeItem('page');
         },
     });
     app.mount("#app");

@@ -60,6 +60,14 @@ public class ProductController {
 		resultMap = productService.getProduct(map);
 		return new Gson().toJson(resultMap);
 	}
-	
+	//리뷰 리스트 가져오기
+	@RequestMapping(value = "/product/reviewList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String review(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.getReviewList(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 }

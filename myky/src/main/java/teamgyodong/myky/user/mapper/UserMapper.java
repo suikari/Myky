@@ -15,5 +15,8 @@ public interface UserMapper {
 
 	User selectUser(HashMap<String, Object> map);
 
+	User selectNick(HashMap<String, Object> map);
+
+	int insertUser(HashMap<String, Object> map);
 
 }

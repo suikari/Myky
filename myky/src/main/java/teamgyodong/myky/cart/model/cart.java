@@ -17,5 +17,7 @@ public class cart {
 	private String productName;
 	private String price;
 	private String totalPrice;
+	private String filepath;
+	private String thumbnail;
 	
 }

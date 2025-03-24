@@ -39,8 +39,8 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in cartItems" :key="item.productId">
-                    <td><img :src="item.image" width="50"></td>
-                    <td>{{ item.name }}</td>
+                    <td><img :src="item.filepath" width="50"></td>
+                    <td>{{ item.productName }}</td>
                     <td>{{ item.price }} 원</td>
                     <td>
                         <button class="quantityBtn" @click="updateQuantity(index, -1)">-</button>
@@ -77,26 +77,11 @@
                     };
                 },
                 computed: {
-                    
+                    totalPrice() {
+                        return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    }
                 },
                 methods: {
-                    loadCart() {
-                        let self = this;
-                        var nparmap = {
-                            userId : self.sessionId
-                        };
-                        $.ajax({
-                            url: "/cart/list.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) { 
-                                console.log("cartList >>> ", data.list);
-                                self.cartItems = data.list;
-                                
-                            }
-                        });
-                    },
                     fnUserInfo(){
                         var self = this;
                         console.log("sessionId >>> ", self.sessionId);
@@ -111,6 +96,24 @@
                             success : function(data) { 
                                 console.log("userInfo >>> ", data.user);
                                 self.userInfo = data.user;
+                                self.loadCart();
+                                
+                            }
+                        });
+                    },
+                    loadCart() {
+                        let self = this;
+                        var nparmap = {
+                            userId : self.userInfo.userId
+                        };
+                        $.ajax({
+                            url: "/cart/list.dox",
+                            dataType:"json",	
+                            type : "POST", 
+                            data : nparmap,
+                            success : function(data) { 
+                                console.log("cartList >>> ", data.list);
+                                self.cartItems = data.list;
                                 
                             }
                         });
@@ -118,14 +121,19 @@
                     updateQuantity(index, change) {
                         let self = this;
                         let item = self.cartItems[index];
-                        let newQuantity = item.quantity + change;
-                        if (newQuantity < 1) return;
-
+                        console.log("수량 변경할 상품 >>> ",item);
+                        let newQuantity = Math.max(1, parseInt(item.quantity) + change);
+                        
+                        var nparmap = {
+                            cartItemId:item.cartItemId,
+                            quantity: newQuantity 
+                        };
                         $.ajax({
-                            url: "/cart/update.dox",
-                            method: "POST",
-                            data: { productId: item.productId, quantity: newQuantity },
-                            success: () => {
+                            url: "/cart/quantity.dox",
+                            dataType:"json",	
+                            type : "POST", 
+                            data : nparmap,
+                            success : function(data) { 
                                 self.cartItems[index].quantity = newQuantity;
                             }
                         });
@@ -133,11 +141,16 @@
                     removeItem(index) {
                         let self = this;
                         let item = self.cartItems[index];
+
+                        var nparmap = {
+                            cartItemId:item.cartItemId
+                        };
                         $.ajax({
-                            url: "/cart/delete.dox",
-                            method: "POST",
-                            data: { productId: item.productId },
-                            success: () => {
+                            url: "/cart/removeProduct.dox",
+                            dataType:"json",	
+                            type : "POST", 
+                            data : nparmap,
+                            success : function(data) {
                                 self.cartItems.splice(index, 1);
                             }
                         });
@@ -149,12 +162,11 @@
                             return;
                         }
                         alert("주문 페이지로 이동합니다.");
-                        location.href = "/order/checkout.jsp";
+                        // location.href = "/order/checkout.jsp";
                     }
                 },
                 mounted() {
                 	let self = this;
-                	self.loadCart();
                     self.fnUserInfo();
                 }
             });
