@@ -10,17 +10,24 @@
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'
 		WHERE 1=1
 		<if test="searchOption != null and searchOption == 'all'">
-		    AND (P.PRODUCT_NAME LIKE '%' || #{keyword} || '%' )
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%' 
+		</if>
+			<if test="searchOption != null and searchOption == 'search'">
+		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%' 
 		</if>
 		<if test="searchOption != null and searchOption == 'dog'">
-		    AND P.PRODUCT_NAME LIKE '%' || '강아지' || '%'
-		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+		    AND P.CATEGORY_ID LIKE '%' || '강아지' || '%'
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
 		<if test="searchOption != null and searchOption == 'cat'">
-		    AND P.PRODUCT_NAME LIKE '%' || '고양이' || '%'
-		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+		    AND P.CATEGORY_ID LIKE '%' || '고양이' || '%'
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
-		ORDER BY P.PRODUCT_ID ASC
+		<if test="searchOption != null and searchOption == 'pet'">
+		    AND P.CATEGORY_ID LIKE '%' || '영양제' || '%'
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
+		</if>
+		ORDER BY P.CATEGORY_ID ASC
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	 
@@ -43,15 +50,22 @@
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'
 		WHERE 1=1
 		<if test="searchOption != null and searchOption == 'all'">
-		    AND (P.PRODUCT_NAME LIKE '%' || #{keyword} || '%' )
+		    AND (P.CATEGORY_ID LIKE '%' || #{keyword} || '%' )
+		</if>
+		<if test="searchOption != null and searchOption == 'search'">
+		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%' 
 		</if>
 		<if test="searchOption != null and searchOption == 'dog'">
-		    AND P.PRODUCT_NAME LIKE '%' || '강아지' || '%'
-		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+		    AND P.CATEGORY_ID LIKE '%' || '강아지' || '%'
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
 		<if test="searchOption != null and searchOption == 'cat'">
-		    AND P.PRODUCT_NAME LIKE '%' || '고양이' || '%'
-		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%'
+		    AND P.CATEGORY_ID LIKE '%' || '고양이' || '%'
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'pet'">
+		    AND P.CATEGORY_ID LIKE '%' || '영양제' || '%'
+		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
 	 </select>
 </mapper>

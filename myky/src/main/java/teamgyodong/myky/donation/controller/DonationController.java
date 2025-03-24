@@ -47,7 +47,7 @@ public class DonationController {
 	}
 	
 	// centerList
-	@RequestMapping(value = "center/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/center/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
