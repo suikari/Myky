@@ -79,7 +79,7 @@ public class DonationServiceImpl implements DonationService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			donation info = donationMapper.selectDonationInfo(map);
+			List<donation> info = donationMapper.selectDonationInfo(map);
 			
 			resultMap.put("info", info);
 			resultMap.put("result", "success");
