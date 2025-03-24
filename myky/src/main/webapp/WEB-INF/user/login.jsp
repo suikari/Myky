@@ -16,7 +16,7 @@
 
 		<jsp:include page="../common/header.jsp" />
 
-		<div id="app">
+		<div id="app"  class="container">
 			<div>
 				아이디 : <input v-model="userId">
 			</div>
@@ -44,6 +44,8 @@
 			</div>
 
 		</div>
+
+		<jsp:include page="/WEB-INF/common/footer.jsp"/>
 	</body>
 
 	</html>
@@ -81,7 +83,7 @@
 					});
 				},
 				fnPasswordReset() {
-					// location.href="/user/resetPwd.do"; //오류 해결 필요
+					location.href="/user/resetPwd.do"; //오류 해결 필요
 				},
 				fnAdd() {
 					var self = this;

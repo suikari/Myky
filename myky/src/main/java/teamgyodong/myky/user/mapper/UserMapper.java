@@ -11,4 +11,9 @@ public interface UserMapper {
 
 	User getUser(HashMap<String, Object> map);
 
+	int updatePwd(HashMap<String, Object> map);
+
+	User selectUser(HashMap<String, Object> map);
+
+
 }

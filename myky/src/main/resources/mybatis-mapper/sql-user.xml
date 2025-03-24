@@ -8,4 +8,16 @@
 		FROM USERS
 		WHERE USER_ID = #{userId} AND PASSWORD = #{pwd}
 	</select>
+	
+	<update id="updatePwd" parameterType="hashmap">
+		  UPDATE USERS
+			SET
+			PASSWORD = #{pwd}
+			WHERE USER_ID = #{userId}
+	</update>
+	<select id="selectUser" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
+		SELECT USER_ID,USERNAME,NICKNAME,EMAIL,PROFILE_IMAGE,PHONE_NUMBER,BIRTH_DATE, ADDRESS,ROLE,GENDER
+		FROM USERS
+		WHERE USER_ID = #{userId}
+	</select>
 </mapper>
