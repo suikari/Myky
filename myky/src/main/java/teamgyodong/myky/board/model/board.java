@@ -22,4 +22,5 @@ public class board {
 	private String cnt;
 	
 	
+	
 }

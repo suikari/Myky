@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue3 레이아웃 예제</title>
+    <title>자유게시판</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
@@ -30,7 +30,6 @@
             color: #202060;
             font-weight: bold;
             height: 70px;
-            width: 100%;
             padding: 10px;
             border-radius: 4px;
             text-align: center;
@@ -40,9 +39,9 @@
             align-items: left; /* 세로 중앙 정렬 */
             justify-content: left; /* 가로 중앙 정렬 */
             font-size: 50px;
-            margin-top: 80px;
-            margin-left: 650px;
-            margin-bottom: 20px;
+            width: 100%;
+            margin-top: 100px;
+            max-width: 1000px;
         }
         .section-headerDown {
             color: #333;
@@ -51,20 +50,22 @@
             display: flex;
             align-items: left; /* 세로 중앙 정렬 */
             justify-content: left;
-            margin-left: -850px;
-            margin-top: -35px;
-            margin-bottom: 20px;
+            width: 100%;
+            margin-top: 10px;
+            max-width: 1000px;
+            width: 100
         }
         .title-label {
             font-size: 20px;
             font-weight: bold;
             color: #202060;
-            margin-top: 100px;
+            margin-top: 70px;
             margin-bottom: 10px;
             width: 1000px;
         }
         /* 제목 input 박스 */
         input {
+            margin-top: -100px;
             width: 100%;
             max-width: 500px;
             padding: 8px 10px;
@@ -127,7 +128,6 @@
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-top: 20px;
         }
 
         button:hover {
@@ -142,6 +142,8 @@
             margin-top: 10px;
             margin-bottom: 40px;
             width: 100%;
+
+            max-width: 1000px;
         }
 </style>
 </head>
@@ -153,7 +155,7 @@
             EDIT
         </div>
         <div class="section-headerDown">
-            공지사항을 수정합니다.
+            게시글 내용을 수정합니다.
         </div>
         <hr class="custom-hr">
 
