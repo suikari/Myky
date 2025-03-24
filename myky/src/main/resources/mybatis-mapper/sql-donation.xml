@@ -18,10 +18,10 @@
 		
 	</select>
 		
-	<insert id="insertHistory" parameterType="hashmap">
+	<insert id="insertHistory" parameterType="hashmap" useGeneratedKeys="true" keyColumn="donation_Id" keyProperty="donationId">
 		
 		insert into donation_history
-		values (donation_seq.nextval,#{centerId},#{amount},sysdate,#{message},#{userId})
+		values (donation_history_seq.nextval,#{centerId},#{amount},sysdate,#{message},#{userId})
 		
 	</insert>
 </mapper>
