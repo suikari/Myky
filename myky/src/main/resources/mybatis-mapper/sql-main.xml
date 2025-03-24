@@ -6,15 +6,15 @@
 
     <!-- 방문 기록 추가 -->
     <insert id="insertVisitLog" parameterType="hashmap">
-        INSERT INTO VISIT_LOG (IP_ADDRESS, USER_AGENT_BROWSER , USER_AGENT_WINDOWS , REFERER, ACCESS_TIME)
-        VALUES ( #{ipAddress}, #{userAgentBrowser}, #{userAgentWindows}, #{referer}, #{accessTime} )
+        INSERT INTO VISIT_LOG (visit_id, IP_ADDRESS, USER_AGENT_BROWSER , USER_AGENT_WINDOWS , REFERER, ACCESS_TIME)
+        VALUES (VISIT_LOG_SEQ.NEXTVAL, #{ipAddress}, #{userAgentBrowser}, #{userAgentWindows}, #{referer}, #{accessTime} )
     </insert>
 
 
 	<select id="selectCategoryList" parameterType="hashmap" resultType="teamgyodong.myky.Main.model.Category">
 		
 			select * from CATEGORY_MENU
-			
+			ORDER BY category_Id
 	</select>
 	
 	
