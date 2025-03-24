@@ -14,7 +14,7 @@
 	<select id="selectCenter" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
 		
 		select * from donation_center
-		where center_Id = #{centerId}
+		where center_id = #{centerId}
 		
 	</select>
 		
@@ -24,6 +24,12 @@
 		values (donation_history_seq.nextval,#{centerId},#{amount},sysdate,#{message},#{userId})
 		
 	</insert>
+	
+	<select id="selectDonationInfo" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
+		
+		select * from donation_history
+		
+	</select>
 </mapper>
 
 

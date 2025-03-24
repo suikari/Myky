@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
         methods: {
             fnCenterInfo(){
                 var self = this;
-                console.log("centerId >>> "+self.centerId);
+                console.log("centerId >>> ", self.centerId);
                 var nparmap = {
                     centerId : self.centerId
                 };
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     type : "POST", 
                     data : nparmap,
                     success : function(data) { 
-                        console.log("info >>> "+data.info);
+                        console.log("info >>> ", data.info);
                         self.info = data.info;
                         
                     }
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             fnUserInfo(){
                 var self = this;
-                console.log("sessionId >>> "+self.sessionId);
+                console.log("sessionId >>> ", self.sessionId);
                 var nparmap = {
                     userId : self.sessionId
                 };
@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     type : "POST", 
                     data : nparmap,
                     success : function(data) { 
-                        console.log("userInfo >>> "+data.user);
+                        console.log("userInfo >>> ", data.user);
                         self.userInfo = data.user;
 
                         
@@ -338,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 let amount = (self.donateAmount != null) ? self.donateAmount : self.customAmount;
-                console.log("amount >>> "+amount);
+                console.log("amount >>> ", amount);
 
                 // 결제 진행
 
@@ -360,10 +360,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         alert("\'"+self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
                         self.fnDonation(rsp,amount);
                         // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
-                        console.log("결제 정보 >>> "+rsp);
+                        console.log("결제 정보 >>> ", rsp);
                     } else {
                         alert("결제에 실패했습니다.");
-                        console.log("결제 정보 >>> "+rsp.error_msg);
+                        console.log("결제 정보 >>> ", rsp.error_msg);
                     }
                 });
             },
@@ -377,8 +377,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     paymentMethod = rsp.pay_method;
                 }
 
-                console.log("paymentMethod >>> "+paymentMethod);
-                console.log("fnPaymentHistory >> self.donationId >>> "+self.donationId);
+                console.log("paymentMethod >>> ", paymentMethod);
+                console.log("fnPaymentHistory >> self.donationId >>> ", self.donationId);
 
                 var nparmap = {
                     paymentCode: rsp.merchant_uid,
@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     type: "POST",
                     data: nparmap,
                     success: function (data) {
-                        console.log("결제 정보 저장 여부 >>> "+data.result);
+                        console.log("결제 정보 저장 여부 >>> ", data.result);
                     }
                 });
             },
@@ -418,9 +418,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     type : "POST", 
                     data : nparmap,
                     success : function(data) { 
-                        console.log("후원 정보 저장 여부 >>> "+data.result);
+                        console.log("후원 정보 저장 여부 >>> ", data.result);
                         self.donationId = data.donationId;
-                        console.log("fnDonation >> self.donationId >>> "+self.donationId);
+                        console.log("fnDonation >> self.donationId >>> ", self.donationId);
                         // DB 저장 후 후원ID 가져오기
                         self.fnPaymentHistory(rsp);
 
