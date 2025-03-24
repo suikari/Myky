@@ -16,6 +16,6 @@ public interface DonationMapper {
 
 	void insertHistory(HashMap<String, Object> map);
 
-	donation selectDonationInfo(HashMap<String, Object> map);
+	List<donation> selectDonationInfo(HashMap<String, Object> map);
 
 }
