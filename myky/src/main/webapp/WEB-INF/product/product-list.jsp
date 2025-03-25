@@ -228,17 +228,13 @@
                     </div>
                 </section>
                 <div class="pagination">
-                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')">
-                        < </a>
-
-                            <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
-                                :class="{ active: page === num }">
-                                <span v-if="page == num">{{ num }}</span>
-                                <span v-else>{{ num }}</span>
-                            </a>
-                            <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> >
-                            </a>
-
+                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> < </a>
+                        <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
+                            :class="{ active: page === num }">
+                            <span v-if="page == num">{{ num }}</span>
+                            <span v-else>{{ num }}</span>
+                        </a>
+                        <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
                 </div>
                 <!-- <button @click="fnChange">강아지</button>
             <button @click="fnChange2">장난감</button> -->
@@ -296,7 +292,7 @@
                         return price.toLocaleString('ko-KR') + '원';
                     },
                     fnView: function (productId) {
-                        pageChange("/product/view.do?productId=" + productId, { productId: productId });
+                        location.href= "/product/view.do?productId=" + productId;
                     },
                     fnPage: function (num) {
                         let self = this;

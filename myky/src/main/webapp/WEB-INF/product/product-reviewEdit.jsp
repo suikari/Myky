@@ -88,7 +88,7 @@
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
         <div id="app" class="container">
-            <h2>상품 사용후기</h2>
+            <h2>리뷰 수정</h2>
             <div class="form-box">
                 <div class="form-group">
                     <label for="title">제목</label>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="button-box">
                     <button class="btn-cancel" @click="fnCancel">취소</button>
-                    <button class="btn-submit" @click="fnSave">등록</button>
+                    <button class="btn-submit" @click="fnEdit">등록</button>
                 </div>
             </div>
         </div>
@@ -136,17 +136,39 @@
                         productId: "",
                         title: "",
                         reviewText: "",
-                        rating : "1",
-                        reviewId: ""
+                        rating : "",
+                        reviewId: "",
                     }
                 },
                 computed: {
 
                 },
                 methods: {
-                    fnSave() {
+                    fnGetReview(){
                         var self = this;
                         var nparmap = {
+                            reviewId : self.reviewId,
+                            option : "UPDATE"
+                        };
+                        $.ajax({
+                            url:"/product/getReview.dox",
+                            dataType:"json",	
+                            type : "POST", 
+                            data : nparmap,
+                            success : function(data) { 
+                                console.log(data);
+                                self.productId = data.info.productId,
+                                self.title = data.info.title,
+                                self.reviewText = data.info.reviewText,
+                                self.rating = data.info.rating
+                                self.fnQuill();
+                            }
+                        });
+                    },
+                    fnEdit() {
+                        var self = this;
+                        var nparmap = {
+                            reviewId: self.reviewId, 
                             title: self.title,
                             reviewText: self.reviewText,
                             userId: self.sessionId,
@@ -154,12 +176,12 @@
                             productId : self.productId
                         };
                         $.ajax({
-                            url: "/product/add.dox",
+                            url: "/product/reviewEdit.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
+                                console.log("1",data);
                                 if (data.result == "success") {
                                     alert("글쓰기 완료.");
 
@@ -168,15 +190,17 @@
                                         for (let i = 0; i < $("#file1")[0].files.length; i++) {
                                             form.append("file1", $("#file1")[0].files[i]);
                                         }
-                                        form.append("reviewId", data.reviewId); 
+                                        form.append("reviewId", self.reviewId); 
                                         self.upload(form); 
                                     
                                 } else {
-                                    location.href = "/product/view.do?productId=" +  self.productId;
+                                    console.log("2", self.productId);
+                                        location.href = "/product/view.do?productId=" +  self.productId;
                                 }
                             }else{
+                                console.log("3","3");
                                     location.href = "/product/view.do?productId=" +  self.productId;
-                                }
+                            }
                                 
                             }
                         });
@@ -191,36 +215,43 @@
                             contentType: false,
                             data: form,
                             success: function (response) {
-                                location.href = "/product/list.do";
+                                console.log("4","4");
+                                location.href = "/product/view.do?productId=" +  self.productId;
                             }
                         });
                     },
+                    //취소
                     fnCancel: function () {
                         location.href = "/product/view.do?productId=" +  this.productId;
+                    },
+                    fnQuill() {
+                        let self = this;
+                        var quill = new Quill('#editor', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                    ['bold', 'italic', 'underline'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    ['link', 'image'],
+                                    ['clean'],
+                                    [{ 'color': [] }, { 'background': [] }]
+                                ]
+                            }
+                        });
+                        quill.root.innerHTML = self.reviewText;
+                        // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
+                        quill.on('text-change', function () {
+                            self.reviewText = quill.root.innerHTML;
+                        });
                     }
                 },
                 mounted() {
                     let self = this;
                     const params = new URLSearchParams(window.location.search);
                     self.productId = params.get("productId") || "";
-
-
-                    var quill = new Quill('#editor', {
-                        theme: 'snow',
-                        modules: {
-                            toolbar: [
-                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                ['bold', 'italic', 'underline'],
-                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                ['link', 'image'],
-                                ['clean'],
-                                [{ 'color': [] }, { 'background': [] }],
-                            ]
-                        }
-                    });
-                    quill.on('text-change', function () {
-                        self.reviewText = quill.root.innerHTML;
-                    });
+                    self.reviewId = params.get("reviewId") || "";
+                    self.fnGetReview();
                 }
             });
             app.mount("#app");

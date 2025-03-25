@@ -31,26 +31,32 @@ public class ProductController {
 	//상품 리스트 가져오기
 	@RequestMapping("/product/list.do") 
     public String list(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		request.setAttribute("map", map);
+		
 		return "product/product-list"; 
 	}
 	
 	//상품 세부사항 가져오기
 	@RequestMapping("/product/view.do") 
     public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-//		request.setAttribute("map", map);
-		model.addAttribute("map", map);
+	
 		return "product/product-view"; 
     }
 	
 	//상품 리뷰 등록
 	@RequestMapping("/product/review.do")
-	public String Review(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		request.setAttribute("map", map);
- 
+	public String review(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) {
+		
 		return "product/product-review";
 	}
+	//리뷰 수정
+	@RequestMapping("/product/reviewEdit.do") 
+    public String reviewEdit(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 	
+		return "product/product-reviewEdit"; 
+    }
+	
+	
+
 	
 	
 	//상품 리스트 호출
@@ -92,6 +98,35 @@ public class ProductController {
 		resultMap = productService.getReviewList(map);
 		return new Gson().toJson(resultMap);
 	}
+		
+	//리뷰글 삭제
+	@RequestMapping(value = "/product/reviewRemove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String reviewRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.reviewRemove(map);
+		return new Gson().toJson(resultMap);
+	}
+	//리뷰글 수정
+	@RequestMapping(value = "/product/reviewEdit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String Reviewedit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.reviewEdit(map);
+		return new Gson().toJson(resultMap);
+	}
+	//리뷰 하나만 가져오기
+	@RequestMapping(value = "/product/getReview.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getReview(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.getReview(map);
+		return new Gson().toJson(resultMap);
+	}
+	
 	
 	// 첨부파일
 		@RequestMapping("/Review/fileUpload.dox")
