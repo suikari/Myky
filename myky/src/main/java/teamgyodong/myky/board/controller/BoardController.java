@@ -1,10 +1,10 @@
 package teamgyodong.myky.board.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ssl.SslProperties.Bundles.Watch.File;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.board.dao.BoardService;
 
 @Controller
-public class BoardControlloer {
+public class BoardController {
 
 	@Autowired
 	BoardService boardService;
@@ -59,6 +59,7 @@ public class BoardControlloer {
 
 	    return "board/board-remove";
 	}
+	
 	//게시글 목록출력
 	@RequestMapping(value = "board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -70,7 +71,7 @@ public class BoardControlloer {
 		
 		return new Gson().toJson(resultMap);
 	}
-	//게시글 보기
+	//게시글 상세보기
 	@RequestMapping(value = "board/view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -165,62 +166,73 @@ public class BoardControlloer {
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
 	}
 	//파일업로드 기능 추가
-		@RequestMapping("/fileUpload.dox")
-		public String result(@RequestParam("file1") List<MultipartFile> files, @RequestParam("boardNo") int boardNo, HttpServletRequest request,HttpServletResponse response, Model model)
-		{
-//			System.out.println(multi.size());O
+	@RequestMapping("/fileUpload.dox")
+	public String result(@RequestParam("file1") List<MultipartFile> files, @RequestParam("boardId") int boardId, HttpServletRequest request,HttpServletResponse response, Model model)
+	{
 			
 			
-			String url = null;
-			String path="c:\\img";
+		String url = null;
+		String path="c:\\img";
 			
-			try {
+		try {
 				
-				for(MultipartFile multi : files) {
-					System.out.println(multi.getOriginalFilename());
+			for(MultipartFile multi : files) {
+				System.out.println(multi.getOriginalFilename());
 					
 
-					String uploadpath = path;
-					String originFilename = multi.getOriginalFilename();
-					String extName = originFilename.substring(originFilename.lastIndexOf("."),originFilename.length());
-					long size = multi.getSize();
-					String saveFileName = Common.genSaveFileName(extName);
+				String uploadpath = path;
+				String originalName = multi.getOriginalFilename();
+				String extName = originalName.substring(originalName.lastIndexOf("."),originalName.length());
+				long filesize = multi.getSize();
+				String saveFileName = Common.genSaveFileName(extName);
 					
-					System.out.println("uploadpath : " + uploadpath);
-					System.out.println("originFilename : " + originFilename);
-					System.out.println("extensionName : " + extName);
-					System.out.println("size : " + size);
-					System.out.println("saveFileName : " + saveFileName);
-					String path2 = System.getProperty("user.dir");
-					System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
-					if(!multi.isEmpty()){
+				System.out.println("uploadpath : " + uploadpath);
+				System.out.println("originalName : " + originalName);
+				System.out.println("extensionName : " + extName);
+				System.out.println("filesize : " + filesize);
+				System.out.println("saveFileName : " + saveFileName);
+				String path2 = System.getProperty("user.dir");
+				System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
+				if(!multi.isEmpty()){
 						
-//						File file = new File(path2 + "\\src\\main\\webapp\\img\\freeBoard", saveFileName);
-//						multi.transferTo(file);
-						
-						HashMap<String, Object> map = new HashMap<String, Object>();
-						map.put("filename", saveFileName);
-						map.put("path", "../img/" + saveFileName);
-						map.put("originFilename", originFilename);
-						map.put("extName", extName); //확장자
-						map.put("size", size);
-						map.put("boardNo", boardNo);
+					File file = new File(path2 + "\\src\\main\\webapp\\img\\freeBoard", saveFileName);
+					multi.transferTo(file);
+					
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					map.put("fileName", saveFileName);
+					map.put("filePath", "../img/freeBoard/" + saveFileName);
+					map.put("originalName", originalName);
+					map.put("fileExt", extName); //확장자
+					map.put("fileSize", filesize);
+					map.put("boardId", boardId);
 						
 				
-						// insert 쿼리 실행
-						boardService.addBoardFile(map);
-						
-						model.addAttribute("filename", multi.getOriginalFilename());
-//						model.addAttribute("uploadPath", file.getAbsolutePath());
-						
-						//redirect==스프링 문법
-						}
-				}
-				return "redirect:board/list.do";
-			}catch(Exception e) {
-				System.out.println(e);
+					// insert 쿼리 실행
+					boardService.addBoardFile(map);
+					
+					model.addAttribute("fileName", multi.getOriginalFilename());
+					model.addAttribute("uploadPath", file.getAbsolutePath());
+					
+					//redirect==스프링 문법
+					}
 			}
 			return "redirect:board/list.do";
+		}catch(Exception e) {
+			System.out.println(e);
 		}
+		return "redirect:board/list.do";
+	}
+	//첨부파일 삭제
+	@RequestMapping(value = "/board/removeFile.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeFile(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+				
+				
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.boardRemoveFile(map);
+				
+		return new Gson().toJson(resultMap);
+	}
 
+	
 }

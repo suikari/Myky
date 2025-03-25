@@ -26,5 +26,7 @@ public interface BoardService {
 
 	void addBoardFile(HashMap<String, Object> map);
 
+	HashMap<String, Object> boardRemoveFile(HashMap<String, Object> map);
+
 
 }
