@@ -5,7 +5,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- <script src="/js/page-change.js"></script> -->
         <title>join page</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
 
@@ -258,7 +257,7 @@ body {
         // vue 문법이 아니므로 밖으로 빼서 넣기
         function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
             //일단 다 받고 필요한거 꺼내쓰기
-            window.vueObj.fnResult(roadFullAddr, roadAddrPart1, addrDetail, engAddr);
+            window.vueObj.fnResult(roadFullAddr, roadAddrPart1, addrDetail, engAddr, zipNo);
         }
 
 
@@ -276,7 +275,10 @@ body {
                             phoneNumber: "",
                             birthDate: "",
                             gender: "M",
-                            email:""
+                            email:"",
+                            agreeYn:"${map.agree2}",
+                            phoneYn:"${map.agree3}",
+                            emailYn:"${map.agree4}"
                         },
                         selectNum: "010",
                             num1: "",
@@ -413,18 +415,22 @@ body {
                     fnSearchAddr: function () {
                         window.open("/addr.do", "addr", "width=300, height=500")
                     },
-                    fnResult: function (roadFullAddr, roadAddrPart1, addrDetail, engAddr) {
+                    fnResult: function (roadFullAddr, roadAddrPart1, addrDetail, engAddr,zipNo) {
                         let self = this;
-                        self.user.address = roadFullAddr;
+                        self.user.address = roadFullAddr + ', ' +zipNo;
 
                         console.log(roadFullAddr);
                         console.log(roadAddrPart1);
                         console.log(addrDetail);
                         console.log(engAddr);
+                        console.log(zipNo);
                     }
                 },
                 mounted() {
                     window.vueObj=this; //obj를 선언해야 주소가 들어간다
+                    console.log(this.user.agreeYn);
+                    console.log(this.user.phoneYn);
+                    console.log(this.user.emailYn);
                 }
             });
 

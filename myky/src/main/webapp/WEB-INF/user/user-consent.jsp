@@ -1,40 +1,57 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue3 레이아웃 예제</title>
-	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	
-    <style>
-    .container {
-        width: 600px;
-        margin: 50px auto;
-    }
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <!DOCTYPE html>
+    <html lang="ko">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>consent page</title>
+        <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+
+        <style>
+            .container {
+                width: 600px;
+                margin: 50px auto;
+            }
+
+            .clb {
+                font-size: 16px;
+                color: #4a90e2;
+                padding: 10px 20px;
+                border-radius: 5px;
+                margin-right: 10px;
+                border: 1px solid #4a90e2;
+                transition: all 0.3s ease;
+            }
+
+            /* 링크 버튼 hover 효과 */
+            .clb:hover {
+                background-color: #4a90e2;
+                color: white;
+                border-color: #4a90e2;
+            }
+        </style>
+    </head>
+
+    <body>
+        <jsp:include page="/WEB-INF/common/header.jsp" />
 
 
-    </style>
-</head>
-<body>
-	<jsp:include page="/WEB-INF/common/header.jsp"/>
- 
 
-
-    <div id="app" class="container">
-        <h1 style="text-align: center;">회원 가입</h1>
-        <br>
-        <br>
-        <div style="font-size: 24px;">전체 동의서 <input type="checkbox" id="" @click="fnAllCheck()"></div>
-        <hr>
-        <br>
-        <br>
-        <div>
-            이용 약관 동의(필수) <input type="checkbox" id="" v-model="selectList">
-        </div>
-        <div class="box">
-            <textarea style="resize: none;" name="" id="" cols="100" rows="15" disabled>
+        <div id="app" class="container">
+            <h1 style="text-align: center;">회원 가입</h1>
+            <br>
+            <br>
+            <div style="font-size: 24px;">전체 동의서 <input type="checkbox" id="" @click="fnAllCheck()"></div>
+            <hr>
+            <br>
+            <br>
+            <div>
+                이용 약관 동의(필수) <input type="checkbox" :checked="agree1 === 'Y'" @change="updateAgree('agree1', $event)">
+            </div>
+            <div class="box">
+                <textarea style="resize: none;" name="" id="" cols="100" rows="15" disabled>
 제1조(목적)
 이 약관은 OO 회사(전자상거래 사업자)가 운영하는 OO 사이버 몰(이하 "몰"이라 한다)에서 제공하는 인터넷 관련 서비스(이하 "서비스"라 한다)를 이용함에 있어 사이버 몰과 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
 ※「PC통신, 무선 등을 이용하는 전자상거래에 대해서도 그 성질에 반하지 않는 한 이 약관을 준용합니다.」
@@ -89,14 +106,15 @@
                 
 "몰"의 이용과 관련된 법적 의무를 준수해야 합니다.
             </textarea>
-        </div>
-        <br>
-        <br>
-        <div>
-            개인정보 수집 및 이용 동의(필수) <input type="checkbox" v-model="selectList">
-        </div>
-        <div class="box">
-            <textarea style="resize: none;" name="" id="" cols="100" rows="15" disabled>
+            </div>
+            <br>
+            <br>
+            <div>
+                개인정보 수집 및 이용 동의(필수) <input type="checkbox" :checked="agree2 === 'Y'"
+                    @change="updateAgree('agree2', $event)">
+            </div>
+            <div class="box">
+                <textarea style="resize: none;" name="" id="" cols="100" rows="15" disabled>
 개인정보 수집 및 이용 동의서
 
 [쇼핑몰 이름]은(는) 이용자의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호 등에 관한 법률" 및 "개인정보 보호법"을 준수하고 있습니다. 당사는 이용자의 개인정보를 수집 및 이용하기 전에 아래와 같은 목적과 항목을 안내드리오니, 동의 여부를 결정해 주시기 바랍니다.
@@ -194,63 +212,83 @@
 9. 동의 및 철회
 본 개인정보 수집 및 이용에 대해 동의하시면 "동의합니다" 버튼을 클릭하여 주십시오. 동의하지 않으실 경우 일부 서비스의 이용이 제한될 수 있습니다.
             </textarea>
+            </div>
+            <hr>
+            <br>
+            <div>
+                <span>SMS 수신 동의(선택) <input type="checkbox" :checked="agree3 === 'Y'"
+                        @change="updateAgree('agree3', $event)"></span>
+                <span>이메일 수신 동의(선택) <input type="checkbox" :checked="agree4 === 'Y'"
+                        @change="updateAgree('agree4', $event)"></span>
+            </div>
+            <hr>
+            <br>
+            <a href="/main.do" style="text-decoration: none"><span class="clb">취소</span></a>
+            <a href="javascript:;" style="text-decoration: none"><span class="clb" @click="fnJoin()">회원가입하기</span></a>
+
+
         </div>
-        <hr>
-        <div style="font-size: 20px;">
-            상품정보 수신 동의(선택) <input type="checkbox" name="agree3" id="">
-        </div>
-        <br>
-        <div>
-            <span>SMS 수신 동의(선택) <input type="checkbox" name="agree4" id=""></span>
-            <span>이메일 수신 동의(선택) <input type="checkbox" name="agree5" id=""></span>
-        </div>
-        <hr>
-        <div>
-            <button>취소</button>
-            <button>회원가입하기</button>
-        </div>
 
 
+        <jsp:include page="/WEB-INF/common/footer.jsp" />
 
-    </div>
 
+    </body>
 
-	<jsp:include page="/WEB-INF/common/footer.jsp"/>
-
-    
-</body>
-</html>
-<script>
-    
-    
+    </html>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
                 data() {
                     return {
-                        selectList : [], //체크박스용 boardNo가 담길 예정
-                        checked : false //체크 온오프 용
-                    
+                        // Y ,N 형식으로
+                        agree1: "N",
+                        agree2: "N",
+                        agree3: "N",
+                        agree4: "N",
+                        checked: false, //체크 온오프 용
+
                     };
                 },
                 computed: {
 
                 },
                 methods: {
-                    fnAllCheck : function (){
-				// let self = this;
-				// self.checked = !self.checked;
-				// if(self.checked){
-                //     self.selectList.push(self.selectList);
-				// }else{
-				// 	self.selectList = []; // 빈 리스트로 돌리기
-				// }
+                    updateAgree(agreeField, event) {
+                        // 체크박스가 체크되면 'Y', 아니면 'N'
+                        this[agreeField] = event.target.checked ? 'Y' : 'N';
+                    },
+                    fnAllCheck: function () {
+                        let self = this;
+                        self.checked = !self.checked;
+                        if (self.checked) {
+                            self.agree1 = "Y";
+                            self.agree2 = "Y";
+                            self.agree3 = "Y";
+                            self.agree4 = "Y";
 
-			}
+                        } else {
+                            self.agree1 = "N";
+                            self.agree2 = "N";
+                            self.agree3 = "N";
+                            self.agree4 = "N";
+                        }
 
+                    },
+                    fnJoin: function(){
+                        let self = this;
+                        if(self.agree1=="N" || self.agree2=="N"){
+                            alert("필수 동의란을 체크해주십시오.")
+                            reurn;
+                        }
+
+                pageChange("/user/join.do", {agree1 : self.agree1 , agree2 : self.agree2, agree3 : self.agree3 , agree4 : self.agree4});
+                // pageChange ("보낼 주소" / 키:밸류)
+            }
                 },
                 mounted() {
-                	
-                	
+                    
+
                 }
             });
 

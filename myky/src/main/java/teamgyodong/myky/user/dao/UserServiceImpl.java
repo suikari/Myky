@@ -58,6 +58,8 @@ public class UserServiceImpl implements UserService {
 	public HashMap<String, Object> newPwd(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		String hashPwd = passwordEncoder.encode((String)map.get("pwd")); // 비밀번호를 넣기전에 암호화 하기
+		map.put("pwd", hashPwd);
 		int num =userMapper.updatePwd(map); // 중복체크용 재활용
 		if(num > 0) {
 			resultMap.put("result", "success");
@@ -73,9 +75,10 @@ public class UserServiceImpl implements UserService {
 		
 		int count = user!= null ? 1 : 0;
 		resultMap.put("count", count); // 결과 값
-
+		resultMap.put("user", user);
 		return resultMap;
 	}
+	
 	
 	public HashMap<String, Object> getview(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub

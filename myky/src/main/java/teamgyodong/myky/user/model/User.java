@@ -16,7 +16,10 @@ public class User {
 	private String phoneNumber;
 	private String birthDate;
 	private String role;
-	
+	private String agreeYn;
+	private String phoneYn;
+	private String emailYn;
+
 
 
 }
