@@ -143,8 +143,8 @@
 
 
             <!-- Main Content1 -->
-            <div class=" main-content">
-                <h2>통계</h2>
+            <div v-if="title == '1' " class=" main-content">
+                <h2>Dashboard</h2>
 
                 <!-- Profit & Expenses Chart -->
                 <div class="card">
@@ -222,7 +222,23 @@
                     </div>
                 </div>
             </div>
+            <!-- Main Content2 -->
+            <div v-if="title == '2' " class="col-9 main-content">
+                <h2>게시판 관리</h2>
+                    
+                     <jsp:include page="/WEB-INF/manager/board/board-main.jsp"/>
+                
+            </div>
 
+             <!-- Main Content3 -->
+             <div v-if="title == '3' " class="col-9 main-content">
+                <h2>UI Componsents</h2>
+            </div>
+
+            <!-- Main Content4 -->
+            <div v-if="title == '4' " class="col-9 main-content">
+                <h2>UI Componsents</h2>
+            </div>       
 
         </div>
 
@@ -242,148 +258,20 @@
             const app = Vue.createApp({
             	 data() {
                      return {
-                    	 optionsP : {
-                             series: [],
-                             chart: {
-                             width: 380,
-                             type: 'pie',
-                             },
-                             labels: [],
-                             responsive: [{
-                             breakpoint: 480,
-                             options: {
-                                 chart: {
-                                 width: 200
-                                 },
-                                 legend: {
-                                 position: 'bottom'
-                                 }
-                             }
-                             }]
-                         },
-                         optionsB : {
-                             series: [{
-                             data: []
-                             }],
-                             chart: {
-                             type: 'bar',
-                             height: 350
-                             },
-                             plotOptions: {
-                             bar: {
-                                 borderRadius: 4,
-                                 borderRadiusApplication: 'end',
-                                 horizontal: true,
-                             }
-                             },
-                             dataLabels: {
-                             enabled: false
-                             },
-                             xaxis: {
-                             categories: [],
-                             }
-                         },
-                         optionsBD : {
-                             series: [{
-                             data: []
-                             }],
-                             chart: {
-                             type: 'bar',
-                             height: 350
-                             },
-                             plotOptions: {
-                             bar: {
-                                 borderRadius: 4,
-                                 borderRadiusApplication: 'end',
-                                 horizontal: true,
-                             }
-                             },
-                             dataLabels: {
-                             enabled: false
-                             },
-                             xaxis: {
-                             categories: [],
-                             }
-                         },
+                    	 
                      };
                  },
                 computed: {
 
                 },
                 methods: {
-                	fnList : function() { 
-                        var self = this;
-                        var nparmap = { };
-                        $.ajax({
-                            url: "/admin/LogList.dox",  // 서버 주소 수정 (http:// 포함)
-                            dataType: "json",
-                            type: "POST", // GET, POST
-                            data: JSON.stringify(nparmap),   // 서버로 보낼 데이터
-                            contentType: "application/json",
-                            success: function(data) {
-                                console.log(data);
-                                
-                                
-                                
-                                self.optionsP.series = [];
-                                self.optionsP.labels = [];
-                                for (i=0;i<data.Browser.length;i++) {
-                                    self.optionsP.series.push(data.Browser[i].visitCount);
-                                    self.optionsP.labels.push(data.Browser[i].userAgentBrowser);
-                                }
-                                var chart = new ApexCharts(document.querySelector("#chart_per"), self.optionsP);
-                                chart.render();
-                                
-                                
-                                self.optionsB.series[0].data = [];
-                                self.optionsB.xaxis.categories = [];
-                                for (i=0;i<data.Time.length;i++) {
-                                    self.optionsB.series[0].data.push(data.Time[i].visitCount);
-                                    self.optionsB.xaxis.categories.push(data.Time[i].visitHour);
-                                }
-                                chart = new ApexCharts(document.querySelector("#chart_bar"), self.optionsB);
-                                chart.render();
-                                
-                                self.optionsBD.series[0].data = [];
-                                self.optionsBD.xaxis.categories = [];
-                                for (i=0;i<data.Date.length;i++) {
-                                    self.optionsBD.series[0].data.push(data.Date[i].visitCount);
-                                    self.optionsBD.xaxis.categories.push(data.Date[i].visitDate);
-                                }
-                                chart = new ApexCharts(document.querySelector("#chart_bar2"), self.optionsBD);
-                                chart.render();
-                                
-                            }
-
-                        });
-
-                        
-
-                    },
-                	
-                    fnPaymentList : function() {
-                    	var self = this;
-                    	var nparmap = {
-                    	};
-                    	$.ajax({
-                    		url: "/pay/list.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("dona",data);
-                    			self.donations = data.info;
-                    		}
-                    	});
-                    },
                 	
                 	
                 },
                 mounted() {
                 	let self = this;
                 	
-                	self.fnList();
-                	self.fnPaymentList();
+         
                 	
                 }
             });

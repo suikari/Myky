@@ -18,4 +18,25 @@ public class pay {
 	private String productId;
 	private String donationId;
 	private String userId;
+	
+	
+	private String productName;
+	private String categoryId;
+	private int price ;
+	private String quantity;
+	private String registrationDate;
+	private String manufacturer;
+	private String productType;
+	private String productCode;
+	
+	private String userName;
+	private String address;
+	private String password;
+	private String nickName;
+	private String email;
+	private String profileImage;
+	private String phoneNumber;
+	private String birthDate;
+	private String role;
+	
 }

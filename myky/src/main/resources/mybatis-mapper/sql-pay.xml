@@ -11,4 +11,12 @@
 		
 	</insert>
 
+
+	 <select id="selectPayment" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
+	 	SELECT *
+		FROM PAYMENT P
+		LEFT JOIN PRODUCT PD ON P.PRODUCT_ID = PD.PRODUCT_ID	
+		LEFT JOIN USERS U ON P.USER_ID = U.USER_ID	
+
+	 </select>
 </mapper>

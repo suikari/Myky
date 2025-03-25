@@ -171,7 +171,7 @@
 }
 
 .board-div {
-    height: 250px; /* 스크롤이 필요한 높이 설정 */
+    height: 190px; /* 스크롤이 필요한 높이 설정 */
     overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
@@ -453,7 +453,8 @@
                     	var self = this;
                     	var nparmap = {
                     			page : 0,
-                    			pageSize : 3
+                    			pageSize : 3,
+                    			category : "F"
                     	};
                     	$.ajax({
                     		url: "board/list.dox",
@@ -516,10 +517,10 @@
                     	});
                     },
                     fnView(boardId) {
-                        pageChange("/board/view.do", { boardId: boardId });
+                        location.href="/board/view.do?boardId="+ boardId;
                     },
                     fnPView(productId) {
-                        pageChange("/product/view.do", { productId: productId });
+                        location.href="/product/view.do?productId="+ productId;
                     },
                     autoScroll() {
                         let container = document.getElementById("scrollBox");
@@ -532,6 +533,7 @@
 
                             // **끝까지 스크롤되면 다시 처음으로 이동**
                             if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+                            		this.fnDonationList();
                                     container.scrollTop = 0; // 처음으로 리셋
                             }
                         }, 50); // 50ms마다 실행 (속도 조절 가능)
@@ -568,6 +570,7 @@
                 		self.kakaotest();
                     	//console.log(self.code);
                 	}
+                	
                 	self.fnboardList();
                 	self.fnProductList();
                 	self.fnDonationList();
