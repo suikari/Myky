@@ -12,4 +12,6 @@ public interface CartService {
 
 	HashMap<String, Object> addCartProduct(HashMap<String, Object> map);
 
+	HashMap<String, Object> addCartOrder(HashMap<String, Object> map);
+
 }

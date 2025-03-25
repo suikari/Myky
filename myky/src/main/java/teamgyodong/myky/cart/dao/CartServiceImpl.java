@@ -110,4 +110,20 @@ public class CartServiceImpl implements CartService {
 		}
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> addCartOrder(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			cartMapper.insertCartOrder(map);
+			// map에 orderId 담김
+			cartMapper.insertCartOrderDetail(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

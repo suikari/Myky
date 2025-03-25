@@ -20,4 +20,14 @@ public class cart {
 	private String filepath;
 	private String thumbnail;
 	
+	private String orderId;
+	private String orderStatus;
+	private String orderedAt;
+	private String receiverName;
+	private String receiverPhone;
+	private String receiverAddr;
+	private String paymentMessage;
+	private String updatedAt;
+	private String refundRequestDate;
+		
 }
