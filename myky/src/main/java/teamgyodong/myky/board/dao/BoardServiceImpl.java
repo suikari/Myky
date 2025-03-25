@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import teamgyodong.myky.board.mapper.BoardMapper;
 import teamgyodong.myky.board.model.board;
+import teamgyodong.myky.board.model.boardFile;
 import teamgyodong.myky.board.model.comment;
 
 
@@ -64,11 +65,13 @@ public class BoardServiceImpl implements BoardService {
 		
 		List<comment> cmtList = boardMapper.selectCmtList(map);
 		List<board> boardList = boardMapper.selectBoard(map);
+		List<boardFile> fileList = boardMapper.selectBoardImg(map);
 		board info = boardList.isEmpty() ? null : boardList.get(0);
 		
 		resultMap.put("info", info);
-		resultMap.put("result", "success");
+		resultMap.put("fileList", fileList);
 		resultMap.put("cmtList", cmtList);
+		resultMap.put("result", "success");
 		return resultMap;
 	}
 	//게시글 추가
@@ -79,7 +82,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("boardId", map.get("boardId"));
 		resultMap.put("result", "success");
 		
-		return null;
+		return resultMap;
 	}
 	//게시글 수정
 	public HashMap<String, Object> boardEdit(HashMap<String, Object> map) {
@@ -137,4 +140,12 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result","success");
 		return resultMap;
 	}
+	//파일 삭제
+	public HashMap<String, Object> boardRemoveFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int num = boardMapper.deleteFile(map);
+		return null;
+	}
 }
+	

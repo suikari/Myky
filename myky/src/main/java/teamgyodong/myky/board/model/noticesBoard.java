@@ -3,9 +3,8 @@ package teamgyodong.myky.board.model;
 import lombok.Data;
 
 @Data
-public class board {
+public class noticesBoard {
 
-	
 	private String boardId;
 	private String title;
 	private String content;
@@ -22,6 +21,5 @@ public class board {
 	private String cnt;
 	private String commentCount;
 	
-	
-	
+
 }
