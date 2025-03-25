@@ -19,12 +19,21 @@
 			
 	</select>
 	
+	<update id="updateCartQuantity" parameterType="hashmap">
+	
+		update cart_item
+		set
+			quantity = quantity + #{quantity}
+		where cart_id = #{cartId} and product_id = #{productId}
+	
+	</update>
+	
 	<update id="updateQuantity" parameterType="hashmap">
 	
 		update cart_item
 		set
 			quantity = #{quantity}
-		where cart_item_id = #{cartItemId}
+		where cart_id = #{cartId} and product_id = #{productId}
 	
 	</update>
 	
@@ -34,6 +43,36 @@
 		where  cart_item_id = #{cartItemId}
 	
 	</delete>
+	
+	<insert id="insertCartProduct" parameterType="hashmap">
+	
+		insert into cart_item
+		values (cart_item_seq.nextval, #{quantity}, #{cartId}, #{productId})
+	
+	</insert>
+	
+	<insert id="insertCart" parameterType="hashmap" useGeneratedKeys="true" keyColumn="cart_id" keyProperty="cartId">
+	
+		insert into cart
+		values (cart_seq.nextval, sysdate, #{sessionId}, #{userId})
+	
+	</insert>
+	
+	<select id="findCart" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
+	   
+	    select cart_id from cart where user_id = #{userId}
+	
+	</select>
+	
+	<select id="findCartItem" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
+	
+		select c.cart_id, c.user_id, c.session_id, c.created_at, ci.cart_item_id, ci.product_id, p.product_name, p.price, ci.quantity
+		from cart c
+		join cart_item ci on c.cart_id = ci.cart_id
+		join product p on ci.product_id = p.product_id
+		where c.cart_id = #{cartId} and ci.product_id = #{productId}
+	
+	</select>
 	
 </mapper>
 
