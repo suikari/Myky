@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.board.model.board;
+import teamgyodong.myky.board.model.boardFile;
 import teamgyodong.myky.board.model.comment;
 
 @Mapper
@@ -38,6 +39,10 @@ public interface BoardMapper {
 	List<board> countComment(HashMap<String, Object> map);
 
 	void insertBoardFile(HashMap<String, Object> map);
+
+	List<boardFile> selectBoardImg(HashMap<String, Object> map);
+
+	int deleteFile(HashMap<String, Object> map);
 	
 	
 

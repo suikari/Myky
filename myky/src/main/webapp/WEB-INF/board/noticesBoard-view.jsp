@@ -64,8 +64,7 @@
             color: #333;
             word-break: break-word;
             white-space: pre-wrap;
-            min-height: 500px;
-            text-align: center;
+            height: 500px;
         }
         #viewPage .view-files {
             margin-top: 10px;
@@ -178,13 +177,6 @@
         .link-container:hover .preview-image {
             display: block;
         }
-        .view-boxContent img {
-            max-width: 70%;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-            border-radius: 6px;
-        }
     </style>
     
 </head>
@@ -194,17 +186,11 @@
     <div id="app" class="container">
         <div id="viewPage">
 
-            <div class="view-header" v-if="category == 'F'">
+            <div class="view-header">
                 VIEW
             </div>
-            <div class="view-header" v-if="category == 'A'">
-                NOTICE VIEW
-            </div>
-            <div class="view-sub" v-if="category == 'F'">
+            <div class="view-sub">
                 여러분의 이야기를 들려주세요.
-            </div>
-            <div class="view-sub" v-if="category == 'A'">
-                새 소식을 알려드립니다.
             </div>
             <hr class="custom-hr">
 
@@ -298,7 +284,6 @@
                         editCommentId : "",
                         editContent : "",
                         fileList: [],
-                        category : "",
                     };
                 },
                 computed: {
@@ -316,7 +301,6 @@
 				        var nparmap = {
                             boardId : self.boardId,
                             option: "View",
-                            category : self.category,
                         };
 				        $.ajax({
 				        	url:"/board/view.dox",
@@ -333,18 +317,17 @@
                     },
                     fnBack : function (info) {
                         let self = this;
-                        location.href="/board/list.do?category="+self.category;
+                        location.href="/board/list.do?page=" + self.page;
                         
                     },
                     fnEdit : function (){
                         var self = this;
-                        location.href="/board/edit.do?boardId=" + self.boardId + "&category="+self.category;
+                        location.href="/board/edit.do?boardId=" + self.boardId;
                     },
                     fnRemove : function () {
                         var self = this;
                         var nparmap = {
                             boardId: self.boardId,
-                            category: self.category,
                         };
                         $.ajax({
                             url: "/board/remove.dox",
@@ -353,7 +336,7 @@
                             data: nparmap,
                             success: function (data) {
                                 console.log(data);
-                                location.href = "/board/list.do?category="+self.category;
+                                location.href = "/board/list.do";
                                 alert("삭제되었습니다!");
                             }
                         });
@@ -430,8 +413,7 @@
                 mounted() {
                 	let self = this;
                     const params = new URLSearchParams(window.location.search);
-                    self.boardId = params.get("boardId") || "";
-                    self.category = params.get("category") || "F";
+                    this.boardId = params.get("boardId") || "";
 
                     
                     self.fnView();

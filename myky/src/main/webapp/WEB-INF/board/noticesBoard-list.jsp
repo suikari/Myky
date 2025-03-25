@@ -193,17 +193,11 @@
 <body>
 <jsp:include page="../common/header.jsp"/>
 <div id="app" class="container">
-    <div class="section-header" v-if="category == 'F'">
+    <div class="section-header">
         자유게시판
     </div>
-    <div class="section-header" v-if="category == 'A'">
-        NOTICE
-    </div>
-    <div class="section-headerDown" v-if="category == 'F'">
+    <div class="section-headerDown">
         여러분의 이야기를 들려주세요
-    </div>
-    <div class="section-headerDown" v-if="category == 'A'">
-        새 소식을 알려드립니다.
     </div>
     <div class="setCss">
     <hr class="custom-hr">
@@ -274,8 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 keyword: "",
                 orderKey: "",
                 orderType: "",
-                sessionId : "${sessionId}" || "",
-                category : "",
+                sessionId : "${sessionId}" || ""
             };
         },
         computed: {
@@ -298,7 +291,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     orderType: self.orderType,
                     keyword: self.keyword,
                     userId: self.userId,
-                    category : self.category,
                 };
                 $.ajax({
                     url: "/board/list.dox",
@@ -318,14 +310,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             },
             fnAdd() {
-                let self = this;
-
-                location.href="/board/add.do?category="+self.category;
+                location.href="/board/add.do";
             },
             fnView(boardId) {
                 let self = this;
                 localStorage.setItem("page", self.page);
-                location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
+                location.href="/board/view.do?boardId=" + boardId;
             },
             fnPage(num) {
                 this.page = num;
@@ -348,10 +338,10 @@ document.addEventListener("DOMContentLoaded", function () {
             let savedPage;
             const params = new URLSearchParams(window.location.search);
             this.boardId = params.get("page") || "";
-            this.category = params.get("category") || "F";
 
              if(localStorage.getItem('page') == "undefined"){
                 savedPage  = 1;
+
              } else {
                 savedPage  = localStorage.getItem('page');
              }
