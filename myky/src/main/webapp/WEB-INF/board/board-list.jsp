@@ -155,7 +155,6 @@
         }
         div {
             text-align: center;
-            margin-top: 20px;
         }
         span {
             margin: 0 4px;
@@ -209,7 +208,7 @@
     <hr class="custom-hr">
         <div class="search-wrapper">
             <div class="search-right">
-                <select v-model="pageSize" @change="fnBoardList">
+                <select v-model="pageSize" @change="fnBoardSearch">
                     <option value="5">5개씩</option>
                     <option value="10">10개씩</option>
                     <option value="15">15개씩</option>
@@ -284,7 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
         methods: {
             fnBoardSearch : function(){
                 let self = this;
-                self.page = '1';
+                let pageCnt = 1;
+                self.page = pageCnt;
                 self.fnBoardList();
             },
             fnBoardList() {
