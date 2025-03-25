@@ -6,21 +6,27 @@
 	
 	
 	<select id="selectBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
-		SELECT * 
-		FROM FREE_BOARD
-		WHERE 1=1
-		<if test="searchOption != null and searchOption == 'all'">
-			AND (TITLE LIKE '%' || #{keyword} || '%'
-				OR USER_ID LIKE '%' || #{keyword} || '%')
-		</if>
-		<if test="searchOption != null and searchOption == 'title'">
-			AND TITLE LIKE '%' || #{keyword} || '%'
-		</if>
-			<if test="searchOption != null and searchOption == 'userId'">
-			AND USER_ID LIKE '%' || #{keyword} || '%'
-		</if>
-
-		ORDER BY BOARD_ID DESC
+		SELECT 
+		    F.*, 
+		    (SELECT COUNT(*)
+		    FROM FREE_BOARD_COMMENT C
+		    WHERE C.BOARD_ID = F.BOARD_ID)AS COMMENT_COUNT
+		FROM 
+		    FREE_BOARD F
+		WHERE 
+		    1=1
+		    <if test="searchOption != null and searchOption == 'all'">
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%' OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		    </if>
+		    <if test="searchOption != null and searchOption == 'title'">
+		        AND F.TITLE LIKE '%' || #{keyword} || '%'
+		    </if>
+		    <if test="searchOption != null and searchOption == 'userId'">
+		        AND F.USER_ID LIKE '%' || #{keyword} || '%'
+		    </if>
+		    AND CATEGORY= #{category}
+		ORDER BY 
+		    F.BOARD_ID DESC
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
@@ -40,6 +46,7 @@
 				AND (TITLE LIKE '%' || #{keyword} || '%' OR USER_ID LIKE '%' || #{keyword} || '%')
 			</when>
 		</choose>
+			AND CATEGORY= #{category}
 	</select>
 	
 	<select id="selectCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
@@ -58,14 +65,13 @@
 	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 		SELECT *
 		FROM FREE_BOARD
-		WHERE BOARD_ID = #{boardId} FETCH FIRST 1 ROW ONLY
+		WHERE BOARD_ID = #{boardId}
+		AND CATEGORY= #{category}
 	</select>
 	
-	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="board_Id" keyProperty="boardId">
-		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, CNT)
-		VALUES(
-			FREE_BOARD_SEQ.NEXTVAL,
-			#{title}, #{content}, SYSDATE, SYSDATE, #{userId}, 0)
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
+		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID,CATEGORY, CNT)
+		VALUES(FREE_BOARD_SEQ.NEXTVAL, #{title}, #{content}, SYSDATE, SYSDATE, #{userId},  #{category}, 0)
 	</insert>
 	
 	<update id="updateBoard" parameterType="hashmap">
@@ -102,9 +108,19 @@
 	
 	<insert id="insertBoardFile" parameterType="hashmap">
 		INSERT INTO FREE_BOARD_FILE
-		VALUES(FREE_BOARD_FILE_SEQ.NEXTVAL, #{boardId}, #{fileName}, #{filePath}, #{orginalName}, #{fileExt}, #{createdAt}, #{fileSize})
+		VALUES(FREE_BOARD_FILE_SEQ.NEXTVAL, #{boardId}, #{fileName}, #{filePath}, #{originalName}, #{fileExt}, SYSDATE, #{fileSize})
 	</insert>
+	<select id="selectBoardImg" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardFile">
+		SELECT *
+		FROM FREE_BOARD_FILE F
+		LEFT JOIN FREE_BOARD B ON F.BOARD_ID = B.BOARD_ID
+		WHERE F.BOARD_ID = #{boardId}
+	</select>
 	
+	<delete id="deleteFile" parameterType="hashmap">
+		DELETE FROM FREE_BOARD_FILE
+		WHERE FILE_ID = #{fileId}
+	</delete>
 </mapper>
 
 

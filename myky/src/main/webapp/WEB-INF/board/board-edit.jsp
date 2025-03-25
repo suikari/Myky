@@ -5,12 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자유게시판</title>
-	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-
     <!-- Quill CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
     <!-- Quill JS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     
@@ -76,8 +72,15 @@
             transition: border-color 0.3s;
         }
         .title-input {
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: -50px;
+            
+        }
+       .title-inputImg{
             width: 1000px;
             margin-bottom: -50px;
+            margin-top: 80px;
         }
         input:focus {
             border-color: #fca311;
@@ -145,30 +148,166 @@
 
             max-width: 1000px;
         }
+        #viewPage {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        #viewPage .view-header {
+            font-size: 36px;
+            font-weight: bold;
+            color: #202060;
+            margin-bottom: 10px;
+        }
+
+        #viewPage .view-sub {
+            color: #333;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        #viewPage .view-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #202060;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+        .view-labelContent {
+            height: 500px;
+        }
+
+        #viewPage .view-box {
+            border: 2px solid #202060;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #fdfdfd;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .view-boxContent{
+            border: 1px solid #202060;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #fdfdfd;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            word-break: break-word;
+            white-space: pre-wrap;
+            height: 500px;
+        }
+        #viewPage .view-files {
+            margin-top: 10px;
+        }
+
+        #viewPage .file-link {
+            color: #202060;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        .view-files {
+            margin-bottom: 20px;
+            color: #202060;
+            border: 1px solid #202060;
+            border-radius: 6px;
+            padding: 15px;
+        }
+        #viewPage .file-link:hover {
+            color: #fca311;
+        }
+        .FileDownload{
+            color: #202060;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .FileDownload:hover{
+            color : #fca311; 
+        }
+        .buttonMargin {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .link-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .preview-image {
+            display: none;
+            position: absolute;
+            top: -19px;
+            left:  -165px;
+            width: 150px;
+            height: auto;
+            border: 1px solid #ddd;
+            background-color: white;
+            padding: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .link-container:hover .preview-image {
+            display: block;
+        }
 </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
  
     <div id="app" class="container">
-        <div class="section-header">
-            EDIT
-        </div>
-        <div class="section-headerDown">
-            게시글 내용을 수정합니다.
-        </div>
-        <hr class="custom-hr">
+        <div id="viewPage">
+            <div class="section-header" v-if="category == 'F'">
+                EDIT
+            </div>
+            <div class="section-header" v-if="category == 'A'">
+                NOTICE EDIT
+            </div>
+            <div class="section-headerDown" >
+                게시글 내용을 수정합니다.
+            </div>
+            <hr class="custom-hr">
 
-        <div class="title-label">TITLE</div>
-        <div class="title-input">
-            <input v-model="info.title">
-        </div>
-        <div class="title-label">CONTENT</div>
-        <div>
-            <div id="editor" style="height: 300px;"></div>
-          </div>
-        <div>
-            <button class="buttonStyle" @click="fnEdit">저장</button>
+            <div class="title-label">TITLE</div>
+            <div class="title-input">
+                <input v-model="info.title">
+            </div>
+            <div class="title-inputImg">
+                <input type="file" id="file1" name="file1" multiple>
+            </div>
+            <div class="title-label">CONTENT</div>
+            <div>
+                <div id="editor" style="height: 300px;"></div>
+            </div>
+            <div class="view-label">첨부파일</div>
+                <div class="view-files">
+                    <div v-for="item in fileList" :key="reload">
+                        <div class="link-container">
+                            <span class="FileDownload">{{item.fileName}}</span>
+                            <span class="FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb) </span></a>
+                                <button class="buttonStyle" @click="fnRemove(item.fileId)">삭제</button>
+                            <img :src="item.filePath" :alt="item.fileName" class="preview-image">
+                        </div>
+                    </div>
+                </div>
+                <table>
+                </table>
+            <div>
+                <button class="buttonStyle" @click="fnEdit">저장</button>
+                <button class="button" @click="fnBack(info)">뒤로가기</button>
+            </div>
         </div>
     </div>
 
@@ -179,8 +318,6 @@
 </html>
 <script>
     
-    document.addEventListener("DOMContentLoaded", function () {
-
                 const app = Vue.createApp({
                 data() {
                     return {
@@ -188,6 +325,8 @@
                         info : {},
                         content : "",
                         title : "",
+                        reload : 0,
+                        category : "",
                     };
                 },
                 computed: {
@@ -195,6 +334,28 @@
                 },
                 methods: {
                     fnView(){
+				        var self = this;
+				        var nparmap = {
+                            boardId : self.boardId,
+                            page: self.page,
+                            option: "UPDATE",
+                            category : self.category,
+                        };
+				        $.ajax({
+				        	url:"/board/view.dox",
+				        	dataType:"json",	
+				        	type : "POST", 
+				        	data : nparmap,
+				        	success : function(data) { 
+				        		console.log(data);
+                                    self.info = data.info;
+                                    self.fileList = data.fileList;
+                                    self.fnQuill();
+
+				        	}
+				        });
+                    },
+                    fnFileView(){
 				        var self = this;
 				        var nparmap = {
                             boardId : self.boardId,
@@ -208,24 +369,43 @@
 				        	data : nparmap,
 				        	success : function(data) { 
 				        		console.log(data);
-                                    self.info = data.info;
-                                    self.fnQuill();
+                                self.fileList = data.fileList;
+                                self.reload += 1; 
 				        	}
 				        });
                     },
                     fnEdit : function (){
                         var self = this;
-				        var nparmap = self.info;
+				        var nparmap = {
+                            title : self.info.title,
+                            content : self.info.content,
+                            boardId : self.boardId
+                        }
 				        $.ajax({
 				        	url:"/board/edit.dox",
 				        	dataType:"json",	
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-                                alert("수정되었습니다.")
-                                location.href="/board/list.do"
+                                alert("수정되었습니다.");
+
+                                if( $("#file1")[0].files.length > 0){
+                                    var form = new FormData();
+                                    for(let i=0; i<$("#file1")[0].files.length; i++){
+                                        form.append( "file1",  $("#file1")[0].files[i]);
+                                    }
+                                    form.append( "boardId", self.boardId); // 임시 pk
+                                    self.upload(form);
+
+                                } else {
+                                    location.href="/board/list.do?category="+self.category;
+                                }
 				        	}
 				        });
+                    },
+                    fnBack : function (info) {
+                        let self = this;
+                        location.href="/board/list.do?category="+self.category;                   
                     },
                     fnQuill() {
                         let self = this;
@@ -247,29 +427,50 @@
                         quill.on('text-change', function () {
                             self.info.content = quill.root.innerHTML;
                         });
-                    }
+                    },
+                    //파일업로드
+                    upload : function(form){
+                    	var self = this;
+                    	 $.ajax({
+                    		 url : "/fileUpload.dox"
+                    	   , type : "POST"
+                    	   , processData : false
+                    	   , contentType : false
+                    	   , data : form
+                    	   , success:function(response) { 
+                            location.href="/board/list.do?category="+self.category;
+
+                    	   }	           
+                       });
+                    },
+                    fnRemove : function (fileId) {
+                        var self = this;
+                        var nparmap = {
+                            fileId : fileId,
+                        };
+                        $.ajax({
+                            url: "/board/removeFile.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                alert("삭제되었습니다!");
+                                self.fnFileView();
+                            }
+                        });
+                    },
                 },
                 mounted() {
                 	var self = this;
 
+                    const params = new URLSearchParams(window.location.search);
+                    self.boardId = params.get("boardId") || "";
+                    self.category = params.get("category") || "F";
                 	self.fnView();
                         
                 }
             });
-            $(document).ready(function() {
-      $('#summernote').summernote({
-        height: 300, // set editor height
-        minHeight: 300, // set minimum height of editor
-        maxHeight: 300, // set maximum height of editor
-      });
-      if (!(typeof board_id == "undefined" || boardId == null || boardId == "")) {
-        appInstance.fnUpdate();//
-      }
-      
-    })
             app.mount("#app");
-            console.log('jQuery 버전:', $.fn.jquery);
-console.log('Summernote 상태:', typeof $.fn.summernote);
-});
 
     </script>

@@ -13,47 +13,117 @@
 
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f8f8f8;
-            margin: 0;
-            padding: 0;
+            padding-bottom: 120px; /* 푸터 높이만큼 확보 */
         }
-
         #app {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
-        label {
-            display: block;
+        /* EDIT */
+        .section-header {
+            color: #202060;
             font-weight: bold;
-            margin-bottom: 6px;
-            color: #333;
-        }
-
-        input, textarea {
+            height: 70px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            align-items: left; /* 세로 중앙 정렬 */
+            justify-content: left; /* 가로 중앙 정렬 */
+            font-size: 50px;
             width: 100%;
-            padding: 12px;
-            font-size: 14px;
-            border: 1px solid #ccc;
+            margin-top: 100px;
+            max-width: 1000px;
+        }
+        .section-headerDown {
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+            display: flex;
+            align-items: left; /* 세로 중앙 정렬 */
+            justify-content: left;
+            width: 100%;
+            margin-top: 10px;
+            max-width: 1000px;
+            width: 100
+        }
+        .title-label {
+            font-size: 20px;
+            font-weight: bold;
+            color: #202060;
+            margin-top: 70px;
+            margin-bottom: 10px;
+            width: 1000px;
+            max-width: 100%;
+        }
+        /* 제목 input 박스 */
+        input {
+            margin-top: -100px;
+            width: 100%;
+            max-width: 500px;
+            padding: 8px 10px;
+            border: 2px solid #202060;
             border-radius: 6px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            background-color: #fff;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #1a73e8;
+            font-size: 16px;
             outline: none;
+            transition: border-color 0.3s;
         }
-
+        .title-input {
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: -50px;
+            
+        }
+       .title-inputImg{
+            width: 1000px;
+            margin-bottom: -50px;
+            margin-top: 80px;
+        }
+        input:focus {
+            border-color: #fca311;
+        }
+        /* 에디터 컨테이너 감싸기 */
+        #editor {
+          background-color: #ffffff; /* 크림톤 배경 */
+          border: 2px solid #202060; /* 연한 베이지 */
+          border-radius: 12px;
+          padding: 15px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+          font-family: 'Nanum Gothic', sans-serif;
+          font-size: 16px;
+          line-height: 1.6;
+          align-items: center;
+          margin-top: 30px;
+          transition: border-color 0.3s;
+          width: 1000px;
+        }
+        #editor .ql-editor:focus{
+            outline: none;
+            border-color: #fca311 !important;
+            border-radius: 12px;
+            box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.3);
+        }
+        /* 툴바도 살짝 꾸미기 */
+        .ql-toolbar {
+            margin-top: 0px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 8px;
+            color: #202060;
+            font-weight: bold;
+            font-size: 20px;
+            width: 1000px;
+            margin-bottom: -20px;
+        }
+        .buttonStyle {
+            margin-top: 50px;
+        }
         button {
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-size: 14px;
             font-weight: bold;
             background-color: #202060;
@@ -65,8 +135,19 @@
         }
 
         button:hover {
-                background-color: #fca311;
-                color: #202060;
+            background-color: #fca311;
+            color: #202060;
+        }
+        .custom-hr {
+            width: 1000px;
+            max-width: 100%;
+            border: none;
+            border-top: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 40px;
+            width: 100%;
+
+            max-width: 1000px;
         }
     </style>
     
@@ -77,18 +158,34 @@
  
 
     <div id="app" class="container">
-        <div>
-            <label>제목</label>
-            <input v-model="title">
-            <input type="file" id="file1" name="file1" accept=".jpg, .png" multiple>
+        <div class="section-header" v-if="category == 'F'">
+            ADD
         </div>
-            <label>내용</label>
-        <div style="width: 500px;">
-            <div id="editor" style="height: 300px;"></div>
+        <div class="section-header" v-if="category == 'A'">
+            NOTICE ADD
         </div>
-        <div>
-            <button @click="fnSave">저장</button>
-        </div>
+            <div class="section-headerDown">
+                게시글 내용을 작성합니다.
+            </div>
+            <hr class="custom-hr">
+
+            <div>
+                <div class="title-label">TITLE</div>
+                <div class="title-input">
+                    <input v-model="title">
+                </div>
+                <div class="title-inputImg">
+                    <input type="file" id="file1" name="file1"  multiple>
+                </div>
+            </div>
+            <div class="title-label">CONTENT</div>
+            <div>
+                <div id="editor" style="height: 300px;"></div>
+            </div>
+            <div>
+                <button class="buttonStyle" @click="fnSave">저장</button>
+                <button class="button" @click="fnBack(info)">뒤로가기</button>
+            </div>
     </div>
 
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
@@ -106,7 +203,8 @@
                        title : "",
                        content : "",
                        sessionId : "${sessionId}",
-                       boardId : "",                   
+                       boardId : "",
+                       category : "",                
                     };
                 },
                 computed: {
@@ -119,6 +217,7 @@
                             title : self.title,
                             content : self.content,
                             userId : self.sessionId,
+                            category : self.category,
                         }
                         $.ajax({
 				    	    url:"/board/add.dox",
@@ -126,7 +225,6 @@
 				    	    type : "POST", 
 				    	    data : nparmap,
 				    	    success : function(data) { 
-				    	    	console.log(data);
                                 alert("저장되었습니다.")
 
                                 if( $("#file1")[0].files.length > 0){
@@ -135,10 +233,11 @@
                                         form.append( "file1",  $("#file1")[0].files[i]);
                                     }
                                     form.append( "boardId", data.boardId); // 임시 pk
+                                    console.log("1",data.boardId);
                                     self.upload(form); 
-                                    location.href="/board/list.do"
+
                                 } else {
-                                    location.href="/board/list.do"
+                                    location.href="/board/list.do?category="+self.category;
                                 }
                             }
 				        });
@@ -153,14 +252,22 @@
                     	   , contentType : false
                     	   , data : form
                     	   , success:function(response) { 
-                        
+                            location.href="/board/list.do?category="+self.category;
+
                     	   }	           
                        });
-                    }
+                    },
+                    fnBack : function (info) {
+                        let self = this;
+                        location.href="/board/list.do?category=" + self.category;
+                        
+                    },
                 
                 },
                 mounted() {
-                    let self = this;                	
+                    let self = this;
+                    const params = new URLSearchParams(window.location.search);
+                    self.category = params.get("category") || "F";            	
                 	var quill = new Quill('#editor', {
                     theme: 'snow',
                     modules: {
