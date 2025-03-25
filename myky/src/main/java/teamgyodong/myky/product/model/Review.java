@@ -11,4 +11,5 @@ public class Review {
 	private String reviewText;
 	private String createdAt;
 	private String productId;
+	private String title;
 }

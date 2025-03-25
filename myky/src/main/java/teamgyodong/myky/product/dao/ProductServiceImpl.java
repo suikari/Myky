@@ -15,7 +15,7 @@ import teamgyodong.myky.product.model.Review;
 public class ProductServiceImpl implements ProductService {
 	@Autowired
 	ProductMapper productMapper;
-	
+	//상품 리스트 가져오기
 	public HashMap<String, Object> getProductList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -28,19 +28,40 @@ public class ProductServiceImpl implements ProductService {
 		
 		return resultMap;
 	}
-	
+	//상품 가져오기
 	public HashMap<String, Object> getProduct(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Product info = productMapper.selectProduct(map);
 		List<Product> imgList = productMapper.selectProductImg(map);
-		resultMap.put("result", "success");
+		
 		resultMap.put("info", info);
 		resultMap.put("imgList", imgList);
-
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//상품 리뷰 쓰기
+	public HashMap<String, Object> addReview(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		productMapper.insertReview(map);
+		
+		resultMap.put("userId", map.get("userId"));
+		resultMap.put("result", "success");
 		return resultMap;
 	}
 	
+	//상품 리뷰 파일 업로드
+	public  void addReviewFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		productMapper.insertReviewFile(map);
+		
+	}
+	
+	
+	
+	
+	//상품 리뷰리스트 가져오기
 	public HashMap<String, Object> getReviewList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();

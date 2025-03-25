@@ -296,7 +296,7 @@
                         return price.toLocaleString('ko-KR') + '원';
                     },
                     fnView: function (productId) {
-                        pageChange("/product/view.do", { productId: productId });
+                        pageChange("/product/view.do?productId=" + productId, { productId: productId });
                     },
                     fnPage: function (num) {
                         let self = this;

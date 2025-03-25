@@ -68,6 +68,16 @@
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
 	 </select>
+	  <!-- 리뷰 글쓰기 -->
+	 <insert id="insertReview" parameterType="hashmap" useGeneratedKeys="true" keyColumn="userId" keyProperty="userId">
+	 	INSERT INTO PRODUCT_REVIEWS (REVIEW_ID,USER_ID,RATING,REVIEW_TEXT,CREATED_AT,PRODUCT_ID) 
+	 	VALUES (PRODUCT_REVIEWS_SEQ.NEXTVAL,#{userId},#{rating},#{reviewText},TO_DATE(#{createdAt}, 'YYYY-MM-DD'),#{productId})
+	 </insert>
+	 <!-- 리뷰 파일업로드 -->
+	 <insert id="insertReviewFile" parameterType="hashmap">
+		INSERT INTO REVIEW_FILE
+		VALUES(REVIEW_FILE_SEQ.NEXTVAL,#{reviewId},#{path},#{filename},#{originFilename},#{size}, #{extName})
+	</insert>
 	 
 	 <!-- 리뷰 리스트 -->
 	 <select id="selectReviewList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
@@ -75,7 +85,7 @@
 		FROM PRODUCT P
 		INNER JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
 		WHERE P.PRODUCT_ID = #{productId}
-	    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    	OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
 	<!-- 리뷰 총 개수 -->

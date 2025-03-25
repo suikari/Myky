@@ -8,4 +8,8 @@ public interface ProductService {
   HashMap<String, Object> getProduct(HashMap<String, Object> map);
 
   HashMap<String, Object> getReviewList(HashMap<String, Object> map);
+
+  HashMap<String, Object> addReview(HashMap<String, Object> map);
+
+  void addReviewFile(HashMap<String, Object> map);
 }

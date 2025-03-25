@@ -275,18 +275,62 @@
                 margin-top: 100px;
             }
 
+            .line-review {
+                padding: 20px 0;
+                border-bottom: 1px solid #e0e0e0;
+                font-family: 'Noto Sans KR', sans-serif;
+            }
+
+            .line-review-header {
+                font-weight: bold;
+                color: #333;
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .line-review-header .stars {
+                color: #ffcc00;
+                margin-right: 10px;
+            }
+
+            .line-review-body p {
+                font-size: 15px;
+                color: #444;
+                margin-bottom: 10px;
+                line-height: 1.6;
+            }
+
+            .review-image img {
+                width: 120px;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin-top: 5px;
+            }
+
+            .line-review-footer {
+                font-size: 13px;
+                color: #888;
+                text-align: right;
+                margin-top: 5px;
+            }
+
+
+
             /* 배송, 교환, 환불 영역 */
             .policy-section {
                 padding: 30px;
                 max-width: 1100px;
                 margin: 0 auto;
             }
+
             .policy-grid {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 30px 80px;
                 justify-content: space-between;
             }
+
             .policy-box {
                 flex: 1 1 45%;
                 min-width: 280px;
@@ -294,13 +338,15 @@
                 color: #444;
                 line-height: 1.7;
             }
+
             .policy-box h3 {
                 font-size: 18px;
                 font-weight: bold;
                 margin-bottom: 10px;
                 color: #222;
             }
-            /* 페이징징 */
+
+            /* 페이징 */
             .pagination {
                 display: flex;
                 justify-content: center;
@@ -321,7 +367,7 @@
                 color: #fff;
                 font-weight: bold;
             }
-           
+
             @media (max-width: 768px) {
                 .product-detail {
                     flex-direction: column;
@@ -334,6 +380,7 @@
                     text-align: center;
                 }
             }
+
             @media (max-width: 768px) {
 
                 .buy-btn1,
@@ -376,7 +423,7 @@
                     </p>
                     <div class="button-group">
                         <button class="buy-btn1">바로 구매</button>
-                        <button class="buy-btn2">장바구니</button>
+                        <button class="buy-btn2" @click="fnAddCart()">장바구니</button>
                     </div>
                 </div>
             </section>
@@ -415,17 +462,18 @@
             <!-- 탭 UI -->
             <section id="tab-area" class="tab-wrapper">
                 <div class="tab-menu">
-                    <div v-for="(tab, index) in tabs" :key="index"
-                        :class="['tab-item', { active: activeTab === index }]" @click="activeTab = index">
+                    <div v-for="tab in tabs" :key="tab.id" :class="['tab-item', { active: activeTab === tab.id }]" @click="changeTab(tab.id)">
                         {{ tab.label }}
                     </div>
                 </div>
 
                 <div class="tab-content">
-                    <div v-if="activeTab === 0">
+                    <!-- 상품 상세정보 -->
+                    <div v-if="activeTab === 'detail'">
                         <div v-html="info.description"></div>
                     </div>
-                    <div v-else-if="activeTab === 1" class="review-section">
+                    <!-- 상품 리뷰 -->
+                    <div v-else-if="activeTab === 'review'" class="review-section">
                         <div class="review-header">
                             <h3>REVIEW</h3>
                             <div class="review-buttons">
@@ -433,31 +481,48 @@
                                 <button class="btn" @click="fnReviewWtite()">글쓰기</button>
                             </div>
                         </div>
+
                         <div v-if="reviewList.length === 0" class="review-empty">
                             현재 게시물이 없습니다
                         </div>
                         <div v-else>
-                            <div v-for="review in reviewList" :key="review.reviewId" class="review-item">
-                                <p><strong>작성자:</strong> {{ review.userId }}</p>
-                                <p><strong>내용:</strong> {{ review.reviewText }}</p>
-                                <p><strong>평점:</strong> {{ review.rating }}</p>
+                            <div v-for="review in reviewList" :key="review.reviewId" class="line-review">
+                                <div class="line-review-header">
+                                    <span class="stars">⭐ {{ review.rating }}점</span>
+                                    <span class="summary-text">아주 좋아요</span> <!-- 이건 rating에 따라 다르게 -->
+                                </div>
+
+                                <div class="line-review-body">
+                                    <p>{{ review.reviewText }}</p>
+
+                                    <div v-if="review.imageUrl" class="review-image">
+                                        <img :src="review.imageUrl" alt="리뷰 이미지" />
+                                    </div>
+                                </div>
+
+                                <div class="line-review-footer">
+                                    {{ review.userId }} 님의 리뷰입니다.
+                                </div>
                             </div>
                         </div>
                         <div class="pagination" style="margin-top: 30px;">
                             <a href="javascript:;" v-if="reviewPage > 1" @click="fnReviewPage(reviewPage - 1)">이전</a>
                             <a href="javascript:;" v-for="num in reviewPages" :key="num" @click="fnReviewPage(num)"
-                               :class="{ active: reviewPage === num }">
+                                :class="{ active: reviewPage === num }">
                                 {{ num }}
                             </a>
-                            <a href="javascript:;" v-if="reviewPage < reviewPages.length" @click="fnReviewPage(reviewPage + 1)">다음</a>
+                            <a href="javascript:;" v-if="reviewPage < reviewPages.length"
+                                @click="fnReviewPage(reviewPage + 1)">다음</a>
                         </div>
                     </div>
-                    
 
-                    <div v-else-if="activeTab === 2">
+                    <!-- 상품 문의 -->
+                    <div v-else-if="activeTab === 'qna'">
                         <p>❓ 상품문의 0개</p>
                     </div>
-                    <div v-if="activeTab === 3" class="policy-section">
+
+                    <!-- 배송, 교환, 환불 설명 -->
+                    <div v-else-if="activeTab === 'policy'" class="policy-section">
                         <div class="policy-grid">
                             <div class="policy-box">
                                 <h3>PAYMENT INFO</h3>
@@ -527,23 +592,27 @@
             const app = Vue.createApp({
                 data() {
                     return {
-                        productId: '${map.productId}',
+                        productId: '',
+                        sessionId: "${sessionId}",
+                        userInfo: {}, //사용자 정보 가져오기
                         info: {},
                         imgList: [],
                         mainImage: '',
                         quantity: 1,
-                        activeTab: 0,
+                        //탭 관련
                         tabs: [
-                            { label: '상세정보' },
-                            { label: '상품후기 개' },
-                            { label: '상품문의 0' },
-                            { label: '배송/교환/환불 안내' }
+                            { id: 'detail', label: '상세정보' },
+                            { id: 'review', label: '상품후기 1개' },
+                            { id: 'qna', label: '상품문의 0' },
+                            { id: 'policy', label: '배송/교환/환불 안내' }
                         ],
+                        activeTab: 'detail',
+                        //상품 리뷰 관련
                         reviewList: [],
                         reviewPage: 1,
                         reviewPageSize: 5,
                         reviewTotal: 0,
-                        reviewPages: []
+                        reviewPages: [],
 
                     };
                 },
@@ -551,6 +620,7 @@
 
                 },
                 methods: {
+                    //상품 보여주기
                     fnProduct() {
                         var self = this;
                         var nparmap = { productId: self.productId };
@@ -572,6 +642,7 @@
                     changeImage(filePath) {
                         document.getElementById('mainImage').src = filePath;
                     },
+                    //리뷰 보여주기
                     fnReviewList() {
                         const self = this;
                         const nparmap = {
@@ -581,7 +652,7 @@
                         };
 
                         $.ajax({
-                            url: "/product/reviewList.dox", 
+                            url: "/product/reviewList.dox",
                             type: "POST",
                             data: nparmap,
                             dataType: "json",
@@ -593,20 +664,72 @@
                             }
                         });
                     },
+                    //상품 리뷰 페이징
                     fnReviewPage(num) {
                         this.reviewPage = num;
                         this.fnReviewList();
+                    },
+                    //상품 리뷰 글쓰기
+                    fnReviewWtite: function () {
+                        pageChange("/product/review.do", {productId : this.productId});
+                    },
+                    //유저 아이디 정보 가져오기
+                    fnUserInfo() {
+                        var self = this;
+                        console.log("sessionId >>> ", self.sessionId);
+                        var nparmap = {
+                            userId: self.sessionId
+                        };
+                        $.ajax({
+                            url: "/user/info.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("userInfo >>> ", data.user);
+                                self.userInfo = data.user;
+                            }
+                        });
+                    },
+                    //장바구니
+                    fnAddCart() {
+                        const self = this;
+                        const nparmap = {
+                            // userId, sessionId, productId, quantity(수량) 필요)
+                            productId: self.productId,
+                            sessionId: self.sessionId,
+                            userId: self.userInfo.userId,
+                            quantity: self.quantity
+                        };
+                        $.ajax({
+                            url: "/cart/addProduct.dox",
+                            type: "POST",
+                            data: nparmap,
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                alert("장바구니에 상품이 담겼습니다.");
+                            }
+                        });
+                    },
+                    changeTab(tabId) {
+                        let self = this;
+                        self.activeTab = tabId;
+                        if (tabId === 'review') {
+                            self.fnReviewList();
+                        }
                     }
                 },
                 mounted() {
+                    const params = new URLSearchParams(window.location.search);
+                    this.productId = params.get("productId") || "";
+
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
-
-
-                    
+                    self.fnUserInfo();
                 }
-            });   
+            });
 
             app.mount("#app");
         });

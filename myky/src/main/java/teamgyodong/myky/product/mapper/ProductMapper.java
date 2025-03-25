@@ -23,4 +23,8 @@ public interface ProductMapper {
 
 	int selectReviewCount(HashMap<String, Object> map);
 
+	void insertReview(HashMap<String, Object> map);
+
+	void insertReviewFile(HashMap<String, Object> map);
+
 }
