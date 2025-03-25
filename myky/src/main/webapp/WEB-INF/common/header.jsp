@@ -366,13 +366,13 @@
         	<div v-if="!sessionName" class="top-bar">
 	            <a href="/register">회원가입</a> 
 	            | <a href="/user/login.do">로그인</a>
-	            | <a href="/board/list.do">공지사항</a> 
+	            | <a href="/board/list.do?category=A">공지사항</a> 
 	        </div>
 	        
 	        <div v-else class="top-bar">
 	            <span>{{sessionName}} 님 환영합니다! </span> 
 	            | <a href="/orders">주문조회</a> 
-	            | <a href="/board/list.do">공지사항</a> 
+	            | <a href="/board/list.do?category=A">공지사항</a> 
 	            <a v-if="sessionRole == 'ADMIN' " href="/manager/main.do"> | 관리자콘솔</a> 
 	            | <a href="/member/logout.do">로그아웃</a>
 	        </div>

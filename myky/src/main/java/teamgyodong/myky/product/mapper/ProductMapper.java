@@ -23,4 +23,17 @@ public interface ProductMapper {
 
 	int selectReviewCount(HashMap<String, Object> map);
 
+	void insertReview(HashMap<String, Object> map);
+
+	void insertReviewFile(HashMap<String, Object> map);
+
+	void deleteReview(HashMap<String, Object> map);
+
+	void UpdateReview(HashMap<String, Object> map);
+	
+	//리뷰 가져오기
+	Review selectReview(HashMap<String, Object> map);
+	//리뷰 사진 가져오기
+	List<Review> selectReviewImg(HashMap<String, Object> map);
+
 }

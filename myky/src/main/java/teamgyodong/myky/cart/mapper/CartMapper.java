@@ -26,4 +26,8 @@ public interface CartMapper {
 
 	void updateCartQuantity(HashMap<String, Object> map);
 
+	void insertCartOrder(HashMap<String, Object> map);
+
+	void insertCartOrderDetail(HashMap<String, Object> map);
+
 }

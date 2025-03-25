@@ -22,34 +22,59 @@
 
 
         <div id="app" class="container">
-            <div>
-                유저아이디 : {{user.userId}}
-            </div>
-            <div>
-                이름 : {{user.userName}}
-            </div>
-            <div>
-                닉네임 : {{user.nickName}}
-            </div>
-            <div>
-                이메일 : {{user.email}}
-            </div>
-            <div>
-                전화번호 : {{user.phoneNumber}}
-            </div>
-            <div>
-                전화번호 : {{user.birthDate}}
-            </div>
-            <div>
-                주소 : {{user.address}}
-            </div>
-            <div>
-                구분 : {{user.role}}
-            </div>
-            <div>
-                <button @click="fnEdit()">수정</button>
-            </div>
 
+            <template v-if="editFlg==false">
+                <div>
+                    유저아이디 : {{user.userId}}
+                </div>
+                <div>
+                    이름 : {{user.userName}}
+                </div>
+                <div>
+                    닉네임 : {{user.nickName}}
+                </div>
+                <div>
+                    이메일 : {{user.email}}
+                </div>
+                <div>
+                    전화번호 : {{user.phoneNumber}}
+                </div>
+                <div>
+                    전화번호 : {{user.birthDate}}
+                </div>
+                <div>
+                    주소 : {{user.address}}
+                </div>
+                <div>
+                    <button @click="fnEdit()">정보 수정</button>
+                    <button @click="fnExit()">뒤로</button>
+                </div>
+            </template>
+
+            <template v-else>
+                <div>
+                    아이디 : {{user.userId}}
+                </div>
+                <div>
+                    이름 : <input type="text" :value="user.userName">
+                </div>
+                <div>
+                    닉네임 : <input type="text" :value="user.nickName">
+                </div>
+                <div>
+                    이메일 : <input type="text" :value="user.email">
+                </div>
+                <div>
+                    전화번호 : <input type="text" :value="user.phoneNumber">
+                </div>
+                <div>
+                    주소 : <input type="text" :value="user.address">
+                </div>
+                <div>
+                    <button @click="fnSave()">저장</button>
+                    <button @click="fnExit()">뒤로</button>
+                </div>
+            </template>
 
 
         </div>
@@ -69,7 +94,8 @@
                 data() {
                     return {
                         userId: "${map.userId}",
-                        user: {}
+                        user: {},
+                        editFlg: false
                     };
                 },
                 computed: {
@@ -92,6 +118,30 @@
                                 self.user = data.user;
                             }
                         });
+                    },
+
+                    fnSave  : function() {
+                        var self = this;
+                        var nparmap = self.user;
+                        console.log(self.user.userName);
+                        // $.ajax({
+                        //     url: "/user/info.dox",
+                        //     dataType: "json",
+                        //     type: "POST",
+                        //     data: nparmap,
+                        //     success: function (data) {
+                        //         console.log(data);
+                        //         self.user = data.user;
+                        //     }
+                        // });
+                    },
+
+                    fnEdit: function () {
+                        let self = this;
+                        self.editFlg = true;
+                    },
+                    fnExit: function () {
+                        location.href = "/user/myPage.do";
                     }
 
                 },

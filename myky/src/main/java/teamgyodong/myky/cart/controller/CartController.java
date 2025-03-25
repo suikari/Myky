@@ -35,6 +35,12 @@ public class CartController {
 		
 		return "cart/cart";
 	}
+
+	@RequestMapping("/cart/order.do") 
+	public String order(Model model) throws Exception{
+		
+		return "cart/order";
+	}
 	
 	// cartList
 	@RequestMapping(value = "/cart/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -56,7 +62,7 @@ public class CartController {
 		return new Gson().toJson(resultMap);
 	}
 
-	// cart 특정 상품 삭제
+	// cart 특정 상품 삭제 - 삭제버튼
 	@RequestMapping(value = "/cart/removeProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String removeCartProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -73,6 +79,16 @@ public class CartController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = cartService.addCartProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// cart order - 주문내역 저장
+	@RequestMapping(value = "/cart/order.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String order(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.addCartOrder(map);
 		return new Gson().toJson(resultMap);
 	}
 }

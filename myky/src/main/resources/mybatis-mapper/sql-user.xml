@@ -18,8 +18,24 @@
 	<select id="selectUser" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
 		SELECT USER_ID,USERNAME,NICKNAME,EMAIL,PROFILE_IMAGE,PHONE_NUMBER,BIRTH_DATE, ADDRESS,ROLE,GENDER
 		FROM USERS
-		WHERE USER_ID = #{userId}
+		WHERE 1=1
+		<if test="userId != null">
+		AND USER_ID = #{userId}
+		</if>
+		<if test="phoneNumber != null and userName != null">
+		AND PHONE_NUMBER = #{phoneNumber}
+        AND USERNAME = #{userName}
+		</if>
 	</select>
+	
+<!--		<if test="searchOption != null and searchOption =='all'">
+		AND (TITLE LIKE '%' ||#{keyword}||'%'
+		OR USERNAME LIKE '%' ||#{keyword}||'%')
+	</if>
+	<if test="searchOption != null and searchOption =='title'">
+		AND TITLE LIKE '%' ||#{keyword}||'%'
+	</if>-->
+	
 	
 	<select id="selectNick" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
 		SELECT *
@@ -28,8 +44,8 @@
 	</select>
 	
 	<insert id="insertUser" parameterType="hashmap" >
-		INSERT INTO USERS(USER_ID,USERNAME,PASSWORD,NICKNAME,EMAIL,PHONE_NUMBER,BIRTH_DATE,ADDRESS,CREATED_AT,ROLE,GENDER) 
-		VALUES (#{userId},#{userName},#{pwd},#{nickName},#{email},#{phoneNumber},#{birthDate},#{address},SYSDATE,'USER',#{gender})   
+		INSERT INTO USERS(USER_ID,USERNAME,PASSWORD,NICKNAME,EMAIL,PHONE_NUMBER,BIRTH_DATE,ADDRESS,CREATED_AT,ROLE,GENDER,AGREE_YN,EMAIL_YN,PHONE_YN) 
+		VALUES (#{userId},#{userName},#{pwd},#{nickName},#{email},#{phoneNumber},#{birthDate},#{address},SYSDATE,'USER',#{gender},'Y',#{emailYn},#{phoneYn})   
 	</insert>
 	
 	
