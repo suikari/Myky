@@ -25,7 +25,7 @@
 
 
     <div id="app" class="container">
-        <h2>🛒 장바구니</h2>
+        <h2>장바구니</h2>
         <table class="cartTable">
             <thead>
                 <tr>
@@ -39,7 +39,8 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in cartItems" :key="item.productId">
-                    <td><img :src="item.filepath" width="50"></td>
+                    <td v-if="item.filpath == null"><img src="/img/product/product update.png" width="50"></td>
+                    <td v-else><img :src="item.filepath" width="50"></td>
                     <td>{{ item.productName }}</td>
                     <td>{{ item.price }} 원</td>
                     <td>
@@ -55,8 +56,6 @@
 
         <h3>총 결제 금액: {{ totalPrice }} 원</h3>
         <button class="orderBtn" @click="orderItems">주문하기</button>
-
-        <button @click="fntest">장바구니 상품 담기 테스트</button>
     </div>
 
 
@@ -125,7 +124,8 @@
                     let newQuantity = Math.max(1, parseInt(item.quantity) + change);
                     
                     var nparmap = {
-                        cartItemId:item.cartItemId,
+                        cartId: item.cartId,
+                        productId: item.productId,
                         quantity: newQuantity 
                     };
                     $.ajax({
@@ -162,7 +162,7 @@
                         return;
                     }
                     alert("주문 페이지로 이동합니다.");
-                    // location.href = "/order/checkout.jsp";
+                    location.href = "/cart/order.do";
                 }
             },
             mounted() {
