@@ -115,12 +115,31 @@ public class UserController {
 	    }
 	}
 	
+	//아이디 찾기 주소
+	@RequestMapping("/user/findId.do") //브라우저 웹주소
+    public String add(Model model) throws Exception{
+
+        return "user/id-find"; // member 폴더로 묶임
+        }
+	
+	
+	
 	//비밀번호 찾기 주소
     @RequestMapping("/user/resetPwd.do") 
     public String searchPwd(Model model) throws Exception{
 		
         return "user/pwd-reset"; 
     }
+    
+    // 비밀번호 찾기 아이디 유효성
+	@RequestMapping(value = "/user/searchId.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String search(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.searchId(map); //userLogin은 재사용은 안할꺼임
+		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+	}
+    
     
     
     // 비밀번호 찾기 기능
@@ -141,8 +160,9 @@ public class UserController {
 	
     //유저 회원가입 주소
 	@RequestMapping("/user/join.do") //브라우저 웹주소
-    public String add(Model model) throws Exception{
-
+    public String add(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		System.out.println(map); // Y,N가 담겨있다
+		request.setAttribute("map", map);
         return "user/user-join"; // member 폴더로 묶임
         }
 	
@@ -181,6 +201,13 @@ public class UserController {
     public String addr(Model model) throws Exception{
 
         return "user/jusoPopup"; // member 폴더로 묶임
+        }
+	
+	//마이 페이지 주소
+	@RequestMapping("/user/myPage.do") //브라우저 웹주소
+    public String myPage(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "user/user-myPage"; // member 폴더로 묶임
         }
 	
 
