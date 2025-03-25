@@ -166,12 +166,10 @@
                 font-size: 14px;
                 color: #333;
             }
-
             .total-count strong {
                 font-weight: bold;
                 color: #000;
             }
-
             @media (max-width: 768px) {
                 .top-bar {
                     flex-direction: column;

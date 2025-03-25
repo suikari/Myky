@@ -45,4 +45,24 @@ public class CartController {
 		resultMap = cartService.getCartList(map);
 		return new Gson().toJson(resultMap);
 	}
+
+	// cart 수량 변경
+	@RequestMapping(value = "/cart/quantity.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String quantity(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.editQuantity(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// cart 특정 상품 삭제
+	@RequestMapping(value = "/cart/removeProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeCartProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.removeCartProduct(map);
+		return new Gson().toJson(resultMap);
+	}
 }

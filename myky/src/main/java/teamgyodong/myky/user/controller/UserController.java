@@ -115,12 +115,15 @@ public class UserController {
 	    }
 	}
 	
+	//비밀번호 찾기 주소
     @RequestMapping("/user/resetPwd.do") 
     public String searchPwd(Model model) throws Exception{
 		
         return "user/pwd-reset"; 
     }
     
+    
+    // 비밀번호 찾기 기능
 	@RequestMapping(value = "/user/searchPwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String pwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -129,6 +132,13 @@ public class UserController {
 		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
 	}
 	
+    //유저 회원가입 전 동의서 주소
+	@RequestMapping("/user/consent.do") //브라우저 웹주소
+    public String consent(Model model) throws Exception{
+
+        return "user/user-consent"; // member 폴더로 묶임
+        }
+	
     //유저 회원가입 주소
 	@RequestMapping("/user/join.do") //브라우저 웹주소
     public String add(Model model) throws Exception{
@@ -136,25 +146,44 @@ public class UserController {
         return "user/user-join"; // member 폴더로 묶임
         }
 	
-	//아이디 중복체크
-//	@RequestMapping(value = "/user/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//	@ResponseBody
-//	public String check(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//		
-//		resultMap = userService.searchId(map); // 이름 바꾼이유 아이디 조회는 여러곳에서 활용가능
-//		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
-//	}
-	
 	//유저 회원가입
-//	@RequestMapping(value = "/user/join.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//	@ResponseBody
-//	public String add(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//		
-//		resultMap = userService.memberAdd(map);
-//		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
-//	}
+	@RequestMapping(value = "/user/join.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String join(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = userService.joinUser(map);
+		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+	}
+	
+	//아이디 중복체크
+	@RequestMapping(value = "/user/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String check(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = userService.searchId(map); // 이름 바꾼이유 아이디 조회는 여러곳에서 활용가능
+		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+	}
+	
+	//닉네임 중복체크
+	@RequestMapping(value = "/user/nickCheck.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String checkNick(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = userService.searchNick(map); // 이름 바꾼이유 아이디 조회는 여러곳에서 활용가능
+		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
+	}
+	
+	// 주소찾기
+	@RequestMapping("/addr.do") //브라우저 웹주소
+    public String addr(Model model) throws Exception{
+
+        return "user/jusoPopup"; // member 폴더로 묶임
+        }
+	
+
 	
 	//유저 상세 정보
 	@RequestMapping("/user/info.do") 

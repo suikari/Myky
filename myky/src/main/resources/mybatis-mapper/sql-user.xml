@@ -6,7 +6,7 @@
 	<select id="getUser" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
 		SELECT *
 		FROM USERS
-		WHERE USER_ID = #{userId} AND PASSWORD = #{pwd}
+		WHERE USER_ID = #{userId}
 	</select>
 	
 	<update id="updatePwd" parameterType="hashmap">
@@ -20,4 +20,17 @@
 		FROM USERS
 		WHERE USER_ID = #{userId}
 	</select>
+	
+	<select id="selectNick" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
+		SELECT *
+		FROM USERS
+		WHERE NICKNAME = #{nickName}
+	</select>
+	
+	<insert id="insertUser" parameterType="hashmap" >
+		INSERT INTO USERS(USER_ID,USERNAME,PASSWORD,NICKNAME,EMAIL,PHONE_NUMBER,BIRTH_DATE,ADDRESS,CREATED_AT,ROLE,GENDER) 
+		VALUES (#{userId},#{userName},#{pwd},#{nickName},#{email},#{phoneNumber},#{birthDate},#{address},SYSDATE,'USER',#{gender})   
+	</insert>
+	
+	
 </mapper>

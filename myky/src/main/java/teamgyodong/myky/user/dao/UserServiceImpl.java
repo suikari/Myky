@@ -28,12 +28,12 @@ public class UserServiceImpl implements UserService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		User user = userMapper.getUser(map); // 단일객체로 받음
 		
-//		boolean loginFlg = false; // 해쉬화된 비밀번호 실행// if에서 국한되지 않게 loginFlg를 밖으로 뺴서 선언하자
+		boolean loginFlg = false; // 해쉬화된 비밀번호 실행// if에서 국한되지 않게 loginFlg를 밖으로 뺴서 선언하자
 		if(user != null) {
 //			// 해쉬화된 비밀번호를 실행
-//			loginFlg = passwordEncoder.matches((String)map.get("pwd"), user.getPassword());
-//		}		
-//		if(loginFlg) { 해시용
+			loginFlg = passwordEncoder.matches((String)map.get("pwd"), user.getPassword());
+		}		
+		if(loginFlg) { //해시용
 			System.out.println("성공");
 			session.setAttribute("sessionId", user.getUserId()); //member 클래스에서 get으로 꺼내기
 			session.setAttribute("sessionName", user.getUserName());
@@ -67,6 +67,16 @@ public class UserServiceImpl implements UserService {
 		return resultMap;
 	}
 	
+	public HashMap<String, Object> searchId(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		User user = userMapper.selectUser(map);
+		
+		int count = user!= null ? 1 : 0;
+		resultMap.put("count", count); // 결과 값
+
+		return resultMap;
+	}
+	
 	public HashMap<String, Object> getview(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -75,4 +85,24 @@ public class UserServiceImpl implements UserService {
 		return resultMap;
 	}
 	
+	public HashMap<String, Object> searchNick(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		User user = userMapper.selectNick(map);
+		
+		int count = user!= null ? 1 : 0;
+		resultMap.put("count", count); // 결과 값
+
+		return resultMap;
+	}
+
+	public HashMap<String, Object> joinUser(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>(); 
+		String hashPwd = passwordEncoder.encode((String)map.get("pwd")); // 비밀번호를 넣기전에 암호화 하기
+		map.put("pwd", hashPwd);
+		int num = userMapper.insertUser(map); //int형으로 받아내기
+		resultMap.put("result", "success");
+		// if num > 0 데이터 삽입 잘 된거
+		// 아니면 뭔가 문제 있는거 확인이 가능
+		return resultMap;
+	}
 }

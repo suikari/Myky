@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import teamgyodong.myky.Main.mapper.MainMapper;
 import teamgyodong.myky.Main.model.Category;
+import teamgyodong.myky.Main.model.Visit;
 import teamgyodong.myky.donation.mapper.DonationMapper;
 import teamgyodong.myky.donation.model.donation;
 
@@ -62,6 +63,28 @@ public class MainServiceImpl implements MainService {
 		}
 		return resultMap;
 	}
+	@Override
+	public HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Visit> Browser = mainMapper.selectLogBrowserList(map);
+			List<Visit> Date = mainMapper.selectLogDateList(map);
+			List<Visit> Time = mainMapper.selectLogTimeList(map);
+
+			resultMap.put("Browser", Browser);
+			resultMap.put("Date", Date);
+			resultMap.put("Time", Time);
+
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 	
-	
+
+
 }

@@ -28,6 +28,22 @@
 		WHERE GU = #{selectgu} AND DONG IS NOT NULL
 	</select>
 	
+	<select id="getPartnerHosList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+    SELECT 
+        h.HOSPITAL_NO, 
+        h.HOS_NAME, 
+        h.HOS_ADDRESS, 
+        l.GU, 
+        l.DONG, 
+        l.NX, 
+        l.NY
+    FROM Animal_Hospital_Info h
+    JOIN AREA l
+    ON h.HOS_ADDRESS LIKE '%' || COALESCE(l.GU, '') || '%' 
+    AND h.HOS_ADDRESS LIKE '%' || COALESCE(l.DONG, '') || '%'
+    WHERE l.GU = #{selectgu} 
+    AND l.DONG IS NOT NULL
+	</select>
 
 </mapper>
 

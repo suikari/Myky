@@ -279,7 +279,7 @@
   align-items: center;
   background: #f1f1f1;
   border-radius: 8px;
-  padding: 10px;
+  padding: 15px;
 }
 
 .search-input {
@@ -287,7 +287,6 @@
   border: none;
   background: transparent;
   outline: none;
-  padding: 8px;
   font-size: 16px;
 }
 
@@ -346,7 +345,7 @@
 				 <div class="search-container">
 				    <button class="close-button" @click="toggleSearch">&times;</button>
 				    <div class="search_box">
-				      <input type="text" placeholder="검색어를 입력해주세요" v-for="searchQuery" @keyup.enter="fnSearch()"   class="search-input" />
+				      <input type="text" placeholder="검색어를 입력해주세요" v-model="searchQuery" @keyup.enter="fnSearch()"   class="search-input" />
 				      <button @click="fnSearch" class="search-button">🔍</button>
 				    </div>
 				    <div class="popular-search">
@@ -399,8 +398,8 @@
             <div class="icons">
                 <span class="icon">💎</span>
 		    	<span @click="toggleSearch" class="search-icon">🔍</span>
-                <span @cilck="myPage" class="icon">👤</span>
-                <span class="icon">🛒</span>
+                <span @click="myPage" class="icon">👤</span>
+                <span @click="myCart" class="icon">🛒</span>
             </div>
             
         </header>
@@ -469,18 +468,28 @@
                         this.showSearch = !this.showSearch;
                     },
                     fnSearch() {
-                      console.log("검색어:", this.searchQuery);
+                    	let self = this;
+                      console.log("검색어:", self.searchQuery);
                       
-                  	
-                     pageChange("/product/list.do?searchOption=search&keyword="+this.searchQuery , { });
+                      if ( self.searchQuery === '' ) {
+                    	  alert("검색어를 입력해주세요.")
+                    	  return;
+                      }
+                      pageChange("/product/list.do?searchOption=search&keyword="+this.searchQuery , { });
                   	
                       // 여기에 검색 로직 추가 가능 (API 호출 등)
                     },
-                    myPage(){
-                        pageChange("user/info.do" , { });
+                    myPage: function(){
+                    	console.log("cart");
 
-                    		
-                    }
+                        pageChange("/user/info.do" , { });
+
+                    },
+                    myCart: function(){
+                    	console.log("cart");
+                    	pageChange("/cart/list.do" , { });
+                    },
+                    
                 },
                 mounted() {
                 	let self = this;
