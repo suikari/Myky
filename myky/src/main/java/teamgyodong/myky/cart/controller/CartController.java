@@ -65,4 +65,14 @@ public class CartController {
 		resultMap = cartService.removeCartProduct(map);
 		return new Gson().toJson(resultMap);
 	}
+
+	// cart 상품 추가 (상세페이지에서 이동 - userId, sessionId, productId, quantity(수량) 필요)
+	@RequestMapping(value = "/cart/addProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String addCartProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.addCartProduct(map);
+		return new Gson().toJson(resultMap);
+	}
 }
