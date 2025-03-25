@@ -68,4 +68,46 @@ public class CartServiceImpl implements CartService {
 		}
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> addCartProduct(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+//			String userId = (map.get("userId")) != null ? (String) map.get("userId") : (String) map.get("sessionId");
+//			map.put("userId", userId);
+//			비회원 장바구니 기능 추가 시 사용할 코드
+			
+			cart userCart = cartMapper.findCart(map);
+			// userId 필요. 해당 유저에게 장바구니가 있는지 조회
+			
+			if(userCart == null) {
+				// 장바구니 없는 경우
+				cartMapper.insertCart(map);
+				// 장바구니 생성. map에 cartId 담겨있음
+				System.out.println("기존 카트 x. map에 담긴 내용 >>> "+map);
+				cartMapper.insertCartProduct(map);
+				// 만들어진 장바구니에 상품 담기
+			} else {
+				map.put("cartId", userCart.getCartId());
+				// 장바구니 데이터에서 cartId 가져오기
+				System.out.println("기존 카트 o. map에 담긴 내용 >>> "+map);
+				cart existingProduct  = cartMapper.findCartItem(map);
+				// 기존 장바구니에 담으려는 상품이 있는지 확인
+				if (existingProduct != null) {
+		            cartMapper.updateCartQuantity(map);
+		            // 기존 장바구니에 해당 상품이 있는 경우 > 수량 추가
+		        } else {
+		            cartMapper.insertCartProduct(map);
+		            // 기존 장바구니에 해당 상품이 없는 경우 > 장바구니에 상품 추가
+		        }
+			}
+			
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

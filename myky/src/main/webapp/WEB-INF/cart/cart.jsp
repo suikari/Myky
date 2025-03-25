@@ -55,6 +55,8 @@
 
         <h3>총 결제 금액: {{ totalPrice }} 원</h3>
         <button class="orderBtn" @click="orderItems">주문하기</button>
+
+        <button @click="fntest">장바구니 상품 담기 테스트</button>
     </div>
 
 
@@ -64,113 +66,111 @@
 </body>
 </html>
 <script>
-    
-    
-        document.addEventListener("DOMContentLoaded", function () {
-            const app = Vue.createApp({
-                data() {
-                    return {
-                        sessionId:"${sessionId}",
-                        userInfo:{},
-                        cartItems: []
-                    
-                    };
-                },
-                computed: {
-                    totalPrice() {
-                        return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    }
-                },
-                methods: {
-                    fnUserInfo(){
-                        var self = this;
-                        console.log("sessionId >>> ", self.sessionId);
-                        var nparmap = {
-                            userId : self.sessionId
-                        };
-                        $.ajax({
-                            url:"/user/info.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) { 
-                                console.log("userInfo >>> ", data.user);
-                                self.userInfo = data.user;
-                                self.loadCart();
-                                
-                            }
-                        });
-                    },
-                    loadCart() {
-                        let self = this;
-                        var nparmap = {
-                            userId : self.userInfo.userId
-                        };
-                        $.ajax({
-                            url: "/cart/list.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) { 
-                                console.log("cartList >>> ", data.list);
-                                self.cartItems = data.list;
-                                
-                            }
-                        });
-                    },
-                    updateQuantity(index, change) {
-                        let self = this;
-                        let item = self.cartItems[index];
-                        console.log("수량 변경할 상품 >>> ",item);
-                        let newQuantity = Math.max(1, parseInt(item.quantity) + change);
-                        
-                        var nparmap = {
-                            cartItemId:item.cartItemId,
-                            quantity: newQuantity 
-                        };
-                        $.ajax({
-                            url: "/cart/quantity.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) { 
-                                self.cartItems[index].quantity = newQuantity;
-                            }
-                        });
-                    },
-                    removeItem(index) {
-                        let self = this;
-                        let item = self.cartItems[index];
 
-                        var nparmap = {
-                            cartItemId:item.cartItemId
-                        };
-                        $.ajax({
-                            url: "/cart/removeProduct.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) {
-                                self.cartItems.splice(index, 1);
-                            }
-                        });
-                    },
-                    orderItems() {
-                        let self = this;
-                        if (self.cartItems.length === 0) {
-                            alert("장바구니가 비어 있습니다.");
-                            return;
-                        }
-                        alert("주문 페이지로 이동합니다.");
-                        // location.href = "/order/checkout.jsp";
-                    }
-                },
-                mounted() {
-                	let self = this;
-                    self.fnUserInfo();
+    document.addEventListener("DOMContentLoaded", function () {
+        const app = Vue.createApp({
+            data() {
+                return {
+                    sessionId:"${sessionId}",
+                    userInfo:{},
+                    cartItems: []
+                };
+            },
+            computed: {
+                totalPrice() {
+                    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 }
-            });
+            },
+            methods: {
+                fnUserInfo(){
+                    var self = this;
+                    console.log("sessionId >>> ", self.sessionId);
+                    var nparmap = {
+                        userId : self.sessionId
+                    };
+                    $.ajax({
+                        url:"/user/info.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) { 
+                            console.log("userInfo >>> ", data.user);
+                            self.userInfo = data.user;
+                            self.loadCart();
+                            
+                        }
+                    });
+                },
+                loadCart() {
+                    let self = this;
+                    var nparmap = {
+                        userId : self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/cart/list.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) { 
+                            console.log("cartList >>> ", data.list);
+                            self.cartItems = data.list;
+                            
+                        }
+                    });
+                },
+                updateQuantity(index, change) {
+                    let self = this;
+                    let item = self.cartItems[index];
+                    console.log("수량 변경할 상품 >>> ",item);
+                    let newQuantity = Math.max(1, parseInt(item.quantity) + change);
+                    
+                    var nparmap = {
+                        cartItemId:item.cartItemId,
+                        quantity: newQuantity 
+                    };
+                    $.ajax({
+                        url: "/cart/quantity.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) { 
+                            self.cartItems[index].quantity = newQuantity;
+                        }
+                    });
+                },
+                removeItem(index) {
+                    let self = this;
+                    let item = self.cartItems[index];
 
-            app.mount("#app");
+                    var nparmap = {
+                        cartItemId:item.cartItemId
+                    };
+                    $.ajax({
+                        url: "/cart/removeProduct.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) {
+                            self.cartItems.splice(index, 1);
+                        }
+                    });
+                },
+                orderItems() {
+                    let self = this;
+                    if (self.cartItems.length === 0) {
+                        alert("장바구니가 비어 있습니다.");
+                        return;
+                    }
+                    alert("주문 페이지로 이동합니다.");
+                    // location.href = "/order/checkout.jsp";
+                }
+            },
+            mounted() {
+                let self = this;
+                self.fnUserInfo();
+            }
         });
-    </script>
+
+        app.mount("#app");
+    });
+</script>
