@@ -31,5 +31,8 @@ public interface BoardService {
 
 	void insertReply(Map<String, Object> map);
 
+//	HashMap<String, Object> toggleLike(HashMap<String, Object> map);
+
+
 
 }

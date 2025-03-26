@@ -49,5 +49,20 @@ public interface BoardMapper {
 	
 	List<comment> selectParentCmtList(HashMap<String, Object> map);
 
+//	String getUserLikeStatus(HashMap<String, Object> map);
+//
+//	void updateLikeCount(String boardId, int i);
+//
+//	void updateDislikeCount(String boardId, int i);
+//
+//	void deleteUserLikeStatus(HashMap<String, Object> map);
+//
+//	void insertUserLikeStatus(HashMap<String, Object> map);
+
+//	int getLikeCount(String boardId);
+//
+//	int getDislikeCount(String boardId);
+
+
 
 }

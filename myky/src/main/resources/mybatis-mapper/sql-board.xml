@@ -128,10 +128,19 @@
 		DELETE FROM FREE_BOARD_FILE
 		WHERE FILE_ID = #{fileId}
 	</delete>
+
 	<insert id="insertReply" parameterType="hashmap">
 		INSERT INTO FREE_BOARD_COMMENT
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{parentCommentId}, #{content}, SYSDATE, SYSDATE, 'N')
 	</insert>
+	
+	<select id="getUserLikeStatus" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardLikeLog">
+	    SELECT status
+	    FROM FREE_BOARD_LIKE_LOG
+	    WHERE board_id = #{boardId} AND user_id = #{userId}
+	</select>
+	
+	
 </mapper>
 
 

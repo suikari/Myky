@@ -252,6 +252,26 @@
             <div class="view-label">CONTENT</div>
             <div class="view-boxContent" v-html="info.content"></div>
 
+            <!-- 좋아요/싫어요 버튼 -->
+            <div style="margin-top: 20px;">
+                <button
+                class="cmtButton2"
+                @click="toggleLike('like')"
+                :style="{ backgroundColor: myLikeStatus === 'like' ? '#fca311' : '#c0c0c0' }"
+                >
+                👍 좋아요 {{ likeCount }}
+                </button>
+            
+                <button
+                class="cmtButton2"
+                @click="toggleLike('dislike')"
+                :style="{ backgroundColor: myLikeStatus === 'dislike' ? '#fca311' : '#c0c0c0' }"
+                >
+                <i class="fi fi-sr-heart-slash"></i>
+                👎 싫어요 {{ dislikeCount }}
+                </button>
+            </div>
+
             <div class="view-label">첨부파일</div>
             <div class="view-files">
                 <div v-for="item in fileList">
@@ -416,6 +436,9 @@
                         editReplyContent: "",
                         updatedTime : "",
                         createdTime : "",
+                        likeCount: 0,
+                        dislikeCount: 0,
+                        myLikeStatus: "", // 'like', 'dislike', or ''
                     };
                 },
                 computed: {
@@ -445,6 +468,11 @@
                                 self.info = data.info
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
+
+                                // 💥 좋아요 데이터 같이 받아옴
+                                self.likeCount = data.likeCount;
+                                self.dislikeCount = data.dislikeCount;
+                                self.myLikeStatus = data.myStatus;
 				        	}
 				        });
                     },
@@ -580,7 +608,26 @@
                         }
 
                         self.replyFormId = commentId;
-                    }
+                    },
+                    toggleLike(type) {
+                        const self = this;
+
+                        $.ajax({
+                        url: "/board/toggleLike.dox",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            boardId: self.boardId,
+                            userId: self.sessionId,
+                            type: type,
+                        },
+                        success: function (res) {
+                            self.likeCount = res.likeCount;
+                            self.dislikeCount = res.dislikeCount;
+                            self.myLikeStatus = res.myStatus;
+                        },
+                        });
+                    },
                 },
                 mounted() {
                 	let self = this;

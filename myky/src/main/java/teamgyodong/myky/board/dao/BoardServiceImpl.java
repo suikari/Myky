@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import teamgyodong.myky.board.mapper.BoardMapper;
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.boardFile;
+import teamgyodong.myky.board.model.boardLikeLog;
 import teamgyodong.myky.board.model.comment;
 
 
@@ -155,8 +156,62 @@ public class BoardServiceImpl implements BoardService {
 		int num = boardMapper.deleteFile(map);
 		return null;
 	}
+	//대댓글 구현
 	public void insertReply(Map<String, Object> map) {
 	    boardMapper.insertReply(map);
 	}
+	//좋아요 싫어요 구현
+//	public HashMap<String, Object> toggleLike(HashMap<String, Object> map) {
+//	    HashMap<String, Object> resultMap = new HashMap<>();
+//
+//	    String boardId = (String) map.get("boardId");
+//	    String userId = (String) map.get("userId");
+//	    String type = (String) map.get("type"); //like, dislike
+//	    
+//	    // BoardLikeLog 객체로 설정
+//	    boardLikeLog boardLikeLog = new BoardLikeLog();
+//	    boardLikeLog.setBoardId(boardId);
+//	    boardLikeLog.setUserId(userId);
+//	    boardLikeLog.setStatus(type);  // like / dislike
+//	    
+//	    String currentStatus = boardMapper.getUserLikeStatus(boardLikeLog);
+//	    
+//	    // 상태에 맞게 처리
+//	    if (currentStatus != null && currentStatus.equals(type)) {
+//	        // 이미 눌렀으면 취소 (DB에서 카운트 -1, 상태 초기화)
+//	        if (type.equals("like")) {
+//	            boardMapper.updateLikeCount(boardId, -1);
+//	        } else {
+//	            boardMapper.updateDislikeCount(boardId, -1);
+//	        }
+//	        boardMapper.deleteUserLikeStatus(map); // 로그에서 상태 삭제
+//	    } else {
+//	        // 새로 눌렀거나 반대 눌렀으면
+//	        if (type.equals("like")) {
+//	            boardMapper.updateLikeCount(boardId, 1);  // 좋아요 +1
+//	            if (currentStatus != null && currentStatus.equals("dislike")) {
+//	                boardMapper.updateDislikeCount(boardId, -1);  // 반대가 눌렸으면 싫어요 -1
+//	            }
+//	        } else {
+//	            boardMapper.updateDislikeCount(boardId, 1);  // 싫어요 +1
+//	            if (currentStatus != null && currentStatus.equals("like")) {
+//	                boardMapper.updateLikeCount(boardId, -1);  // 좋아요가 눌렸으면 좋아요 -1
+//	            }
+//	        }
+//	        boardMapper.insertUserLikeStatus(map);  // 로그에 상태 저장
+//	    }
+//
+//	    // 현재 좋아요/싫어요 카운트 가져오기
+//	    int likeCount = boardMapper.getLikeCount(boardId);
+//	    int dislikeCount = boardMapper.getDislikeCount(boardId);
+//
+//	    // 결과 맵에 담기
+//	    resultMap.put("likeCount", likeCount);
+//	    resultMap.put("dislikeCount", dislikeCount);
+//	    resultMap.put("myStatus", boardMapper.getUserLikeStatus(map));  // 현재 세션 상태
+//
+//	    return resultMap;
+//	}
+	
 }
 	
