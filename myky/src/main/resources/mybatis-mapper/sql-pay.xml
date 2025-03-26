@@ -7,7 +7,7 @@
 	<insert id="insertPayment" parameterType="hashmap">
 		
 		insert into payment
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},#{productId},#{donationId},#{userId})
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},#{orderId},#{donationId},#{userId})
 		
 	</insert>
 

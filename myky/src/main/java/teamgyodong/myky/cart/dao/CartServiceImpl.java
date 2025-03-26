@@ -118,20 +118,22 @@ public class CartServiceImpl implements CartService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			if(map.get("option").equals("order")) {
-				cartMapper.insertCartOrder(map);				
-				// map에 orderId 담김
-			}
-			System.out.println(map.get("orderId"));
-			resultMap.put("orderId", map.get("orderId"));
-			if (map.get("option").equals("orderDetail")) {
-                List<HashMap<String, Object>> orderDetails = (List<HashMap<String, Object>>) map.get("orderDetails");
+			if (map.get("option").equals("order")) {
+	            // 주문 정보 삽입
+	            cartMapper.insertCartOrder(map);
 
-                for (HashMap<String, Object> detail : orderDetails) {
-                    detail.put("orderId", map.get("orderId")); // 주문 ID 추가
-                    cartMapper.insertCartOrderDetail(detail);
-                }
-            }
+	            // 주문에 대한 고유 ID 가져오기
+	            Object orderId = map.get("orderId");
+	            resultMap.put("orderId", orderId);
+
+	            // 주문 상세 정보를 한 번에 처리
+	            List<HashMap<String, Object>> orderDetails = (List<HashMap<String, Object>>) map.get("orderDetails");
+
+	            for (HashMap<String, Object> detail : orderDetails) {
+	                detail.put("orderId", orderId); // 해당 주문 ID를 상세정보에 추가
+	                cartMapper.insertCartOrderDetail(detail); // 상세 정보 저장
+	            }
+	        }
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println("오류 발생: " + e.getMessage());

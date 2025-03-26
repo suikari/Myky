@@ -398,11 +398,9 @@
                     
                     console.log("총 결제 금액 >>> ",self.orderData.totalPrice);
                     
-                    console.log("orders+orderDetail >>>", self.orderData,self.orderDetailData);
-
-                    self.fnPayment(totalPrice);
+                    self.fnPayment(totalPrice,finalAddress,finalMessage);
                 },
-                fnPayment:function(totalPrice){
+                fnPayment:function(totalPrice,finalAddress,finalMessage){
 	                var self = this;
 	
 	                if (typeof IMP === 'undefined') {
@@ -421,14 +419,14 @@
 	                }, function (rsp) {
 	                    if (rsp.success) {
 	                        console.log("결제 정보 >>> ",rsp);
-                            self.fnPaymentHistory(rsp, totalPrice);
+                            self.fnPaymentHistory(rsp, totalPrice,finalAddress,finalMessage);
 	                    } else {
 	                        alert("결제에 실패했습니다.");
 	                        console.log("결제 정보 >>> ",rsp.error_msg);
 	                    }
 	                });
 	            },
-	            fnPaymentHistory:function(rsp,totalPrice){
+	            fnPaymentHistory:function(rsp,totalPrice,finalAddress,finalMessage){
 	                let self = this;
 	                
 	                let paymentMethod = "";
@@ -461,12 +459,12 @@
 		                data: nparmap,
 		                success: function (data) {
 	                    	console.log("결제 정보 저장 여부 >>> ",data.result);
-                            self.fnOrderHistory(totalPrice,rsp.pay_method);
+                            self.fnOrderHistory(totalPrice,rsp.pay_method,finalAddress,finalMessage);
 
 	                	}
 	            	});
             	},
-                fnOrderHistory:function(totalPrice, paymentMethod){
+                fnOrderHistory:function(totalPrice, paymentMethod, finalAddress, finalMessage) {
                     let self = this;
 
                     self.orderData = {
@@ -475,52 +473,32 @@
                         receiverName: self.orderInfo.receiver || self.userInfo.userName,
                         receiverPhone: self.orderInfo.phone || self.userInfo.phoneNumber,
                         receiverAddr: finalAddress,
-                        paymentMethod:paymentMethod,
+                        paymentMethod: paymentMethod,
                         deliveryMessage: finalMessage,
-                        option:"order"
-                    };
-                    
-                    console.log("orders에 저장할 데이터 >>>", self.orderData);
-
-                    var nparmap = self.orderData;
-		            $.ajax({
-		                url: "/cart/order.dox",
-		                dataType: "json",
-		                type: "POST",
-		                data: nparmap,
-		                success: function (data) {
-	                    	console.log("주문 정보 저장 여부 >>> ",data.result);
-                            self.fnOrderDetailHistory(data.orderId);
-
-	                	}
-	            	});
-                },
-                fnOrderDetailHistory:function(orderId){
-                    let self = this;
-
-                    self.orderDetailData = {
-                        option: "orderDetail",
-                        orderId:orderId,
+                        option: "order",
                         orderDetails: self.cartItems.map(item => ({
+                            option: "orderDetail",
                             productId: item.productId,
                             quantity: item.quantity,
                             price: item.quantity * item.price
-                        }))
+                        })) // 주문 상세 정보를 함께 포함
                     };
 
-                    console.log("orderDetail에 저장할 데이터 >>> ",self.orderDetailData);
+                    console.log("주문 데이터 >>>", self.orderData);
 
-                    var nparmap = self.orderDetailData;
-		            $.ajax({
-		                url: "/cart/order.dox",
-		                dataType: "json",
-		                type: "POST",
-		                data: nparmap,
-		                success: function (data) {
-	                    	console.log("주문 상세 정보 저장 여부 >>> ",data.result);
-
-	                	}
-	            	});
+                    var nparmap = self.orderData;
+                    $.ajax({
+                        url: "/cart/order.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("주문 정보 저장 여부 >>> ", data.result);
+                            if (data.result === "success") {
+                                console.log("주문 상세 정보도 저장 완료");
+                            }
+                        }
+                    });
                 }
             },
             mounted() {
