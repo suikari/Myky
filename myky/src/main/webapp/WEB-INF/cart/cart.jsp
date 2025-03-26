@@ -39,8 +39,8 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in cartItems" :key="item.productId">
-                    <td v-if="item.filpath == null"><img src="/img/product/product update.png" width="50"></td>
-                    <td v-else><img :src="item.filepath" width="50"></td>
+                    <td v-if="item.filepath"><img :src="item.filepath" width="50"></td>
+                    <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
                     <td>{{ item.price }} 원</td>
                     <td>
@@ -54,7 +54,20 @@
             </tbody>
         </table>
 
-        <h3>총 결제 금액: {{ totalPrice }} 원</h3>
+
+        <h4 v-if="totalPrice < 30000">
+            <span>배송비 : 2,000 원 </span>
+        </h4>
+        <h4 v-else>
+            <span>배송비 : 무료 ! </span>
+        </h4>
+        <p>(30,000원 이상 무료배송)</p>
+        <h2 v-if="totalPrice < 30000">
+            <span>총 결제 금액: {{ totalShippingPrice }} 원</span>
+        </h2>
+        <h2 v-else>
+            <span>총 결제 금액: {{ totalPrice }} 원</span>
+        </h2>
         <button class="orderBtn" @click="orderItems">주문하기</button>
     </div>
 
@@ -78,6 +91,9 @@
             computed: {
                 totalPrice() {
                     return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                },
+                totalShippingPrice() {
+                    return (this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
                 }
             },
             methods: {

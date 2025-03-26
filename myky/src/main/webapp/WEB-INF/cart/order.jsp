@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>멍냥꽁냥 주문하기</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
     <style>
         .ordercontainer {
@@ -119,8 +119,8 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in cartItems" :key="item.productId">
-                    <td v-if="item.filepath == null"><img src="/img/product/product update.png" width="50"></td>
-                    <td v-else><img :src="item.filepath" width="50"></td>
+                    <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
+                    <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
                     <td>{{ item.price }} 원</td>
                     <td>{{ item.quantity }}</td>
@@ -129,8 +129,17 @@
             </tbody>
         </table>
 
-        <h3>
-            <span>배송비 : </span><span>+ 총 결제 금액: {{ totalPrice }} 원</span></h3>
+        <div v-if="totalPrice < 30000">
+            <h3>
+                <span>배송비 : 2,000 원 </span><span> + 상품 금액 : {{ totalPrice }} 원</span>
+            </h3>
+            <h2>총 결제 금액 : {{ totalShippingPrice }} 원</h2>
+        </div>
+        <div v-else>
+            <h3>
+                <span>총 결제 금액 : {{ totalPrice }} 원</span>
+            </h3>
+        </div>
 
         <div class="delivery-section">
             <h3>배송 정보</h3>
@@ -188,9 +197,9 @@
     </div>
 
 
-	<jsp:include page="/WEB-INF/common/footer.jsp"/>
+	<!-- <jsp:include page="/WEB-INF/common/footer.jsp"/> -->
 
-    
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 </body>
 </html>
 <script>
@@ -224,12 +233,16 @@
                         deliveryMessage: "",
                         customMessage: "",
                     },
-                    orderData: {}
+                    orderData: {},
+                    orderDetailData:{}
                 };
             },
             computed: {
                 totalPrice() {
                     return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                },
+                totalShippingPrice() {
+                    return (this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
                 }
             },
             methods: {
@@ -245,7 +258,6 @@
                             self.userInfo = data.user;
                             self.loadCart();
                             self.setDefaultAddress();
-                            self.splitPhoneNumber()
 
                         }
                     });
@@ -286,6 +298,7 @@
                             self.$refs.receiverInput.focus();
                         });
                     }
+                    self.splitPhoneNumber();
                 },
                 parseAddress(fullAddress) {
                     let self = this;
@@ -316,11 +329,11 @@
                             self.orderInfo.phoneMiddle = phone.slice(3, 6);
                             self.orderInfo.phoneSuffix = phone.slice(6, 10);
                         }
-                    } else {
+                    } 
+                    if(self.deliveryType === "new") {
                         self.orderInfo.phonePrefix = "010";
                         self.orderInfo.phoneMiddle = "";
                         self.orderInfo.phoneSuffix = "";
-                        // 250325 적용안됨
                     }
                 },
                 searchAddress() {
@@ -352,8 +365,8 @@
                 submitOrder() {
                     let self = this;
 
-                    self.orderInfo.phone = `${self.orderInfo.phonePrefix}-${self.orderInfo.phoneMiddle}-${self.orderInfo.phoneSuffix}`;
-                    
+                    self.orderInfo.phone = (self.deliveryType === "new") ? self.orderInfo.phonePrefix+self.orderInfo.phoneMiddle+self.orderInfo.phoneSuffix : "";
+
                     if(!self.orderInfo.receiver){
                         alert("수령인 성함을 정확히 입력해주세요.");
                         self.$nextTick(() => {
@@ -375,23 +388,21 @@
                         });
                         return;
                     }
-
-                    let finalAddress = self.deliveryType === "default" ? self.userInfo.address : self.orderInfo.address;
+                    let address = self.orderInfo.baseAddress+","+self.orderInfo.detailAddress+","+self.orderInfo.zipcode;
+                    let finalAddress = self.deliveryType === "default" ? self.userInfo.address : address;
                     let finalMessage = self.orderInfo.deliveryMessage === "직접 입력" ? self.orderInfo.customMessage : self.orderInfo.deliveryMessage;
+                    
 
-                    self.orderData = {
-                        userId: self.userInfo.userId,
-                        receiver: self.orderInfo.receiver || self.userInfo.userName,
-                        address: finalAddress,
-                        phone: self.orderInfo.phone || self.userInfo.phoneNumber,
-                        deliveryMessage: finalMessage,
-                        totalPrice: self.totalPrice
-                    };
+                    // let totalPrice = (self.totalPrice < 30000) ? self.totalShippingPrice : self.totalPrice;
+                    let totalPrice = self.totalPrice;
+                    
+                    console.log("총 결제 금액 >>> ",self.orderData.totalPrice);
+                    
+                    console.log("orders+orderDetail >>>", self.orderData,self.orderDetailData);
 
-                    console.log("주문 정보 >>>", orderData);
-                    self.fnPayment();
+                    self.fnPayment(totalPrice);
                 },
-                fnPayment:function(){
+                fnPayment:function(totalPrice){
 	                var self = this;
 	
 	                if (typeof IMP === 'undefined') {
@@ -405,19 +416,19 @@
 	                    pay_method: "card",
 	                    merchant_uid: "merchant_" + new Date().getTime(),
 	                    name: "장바구니 상품 결제",
-	                    amount: self.totalPrice,
+	                    amount: totalPrice,
 	                    buyer_tel: self.userInfo.phoneNumber,
 	                }, function (rsp) {
 	                    if (rsp.success) {
 	                        console.log("결제 정보 >>> ",rsp);
-                            self.fnPaymentHistory(rsp);
+                            self.fnPaymentHistory(rsp, totalPrice);
 	                    } else {
 	                        alert("결제에 실패했습니다.");
 	                        console.log("결제 정보 >>> ",rsp.error_msg);
 	                    }
 	                });
 	            },
-	            fnPaymentHistory:function(rsp){
+	            fnPaymentHistory:function(rsp,totalPrice){
 	                let self = this;
 	                
 	                let paymentMethod = "";
@@ -450,13 +461,78 @@
 		                data: nparmap,
 		                success: function (data) {
 	                    	console.log("결제 정보 저장 여부 >>> ",data.result);
+                            self.fnOrderHistory(totalPrice,rsp.pay_method);
+
 	                	}
 	            	});
-            	}
+            	},
+                fnOrderHistory:function(totalPrice, paymentMethod){
+                    let self = this;
+
+                    self.orderData = {
+                        totalPrice: totalPrice,
+                        userId: self.userInfo.userId,
+                        receiverName: self.orderInfo.receiver || self.userInfo.userName,
+                        receiverPhone: self.orderInfo.phone || self.userInfo.phoneNumber,
+                        receiverAddr: finalAddress,
+                        paymentMethod:paymentMethod,
+                        deliveryMessage: finalMessage,
+                        option:"order"
+                    };
+                    
+                    console.log("orders에 저장할 데이터 >>>", self.orderData);
+
+                    var nparmap = self.orderData;
+		            $.ajax({
+		                url: "/cart/order.dox",
+		                dataType: "json",
+		                type: "POST",
+		                data: nparmap,
+		                success: function (data) {
+	                    	console.log("주문 정보 저장 여부 >>> ",data.result);
+                            self.fnOrderDetailHistory(data.orderId);
+
+	                	}
+	            	});
+                },
+                fnOrderDetailHistory:function(orderId){
+                    let self = this;
+
+                    self.orderDetailData = {
+                        option: "orderDetail",
+                        orderId:orderId,
+                        orderDetails: self.cartItems.map(item => ({
+                            productId: item.productId,
+                            quantity: item.quantity,
+                            price: item.quantity * item.price
+                        }))
+                    };
+
+                    console.log("orderDetail에 저장할 데이터 >>> ",self.orderDetailData);
+
+                    var nparmap = self.orderDetailData;
+		            $.ajax({
+		                url: "/cart/order.dox",
+		                dataType: "json",
+		                type: "POST",
+		                data: nparmap,
+		                success: function (data) {
+	                    	console.log("주문 상세 정보 저장 여부 >>> ",data.result);
+
+	                	}
+	            	});
+                }
             },
             mounted() {
                 let self = this;
                 self.fnUserInfo();
+
+                if (typeof IMP !== 'undefined') {
+                    IMP.init(userCode); 
+                    console.log('IMP initialized');
+                } else {
+                    console.error('IMP is not loaded properly');
+                }
             }
         });
 
