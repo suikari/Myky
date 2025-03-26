@@ -466,7 +466,13 @@
             	},
                 fnOrderHistory:function(totalPrice, paymentMethod, finalAddress, finalMessage , orderId) {
                     let self = this;
-
+					let payList = self.cartItems.map(item => ({
+                    	orderId : orderId, 
+                        productId: item.productId,
+                        quantity: item.quantity,
+                        price: item.quantity * item.price
+					}))
+					
                     self.orderData = {
                     	orderId : orderId, 
                         totalPrice: totalPrice,
@@ -477,12 +483,7 @@
                         paymentMethod: paymentMethod,
                         deliveryMessage: finalMessage,
                         option: "order",
-                        orderDetails: self.cartItems.map(item => ({
-                        	orderId : orderId, 
-                            productId: item.productId,
-                            quantity: item.quantity,
-                            price: item.quantity * item.price
-                        })) // 주문 상세 정보를 함께 포함
+						orderDetails : JSON.stringify(payList)
                     };
 
                     console.log("주문 데이터 >>>", self.orderData);

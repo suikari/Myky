@@ -1,6 +1,7 @@
 package teamgyodong.myky.cart.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.LinkedMultiValueMap;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
@@ -88,6 +90,12 @@ public class CartController {
 	public String order(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String json = map.get("orderDetails").toString(); 
+		ObjectMapper mapper = new ObjectMapper();
+		List<Object> orderDetails = mapper.readValue(json, new TypeReference<List<Object>>(){});
+		map.put("orderDetails", orderDetails);
+		
 		resultMap = cartService.addCartOrder(map);
 		return new Gson().toJson(resultMap);
 	}
