@@ -13,6 +13,8 @@ public class cart {
 	private String cartItemId;
 	private String quantity;
 	private String productId;
+	private String shippingFee;
+	private String shippingFreeMinimum;
 	
 	private String productName;
 	private String price;
@@ -26,8 +28,9 @@ public class cart {
 	private String receiverName;
 	private String receiverPhone;
 	private String receiverAddr;
-	private String paymentMessage;
+	private String paymentMethod;
 	private String updatedAt;
 	private String refundRequestDate;
+	private String deliveryMessage;
 		
 }
