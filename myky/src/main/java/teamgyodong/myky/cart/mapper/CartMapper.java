@@ -2,6 +2,7 @@ package teamgyodong.myky.cart.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -28,6 +29,6 @@ public interface CartMapper {
 
 	void insertCartOrder(HashMap<String, Object> map);
 
-	void insertCartOrderDetail(HashMap<String, Object> map);
+	void insertCartOrderDetail(Map<String, Object> detail);
 
 }

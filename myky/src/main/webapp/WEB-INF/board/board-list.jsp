@@ -237,8 +237,8 @@
                 <template v-if="item.isDeleted == 'N'">
                     <td>{{item.boardId}}</td>
                     <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}
-                        <span v-if="parseInt(item.commentCount) > 0" class="cmtCountColor">({{item.commentCount}})</span>
-                    </a></td>
+                        <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="cmtCountColor">({{item.commentCount}})</span>
+                        </a></td>
                     <td>{{item.userId}}</td>
                     <td>{{item.createdAt}}</td>
                     <td>{{item.cnt}}</td>

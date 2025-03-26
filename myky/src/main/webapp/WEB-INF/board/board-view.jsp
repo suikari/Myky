@@ -33,7 +33,7 @@
         }
 
         #viewPage .view-label {
-            font-size: 18px;
+            font-size: 25px;
             font-weight: bold;
             color: #202060;
             margin-top: 40px;
@@ -45,6 +45,7 @@
 
         #viewPage .view-box {
             border: 2px solid #202060;
+            font-weight: bold;
             border-radius: 6px;
             padding: 15px;
             background-color: #fdfdfd;
@@ -112,7 +113,7 @@
             cursor: pointer;
             width: fit-content;
         }
-        .cntButton {
+        .cmtButton {
             padding : 5px 10px;
             font-size : 14px;
             font-weight: bold;
@@ -122,22 +123,45 @@
             cursor: pointer;
             width: fit-content;
             margin-inline-end:auto;
+            border : none;
         }
-        .cntButtonBox{
+        .cmtButtonBox{
             border-radius: 6px;
-            border: 1px solid #202060;
             max-width: 1000px;
             margin-top: 20px;
-            margin-bottom: 50px;
-        }
-        .cntTextBox{
-            border-radius: 6px;
+            margin-bottom: 5px;
+            /* border : none; */
             border: 1px solid #202060;
+        }
+        .cmtButton2 {
+            padding : 5px 10px;
+            font-size : 14px;
+            font-weight: bold;
+            background-color: #c0c0c0;
+            color: #353535;
+            border-radius: 6px;
+            cursor: pointer;
+            width: fit-content;
+            margin-inline-end:auto;
+            border : none;
+            margin: 1px;
+        }
+        .cmtInput{
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding : 8px;
+        }
+        .cmtTextBox{
+            border-radius: 6px;
+            border: 1px solid #f7f7f8;
+            background-color: #ebebeb;
             max-width: 1000px;
             width: 100%;
             margin: 5px;
             padding: 5px;
-            margin-bottom: 50px;
+            margin-bottom: 5px;
         }
         .Button:hover  {
             background-color: #fca311;
@@ -185,6 +209,12 @@
             margin: 10px auto;
             border-radius: 6px;
         }
+        .cmt2button{
+            margin-right: 10px;
+            color: #888;
+            font-size: 15px;
+            cursor: pointer;
+        }
     </style>
     
 </head>
@@ -204,17 +234,43 @@
                 여러분의 이야기를 들려주세요.
             </div>
             <div class="view-sub" v-if="category == 'A'">
-                새 소식을 알려드립니다.
+                새 소식을 알려드립니다<div class="f"></div>
             </div>
             <hr class="custom-hr">
-
-            <div class="view-label">TITLE</div>
-            <div class="view-box">{{info.title}}</div>
-
+            <div class="view-label">
+                TITLE
+            </div>
+            <div class="view-box">
+            <a style="font-size:20px">{{info.title}}</a>
+                <!-- 날짜 표시 여기 넣기 -->
+                <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
+                    작성일: {{ info.updatedTime }}
+                </div>
+            </div>
             
 
             <div class="view-label">CONTENT</div>
             <div class="view-boxContent" v-html="info.content"></div>
+
+            <!-- 좋아요/싫어요 버튼 -->
+            <div style="margin-top: 20px;">
+                <button
+                class="cmtButton2"
+                @click="toggleLike('like')"
+                :style="{ backgroundColor: myLikeStatus === 'like' ? '#fca311' : '#c0c0c0' }"
+                >
+                👍 좋아요 {{ likeCount }}
+                </button>
+            
+                <button
+                class="cmtButton2"
+                @click="toggleLike('dislike')"
+                :style="{ backgroundColor: myLikeStatus === 'dislike' ? '#fca311' : '#c0c0c0' }"
+                >
+                <i class="fi fi-sr-heart-slash"></i>
+                👎 싫어요 {{ dislikeCount }}
+                </button>
+            </div>
 
             <div class="view-label">첨부파일</div>
             <div class="view-files">
@@ -222,48 +278,104 @@
                     <div class="link-container">
                         <a :href="item.filePath" download class="FileDownload">{{item.fileName}}
                         <span class="FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb) </span></a>
-                        <img :src="item.filePath" :alt="item.fileName" class="preview-image">
+                        <div v-if="isImageFile(item.fileName)">
+                             <img :src="item.filePath" :alt="item.fileName" class="preview-image">
+                        </div>
                     </div>
                 </div>
             </div>
             <table>
             </table>
-            <table>
-                <tr v-if="cmtList.commentId != null">
-                    <div v-for="item in cmtList" >
-                        <a  class="cntTextBox">
-                            <label v-if="editCommentId == item.commentId">
-                                {{item.userId}}: <input v-model="editContent">
-                            </label>
-                            <label v-else>{{item.userId}}:{{item.content}}
-                            </label>
-                        </a>
-                        <span class="">
-                            <template v-if="editCommentId == item.commentId">
-                                <button class="button" @click="fnCommentUpdate(item.commentId)">저장</button>
-                                <button class="button" @click="editCommentId = ''">취소</button>
-                            </template>
-                            <template v-else>
-                                <template  v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
-                                    <button class="cntButton Button" @click="fnCommentEdit(item)">수정</button>
-                                    <button class="cntButton Button" @click="fnCommentRemove(item.commentId)">❌</button>
-                                </template>
-                            </template>
-                        </span>
-                    </div>
-                </tr>
-            </table>
-            <table class="cntButtonBox">
-                <tr>
-                    <th style="margin-right: 10px;"> 댓글 </th>
-                    <td>
-                        <textarea style="width: 430px" v-model="content" cols="60" rows="5"></textarea>
-                    </td>
-                    <td>
-                        <button class="button" @click="fnCommentSave">저장</button>
-                    </td>
-                </tr>
-            </table>
+            <!-- 댓글 입력 -->
+             <div v-if="category == 'F'">
+                <table>
+                    <tr v-if="cmtList.commentId != null">
+                        <div v-for="item in cmtList" :key="item.commentId">
+                            <div class="cmtTextBox">
+                              
+                              <!-- 수정 중인 경우 -->
+                              <div v-if="editCommentId == item.commentId">
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.userId }}</div>
+                                <input v-model="editContent" class="cmtInput" />
+                          
+                                <div style="display: flex; gap: 5px;">
+                                  <button class="cmtButton2" @click="fnCommentUpdate(item.commentId)">저장</button>
+                                  <button class="cmtButton2" @click="editCommentId = ''">취소</button>
+                                </div>
+                              </div>
+                          
+                              <!-- 일반 댓글 보기 -->
+                              <div v-else>
+                                <!-- 유저 아이디 -->
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.userId }}</div>
+                          
+                                <!-- 댓글 내용 -->
+                                <div style="margin-bottom: 5px;">{{ item.content }}</div>
+                          
+                                <!-- 날짜 / 버튼들 -->
+                                <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
+                                  <span>{{ item.updatedTime }}</span>
+                          
+                                  <!-- 답글 -->
+                                  <a class="cmt2button" @click="fnReply(item.commentId)">답글 달기</a>
+                          
+                                  <!-- 수정/삭제 -->
+                                  <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
+                                    <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
+                                    <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                  </template>
+                                </div>
+                              </div>
+                          
+                            </div>
+                          
+                            <!-- 대댓글 입력창 -->
+                            <div v-if="replyFormId === item.commentId" style="margin-left: 30px;">
+                              <input class="cmtInput" v-model="replyContent" placeholder="대댓글 입력" />
+                              <button class="cmtButton2" @click="fnReplySave(item.commentId)">등록</button>
+                              <button class="cmtButton2" @click="replyFormId = ''">취소</button>
+                            </div>
+                          
+                            <!-- 대댓글 반복 -->
+                            <div v-for="reply in item.replies || []" :key="reply.commentId" style="margin-left: 30px;">
+                              <div v-if="editCommentId === reply.commentId">
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.userId }}</div>
+                                <input v-model="editContent"/>
+                                <button class="cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
+                                <button class="cmtButton2" @click="editCommentId = ''">취소</button>
+                              </div>
+                          
+                              <div v-else>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.userId }}</div>
+                                <div style="margin-bottom: 5px;">{{ reply.content }}</div>
+                                <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
+                                  <span>{{ reply.updatedTime }}</span>
+                                  <template v-if="sessionId === reply.userId || sessionRole === 'ADMIN'">
+                                    <button class="cmtButton2" @click="fnCommentEdit(reply)">수정</button>
+                                    <button class="cmtButton2" @click="fnCommentRemove(reply.commentId)">❌</button>
+                                  </template>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                    </tr>
+                </table>
+                
+                <table class="cmtButtonBox">
+                    <tr>
+                        <th style="margin-right: 10px;"> 댓글 </th>
+                        <td>
+                            <textarea style="width: 430px" v-model="content" cols="60" rows="5"></textarea>
+                        </td>
+                        <td>
+                            <button class="button" @click="fnCommentSave">저장</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
             <div class="buttonMargin" style="display: flex; gap: 5px;">
                 <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
                     <button class="button" @click="fnEdit()">수정</button>
@@ -299,6 +411,34 @@
                         editContent : "",
                         fileList: [],
                         category : "",
+                        imageExtensions : [
+                            // 일반적으로 많이 쓰는 확장자
+                            'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp',
+
+                            // 벡터 이미지
+                            'svg', 'eps', 'ai',
+
+                            // 고화질/전문 이미지
+                            'tiff', 'tif', 'heic', 'heif', 'raw', 'cr2', 'nef', 'orf', 'sr2',
+
+                            // 애니메이션/움짤
+                            'apng', 'mng',
+
+                            // 아이콘/스프라이트 등
+                            'ico', 'icns',
+
+                            // 기타/특수 확장자
+                            'jfif', 'pjpeg', 'pjp', 'avif', 'emf', 'wmf'
+                        ],
+                        replyFormId: "",       // 어떤 댓글에 답글을 다는지
+                        replyContent: "",      // 대댓글 내용
+                        editReplyId: "",
+                        editReplyContent: "",
+                        updatedTime : "",
+                        createdTime : "",
+                        likeCount: 0,
+                        dislikeCount: 0,
+                        myLikeStatus: "", // 'like', 'dislike', or ''
                     };
                 },
                 computed: {
@@ -328,6 +468,11 @@
                                 self.info = data.info
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
+
+                                // 💥 좋아요 데이터 같이 받아옴
+                                self.likeCount = data.likeCount;
+                                self.dislikeCount = data.dislikeCount;
+                                self.myLikeStatus = data.myStatus;
 				        	}
 				        });
                     },
@@ -374,6 +519,7 @@
                             boardId : self.boardId,
                             userId : self.userId,
                             content : self.editContent,
+                            
                         };
                         $.ajax({
                             url: "/board/comment/update.dox",
@@ -424,6 +570,62 @@
                                 self.fnView();
                                 self.content="";
                             }
+                        });
+                    },
+                    isImageFile(fileName) {
+                        let self = this;
+
+                        const ext = fileName.split('.').pop().toLowerCase();
+                        return self.imageExtensions.includes(ext);
+                    },
+                    fnReplySave(parentCommentId) {
+                        let self = this;
+                        let nparmap = {
+                        boardId: self.boardId,
+                        userId: self.sessionId,
+                        content: self.replyContent,
+                        parentCommentId: parentCommentId
+                        };
+                        $.ajax({
+                        url: "/board/ReplyAdd.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function () {
+                            alert("답글이 등록되었습니다!");
+                            self.replyContent = "";
+                            self.replyFormId = "";
+                            self.fnView(); // 다시 댓글 전체 불러오기
+                        }
+                        });
+                    },
+                    fnReply(commentId) {
+                        let self = this;
+                        console.log(commentId);
+                        if ( self.replyFormId == commentId ) {
+                            self.replyFormId = "";
+                            return;
+                        }
+
+                        self.replyFormId = commentId;
+                    },
+                    toggleLike(type) {
+                        const self = this;
+
+                        $.ajax({
+                        url: "/board/toggleLike.dox",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            boardId: self.boardId,
+                            userId: self.sessionId,
+                            type: type,
+                        },
+                        success: function (res) {
+                            self.likeCount = res.likeCount;
+                            self.dislikeCount = res.dislikeCount;
+                            self.myLikeStatus = res.myStatus;
+                        },
                         });
                     },
                 },

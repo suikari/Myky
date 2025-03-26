@@ -3,10 +3,12 @@ package teamgyodong.myky.board.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,7 @@ import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.board.dao.BoardService;
 
@@ -233,6 +236,23 @@ public class BoardController {
 				
 		return new Gson().toJson(resultMap);
 	}
-
-	
+	//대댓글
+	@PostMapping("/board/ReplyAdd.dox")
+	@ResponseBody
+	public Map<String, Object> addReply(@RequestParam Map<String, Object> map) {
+	    Map<String, Object> result = new HashMap<>();
+	    boardService.insertReply(map);
+	    result.put("status", "success");
+	    return result;
+	}
+//	@RequestMapping(value = "/board/toggleLike.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public String toggleLike(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+//	    HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//
+//	    // 좋아요/싫어요 토글 로직 (현재 누른 버튼 상태를 확인하고 처리)
+//	    resultMap = boardService.toggleLike(map);
+//
+//	    return new Gson().toJson(resultMap);
+//	}
 }
