@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -112,17 +113,32 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	@Override
+	@Transactional
 	public HashMap<String, Object> addCartOrder(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			cartMapper.insertCartOrder(map);
-			// map에 orderId 담김
-			cartMapper.insertCartOrderDetail(map);
+			if (map.get("option").equals("order")) {
+	            // 주문 정보 삽입
+	            cartMapper.insertCartOrder(map);
+
+	            // 주문에 대한 고유 ID 가져오기
+	            Object orderId = map.get("orderId");
+	            resultMap.put("orderId", orderId);
+
+	            // 주문 상세 정보를 한 번에 처리
+	            List<HashMap<String, Object>> orderDetails = (List<HashMap<String, Object>>) map.get("orderDetails");
+
+	            for (HashMap<String, Object> detail : orderDetails) {
+	                detail.put("orderId", orderId); // 해당 주문 ID를 상세정보에 추가
+	                cartMapper.insertCartOrderDetail(detail); // 상세 정보 저장
+	            }
+	        }
 			resultMap.put("result", "success");
 		}catch(Exception e) {
-			System.out.println(e.getMessage());
-			resultMap.put("result", "fail");			
+			System.out.println("오류 발생: " + e.getMessage());
+            resultMap.put("result", "fail");
+            throw new RuntimeException(e); // 트랜잭션 롤백을 위해 예외 발생			
 		}
 		return resultMap;
 	}

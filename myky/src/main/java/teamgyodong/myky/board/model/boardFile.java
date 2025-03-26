@@ -13,5 +13,6 @@ public class boardFile {
 	private String fileExt;
 	private String createdAt;
 	private int fileSize;
+	private String updatedTime;
 	
 }

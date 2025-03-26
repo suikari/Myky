@@ -2,6 +2,7 @@ package teamgyodong.myky.board.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -43,8 +44,25 @@ public interface BoardMapper {
 	List<boardFile> selectBoardImg(HashMap<String, Object> map);
 
 	int deleteFile(HashMap<String, Object> map);
+
+	void insertReply(Map<String, Object> map);
 	
-	
+	List<comment> selectParentCmtList(HashMap<String, Object> map);
+
+//	String getUserLikeStatus(HashMap<String, Object> map);
+//
+//	void updateLikeCount(String boardId, int i);
+//
+//	void updateDislikeCount(String boardId, int i);
+//
+//	void deleteUserLikeStatus(HashMap<String, Object> map);
+//
+//	void insertUserLikeStatus(HashMap<String, Object> map);
+
+//	int getLikeCount(String boardId);
+//
+//	int getDislikeCount(String boardId);
+
 
 
 }
