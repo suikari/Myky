@@ -20,12 +20,15 @@
 		SELECT DISTINCT GU ,NX, NY 
         FROM AREA 
         WHERE SI = #{selectsi} AND GU IS NOT NULL
+        ORDER BY GU ASC
 	</select>
 	
 	<select id="getPartnerDongList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		SELECT DISTINCT GU, DONG  ,NX, NY 
-		FROM AREA 
+		FROM AREA  
 		WHERE GU = #{selectgu} AND DONG IS NOT NULL
+		ORDER BY DONG ASC
+
 	</select>
 	
 	<select id="getPartnerHosList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
@@ -52,7 +55,12 @@ WHERE
 
 </select>
 
+<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		SELECT DISTINCT PARTNER_DETAIL_ID, NAME,PHONE_NUMBER, ADDRESS, NX, NY,RESERVATION_URL, OPENING_HOURS,REGULAR_HOLIDAY 
+		FROM PARTNER_DETAIL
+	
 
+	</select>
 
 </mapper>
 

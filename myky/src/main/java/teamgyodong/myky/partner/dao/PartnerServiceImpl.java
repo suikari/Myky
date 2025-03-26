@@ -26,11 +26,11 @@ public class PartnerServiceImpl implements PartnerService {
 			List<partnerdetail> gulist = partnerMapper.getPartnerGuList(map);
 			List<partnerdetail> donglist = partnerMapper.getPartnerDongList(map);
 			List<partnerdetail> silist = partnerMapper.getPartnerSiList(map);
-			List<partnerdetail> hoslist = partnerMapper.getPartnerHosList(map);
+			List<partnerdetail> hoslist = partnerMapper.getPartnerHosList(map); //병원리스트
+			List<partnerdetail> partnerlist = partnerMapper.getPartnerList(map); //제휴리스트
 			
-			//result = board != null ? "success" : "fail";
-			//System.out.print(result);
 			 
+			resultMap.put("partnerlist", partnerlist);
 			resultMap.put("hoslist", hoslist);
 			resultMap.put("gulist", gulist);
 			resultMap.put("donglist", donglist);

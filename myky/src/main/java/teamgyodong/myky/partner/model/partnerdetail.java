@@ -11,15 +11,21 @@ public class partnerdetail {
 	private String PARTNERDETAILID;
 	private String hosName;
 	private String hosAddress;
-	private String phoneNumber;
+	private String phone;
 	private String NX;
 	private String NY;
 	private String WEBSITEURL;
-	private String RESERVATIONURL;
-	private String OPENINGHOURS;
+	private String reservationUrl;
+	private String openingHours;
 	private String LUNCHBREAK;
 	private String regularHoliday;
 	private int hospitalNo;
 	private String PHONE;
+	
+	private int partnerId;
+	private String name;
+	private String phoneNumber;
+	private String address;
+
 	
 }
