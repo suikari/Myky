@@ -24,6 +24,7 @@ public class PayServiceImpl implements PayService {
 		try {
 			payMapper.insertPayment(map);
 
+			resultMap.put("orderId", map.get("orderId"));
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

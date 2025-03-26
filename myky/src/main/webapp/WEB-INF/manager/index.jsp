@@ -19,6 +19,7 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     
     <!-- Vue 3 Script -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3"></script>
@@ -126,10 +127,90 @@
 		    font-weight: bold;
 		    font-size: 20px;
 		}
+		
+		/* 전체 카드 그리드 */
+		.stats-cards {
+		    margin-top: 20px;
+		}
+		
+		/* 카드 스타일 */
+		.stat-card {
+		    background-color: #ffffff;
+		    border-radius: 16px;
+		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+		    transition: transform 0.2s ease;
+		}
+		.stat-card:hover {
+		    transform: translateY(-3px);
+		}
+		
+		/* 아이콘 원형 배경 */
+		.stat-icon {
+		    width: 48px;
+		    height: 48px;
+		    border-radius: 50%;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    margin: 0 auto;
+		    font-size: 20px;
+		    color: white;
+		}
+		
+		/* 색상 클래스 */
+		.bg-blue { background-color: #c7dfff; color: #2563eb; }
+		.bg-yellow { background-color: #fff7da; color: #eab308; }
+		.bg-red { background-color: #fee2e2; color: #dc2626; }
+		.bg-purple { background-color: #ede9fe; color: #7c3aed; }
+		
+		/* 숫자와 텍스트 */
+		.stat-number {
+		    font-weight: bold;
+		    font-size: 20px;
+		    color: #111827;
+		}
+		.stat-label {
+		    font-size: 14px;
+		    color: #6b7280;
+		}
+		
+		
+		/* 추가된 카드 스타일 */
+		.bg-green {
+		    background-color: #d1fae5;
+		    color: #10b981;
+		}
+		
+		.bg-orange {
+		    background-color: #fff7ed;
+		    color: #fb923c;
+		}
+		
+		/* 카드 숫자 크기 조정 */
+		.stat-number {
+		    font-weight: bold;
+		    font-size: 22px;
+		    color: #111827;
+		}
+		
+		.stat-label {
+		    font-size: 14px;
+		    color: #6b7280;
+		}
+		
+		/* 카드 hover 효과 */
+		.stat-card:hover {
+		    transform: translateY(-5px);
+		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
     </style>
     
 </head>
 <body>
+
+
+
      <jsp:include page="/WEB-INF/common/header.jsp"/>
  
 
@@ -145,6 +226,43 @@
             <!-- Main Content1 -->
             <div class=" main-content">
                 <h2>통계</h2>
+
+
+				<div class="row stats-cards">
+				  <div class="col-md-3 col-sm-6 mb-4" v-for="(item, index) in stats" :key="index">
+				    <div class="card stat-card text-center p-3">
+				      <div :class="['stat-icon', item.bg]">
+				        <i :class="item.icon"></i>
+				      </div>
+				      <div class="stat-number mt-2">{{ item.number }}</div>
+				      <div class="stat-label">{{ item.label }}</div>
+				    </div>
+				  </div>
+				</div>
+
+
+				
+				<!-- 추가된 카드: 이달의 판매 금액과 후원 금액 -->
+				<div class="row mt-4">
+				  <div class="col-md-6 mb-4">
+				    <div class="card stat-card text-center p-3">
+				      <div class="stat-icon bg-green">
+				        <i class="bi bi-cash-stack"></i>
+				      </div>
+				      <div class="stat-number mt-2">{{saletot}}</div>
+				      <div class="stat-label">이달의 판매 금액</div>
+				    </div>
+				  </div>
+				  <div class="col-md-6 mb-4">
+				    <div class="card stat-card text-center p-3">
+				      <div class="stat-icon bg-orange">
+				        <i class="bi bi-hand-thumbs-up-fill"></i>
+				      </div>
+				      <div class="stat-number mt-2">$1,500</div>
+				      <div class="stat-label">이달의 후원 금액</div>
+				    </div>
+				  </div>
+				</div>
 
                 <!-- Profit & Expenses Chart -->
                 <div class="card">
@@ -237,8 +355,7 @@
 </html>
 <script>
     
-    
-        document.addEventListener("DOMContentLoaded", function () {
+   
             const app = Vue.createApp({
             	 data() {
                      return {
@@ -305,6 +422,15 @@
                              categories: [],
                              }
                          },
+                         stats: [
+                             { icon: 'bi bi-heart-fill', number: "..", label: '이달의 후원 수', bg: 'bg-blue' },
+                             { icon: 'bi bi-box-fill', number: "..", label: '등록 상품 수', bg: 'bg-yellow' },
+                             { icon: 'bi bi-bag-fill', number: "..", label: '이달의 상품 판매량', bg: 'bg-red' },
+                             { icon: 'bi bi-briefcase-fill', number: "..", label: '이달의 등록자 현황', bg: 'bg-purple' }
+                         ],
+                         saletot : 0,
+                         donationtot : "",
+                         
                      };
                  },
                 computed: {
@@ -360,19 +486,31 @@
                         
 
                     },
-                	
-                    fnPaymentList : function() {
+                    fnMainList : function() {
                     	var self = this;
                     	var nparmap = {
                     	};
                     	$.ajax({
-                    		url: "/pay/list.dox",
+                    		url: "/admin/mainList.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("dona",data);
-                    			self.donations = data.info;
+                    			console.log("main",data);
+                    			
+                    			self.stats[0].number = data.donationCnt;
+                    			self.stats[1].number = data.productcnt;
+                    			self.stats[2].number = data.paycnt;
+                    			self.stats[3].number = data.userCnt;
+							
+                    			for (var i= 0 ; i < data.Pay.length ; i++ ){
+                        			self.saletot += parseInt(data.Pay[i].amount);
+                    			}
+                    			
+                    			for (var i= 0 ; i < data.Donation.length ; i++ ){
+                    				self.donationtot += parseInt(data.Donation[i].amount);
+                    			}
+                    				
                     		}
                     	});
                     },
@@ -381,14 +519,18 @@
                 },
                 mounted() {
                 	let self = this;
-                	
+                	const params = new URLSearchParams(window.location.search);
+                    
+                    self.menu = params.get("menu") || "stat";
+                    self.submenu = params.get("submenu") || "1";
+                    
                 	self.fnList();
-                	self.fnPaymentList();
+                	self.fnMainList();
+
                 	
                 }
             });
             
-
             app.mount("#app");
-        });
+            
     </script>

@@ -1,4 +1,4 @@
-package teamgyodong.myky.Main.model;
+package teamgyodong.myky.manager.model;
 
 import java.time.LocalDateTime;
 

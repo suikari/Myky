@@ -38,7 +38,12 @@ public class MainController {
 	@RequestMapping("main.do") 
     public String main(HttpServletRequest request, HttpSession session, Model model)throws Exception{
 
-		
+		    // Flash Attribute를 JSP에서 사용할 수 있도록 처리
+		    String alertMessage = (String) request.getAttribute("alertMessage");
+		    if (alertMessage != null) {
+		        model.addAttribute("alertMessage", alertMessage);
+		    }
+		    
 		//session.removeAttribute("firstVisit");
 		
 		 // 세션을 통해 첫 방문 여부 확인
@@ -95,8 +100,7 @@ public class MainController {
     	session.removeAttribute("sessionId");	
     	session.removeAttribute("sessionName");	
     	session.removeAttribute("sessionRole");	
-    	
-        return "index"; 
+    	return "redirect:/main.do"; // 로그인 페이지로 이동
     }
 	
 	
@@ -114,19 +118,18 @@ public class MainController {
 	}
     
     
-    
-    
 	// centerList
-	@RequestMapping(value = "/admin/LogList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/insertSearch.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String LogList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String insertSearch(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = mainService.selectLogBrowserList(map);
+		resultMap = mainService.insertSearchHistory(map);
 		return new Gson().toJson(resultMap);
 	}
     
-    
+
+	
 	
 	// 클라이언트의 실제 IP를 가져오는 메서드
     private String getClientIp(HttpServletRequest request) {

@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.Main.model.Category;
-import teamgyodong.myky.Main.model.Visit;
+import teamgyodong.myky.manager.model.Visit;
+import teamgyodong.myky.manager.model.mPay;
+import teamgyodong.myky.manager.model.mProduct;
+import teamgyodong.myky.manager.model.mUser;
 
 
 
@@ -15,10 +18,10 @@ public interface MainMapper {
 	
 	
 	int insertVisitLog(HashMap<String, Object> map);
+	int insertSearchHistory(HashMap<String, Object> map);
+
+	
 	List<Category> selectCategoryList(HashMap<String, Object> map);
-	List<Visit> selectLogBrowserList(HashMap<String, Object> map);
-	List<Visit> selectLogDateList(HashMap<String, Object> map);
-	List<Visit> selectLogTimeList(HashMap<String, Object> map);
 
 	
 	

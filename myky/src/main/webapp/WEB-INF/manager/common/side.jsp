@@ -84,8 +84,9 @@
                 <li class="nav-item" :class="{ active: menu === 'stat' }"  >
                     <a @click="fnchange('stat','1')" class="nav-link"  :class="{ active: menu === 'stat' }" href="#">통계 관리</a>
                     <ul class="submenu">
-                        <li @click="fnchange('stat','1')" class="submenu-item" :class="{ active: submenu === '1' }">일일 통계</li>
-                        <li @click="fnchange('stat','2')" class="submenu-item" :class="{ active: submenu === '2' }" >월별 통계</li>
+                        <li @click="fnchange('stat','1')" class="submenu-item" :class="{ active: submenu === '1' }">요약 통계</li>
+                        <li @click="fnchange('stat','2')" class="submenu-item" :class="{ active: submenu === '2' }">접속자 통계</li>
+                        <li @click="fnchange('stat','3')" class="submenu-item" :class="{ active: submenu === '3' }">판매량 통계</li>
                     </ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'board' }">

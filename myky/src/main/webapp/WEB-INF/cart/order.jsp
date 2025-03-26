@@ -423,6 +423,7 @@
 	                    } else {
 	                        alert("결제에 실패했습니다.");
 	                        console.log("결제 정보 >>> ",rsp.error_msg);
+
 	                    }
 	                });
 	            },
@@ -448,7 +449,6 @@
 	                    paymentStatus: rsp.status,
 	                    isCanceled: "N",
                     	cancelDate: null,
-	                    productId: null,
 	                    donationId: null,
 	                    userId: self.userInfo.userId
 	                };
@@ -458,16 +458,17 @@
 		                type: "POST",
 		                data: nparmap,
 		                success: function (data) {
-	                    	console.log("결제 정보 저장 여부 >>> ",data.result);
-                            self.fnOrderHistory(totalPrice,rsp.pay_method,finalAddress,finalMessage);
+	                    	console.log("결제 정보 저장 여부 >>> ",data);
+                            self.fnOrderHistory(totalPrice,rsp.pay_method,finalAddress,finalMessage,data.orderId);
 
 	                	}
 	            	});
             	},
-                fnOrderHistory:function(totalPrice, paymentMethod, finalAddress, finalMessage) {
+                fnOrderHistory:function(totalPrice, paymentMethod, finalAddress, finalMessage , orderId) {
                     let self = this;
 
                     self.orderData = {
+                    	orderId : orderId, 
                         totalPrice: totalPrice,
                         userId: self.userInfo.userId,
                         receiverName: self.orderInfo.receiver || self.userInfo.userName,
@@ -477,7 +478,7 @@
                         deliveryMessage: finalMessage,
                         option: "order",
                         orderDetails: self.cartItems.map(item => ({
-                            option: "orderDetail",
+                        	orderId : orderId, 
                             productId: item.productId,
                             quantity: item.quantity,
                             price: item.quantity * item.price

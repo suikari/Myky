@@ -418,6 +418,7 @@
             const app = Vue.createApp({
                 data() {
                     return {
+                    	alertMessage : "${alertMessage}" || "" ,
                     	slides : [
                             'img/banner/banner1.PNG',
                             'img/banner/banner2.PNG',
@@ -576,6 +577,10 @@
                 	self.fnDonationList();
                 	self.autoScroll();
 
+                	if (self.alertMessage != "") {
+                		alert(self.alertMessage);
+                		
+                	}
                 	
 
                 	

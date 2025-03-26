@@ -1,5 +1,12 @@
 package teamgyodong.myky.manager.dao;
 
-public interface ManagerService {
+import java.util.HashMap;
 
+public interface ManagerService {
+	
+	HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map);
+	
+	HashMap<String, Object> selectMainList(HashMap<String, Object> map);
+	
+	
 }
