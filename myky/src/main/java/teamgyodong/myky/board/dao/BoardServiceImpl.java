@@ -63,16 +63,24 @@ public class BoardServiceImpl implements BoardService {
 			boardMapper.updateCnt(map);
 		}
 		
-		List<comment> cmtList = boardMapper.selectCmtList(map);
-		List<board> boardList = boardMapper.selectBoard(map);
-		List<boardFile> fileList = boardMapper.selectBoardImg(map);
-		board info = boardList.isEmpty() ? null : boardList.get(0);
-		
-		resultMap.put("info", info);
-		resultMap.put("fileList", fileList);
-		resultMap.put("cmtList", cmtList);
-		resultMap.put("result", "success");
-		return resultMap;
+	    List<comment> cmtList = boardMapper.selectCmtList(map);
+
+	    for (comment comment : cmtList) {
+	        map.put("parentId", comment.getCommentId()); // 댓글 ID → 대댓글 검색용
+	        List<comment> replies = boardMapper.selectParentCmtList(map);
+	        comment.setReplies(replies); // 💥 replies를 comment 객체에 직접 세팅
+	    }
+
+	    List<board> boardList = boardMapper.selectBoard(map);
+	    List<boardFile> fileList = boardMapper.selectBoardImg(map);
+	    board info = boardList.isEmpty() ? null : boardList.get(0);
+
+	    resultMap.put("info", info);
+	    resultMap.put("fileList", fileList);
+	    resultMap.put("cmtList", cmtList); // 여기에 대댓글이 포함됨
+	    resultMap.put("result", "success");
+
+	    return resultMap;
 	}
 	//게시글 추가
 	public HashMap<String, Object> boardAdd(HashMap<String, Object> map) {
@@ -146,6 +154,9 @@ public class BoardServiceImpl implements BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int num = boardMapper.deleteFile(map);
 		return null;
+	}
+	public void insertReply(Map<String, Object> map) {
+	    boardMapper.insertReply(map);
 	}
 }
 	

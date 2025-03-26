@@ -3,10 +3,12 @@ package teamgyodong.myky.board.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -232,6 +234,14 @@ public class BoardController {
 		resultMap = boardService.boardRemoveFile(map);
 				
 		return new Gson().toJson(resultMap);
+	}
+	@PostMapping("/board/ReplyAdd.dox")
+	@ResponseBody
+	public Map<String, Object> addReply(@RequestParam Map<String, Object> map) {
+	    Map<String, Object> result = new HashMap<>();
+	    boardService.insertReply(map);
+	    result.put("status", "success");
+	    return result;
 	}
 
 	

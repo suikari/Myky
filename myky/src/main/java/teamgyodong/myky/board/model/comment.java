@@ -1,5 +1,7 @@
 package teamgyodong.myky.board.model;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -13,5 +15,18 @@ public class comment {
 	private String createAt;
 	private String updatedAt;
 	private String isDeleted;
+	private String updatedTime;
 
+	
+    // ✅ 추가
+    private List<comment> replies;
+
+    // Getter/Setter 포함
+    public List<comment> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<comment> replies) {
+        this.replies = replies;
+    }
 }
