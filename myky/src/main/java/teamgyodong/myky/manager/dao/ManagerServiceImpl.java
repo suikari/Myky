@@ -1,7 +1,10 @@
 package teamgyodong.myky.manager.dao;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,10 +15,81 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import teamgyodong.myky.Main.mapper.MainMapper;
+import teamgyodong.myky.manager.mapper.ManagerMapper;
+import teamgyodong.myky.manager.model.Visit;
+import teamgyodong.myky.manager.model.mDonation;
+import teamgyodong.myky.manager.model.mPay;
+import teamgyodong.myky.manager.model.mProduct;
+import teamgyodong.myky.manager.model.mUser;
+
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
+	@Autowired
+	
+	ManagerMapper managerMapper;
+	
+	
+	@Override
+	public HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Visit> Browser = managerMapper.selectLogBrowserList(map);
+			List<Visit> Date = managerMapper.selectLogDateList(map);
+			List<Visit> Time = managerMapper.selectLogTimeList(map);
+
+			resultMap.put("Browser", Browser);
+			resultMap.put("Date", Date);
+			resultMap.put("Time", Time);
+
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
 
 	
+	@Override
+	public HashMap<String, Object> selectMainList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mProduct> mProduct = managerMapper.selectProductList(map);
+			List<mPay> mPay = managerMapper.selectPaymentList(map);
+			List<mUser> mUser = managerMapper.selectUserList(map);
+			List<mDonation> mDonation = managerMapper.selectDonationList(map);
+
+			
+
+			
+			resultMap.put("Product", mProduct);
+			resultMap.put("Pay", mPay);
+			resultMap.put("User", mUser);
+			resultMap.put("Donation", mDonation);
+
+			resultMap.put("productcnt", mProduct.get(0).getProductTotalCnt());
+			resultMap.put("paycnt", mPay.get(0).getPaymentTotalCnt());
+			resultMap.put("userCnt", mUser.get(0).getUserTotalCnt());
+			resultMap.put("donationCnt", mDonation.get(0).getDonationTotalCnt());
+
+			
+			
+			resultMap.put("result", "success");
+			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
 }

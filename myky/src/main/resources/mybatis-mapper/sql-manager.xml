@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="teamgyodong.myky.manager.mapper.ManagerMapper">
+
+
+	<select id="selectLogBrowserList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.Visit">
+	
+			select user_agent_browser, count(*) visit_count from VISIT_LOG 
+			group by user_agent_browser
+			
+	</select>
+	
+	
+	<select id="selectLogDateList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.Visit">
+	
+			SELECT 
+			     TO_CHAR(TRUNC(access_time), 'YYYY-MM-DD')   AS visitdate, 
+			    COUNT(*) AS visit_count 
+			FROM visit_log
+			GROUP BY TRUNC(access_time)
+			ORDER BY visitdate			
+			
+	</select>
+	
+	<select id="selectLogTimeList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.Visit">
+	
+			SELECT 
+			    EXTRACT(HOUR FROM access_time) AS visithour, 
+			    COUNT(*) AS visit_count 
+			FROM visit_log
+			GROUP BY EXTRACT(HOUR FROM access_time)
+			ORDER BY visithour	
+			
+	</select>
+
+
+
+	
+	
+	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mProduct">
+			select P.*  , 
+			(SELECT COUNT(*)
+		    FROM Product P ) AS productTotalCnt
+			FROM Product P
+	</select>
+	
+	
+	<select id="selectPaymentList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mPay">
+			select P.*  , 
+			(SELECT COUNT(*)
+		    FROM payment P where nvl(P.subscription_period,0) = 0 ) AS paymentTotalCnt
+			FROM payment P
+			WHERE 1=1
+		    <if test="year != null and year == '' ">
+		        AND  EXTRACT(YEAR FROM PAYMENT_DATE) =  #{year} 
+		    </if>
+		    <if test="month != null and month == '' ">
+		        AND  EXTRACT(MONTH FROM PAYMENT_DATE) =  #{month} 
+		    </if>
+		    <if test="hour != null and hour == '' ">
+		        AND  EXTRACT(HOUR FROM PAYMENT_DATE) =  #{hour} 
+		    </if>	
+		    AND nvl(P.subscription_period,0) = 0
+	</select>
+	
+	<select id="selectUserList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mUser">
+			select U.*  , 
+			(SELECT COUNT(*)
+		    FROM USERS ) AS userTotalCnt
+			FROM USERS U
+			WHERE 1=1
+		    <if test="year != null and year == '' ">
+		        AND  EXTRACT(YEAR FROM CREATED_AT) =  #{year} 
+		    </if>
+		    <if test="month != null and month == '' ">
+		        AND  EXTRACT(MONTH FROM CREATED_AT) =  #{month} 
+		    </if>
+		    <if test="hour != null and hour == '' ">
+		        AND  EXTRACT(HOUR FROM CREATED_AT) =  #{hour} 
+		    </if>	
+		    
+	</select>	
+	
+		<select id="selectDonationList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mDonation">
+			select D.*  , 
+			(SELECT COUNT(*)
+		    FROM donation_history ) AS donationTotalCnt
+			FROM donation_history D
+			WHERE 1=1
+		    <if test="year != null and year == '' ">
+		        AND  EXTRACT(YEAR FROM DONATION_DATE) =  #{year} 
+		    </if>
+		    <if test="month != null and month == '' ">
+		        AND  EXTRACT(MONTH FROM DONATION_DATE) =  #{month} 
+		    </if>
+		    <if test="hour != null and hour == '' ">
+		        AND  EXTRACT(HOUR FROM DONATION_DATE) =  #{hour} 
+		    </if>	
+		    
+	</select>	
+
+
+</mapper>
+
+
+
+
+

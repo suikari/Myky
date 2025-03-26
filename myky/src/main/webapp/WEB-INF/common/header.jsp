@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
     <title>Vue3 레이아웃 예제</title>
 	<script src="/js/vue3b.js"></script>
 	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
@@ -364,7 +368,7 @@
 	  
         <div class="top-bar-main">
         	<div v-if="!sessionName" class="top-bar">
-	            <a href="/register">회원가입</a> 
+	            <a href="/user/consent.do">회원가입</a> 
 	            | <a href="/user/login.do">로그인</a>
 	            | <a href="/board/list.do?category=A">공지사항</a> 
 	        </div>
@@ -410,7 +414,7 @@
                 data() {
                     return {
                     	categories: [ ],
-                        sessionId   : '${sessionId}',
+                        sessionId   : '${sessionId}' || '' ,
                         sessionName : '${sessionName}',
                         sessionRole : '${sessionRole}',
                         showSearch: false,
@@ -475,19 +479,33 @@
                     	  alert("검색어를 입력해주세요.")
                     	  return;
                       }
-                      pageChange("/product/list.do?searchOption=search&keyword="+this.searchQuery , { });
+	                  	var nparmap = {
+	                  			user_id : self.sessionId,
+	                  			keyword : self.searchQuery
+	                  	};
+	                  	$.ajax({
+	                  		url: "/insertSearch.dox",
+	                  		dataType: "json",
+	                  		type: "POST",
+	                  		data: nparmap,
+	                  		success: function (data) {
+	                  			console.log(data);
+	                  		}
+	                  	});
                   	
+                      
+                         location.href = "/product/list.do?searchOption=search&keyword="+this.searchQuery;                  	
                       // 여기에 검색 로직 추가 가능 (API 호출 등)
                     },
                     myPage: function(){
-                    	console.log("cart");
-
-                        pageChange("/user/info.do" , { });
+                    	console.log("user");
+                    	location.href = "/user/myPage.do";
 
                     },
                     myCart: function(){
                     	console.log("cart");
-                    	pageChange("/cart/list.do" , { });
+                    	location.href = "/cart/list.do";
+
                     },
                     
                 },
