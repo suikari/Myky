@@ -126,8 +126,9 @@ public class UserController {
 	
 	//비밀번호 찾기 주소
     @RequestMapping("/user/resetPwd.do") 
-    public String searchPwd(Model model) throws Exception{
-		
+    public String searchPwd(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		System.out.println(map);
+		request.setAttribute("map", map);
         return "user/pwd-reset"; 
     }
     
@@ -225,6 +226,15 @@ public class UserController {
 	public String view(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = userService.getview(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//유저 상세 정보 수정
+	@RequestMapping(value = "/user/update.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String edit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.editInfo(map);
 		return new Gson().toJson(resultMap);
 	}
 	

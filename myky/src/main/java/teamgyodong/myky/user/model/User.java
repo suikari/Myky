@@ -19,6 +19,7 @@ public class User {
 	private String agreeYn;
 	private String phoneYn;
 	private String emailYn;
+	private String gender;
 
 
 
