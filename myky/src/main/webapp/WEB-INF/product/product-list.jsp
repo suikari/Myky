@@ -26,31 +26,27 @@
                 grid-template-columns: repeat(4, 1fr);
                 column-gap: 20px;
                 row-gap: 40px;
-                padding: 20px;
-                max-width: 1200px;
-                margin: 0 auto;
-                cursor: pointer;
+                flex-wrap: wrap;
+                gap: 24px;
+                justify-content: flex-start;
             }
 
             .product-item {
+                width: 260px;
+                height: 100%;
+                background: #fff;
+                padding: 12px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                border-radius: 6px;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
-                padding: 10px;
-                border-radius: 8px;
-                height: 100%;
                 transition: all 0.3s ease-in-out;
                 background-color: transparent;
                 box-shadow: none;
                 border: none;
-                text-align: center;
+                text-align: left
             }
-
-            .product-item:hover {
-                transform: translateY(-5px);
-            }
-
-            .product-item img {
+            .product-image img {
                 width: 250px;
                 height: 250px;
                 object-fit: contain;
@@ -58,7 +54,36 @@
                 margin-bottom: 10px;
                 cursor: pointer;
             }
+            .product-name {
+                font-size: 14px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 8px;
+                line-height: 1.4;
+                min-height: 38px;
+                /* 두 줄 보장 */
+            }
+            .original-price {
+                font-size: 13px;
+                text-decoration: line-through;
+                color: #888;
+                margin-bottom: 4px;
+            }
+            .discount-price {
+                font-size: 16px;
+                color: #d32f2f;
+                font-weight: bold;
+                margin-bottom: 6px;
+            }
 
+            .shipping-fee {
+                font-size: 12px;
+                color: #666;
+                margin-top: auto;
+            }
+            .product-item:hover {
+                transform: translateY(-5px);
+            }
             .product-item h3 {
                 text-align: left;
                 width: 100%;
@@ -86,6 +111,22 @@
                 font-weight: bold;
             }
 
+
+
+            .discount-price strong {
+                text-align: left;
+                width: 100%;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .price {
+                font-size: 20px;
+                font-weight: bold;
+                color: #000;
+                margin-bottom: 6px;
+            }
+
             .del-price {
                 text-align: left;
                 width: 100%;
@@ -95,14 +136,12 @@
                 margin-bottom: 4px;
             }
 
-            p.discount-info {
-                text-align: left;
-                width: 100%;
-                font-size: 12px;
-                font-weight: bold;
-                color: rgb(142, 36, 4);
-                margin-top: 2px;
-                margin-bottom: 4px;
+            .discount-info {
+                font-size: 13px;
+                color: #ff4444;
+                margin-top: -4px;
+                margin-bottom: 10px;
+                font-weight: 500;
             }
 
             .pagination {
@@ -153,6 +192,7 @@
                 outline: none;
                 border-color: #888;
             }
+
             .product-header {
                 display: flex;
                 justify-content: space-between;
@@ -161,15 +201,18 @@
                 margin-bottom: 15px;
                 box-sizing: border-box;
             }
+
             /* 상품 총 개수 */
             .total-count {
                 font-size: 14px;
                 color: #333;
             }
+
             .total-count strong {
                 font-weight: bold;
                 color: #000;
             }
+
             @media (max-width: 768px) {
                 .top-bar {
                     flex-direction: column;
@@ -190,7 +233,7 @@
                 <option value="dog">강아지 상품</option>
                 <option value="cat">고양이 상품</option>
             </select> -->
-            <div class="product-header">
+                <div class="product-header">
                     <div class="total-count">
                         총 <strong>{{ totalCount }}</strong>개의 상품이 있습니다.
                     </div>
@@ -206,35 +249,39 @@
                 <hr>
                 <section class="product-container">
                     <div v-for="item in list" class="product-item" :key="item.productId">
-                        <template v-if="item.filePath">
-                            <img :src="item.filePath" :alt="item.fileName" @click="fnView(item.productId)">
-                        </template>
-                        <template v-else>
-                            <img src="../../img/product/product update.png" alt="이미지 없음"
-                                @click="fnView(item.productId)">
-                        </template>
-                        <h3>{{ item.productName }}</h3>
-                        <!-- 일반 가격 -->
-                        <p class="price">{{ formatPrice(item.price) }}</p>
-                        <p class="del-price">배송비 : 2000원</p>
+                        <div class="product-image" @click="fnView(item.productId)">
+                            <img :src="item.filePath || '../../img/product/product update.png'"
+                                :alt="item.fileName || '이미지 없음'">
+                        </div>
 
-                        <!-- 멤버십 회원이면 할인율과 할인 가격을 표시 -->
-                        <template v-if="isMember">
-                            <p class="discount-info">
-                                멤버십 {{ Math.round((1 - membershipDiscountRate) * 100) }}% 할인 :
-                                {{ formatPrice(Math.floor(item.price * membershipDiscountRate)) }}
-                            </p>
-                        </template>
+                        <div class="product-info">
+                            <div class="product-name">{{ item.productName }}</div>
+
+                            <!-- 할인 있는 경우 -->
+                            <template v-if="isMember && item.discount > 0">
+                                <div class="original-price">정상가: {{ formatPrice(item.price) }}</div>
+                                <div class="discount-price">멤버십 할인가: {{ formatPrice(item.price - item.discount) }}</div>
+                            </template>
+
+                            <!-- 할인 없는 경우 -->
+                            <template v-else>
+                                <div class="discount-price">{{ formatPrice(item.price) }}</div>
+                            </template>
+
+                            <div class="shipping-fee">배송비: {{ formatPrice(item.shippingFee) }}</div>
+                        </div>
                     </div>
                 </section>
+
                 <div class="pagination">
-                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> < </a>
-                        <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
-                            :class="{ active: page === num }">
-                            <span v-if="page == num">{{ num }}</span>
-                            <span v-else>{{ num }}</span>
-                        </a>
-                        <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
+                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')">
+                        < </a>
+                            <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
+                                :class="{ active: page === num }">
+                                <span v-if="page == num">{{ num }}</span>
+                                <span v-else>{{ num }}</span>
+                            </a>
+                            <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
                 </div>
                 <!-- <button @click="fnChange">강아지</button>
             <button @click="fnChange2">장난감</button> -->
@@ -292,7 +339,7 @@
                         return price.toLocaleString('ko-KR') + '원';
                     },
                     fnView: function (productId) {
-                        location.href= "/product/view.do?productId=" + productId;
+                        location.href = "/product/view.do?productId=" + productId;
                     },
                     fnPage: function (num) {
                         let self = this;
@@ -317,6 +364,10 @@
                         } else if (self.sortOption === "name") {
                             self.list.sort((a, b) => a.productName.localeCompare(b.productName));
                         }
+                    },
+                    formatPrice(value) {
+                        if (!value && value !== 0) return '';
+                        return Number(value).toLocaleString();
                     }
                 },
                 setup() {

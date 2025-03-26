@@ -55,6 +55,33 @@
                 border-radius: 4px;
             }
 
+            .rating-label {
+                display: block;
+                font-weight: bold;
+                font-size: 16px;
+                color: #000;
+                margin-bottom: 6px;
+            }
+
+            .star-rating .stars {
+                display: inline-block;
+            }
+
+            .star-rating .star {
+                font-size: 24px;
+                cursor: pointer;
+                color: #eee;
+                transition: color 0.2s;
+                user-select: none;
+
+            }
+
+            .star-rating .star.filled {
+                color: #f5b301;
+            }
+
+
+
             .editor-container {
                 height: 300px;
                 border: 1px solid #ccc;
@@ -94,21 +121,16 @@
                     <label for="title">제목</label>
                     <input type="text" id="title" v-model="title">
                 </div>
-                <div class="form-group">
-                    <label for="rating">별점</label>
-                    <input type="number" id="rating" v-model="rating" min="1" max="5" />
-                  </div>
+                <div class="form-group star-rating">
+                    <label class="rating-label" for="rating">별점</label>
+                    <div class="stars">
+                        <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= rating }"
+                            @click="rating = star">★</span>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>첨부파일1</label>
                     <input type="file" id="file1" name="file1" accept=".jpg,.png">
-                </div>
-                <div class="form-group">
-                    <label>첨부파일2</label>
-                    <input type="file" id="file2" name="file2" accept=".jpg,.png">
-                </div>
-                <div class="form-group">
-                    <label>첨부파일3</label>
-                    <input type="file" id="file3" name="file3" accept=".jpg,.png">
                 </div>
                 <div class="form-group">
                     <label>내용</label>
@@ -136,7 +158,7 @@
                         productId: "",
                         title: "",
                         reviewText: "",
-                        rating : "1",
+                        rating: "",
                         reviewId: ""
                     }
                 },
@@ -150,8 +172,8 @@
                             title: self.title,
                             reviewText: self.reviewText,
                             userId: self.sessionId,
-                            rating : self.rating,
-                            productId : self.productId
+                            rating: self.rating,
+                            productId: self.productId
                         };
                         $.ajax({
                             url: "/product/add.dox",
@@ -168,16 +190,16 @@
                                         for (let i = 0; i < $("#file1")[0].files.length; i++) {
                                             form.append("file1", $("#file1")[0].files[i]);
                                         }
-                                        form.append("reviewId", data.reviewId); 
-                                        self.upload(form); 
-                                    
+                                        form.append("reviewId", data.reviewId);
+                                        self.upload(form);
+
+                                    } else {
+                                        location.href = "/product/view.do?productId=" + self.productId;
+                                    }
                                 } else {
-                                    location.href = "/product/view.do?productId=" +  self.productId;
+                                    location.href = "/product/view.do?productId=" + self.productId;
                                 }
-                            }else{
-                                    location.href = "/product/view.do?productId=" +  self.productId;
-                                }
-                                
+
                             }
                         });
                     },
@@ -196,7 +218,7 @@
                         });
                     },
                     fnCancel: function () {
-                        location.href = "/product/view.do?productId=" +  this.productId;
+                        location.href = "/product/view.do?productId=" + this.productId;
                     }
                 },
                 mounted() {

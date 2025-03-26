@@ -15,11 +15,16 @@ public class Product {
 	private String productType;
 	private String description;
 	private String productCode;
+	private int shippingFee;
+	private int shippingFreeMinimum;
+	private int discount;
 	
-	private String fileId;
+	private String fileNo;
+	private String reviewId;
 	private String filePath ;
 	private String fileName ;
-	private String thumbNail ;
+	private String fileOrgname ;
 	private String fileSize ;
-	private String fileType;
+	private String fileEtc;
+	private String thumbYn ;
 }
