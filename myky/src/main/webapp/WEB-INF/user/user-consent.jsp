@@ -218,7 +218,7 @@
             <div>
                 <span>SMS 수신 동의(선택) <input type="checkbox" :checked="agree3 === 'Y'"
                         @change="updateAgree('agree3', $event)"></span>
-                <span>이메일 수신 동의(선택) <input type="checkbox" :checked="agree4 === 'Y'"
+                <span style="margin-left: 15px;">이메일 수신 동의(선택) <input type="checkbox" :checked="agree4 === 'Y'"
                         @change="updateAgree('agree4', $event)"></span>
             </div>
             <hr>

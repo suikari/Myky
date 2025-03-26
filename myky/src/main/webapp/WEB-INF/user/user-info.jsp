@@ -10,7 +10,100 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
         <style>
+/* 전체 컨테이너 */
+.user-info-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
+/* 개별 항목 스타일 */
+.user-info-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-info-box2 {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 12px;
+    gap: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 라벨 (항목 제목) 스타일 */
+.user-info-label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 값 (텍스트 데이터) 스타일 */
+.user-info-value {
+    color: #666;
+}
+
+/* 입력 필드 스타일 */
+.user-info-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 60%;
+}
+
+/* 작은 입력 필드 (전화번호) */
+.user-info-input.small {
+    width: 75px;
+    text-align: left;
+}
+
+/* 버튼 스타일 */
+.user-info-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-info-btn:hover {
+    background: #45a049;
+}
+
+/* 취소 버튼 (빨간색) */
+.user-info-btn.cancel {
+    background: #f44336;
+}
+
+.user-info-btn.cancel:hover {
+    background: #d32f2f;
+}
+
+/* 버튼 그룹 정렬 */
+.user-info-btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* 왼쪽 버튼 그룹 */
+.user-info-btn-group-left {
+    display: flex;
+    gap: 10px; /* 버튼 간격 */
+}
+
+/* 오른쪽 버튼 (뒤로) */
+.user-info-btn-group-right {
+    margin-left: auto; /* 자동 마진으로 오른쪽 정렬 */
+}
 
 
         </style>
@@ -21,58 +114,156 @@
 
 
 
-        <div id="app" class="container">
-
+        <div id="app" class="user-info-container">
             <template v-if="editFlg==false">
-                <div>
-                    유저아이디 : {{user.userId}}
+                <div class="user-info-box">
+                    <div class="user-info-label">유저아이디 :</div>
+                    <div class="user-info-value">{{user.userId}}</div>
                 </div>
-                <div>
-                    이름 : {{user.userName}}
+                <div class="user-info-box">
+                    <div class="user-info-label">이름 :</div>
+                    <div class="user-info-value">{{user.userName}}</div>
                 </div>
-                <div>
-                    닉네임 : {{user.nickName}}
+                <div class="user-info-box">
+                    <div class="user-info-label">닉네임 :</div>
+                    <div class="user-info-value">{{user.nickName}}</div>
                 </div>
-                <div>
-                    이메일 : {{user.email}}
+                <div class="user-info-box">
+                    <div class="user-info-label">이메일 :</div>
+                    <div class="user-info-value">{{user.email}}</div>
                 </div>
-                <div>
-                    전화번호 : {{user.phoneNumber}}
+                <div class="user-info-box">
+                    <div class="user-info-label">생년월일 :</div>
+                    <div class="user-info-value">{{user.birthDate}}</div>
                 </div>
-                <div>
-                    전화번호 : {{user.birthDate}}
+                <div class="user-info-box">
+                    <div class="user-info-label">연락처 :</div>
+                    <div class="user-info-value">{{user.phoneNumber}}</div>
                 </div>
-                <div>
-                    주소 : {{user.address}}
+                <div class="user-info-box">
+                    <div class="user-info-label">주소 :</div>
+                    <div class="user-info-value">{{user.address}}</div>
                 </div>
-                <div>
-                    <button @click="fnEdit()">정보 수정</button>
-                    <button @click="fnExit()">뒤로</button>
+                <div class="user-info-box">
+                    <div class="user-info-label">성별 :</div>
+                    <div class="user-info-value">
+                        <span v-if="user.gender == 'M'">남자</span>
+                        <span v-if="user.gender == 'F'">여자</span>
+                        <span v-if="user.gender == 'N'">비공개</span>
+                    </div>
                 </div>
+                <div class="user-info-box">
+                    <div class="user-info-label">SNS 수신동의 :</div>
+                    <div class="user-info-value">
+                        <span v-if="user.phoneYn == 'Y'">수신</span>
+                        <span v-else>미수신</span>
+                    </div>
+                </div>
+                <div class="user-info-box">
+                    <div class="user-info-label">이메일 수신동의 :</div>
+                    <div class="user-info-value">
+                        <span v-if="user.emailYn == 'Y'">수신</span>
+                        <span v-else>미수신</span>
+                    </div>
+                </div>
+                <div class="user-info-btn-group">
+                    <!-- 왼쪽 버튼 그룹 -->
+                    <div class="user-info-btn-group-left">
+                        <button class="user-info-btn" @click="fnEdit()">정보 수정</button>
+                        <button class="user-info-btn" @click="fnPwd()">비밀번호 변경</button>
+                    </div>
+                
+                    <!-- 오른쪽 버튼 (뒤로) -->
+                    <div class="user-info-btn-group-right">
+                        <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
+                    </div>
             </template>
 
+
+
+            <!-- 수정 칸 -->
             <template v-else>
-                <div>
-                    아이디 : {{user.userId}}
+                <div class="user-info-box2">
+                    <div class="user-info-label">이름 :</div>
+                    <input type="text" v-model="user.userName" class="user-info-input">
                 </div>
-                <div>
-                    이름 : <input type="text" :value="user.userName">
+
+                <div class="user-info-box">
+                    <div class="user-info-label">닉네임 :</div>
+                    <template v-if="!nickFlg">
+                        <input type="text" v-model="user.nickName" class="user-info-input" disabled>
+                        <button class="user-info-btn" @click="fnEditNick()">닉네임 변경</button>
+                    </template>
+                    <template v-else>
+                        <input type="text" v-model="user.nickName" class="user-info-input">
+                        <button class="user-info-btn" @click="fnNickChecked()">저장</button>
+                        <button class="user-info-btn cancel" @click="fnExitNick()">취소</button>
+                    </template>
                 </div>
-                <div>
-                    닉네임 : <input type="text" :value="user.nickName">
+
+                <div class="user-info-box2">
+                    <div class="user-info-label">이메일 :</div>
+                    <input type="text" v-model="user.email" class="user-info-input">
                 </div>
-                <div>
-                    이메일 : <input type="text" :value="user.email">
+
+                <div class="user-info-box2">
+                    <div class="user-info-label">생년월일 :</div>
+                    <input type="text" v-model="user.birthDate" class="user-info-input">
                 </div>
-                <div>
-                    전화번호 : <input type="text" :value="user.phoneNumber">
+
+                <div class="user-info-box2">
+                    <div class="user-info-label">연락처 :</div>
+                    <template v-if="!phoneFlg">
+                        <div class="user-info-value">{{user.phoneNumber}}</div>
+                        <button class="user-info-btn" @click="fnEditPhone()">연락처 변경</button>
+                    </template>
+                    <template v-else>
+                        <select v-model="selectNum" class="user-info-input small">
+                            <option value="010">010</option>
+                            <option value="011">011</option>
+                            <option value="017">017</option>
+                        </select>
+                        <input v-model="num1" class="user-info-input small">
+                        <input v-model="num2" class="user-info-input small">
+                        <button class="user-info-btn" @click="phoneSave()">변경</button>
+                        <button class="user-info-btn cancel" @click="fnExitPhone()">취소</button>
+                    </template>
                 </div>
-                <div>
-                    주소 : <input type="text" :value="user.address">
+
+                <div class="user-info-box">
+                    <div class="user-info-label">주소 :</div>
+                    <input type="text" v-model="user.address" class="user-info-input" disabled>
+                    <button class="user-info-btn" @click="fnSearchAddr()">주소검색</button>
                 </div>
-                <div>
-                    <button @click="fnSave()">저장</button>
-                    <button @click="fnExit()">뒤로</button>
+
+                <div class="user-info-box">
+                    <div class="user-info-label">성별 :</div>
+                    <div class="user-info-value">
+                        <input type="radio" name="gender" value="M" v-model="user.gender"> 남성
+                        <input type="radio" name="gender" value="F" v-model="user.gender"> 여성
+                        <input type="radio" name="gender" value="N" v-model="user.gender"> 비공개
+                    </div>
+                </div>
+
+                <div class="user-info-box">
+                    <div class="user-info-label">SNS 수신동의 :</div>
+                    <div class="user-info-value">
+                        <input type="radio" name="sns" value="Y" v-model="user.phoneYn"> 수신
+                        <input type="radio" name="sns" value="N" v-model="user.phoneYn"> 미수신
+                    </div>
+                </div>
+
+                <div class="user-info-box">
+                    <div class="user-info-label">이메일 수신동의 :</div>
+                    <div class="user-info-value">
+                        <input type="radio" name="email" value="Y" v-model="user.emailYn"> 수신
+                        <input type="radio" name="email" value="N" v-model="user.emailYn"> 미수신
+                    </div>
+                </div>
+
+                <div class="user-info-btn-group"> 
+                    <button class="user-info-btn" @click="fnSave()">저장</button>
+                    <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
                 </div>
             </template>
 
@@ -87,15 +278,28 @@
 
     </html>
     <script>
-
-
+        // vue 문법이 아니므로 밖으로 빼서 넣기
+        function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
+            //일단 다 받고 필요한거 꺼내쓰기
+            window.vueObj.fnResult(roadFullAddr, roadAddrPart1, addrDetail, engAddr, zipNo);
+        }
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
                 data() {
                     return {
                         userId: "${map.userId}",
                         user: {},
-                        editFlg: false
+                        editFlg: false,
+                        phoneFlg: false,
+                        nickFlg: false,
+                        authFlg: true,
+                        originalNick: "",
+                        originalPhone: "",
+                        selectNum: "010",
+                        num1: "",
+                        num2: ""
+
+
                     };
                 },
                 computed: {
@@ -120,20 +324,28 @@
                         });
                     },
 
-                    fnSave  : function() {
+                    fnSave: function () {
                         var self = this;
-                        var nparmap = self.user;
-                        console.log(self.user.userName);
-                        // $.ajax({
-                        //     url: "/user/info.dox",
-                        //     dataType: "json",
-                        //     type: "POST",
-                        //     data: nparmap,
-                        //     success: function (data) {
-                        //         console.log(data);
-                        //         self.user = data.user;
-                        //     }
-                        // });
+                        if (!self.authFlg) {
+                            alert("닉네임 저장 혹은 취소 바랍니다.");
+                            return;
+                        }
+                        if (self.user.birthDate.length != 8) {
+                            alert("생년월일은 8자리로 입력바랍니다.");
+                            return;
+                        }
+                        var nparmap = self.user
+                        $.ajax({
+                            url: "/user/update.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                alert("수정 완료");
+                                console.log(data);
+                                location.reload();
+                            }
+                        });
                     },
 
                     fnEdit: function () {
@@ -142,12 +354,107 @@
                     },
                     fnExit: function () {
                         location.href = "/user/myPage.do";
+                    },
+                    fnPwd : function () {
+                        let self = this;
+                        pageChange("/user/resetPwd.do", {userId : self.user.userId});
+                        
+                    },
+
+                    fnEditNick: function () {
+                        let self = this;
+                        if (confirm("닉네임을 변경하시겠습니까?")) {
+                            self.originalNick = self.user.nickName; // 현재 이름 저장
+                            self.nickFlg = true;
+                            self.authFlg = false;
+                        } else {
+                            return;
+                        }
+                    },
+                    fnEditPhone: function () {
+                        let self = this;
+                        if (confirm("연락처를 새로 변경하시겠습니까?")) {
+                            self.originalPhone = self.user.phoneNumber; // 현재 이름 저장
+                            self.phoneFlg = true;
+                        } else {
+                            return;
+                        }
+                    },
+
+                    fnExitNick: function () {
+                        let self = this;
+                        self.user.nickName = self.originalNick; // 원래 이름 복원
+                        self.nickFlg = false;
+                        self.authFlg = true;
+                    },
+
+                    fnExitPhone: function () {
+                        let self = this;
+                        self.user.phoneNumber = self.originalPhone; // 원래 이름 복원
+                        self.phoneFlg = false;
+
+                    },
+
+                    fnNickChecked: function () {
+                        var self = this;
+                        if (self.user.nickName.length > 8 || self.user.nickName == "") {
+                            alert("닉네임은 한글 8글짜 이하로 입력가능합니다.");
+                            return;
+                        }
+                        var nparmap =
+                        {
+                            nickName: self.user.nickName
+                        };
+                        $.ajax({
+                            url: "/user/nickCheck.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                if (data.count == 0) {
+                                    alert("사용 가능한 닉네임입니다");
+                                    self.nickFlg = false;
+                                    self.authFlg = true;
+
+                                } else {
+                                    alert("중복된 닉네임입니다");
+                                }
+                            }
+                        });
+                    },
+
+                    phoneSave: function () {
+                        var self = this;
+                        if (self.num1.length != 4 || self.num2.length != 4) {
+                            alert("전화번호는 4자리씩 입력바랍니다.");
+                            return;
+                        }
+                        self.user.phoneNumber = self.selectNum + self.num1 + self.num2;
+                        alert("변경되었습니다");
+                        self.phoneFlg = false;
+                    },
+
+                    fnSearchAddr: function () {
+                        window.open("/addr.do", "addr", "width=300, height=500")
+                    },
+                    fnResult: function (roadFullAddr, roadAddrPart1, addrDetail, engAddr, zipNo) {
+                        let self = this;
+                        self.user.address = roadFullAddr + ', ' + zipNo;
+
+                        console.log(roadFullAddr);
+                        console.log(roadAddrPart1);
+                        console.log(addrDetail);
+                        console.log(engAddr);
+                        console.log(zipNo);
                     }
 
                 },
                 mounted() {
+                    window.vueObj = this; //obj를 선언해야 주소가 들어간다
                     let self = this;
                     self.fnInfo();
+
                 }
             });
 

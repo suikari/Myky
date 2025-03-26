@@ -108,4 +108,11 @@ public class UserServiceImpl implements UserService {
 		// 아니면 뭔가 문제 있는거 확인이 가능
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> editInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int count = userMapper.updateInfo(map);
+		resultMap.put("count", count); // 결과 값
+		return resultMap;
+	}
 }
