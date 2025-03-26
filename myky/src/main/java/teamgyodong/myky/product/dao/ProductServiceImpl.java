@@ -40,26 +40,35 @@ public class ProductServiceImpl implements ProductService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
-	
+
 	//상품 리뷰 쓰기
 	public HashMap<String, Object> addReview(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		productMapper.insertReview(map);
-		System.out.println("Key ==> " +map.get("userId"));
+		//System.out.println("Key ==> " +map.get("userId"));
 		
-		resultMap.put("userId", map.get("userId"));
+		resultMap.put("reviewId", map.get("reviewId"));
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//리뷰 가져오기
+	public HashMap<String, Object> getReviewCnt(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int count = productMapper.ReviewCnt(map);
+
 		resultMap.put("result", "success");
 		return resultMap;
 	}
 	
+
 	//상품 리뷰 리스트 가져오기
 	public HashMap<String, Object> getReviewList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		List<Review> list = productMapper.selectReviewList(map);
 		int count = productMapper.selectReviewCount(map);
-		
 		
 		resultMap.put("reviewList", list);
 		resultMap.put("count", list.size());

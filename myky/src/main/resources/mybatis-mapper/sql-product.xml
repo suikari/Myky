@@ -68,10 +68,19 @@
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
 	 </select>
+	 
+	 <!--조회수 -->
+	 <update id="ReviewCnt" parameterType="hashmap">
+	    UPDATE PRODUCT_REVIEWS
+	    SET 
+	    	CNT = CNT + 1
+	    WHERE REVIEW_ID = #{reviewId}
+	</update>
+ 
 	  <!-- 리뷰 글쓰기 -->
 	 <insert id="insertReview" parameterType="hashmap" useGeneratedKeys="true" keyColumn="REVIEW_ID" keyProperty="reviewId">
-	 	INSERT INTO PRODUCT_REVIEWS (REVIEW_ID,USER_ID,RATING,REVIEW_TEXT,CREATED_AT,PRODUCT_ID, TITLE) 
-	 	VALUES (PRODUCT_REVIEWS_SEQ.NEXTVAL, #{userId}, #{rating}, #{reviewText}, SYSDATE, #{productId}, #{title})
+	 	INSERT INTO PRODUCT_REVIEWS (REVIEW_ID,USER_ID,RATING,REVIEW_TEXT,CREATED_AT,PRODUCT_ID, TITLE, CNT) 
+	 	VALUES (PRODUCT_REVIEWS_SEQ.NEXTVAL, #{userId}, #{rating}, #{reviewText}, SYSDATE, #{productId}, #{title}, 0)
 	 </insert>
 	 <!--리뷰 삭제 -->
 	 <delete id="deleteReview" parameterType="hashmap">
@@ -84,28 +93,31 @@
 		UPDATE PRODUCT_REVIEWS
 		SET
 			TITLE = #{title},
-			REVIEW_TEXT = #{reviewText}
+			REVIEW_TEXT = #{reviewText},
+			 RATING = #{rating}
 		WHERE REVIEW_ID = #{reviewId}
 	 </update>
 	 <!--리뷰 가져오기 -->
 	 <select id="selectReview"  parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
 	 	SELECT * 
-	 	FROM PRODUCT_REVIEWS
-	 	WHERE REVIEW_ID = #{reviewId}
+		FROM PRODUCT_REVIEWS
+		WHERE REVIEW_ID = #{reviewId}
+		ORDER BY CREATED_AT DESC
 	 </select>
 	 
 	 <!-- 리뷰 파일 업로드 -->
 	 <insert id="insertReviewFile" parameterType="hashmap">
-		INSERT INTO REVIEW_FILE
-		VALUES(REVIEW_FILE_SEQ.NEXTVAL,#{reviewId},#{path},#{filename},#{originFilename},#{size}, #{extName})
+		INSERT INTO REVIEW_FILE 
+		VALUES(REVIEW_FILE_SEQ.NEXTVAL, #{reviewId}, #{filePath},#{fileName},#{fileOrgname},#{fileSize}, #{fileEtc},#{thumbYn})
 	</insert>
 	 
 	 <!-- 리뷰 리스트 -->
 	 <select id="selectReviewList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
-	    SELECT P.PRODUCT_ID, P.PRODUCT_NAME, R.REVIEW_ID, R.REVIEW_TEXT, R.RATING ,R.USER_ID, R.TITLE
+	    SELECT P.PRODUCT_ID, P.PRODUCT_NAME, R.REVIEW_ID, R.REVIEW_TEXT, R.RATING ,R.USER_ID, R.TITLE, R.CREATED_AT, R.CNT
 		FROM PRODUCT P
 		INNER JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
 		WHERE P.PRODUCT_ID = #{productId}
+		ORDER BY CREATED_AT DESC
     	OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	

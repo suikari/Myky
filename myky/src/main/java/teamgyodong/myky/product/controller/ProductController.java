@@ -88,6 +88,15 @@ public class ProductController {
 		resultMap = productService.addReview(map);
 		return new Gson().toJson(resultMap);
 	}
+	//리뷰 가져오기
+	@RequestMapping(value = "/product/reviewCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getreview(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.getReviewCnt(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 	//리뷰 리스트 가져오기
 	@RequestMapping(value = "/product/reviewList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -129,59 +138,55 @@ public class ProductController {
 	
 	
 	// 첨부파일
-		@RequestMapping("/Review/fileUpload.dox")
-		public String result(@RequestParam("file1") List<MultipartFile> files, @RequestParam("reviewId") int reviewId,
-				HttpServletRequest request, HttpServletResponse response, Model model) {
+	@RequestMapping("/Review/fileUpload.dox")
+	public String result(@RequestParam("file1") List<MultipartFile> files, @RequestParam("reviewId") int reviewId,
+			HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		String url = null;
+		String path = "c:\\img";	
+		try {
 			
-//			System.out.println(multi.size());
-//			for(MultipartFile file : multi) {
-//				System.out.println(file.getOriginalFilename());
-//			}	
-			String url = null;
-			String path = "c:\\img";	
-			try {
+			for(MultipartFile multi : files) {
+			// String uploadpath = request.getServletContext().getRealPath(path);
+			String uploadpath = path;
+			String fileOrgname = multi.getOriginalFilename();
+			String extName = fileOrgname.substring(fileOrgname.lastIndexOf("."), fileOrgname.length());
+			long size = multi.getSize();
+			String saveFileName = Common.genSaveFileName(extName);
+
+			System.out.println("uploadpath : " + uploadpath);
+			System.out.println("fileOrgname : " + fileOrgname);
+			System.out.println("fileEtc : " + extName);
+			System.out.println("fileSize : " + size);
+			System.out.println("saveFileName : " + saveFileName);
+			String path2 = System.getProperty("user.dir");
+			System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img\\product\\Review");
+		
+			if (!multi.isEmpty()) {
+				File file = new File(path2 + "\\src\\main\\webapp\\img\\product\\Review", saveFileName);
+				multi.transferTo(file);
+
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("reviewId", reviewId);
+				map.put("filePath", "../img/product/Review/" + saveFileName);
+				map.put("fileName",  saveFileName);
+				map.put("fileOrgname", fileOrgname);
+				map.put("fileSize",size);
+				map.put("fileEtc", extName); 
+				map.put("thumbYn", "N");
+			
 				
-				for(MultipartFile multi : files) {
-				// String uploadpath = request.getServletContext().getRealPath(path);
-				String uploadpath = path;
-				String originFilename = multi.getOriginalFilename();
-				String extName = originFilename.substring(originFilename.lastIndexOf("."), originFilename.length());
-				long size = multi.getSize();
-				String saveFileName = Common.genSaveFileName(extName);
-
-				System.out.println("uploadpath : " + uploadpath);
-				System.out.println("originFilename : " + originFilename);
-				System.out.println("extensionName : " + extName);
-				System.out.println("size : " + size);
-				System.out.println("saveFileName : " + saveFileName);
-				String path2 = System.getProperty("user.dir");
-				System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
 				
-				if (!multi.isEmpty()) {
-					File file = new File(path2 + "\\src\\main\\webapp\\img", saveFileName);
-					multi.transferTo(file);
 
-					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("filename", saveFileName);
-					map.put("path", "../img/" + saveFileName);
-					map.put("originFilename", originFilename);
-					map.put("extName",extName);
-					map.put("size",size);
-					map.put("reviewId", reviewId);
-
-					// insert 쿼리 실행
-					productService.addReviewFile(map);
-					// testService.addBoardImg(map);
-
-//					model.addAttribute("filename", multi.getOriginalFilename());
-//					model.addAttribute("uploadPath", file.getAbsolutePath());			
-					}
+				productService.addReviewFile(map);
+	
 				}
-				return "redirect:product/list.do";
-			} catch (Exception e) {
-				System.out.println(e);
 			}
-			return "redirect:list.do";
+			return "redirect:product/view.do";
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return "redirect:view.do";
 		}
 		
 	}

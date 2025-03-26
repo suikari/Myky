@@ -35,5 +35,8 @@ public interface ProductMapper {
 	Review selectReview(HashMap<String, Object> map);
 	//리뷰 사진 가져오기
 	List<Review> selectReviewImg(HashMap<String, Object> map);
+	//조회수
+	int ReviewCnt(HashMap<String, Object> map);
+
 
 }
