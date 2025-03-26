@@ -110,7 +110,10 @@
 		INSERT INTO REVIEW_FILE 
 		VALUES(REVIEW_FILE_SEQ.NEXTVAL, #{reviewId}, #{filePath},#{fileName},#{fileOrgname},#{fileSize}, #{fileEtc},#{thumbYn})
 	</insert>
-	 
+	
+	<!--리뷰 이미지 -->
+
+
 	 <!-- 리뷰 리스트 -->
 	 <select id="selectReviewList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
 	    SELECT P.PRODUCT_ID, P.PRODUCT_NAME, R.REVIEW_ID, R.REVIEW_TEXT, R.RATING ,R.USER_ID, R.TITLE, R.CREATED_AT, R.CNT

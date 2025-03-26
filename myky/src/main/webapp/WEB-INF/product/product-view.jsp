@@ -436,16 +436,20 @@
                 border-collapse: collapse;
                 margin-top: 10px;
             }
-            .review-table th, .review-table td {
+
+            .review-table th,
+            .review-table td {
                 border-bottom: 1px solid #ddd;
                 padding: 12px;
                 text-align: center;
             }
+
             .review-table th {
                 background-color: #f2f2f2;
                 color: #555;
                 font-weight: bold;
             }
+
             .review-table .review-title {
                 text-align: left;
                 color: #333;
@@ -458,6 +462,7 @@
                 padding: 15px;
                 text-align: left;
             }
+
             .review-actions {
                 display: flex;
                 justify-content: flex-end;
@@ -718,6 +723,7 @@
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="pagination" style="margin-top: 30px;">
                             <a href="javascript:;" v-if="reviewPage > 1" @click="fnReviewPageMove('prev')"> &lt; </a>
 
@@ -733,7 +739,44 @@
 
                     <!-- 상품 문의 -->
                     <div v-else-if="activeTab === 'qna'">
-                        <p>❓ 상품문의 0개</p>
+                        <!-- 상품 문의 -->
+                        <div v-else-if="activeTab === 'qna'" class="review-section">
+                            <div class="review-header">
+                                <h3>상품 Q&A</h3>
+                                <div class="review-buttons">
+                                    <button class="btn" @click="fnQnaWrite()">글쓰기</button>
+                                </div>
+                            </div>
+
+                            <div v-if="qnaList.length === 0" class="review-empty">
+                                등록된 Q&A가 없습니다.
+                            </div>
+                            <div v-else>
+                                <table class="review-table">
+                                    <thead>
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>제목</th>
+                                            <th>작성자</th>
+                                            <th>작성일</th>
+                                            <th>조회</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="qna in qnaList" :key="qna.qnaId">
+                                            <tr @click="fnQnaView(qna.qnaId)">
+                                                <td>{{ qna.qnaId }}</td>
+                                                <td class="review-title">{{ qna.title || '(제목 없음)' }}</td>
+                                                <td>{{ qna.userId }}</td>
+                                                <td>{{ qna.createdAt }}</td>
+                                                <td>{{ qna.viewCount }}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- 배송, 교환, 환불 설명 -->
@@ -830,7 +873,8 @@
                         reviewPageSize: 5,
                         reviewTotal: 0,
                         reviewPages: [],
-
+                        // 상품 문의..
+                        qnaList: []
                     };
                 },
                 computed: {
@@ -1035,6 +1079,8 @@
                         self.activeTab = tabId;
                         if (tabId === 'review') {
                             self.fnReviewList();
+                        }else if(abId === 'qna'){
+                            self.fnQnaList();
                         }
                     },
                     //수량 감소
@@ -1055,7 +1101,29 @@
                     cancelSelection() {
                         this.isSelected = false;
                         this.quantity = 1;
+                    },
+                    // 상품 문의
+                    fnQnaList() {
+                        const self = this;
+                        $.ajax({
+                            url: "/product/qnaList.dox",
+                            type: "POST",
+                            data: { productId: self.productId },
+                            dataType: "json",
+                            success(data) {
+                                console.log("Q&A 목록:", data);
+                                self.qnaList = data.qnaList;
+                                self.tabs[2].cmtcount = data.qnaList.length;
+                            }
+                        });
+                    },
+                    fnQnaView(qnaId) {
+                        location.href = "/product/qnaView.do?productId=" + this.productId + "&qnaId=" + qnaId;
+                    },
+                    fnQnaWrite() {
+                        location.href = "/product/qnaWrite.do?productId=" + this.productId;
                     }
+
                 },
                 mounted() {
                     const params = new URLSearchParams(window.location.search);
@@ -1069,6 +1137,7 @@
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
+                    self.fnQnaList();
                     self.fnUserInfo();
                 }
             });
