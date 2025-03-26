@@ -1,6 +1,7 @@
 package teamgyodong.myky.board.dao;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public interface BoardService {
 	
@@ -27,6 +28,8 @@ public interface BoardService {
 	void addBoardFile(HashMap<String, Object> map);
 
 	HashMap<String, Object> boardRemoveFile(HashMap<String, Object> map);
+
+	void insertReply(Map<String, Object> map);
 
 
 }
