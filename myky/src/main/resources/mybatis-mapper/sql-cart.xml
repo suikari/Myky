@@ -60,16 +60,26 @@
 
 	<insert id="insertCartOrder" parameterType="hashmap" useGeneratedKeys="true" keyColumn="order_id" keyProperty="orderId">
 	
-		insert into orders (order_id, total_price, ordered_at, user_id, receiver_name, receiver_phone, receiver_addr, payment_method, delivery_message)
-		values (orders_seq.nextval, #{totalPrice}, sysdate, #{userId}, #{receiverName}, #{receiverPhone}, #{receiverAddr}, #{paymentMethod}, #{deliveryMessage})
+		insert into orders (order_id, total_price, ordered_at, user_id, receiver_name, receiver_phone, receiver_addr, payment_method, delivery_message , UPDATED_AT)
+		values (#{orderId}, #{totalPrice}, sysdate, #{userId}, #{receiverName}, #{receiverPhone}, #{receiverAddr}, #{paymentMethod}, #{deliveryMessage}, SYSDATE)
 	
 	</insert>
 
 	<insert id="insertCartOrderDetail" parameterType="hashmap">
-	
-		insert into order_details (order_detail_id, product_id, quantity, price, order_id)
-		values (order_details_seq.nextval, #{productId}, #{quantity}, #{price}, #{orderid})
-	
+		INSERT ALL 
+		<foreach collection="orderDetails" item="order" separator=" " >
+		into order_details (order_detail_id, product_id, quantity, price, order_id)
+		values
+	        (
+				order_details_seq.nextval,
+				#{order.productId},
+	            #{order.quantity},
+	            #{order.price},
+	            #{orderId}
+	        )
+    	</foreach>
+    	
+    	SELECT * FROM DUAL	
 	</insert>
 	
 	<select id="findCart" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">

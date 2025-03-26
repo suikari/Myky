@@ -19,4 +19,6 @@ public interface UserMapper {
 
 	int insertUser(HashMap<String, Object> map);
 
+	int updateInfo(HashMap<String, Object> map);
+
 }

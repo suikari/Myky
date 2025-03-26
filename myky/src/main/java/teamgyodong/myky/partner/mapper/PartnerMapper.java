@@ -19,4 +19,8 @@ public interface PartnerMapper {
 
 	List<partnerdetail> getPartnerHosList(HashMap<String, Object> map);
 
+	List<partnerdetail> getPartnerList(HashMap<String, Object> map);
+
+
+
 }

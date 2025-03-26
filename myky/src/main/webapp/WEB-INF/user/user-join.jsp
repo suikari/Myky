@@ -81,7 +81,7 @@ body {
     .phone-section .phone-select,
     .phone-section .phone-input {
         display: inline-block;
-        width: 32%;
+        width: 7%;
         padding: 10px;
         margin-top: 5px;
         margin-bottom: 10px;

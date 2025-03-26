@@ -1,5 +1,6 @@
 package teamgyodong.myky.cart.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,18 +122,18 @@ public class CartServiceImpl implements CartService {
 			if (map.get("option").equals("order")) {
 	            // 주문 정보 삽입
 	            cartMapper.insertCartOrder(map);
+	            
 
-	            // 주문에 대한 고유 ID 가져오기
-	            Object orderId = map.get("orderId");
-	            resultMap.put("orderId", orderId);
+	    		List<HashMap<String, Object>> detailMap = new ArrayList<>();
 
-	            // 주문 상세 정보를 한 번에 처리
-	            List<HashMap<String, Object>> orderDetails = (List<HashMap<String, Object>>) map.get("orderDetails");
+	    		
+	    		detailMap.add((HashMap<String, Object>) map.get("orderDetails"));
+	            System.out.println("그럼죽어="+ detailMap);
+	            System.out.println("그럼살어="+  map.get("orderDetails"));
+	            System.out.println("그럼살어="+  map.get("option"));
 
-	            for (HashMap<String, Object> detail : orderDetails) {
-	                detail.put("orderId", orderId); // 해당 주문 ID를 상세정보에 추가
-	                cartMapper.insertCartOrderDetail(detail); // 상세 정보 저장
-	            }
+	            cartMapper.insertCartOrderDetail(map);
+	            
 	        }
 			resultMap.put("result", "success");
 		}catch(Exception e) {

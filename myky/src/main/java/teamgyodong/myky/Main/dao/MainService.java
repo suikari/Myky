@@ -7,8 +7,8 @@ public interface MainService {
 	HashMap<String, Object> InsertVisitLog(HashMap<String, Object> map);
 	HashMap<String, Object> selectCategoryList(HashMap<String, Object> map);
 	
-	HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map);
-	
+	HashMap<String, Object> insertSearchHistory(HashMap<String, Object> map);
+
 	
 	
 }

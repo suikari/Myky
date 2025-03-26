@@ -1,11 +1,11 @@
-package teamgyodong.myky.user.model;
+package teamgyodong.myky.manager.model;
 
 import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class User {
+public class mUser {
 	private String userId;
 	private String userName;
 	private String address;
@@ -19,7 +19,7 @@ public class User {
 	private String agreeYn;
 	private String phoneYn;
 	private String emailYn;
-	private String gender;
+	private int userTotalCnt;
 
 
 

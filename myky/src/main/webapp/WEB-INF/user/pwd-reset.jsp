@@ -165,7 +165,7 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    userId: "",
+                    userId: "${map.userId}",
                     authFlg: false,
                     pwd: "",
                     pwdCheck: ""

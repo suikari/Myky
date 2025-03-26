@@ -4,10 +4,10 @@
 
 <mapper namespace="teamgyodong.myky.pay.mapper.PayMapper">
 
-	<insert id="insertPayment" parameterType="hashmap">
+	<insert id="insertPayment" parameterType="hashmap"  useGeneratedKeys="true" keyColumn="ORDER_ID" keyProperty="orderId">
 		
 		insert into payment
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},#{orderId},#{donationId},#{userId})
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId})
 		
 	</insert>
 

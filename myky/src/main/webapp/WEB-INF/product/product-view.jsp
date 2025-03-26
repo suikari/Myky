@@ -15,7 +15,7 @@
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-                background-color: #f5f5f5;
+                background-color: #ffffff;
             }
 
             .container {
@@ -83,9 +83,17 @@
                 color: #333;
             }
 
-            .product-price {
-                font-size: 15px;
-                color: #666;
+            .detail-product-info .original-price {
+                text-decoration: line-through;
+                color: #999;
+                font-size: 18px;
+                margin-bottom: 4px;
+            }
+
+            .detail-product-info .discount-price {
+                color: #d32f2f;
+                font-size: 22px;
+                font-weight: bold;
                 margin-bottom: 10px;
             }
 
@@ -96,53 +104,159 @@
                 font-weight: bold;
             }
 
-            .price {
-                font-size: 20px;
-                font-weight: bold;
-                color: #dc3545;
-                margin-top: 10px;
+
+            /* 수량 */
+            .purchase-section {
+                margin-top: 20px;
             }
 
-            .button-group {
+            .qty-box {
                 display: flex;
+                align-items: center;
                 gap: 10px;
-                flex-wrap: wrap;
+                margin-bottom: 20px;
             }
 
-            .buy-btn1,
-            .buy-btn2 {
-                padding: 12px 20px;
+            .qty-controller {
+                display: flex;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                overflow: hidden;
+                width: fit-content;
+                background-color: #fff;
+            }
+
+            .qty-btn {
+                width: 36px;
+                height: 36px;
+                background-color: #fff;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                border-right: 1px solid #ccc;
+            }
+
+            .qty-btn:last-child {
+                border-left: 1px solid #ccc;
+                border-right: none;
+            }
+
+            .qty-input {
+                width: 50px;
+                height: 36px;
+                text-align: center;
+                border: none;
+                font-size: 16px;
+            }
+
+            .qty-btn:hover {
+                background-color: #f0f0f0;
+            }
+
+            .shipping-note {
+                font-size: 12px;
+                color: #777;
+                margin-top: -10px;
+                margin-bottom: 10px;
+            }
+
+            .remove-btn {
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                color: #999;
+            }
+
+            .remove-btn:hover {
+                color: #333;
+            }
+
+            .confirmed-box {
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 12px 16px;
+                background-color: #fafafa;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+                margin-bottom: 10px;
+            }
+
+            .confirmed-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .product-name {
+                font-weight: bold;
+            }
+
+            .remove-btn {
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+            }
+
+            .price-display {
                 font-size: 18px;
                 font-weight: bold;
-                color: #fff;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
                 margin-top: 10px;
-                transition: background-color 0.3s;
             }
 
-            /* 버튼 css */
-            .buy-btn1 {
-                background-color: #28a745;
+            .total-price {
+                margin-top: 20px;
+                font-size: 20px;
+                text-align: right;
+                font-weight: bold;
             }
 
-            .buy-btn1:hover {
-                background-color: #218838;
+            .select-btn {
+                height: 34px;
+                padding: 0 10px;
+                border: 1px solid #ccc;
+                background-color: #f3f3f3;
+                border-radius: 4px;
+                cursor: pointer;
+                white-space: nowrap;
             }
 
-            .buy-btn2 {
-                background-color: #007bff;
+            .select-btn:disabled {
+                background-color: #ddd;
+                color: #666;
+                cursor: not-allowed;
             }
 
-            .buy-btn2:hover {
-                background-color: #0056b3;
+            /* 장바구니 + 구매 */
+            .action-buttons {
+                display: flex;
+                gap: 10px;
+            }
+
+            .cart-btn {
+                flex: 1;
+                height: 45px;
+                font-size: 16px;
+                background-color: #fff;
+                border: 1px solid #000;
+                cursor: pointer;
+            }
+
+            .buy-btn {
+                flex: 1;
+                height: 45px;
+                font-size: 16px;
+                background-color: red;
+                color: white;
+                border: none;
+                cursor: pointer;
             }
 
 
-            .buy-btn:hover {
-                background-color: #218838;
-            }
 
             /* 상세보기 */
             .notice-section {
@@ -238,6 +352,9 @@
             .review-section {
                 padding: 30px;
                 font-family: 'Noto Sans KR', sans-serif;
+                background-color: #fff;
+                max-width: 1100px;
+                margin: 0 auto;
             }
 
             .review-header {
@@ -254,18 +371,17 @@
             }
 
             .review-buttons .btn {
-                padding: 8px 16px;
-                margin-left: 10px;
-                border: 1px solid #333;
-                background: white;
+                padding: 6px 14px;
+                font-size: 14px;
+                border: 1px solid #ccc;
+                background-color: white;
                 color: #333;
                 cursor: pointer;
-                font-weight: bold;
-                transition: background-color 0.2s;
+                border-radius: 4px;
             }
 
             .review-buttons .btn:hover {
-                background-color: #f0f0f0;
+                background-color: #f7f7f7;
             }
 
             .review-empty {
@@ -315,6 +431,44 @@
                 margin-top: 5px;
             }
 
+            .review-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+
+            .review-table th,
+            .review-table td {
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .review-table th {
+                background-color: #f2f2f2;
+                color: #555;
+                font-weight: bold;
+            }
+
+            .review-table .review-title {
+                text-align: left;
+                color: #333;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .review-detail {
+                background-color: #f9f9f9;
+                padding: 15px;
+                text-align: left;
+            }
+
+            .review-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 8px;
+                margin-top: 20px;
+            }
 
 
             /* 배송, 교환, 환불 영역 */
@@ -349,27 +503,28 @@
             /* 페이징 */
             .pagination {
                 display: flex;
-                justify-content: center; 
+                justify-content: center;
                 align-items: center;
-                gap: 8px; 
+                gap: 8px;
                 margin-top: 30px;
             }
+
             .pagination a {
                 text-decoration: none;
                 color: #333;
                 font-weight: bold;
                 padding: 4px 8px;
-                border: none;           
-                border-radius: 0;          
-                background: none;         
+                border: none;
+                border-radius: 0;
+                background: none;
                 font-size: 15px;
             }
+
             .pagination a.active {
                 color: #000;
                 font-weight: 900;
                 text-decoration: none;
             }
-
 
             @media (max-width: 768px) {
                 .product-detail {
@@ -407,27 +562,67 @@
                         <img src="../../img/product/product update.png" alt="이미지 없음">
                     </template>
                     <div class="product-image-thumbNails">
-                        <img v-for="(img, index) in imgList" :src="img.filePath" alt="상품 썸네일" @click="changeImage(img.filePath)">
+                        <img v-for="(img, index) in imgList" :src="img.filePath" alt="상품 썸네일"
+                            @click="changeImage(img.filePath)">
                     </div>
                 </div>
                 <div class="product-info">
                     <hr>
                     <h1>{{info.productName}}</h1>
-                    <p class="product-price">판매가 : {{ info.price }}</p>
+                    <!-- 정상가 (할인 전 가격) -->
+                    <div class="detail-product-info">
+                        <p class="original-price" v-if="info.discount > 0">
+                            정상가: {{ info.price }}원
+                        </p>
+                        <!-- 멤버십 할인가 -->
+                        <p class="discount-price">
+                            멤버십 할인가:
+                            <strong>{{ discountedPrice}}원</strong>
+                        </p>
+                    </div>
                     <p>제조사 : {{ info.manufacturer }}</p>
-                    <p>배송비 : 2000원</p>
+                    <p>배송비 : {{ info.shippingFee }}원</p>
+                    <div v-if="info.shippingFreeMinimum" class="shipping-note">
+                        ({{ info.shippingFreeMinimum }}원 이상 주문 시 무료배송)
+                    </div>
                     <p>상품코드 : {{ info.productCode }}</p>
                     <hr>
 
-                    <p>
-                        수량 :
-                        <input type="number" v-model="quantity" min="1" style="width: 60px; text-align: center;" />
-                    </p>
-                    <div class="button-group">
-                        <button class="buy-btn1">바로 구매</button>
-                        <button class="buy-btn2" @click="fnAddCart()">장바구니</button>
-                    </div>
-                </div>
+                    <div class="purchase-section">
+                        <!-- 수량 선택 화면 (선택 전만 보임) -->
+                        <div v-if="!isSelected" class="qty-box">
+                            <span>수량</span>
+                            <div class="qty-controller">
+                                <button @click="decreaseQty" class="qty-btn">-</button>
+                                <input type="text" :value="quantity" readonly class="qty-input" />
+                                <button @click="increaseQty" class="qty-btn">+</button>
+                            </div>
+                            <button @click="confirmQuantity" class="select-btn">선택</button>
+                        </div>
+
+                        <div v-if="isSelected">
+                            <div class="confirmed-box">
+                                <div class="confirmed-header">
+                                    <span class="product-name">{{ info.productName }}</span>
+                                    <button class="remove-btn" @click="cancelSelection">X</button>
+                                </div>
+                                <div class="qty-controller">
+                                    <button @click="decreaseQty" class="qty-btn">-</button>
+                                    <input type="text" :value="quantity" readonly class="qty-input" />
+                                    <button @click="increaseQty" class="qty-btn">+</button>
+                                </div>
+                            </div>
+
+                            <div class="price-display">
+                                <strong>총 결제 금액 : {{ formattedPrice }}원</strong>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="cart-btn" @click="fnAddCart()">장바구니</button>
+                            <button class="buy-btn">구매하기</button>
+                        </div>
+
             </section>
 
             <!-- 상세 설명 -->
@@ -464,8 +659,9 @@
             <!-- 탭 UI -->
             <section id="tab-area" class="tab-wrapper">
                 <div class="tab-menu">
-                    <div v-for="tab in tabs" :key="tab.id" :class="['tab-item', { active: activeTab === tab.id }]" @click="changeTab(tab.id)">
-                        {{ tab.label }}  {{ tab.cmtcount }}  
+                    <div v-for="tab in tabs" :key="tab.id" :class="['tab-item', { active: activeTab === tab.id }]"
+                        @click="changeTab(tab.id)">
+                        {{ tab.label }} {{ tab.cmtcount }}
                     </div>
                 </div>
 
@@ -479,7 +675,6 @@
                         <div class="review-header">
                             <h3>REVIEW</h3>
                             <div class="review-buttons">
-
                                 <button class="btn" @click="fnReviewWtite()">글쓰기</button>
                             </div>
                         </div>
@@ -488,44 +683,100 @@
                             현재 게시물이 없습니다
                         </div>
                         <div v-else>
-                            <div v-for="review in reviewList" :key="review.reviewId" class="line-review">
-                                <div class="line-review-header">
-                                    <div class="stars">
-                                        {{ '⭐'.repeat(review.rating) }} ({{ review.rating }}점)
-                                    </div>
-                                    <div class="summary-text">{{ review.title }}</div>
-                                </div>
-
-                                <div class="line-review-body">
-                                    <div v-html="review.reviewText"></div>
-
-                                    <div v-if="review.imageUrl" class="review-image">
-                                        <img :src="review.imageUrl" alt="리뷰 이미지" />
-                                    </div>
-                                </div>
-
-                                <div class="line-review-footer">
-                                    {{ review.userId }} 님의 리뷰입니다.
-                                    <button @click="fnEdit(review.reviewId)">수정</button>
-                                    <button @click="fnDelete(review.reviewId)">삭제</button>  
-                                </div>
-                            </div>
+                            <table class="review-table">
+                                <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>작성자</th>
+                                        <th>작성일</th>
+                                        <th>조회</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="(review, index) in reviewList" :key="review.reviewId">
+                                        <tr @click="toggleReviewDetail(review.reviewId)">
+                                            <td>{{ review.reviewId }}</td>
+                                            <td class="review-title">{{ review.title || '(제목 없음)' }}</td>
+                                            <td>{{ review.userId }}</td>
+                                            <!-- <td>{{ maskedUserId(review.userId) }}</td> -->
+                                            <td>{{ review.createdAt }}</td>
+                                            <td>{{ review.cnt }}</td>
+                                        </tr>
+                                        <tr v-if="selectedReviewId === review.reviewId">
+                                            <td colspan="5">
+                                                <div class="review-detail">
+                                                    <div class="stars">⭐️ {{ review.rating }}점</div>
+                                                    <div v-html="review.reviewText"></div>
+                                                    <div v-if="review.imageUrl">
+                                                        <img :src="review.imageUrl" alt="리뷰 이미지"
+                                                            style="max-width: 200px;">
+                                                    </div>
+                                                    <div class="review-actions">
+                                                        <button @click.stop="fnEdit(review.reviewId)">수정</button>
+                                                        <button @click.stop="fnDelete(review.reviewId)">삭제</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
                         </div>
+
                         <div class="pagination" style="margin-top: 30px;">
                             <a href="javascript:;" v-if="reviewPage > 1" @click="fnReviewPageMove('prev')"> &lt; </a>
-                        
+
                             <a href="javascript:;" v-for="num in reviewPages" :key="num" @click="fnReviewPage(num)"
                                 :class="{ active: reviewPage === num }">
                                 <span v-if="reviewPage === num">{{ num }}</span>
                                 <span v-else>{{ num }}</span>
                             </a>
-                            <a href="javascript:;" v-if="reviewPage < reviewPages.length" @click="fnReviewPageMove('next')"> &gt; </a>
-                        </div>                        
+                            <a href="javascript:;" v-if="reviewPage < reviewPages.length"
+                                @click="fnReviewPageMove('next')"> &gt; </a>
+                        </div>
                     </div>
 
                     <!-- 상품 문의 -->
                     <div v-else-if="activeTab === 'qna'">
-                        <p>❓ 상품문의 0개</p>
+                        <!-- 상품 문의 -->
+                        <div v-else-if="activeTab === 'qna'" class="review-section">
+                            <div class="review-header">
+                                <h3>상품 Q&A</h3>
+                                <div class="review-buttons">
+                                    <button class="btn" @click="fnQnaWrite()">글쓰기</button>
+                                </div>
+                            </div>
+
+                            <div v-if="qnaList.length === 0" class="review-empty">
+                                등록된 Q&A가 없습니다.
+                            </div>
+                            <div v-else>
+                                <table class="review-table">
+                                    <thead>
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>제목</th>
+                                            <th>작성자</th>
+                                            <th>작성일</th>
+                                            <th>조회</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="qna in qnaList" :key="qna.qnaId">
+                                            <tr @click="fnQnaView(qna.qnaId)">
+                                                <td>{{ qna.qnaId }}</td>
+                                                <td class="review-title">{{ qna.title || '(제목 없음)' }}</td>
+                                                <td>{{ qna.userId }}</td>
+                                                <td>{{ qna.createdAt }}</td>
+                                                <td>{{ qna.viewCount }}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
 
                     <!-- 배송, 교환, 환불 설명 -->
@@ -606,12 +857,14 @@
                         imgList: [],
                         mainImage: '',
                         quantity: 1,
+                        isSelected: false,
+                        selectedReviewId: null,
                         //탭 관련
                         tabs: [
-                            { id: 'detail', label: '상세정보'  , cmtcount  : "" },
-                            { id: 'review', label: '상품후기 ' , cmtcount  : 0 },
-                            { id: 'qna', label: '상품문의 0' , cmtcount  : "" },
-                            { id: 'policy', label: '배송/교환/환불 안내' , cmtcount  : ""  }
+                            { id: 'detail', label: '상세정보', cmtcount: "" },
+                            { id: 'review', label: '상품후기 ', cmtcount: 0 },
+                            { id: 'qna', label: '상품문의 0', cmtcount: "" },
+                            { id: 'policy', label: '배송/교환/환불 안내', cmtcount: "" }
                         ],
                         activeTab: 'detail',
                         //상품 리뷰 관련
@@ -620,11 +873,41 @@
                         reviewPageSize: 5,
                         reviewTotal: 0,
                         reviewPages: [],
-
+                        // 상품 문의..
+                        qnaList: []
                     };
                 },
                 computed: {
+                    // 총 상품 금액 (상품 가격 × 수량)
+                    totalProductPrice() {
+                        const result = this.info.price * this.quantity;
+                        console.log("📦 총 상품 금액:", result);
+                        return result;
+                    },
 
+                    isFreeShipping() {
+                        const condition = this.totalProductPrice >= this.info.shippingFreeMinimum;
+                        console.log("🚚 무료배송 조건:", this.totalProductPrice, ">=", this.info.shippingFreeMinimum, "→", condition);
+                        return condition;
+                    },
+
+                    shippingCost() {
+                        const cost = this.isFreeShipping ? 0 : this.info.shippingFee;
+                        console.log("💸 배송비 적용:", cost);
+                        return cost;
+                    },
+
+                    totalPrice() {
+                        const total = this.totalProductPrice + this.shippingCost;
+                        console.log("💰 총 결제 금액:", total);
+                        return total;
+                    },
+                    formattedPrice() {
+                        return this.totalPrice.toLocaleString();
+                    },
+                    discountedPrice() {
+                        return this.info.price - this.info.discount;
+                    }
                 },
                 methods: {
                     //상품 보여주기
@@ -639,8 +922,8 @@
                             success: function (data) {
                                 console.log(data);
 
-                                if(data.result != "success"){
-                                    if(this.productId == ""){
+                                if (data.result != "success") {
+                                    if (this.productId == "") {
                                         alert("상품을 불러올수 없습니다.");
                                         location.href = "/product/list.do";
                                     }
@@ -670,13 +953,39 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log("1",data);
+                                console.log("1", data);
                                 self.reviewList = data.reviewList;
                                 self.tabs[1].cmtcount = data.totalCount;
                                 self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
                             }
                         });
                     },
+                    //리뷰 조회수
+                    toggleReviewDetail(reviewId) {
+                        const self = this;
+                        if (self.selectedReviewId === reviewId) {
+                            self.selectedReviewId = null;
+                            return;
+                        }
+                        $.ajax({
+                            url: "/product/reviewCnt.dox",
+                            type: "POST",
+                            data: { reviewId: reviewId },
+                            dataType: "json",
+                            success: function (data) {
+                                console.log("조회수 증가 결과:", data);
+                                // 조회수 증가 후 리스트 다시 불러오기
+                                self.fnReviewList();
+                            }
+                        });
+                        self.selectedReviewId = reviewId;
+
+                        // this.selectedReviewId = this.selectedReviewId === reviewId ? null : reviewId;
+                    },
+                    // maskedUserId(userId) {
+                    //     // 예: 네이버 스타일 아이디 마스킹 (aa1234 → aa****)
+                    //     return userId.slice(0, 2) + "****";
+                    // },
                     //상품 리뷰 페이징
                     fnReviewPage(num) {
                         this.reviewPage = num;
@@ -696,33 +1005,33 @@
                         location.href = "/product/review.do?productId=" + self.productId;
                     },
                     //개인 리뷰 삭제
-                    fnDelete : function(reviewId){
+                    fnDelete: function (reviewId) {
                         var self = this;
                         if (!confirm("정말 삭제하시겠습니까?")) {
                             return;
                         }
                         var nparmap = {
                             userId: self.sessionId,
-                            reviewId : reviewId
+                            reviewId: reviewId
                         };
                         $.ajax({
-                            url:"/product/reviewRemove.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) { 
+                            url: "/product/reviewRemove.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
                                 console.log(data);
-                                if(data.result == "success"){
+                                if (data.result == "success") {
                                     alert("삭제가 완료되었습니다");
-                                    location.href= "/product/view.do?productId=" + self.productId;
-                                }else{
+                                    location.href = "/product/view.do?productId=" + self.productId;
+                                } else {
                                     alert("삭제에 실패했습니다.");
                                 }
                             }
                         });
                     },
                     //개인 리뷰 수정
-                    fnEdit : function(reviewId){
+                    fnEdit: function (reviewId) {
                         let self = this;
                         location.href = "/product/reviewEdit.do?productId=" + self.productId + "&reviewId=" + reviewId;
                     },
@@ -770,14 +1079,57 @@
                         self.activeTab = tabId;
                         if (tabId === 'review') {
                             self.fnReviewList();
+                        }else if(abId === 'qna'){
+                            self.fnQnaList();
                         }
+                    },
+                    //수량 감소
+                    increaseQty() {
+                        this.quantity++;
+                    },
+                    //수량 증가
+                    decreaseQty() {
+                        if (this.quantity > 1) {
+                            this.quantity--;
+                        }
+                    },
+                    //수량 확인
+                    confirmQuantity() {
+                        this.isSelected = true;
+                        // 필요하면 서버에 확정된 수량 보내기 or 알림 띄우기 가능
+                    },
+                    cancelSelection() {
+                        this.isSelected = false;
+                        this.quantity = 1;
+                    },
+                    // 상품 문의
+                    fnQnaList() {
+                        const self = this;
+                        $.ajax({
+                            url: "/product/qnaList.dox",
+                            type: "POST",
+                            data: { productId: self.productId },
+                            dataType: "json",
+                            success(data) {
+                                console.log("Q&A 목록:", data);
+                                self.qnaList = data.qnaList;
+                                self.tabs[2].cmtcount = data.qnaList.length;
+                            }
+                        });
+                    },
+                    fnQnaView(qnaId) {
+                        location.href = "/product/qnaView.do?productId=" + this.productId + "&qnaId=" + qnaId;
+                    },
+                    fnQnaWrite() {
+                        location.href = "/product/qnaWrite.do?productId=" + this.productId;
                     }
+
                 },
                 mounted() {
                     const params = new URLSearchParams(window.location.search);
                     this.productId = params.get("productId") || "";
 
-                    if(this.productId == ""){
+                    if (this.productId == "") {
                         alert("상품을 불러올수 없습니다.");
                         location.href = "/product/list.do";
                     }
@@ -785,6 +1137,7 @@
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
+                    self.fnQnaList();
                     self.fnUserInfo();
                 }
             });

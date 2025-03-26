@@ -1,10 +1,10 @@
-package teamgyodong.myky.product.model;
+package teamgyodong.myky.manager.model;
 
 import lombok.Data;
 
 @Data
 
-public class Product {
+public class mProduct {
 	private String productId;
 	private String productName;
 	private String categoryId;
@@ -15,16 +15,13 @@ public class Product {
 	private String productType;
 	private String description;
 	private String productCode;
-	private int shippingFee;
-	private int shippingFreeMinimum;
-	private int discount;
-	
-	private String fileNo;
-	private String reviewId;
+	private int productTotalCnt;
+
+
+	private String fileId;
 	private String filePath ;
 	private String fileName ;
-	private String fileOrgname ;
+	private String thumbNail ;
 	private String fileSize ;
-	private String fileEtc;
-	private String thumbYn ;
+	private String fileType;
 }

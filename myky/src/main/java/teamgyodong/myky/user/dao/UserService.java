@@ -16,5 +16,7 @@ public interface UserService {
 
 	HashMap<String, Object> joinUser(HashMap<String, Object> map);
 
+	HashMap<String, Object> editInfo(HashMap<String, Object> map);
+
 	
 }
