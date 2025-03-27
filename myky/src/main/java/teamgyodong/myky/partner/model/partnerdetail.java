@@ -5,27 +5,33 @@ import lombok.Data;
 @Data
 public class partnerdetail {
 
+	//동물병원
 	private String SI;
 	private String GU;
 	private String DONG;
-	private String PARTNERDETAILID;
 	private String hosName;
 	private String hosAddress;
+	private int hospitalNo;
 	private String phone;
 	private String NX;
 	private String NY;
+
+	
+	//제휴사
+	private int partnerId;
+	private String name;
+	private String phoneNumber;
+	private String address;
 	private String WEBSITEURL;
 	private String reservationUrl;
 	private String openingHours;
 	private String LUNCHBREAK;
 	private String regularHoliday;
-	private int hospitalNo;
-	private String PHONE;
+	private String PARTNERDETAILID;
 	
-	private int partnerId;
-	private String name;
-	private String phoneNumber;
-	private String address;
+	//즐겨찾기
+	private int favoriteId;
+	private String userId;
 
 	
 }
