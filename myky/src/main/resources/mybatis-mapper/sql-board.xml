@@ -7,12 +7,16 @@
 	
 	<select id="selectBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 		SELECT 
-		    F.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime ,
+		    F.*,  U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime ,
 		    (SELECT COUNT(*)
 		    FROM FREE_BOARD_COMMENT C
 		    WHERE C.BOARD_ID = F.BOARD_ID) AS COMMENT_COUNT
 		FROM 
 		    FREE_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
 		WHERE 
 		    1=1
 		    <if test="searchOption != null and searchOption == 'all'">
@@ -25,6 +29,7 @@
 		        AND F.USER_ID LIKE '%' || #{keyword} || '%'
 		    </if>
 		    AND CATEGORY= #{category}
+		    AND IS_DELETED = 'N'
 		ORDER BY 
 		    F.BOARD_ID DESC
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -45,17 +50,27 @@
 				AND (TITLE LIKE '%' || #{keyword} || '%' OR USER_ID LIKE '%' || #{keyword} || '%')
 			</when>
 		</choose>
+			AND CATEGORY= #{category}
+		    AND IS_DELETED = 'N'
 	</select>
 	
 	<select id="selectCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
-		SELECT F.*, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		SELECT F.*, U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD_COMMENT F
-		WHERE BOARD_ID = #{boardId} AND NVL(PARENT_COMMENT_ID,0) = 0 ORDER BY comment_id ASC
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE F.BOARD_ID = #{boardId} AND NVL(F.PARENT_COMMENT_ID,0) = 0 ORDER BY F.comment_id ASC
 	</select>
 	<select id="selectParentCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
-		SELECT F.*, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		SELECT F.*, U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD_COMMENT F
-		WHERE BOARD_ID = #{boardId} AND parent_comment_id = #{parentId} ORDER BY comment_id ASC
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE F.BOARD_ID = #{boardId} AND F.parent_comment_id = #{parentId} ORDER BY F.comment_id ASC
 	</select>
 	
 	<update id="updateCnt" parameterType="hashmap">
@@ -66,15 +81,19 @@
 	</update>
 	
 	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
-		SELECT F.*, TO_CHAR(CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD F
-		WHERE BOARD_ID = #{boardId}
-		AND CATEGORY= #{category}
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE F.BOARD_ID = #{boardId}
+		AND F.CATEGORY= #{category}
 	</select>
 	
 	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
-		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, CATEGORY, CNT)
-		VALUES(FREE_BOARD_SEQ.NEXTVAL, #{title}, #{content}, SYSDATE, SYSDATE, #{userId},  #{category}, 0)
+		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, LIKES, DISLIKES, CATEGORY, CNT)
+		VALUES(FREE_BOARD_SEQ.NEXTVAL, #{title}, #{content}, SYSDATE, SYSDATE, #{userId}, 0, 0, #{category}, 0)
 	</insert>
 	
 	<update id="updateBoard" parameterType="hashmap">
@@ -107,10 +126,12 @@
 		WHERE COMMENT_ID = #{commentId}
 	</update>
 	
-	<delete id="deleteComment" parameterType="hashmap">
-		DELETE FROM FREE_BOARD_COMMENT
+	<update id="deleteComment" parameterType="hashmap">
+		UPDATE FREE_BOARD_COMMENT
+		SET
+			IS_DELETED = 'Y'
 		WHERE COMMENT_ID = #{commentId}
-	</delete>
+	</update>
 	
 	<insert id="insertBoardFile" parameterType="hashmap">
 		INSERT INTO FREE_BOARD_FILE
@@ -134,13 +155,35 @@
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{parentCommentId}, #{content}, SYSDATE, SYSDATE, 'N')
 	</insert>
 	
-	<select id="getUserLikeStatus" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardLikeLog">
-	    SELECT status
-	    FROM FREE_BOARD_LIKE_LOG
-	    WHERE board_id = #{boardId} AND user_id = #{userId}
+	<!-- Like Button-->
+	<select id="selectLike" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardLikeLog" >
+		SELECT *
+		FROM FREE_BOARD_LIKE_LOG
+		WHERE USER_ID = #{userId}
+		  AND BOARD_ID = #{boardId}
 	</select>
 	
+	<insert id="insertLikelog" parameterType="hashmap" >
+		INSERT INTO FREE_BOARD_LIKE_LOG(BOARD_ID, USER_ID, STATUS)
+		VALUES(#{boardId}, #{userId}, #{status})
+	</insert>
 	
+	<delete id="deleteStatus" parameterType="hashmap">
+		DELETE FROM FREE_BOARD_LIKE_LOG
+		WHERE USER_ID = #{userId} AND BOARD_ID = #{boardId}
+	</delete>
+	
+	<update id="updatelikeCntBoard" parameterType="hashmap">
+		UPDATE FREE_BOARD
+		SET
+		    <if test="status != null and status == 'like'">
+						LIKES = LIKES + #{finalstatus}
+		    </if>
+		    <if test="status != null and status == 'dislike'">
+						DISLIKES = DISLIKES + #{finalstatus}
+		    </if>		    
+		WHERE BOARD_ID = #{boardId}
+	</update>
 </mapper>
 
 

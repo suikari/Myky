@@ -239,7 +239,7 @@
                     <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}
                         <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="cmtCountColor">({{item.commentCount}})</span>
                         </a></td>
-                    <td>{{item.userId}}</td>
+                    <td>{{item.nickName}}</td>
                     <td>{{item.createdAt}}</td>
                     <td>{{item.cnt}}</td>
                 </template>
@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 userId: "",
                 index: 0,
                 pageSize: 5,
-                page: 1,
+                page: 0,
                 searchOption: "all",
                 keyword: "",
                 orderKey: "",

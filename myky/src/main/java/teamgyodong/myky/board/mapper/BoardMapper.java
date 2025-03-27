@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.boardFile;
+import teamgyodong.myky.board.model.boardLikeLog;
 import teamgyodong.myky.board.model.comment;
 
 @Mapper
@@ -49,19 +50,14 @@ public interface BoardMapper {
 	
 	List<comment> selectParentCmtList(HashMap<String, Object> map);
 
-//	String getUserLikeStatus(HashMap<String, Object> map);
-//
-//	void updateLikeCount(String boardId, int i);
-//
-//	void updateDislikeCount(String boardId, int i);
-//
-//	void deleteUserLikeStatus(HashMap<String, Object> map);
-//
-//	void insertUserLikeStatus(HashMap<String, Object> map);
+	boardLikeLog selectLike(HashMap<String, Object> map);
 
-//	int getLikeCount(String boardId);
-//
-//	int getDislikeCount(String boardId);
+	int insertLikelog(HashMap<String, Object> map);
+
+	int deleteStatus(HashMap<String, Object> map);
+	
+	void updatelikeCntBoard (HashMap<String, Object> map);
+	
 
 
 

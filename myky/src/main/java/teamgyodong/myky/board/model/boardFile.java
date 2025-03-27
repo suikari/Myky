@@ -14,5 +14,6 @@ public class boardFile {
 	private String createdAt;
 	private int fileSize;
 	private String updatedTime;
+	private String nickName;
 	
 }

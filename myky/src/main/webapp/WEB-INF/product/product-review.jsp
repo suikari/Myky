@@ -139,8 +139,8 @@
                     </div>
                 </div>
                 <div class="button-box">
-                    <button class="btn-cancel" @click="fnCancel">취소</button>
-                    <button class="btn-submit" @click="fnSave">등록</button>
+                    <button class="btn-cancel" @click="fnCancel()">취소</button>
+                    <button class="btn-submit" @click="fnSave()">등록</button>
                 </div>
             </div>
         </div>
