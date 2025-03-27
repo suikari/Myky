@@ -123,14 +123,6 @@ public class CartServiceImpl implements CartService {
 	            // 주문 정보 삽입
 	            cartMapper.insertCartOrder(map);
 	            
-
-	    		//List<HashMap<String, Object>> detailMap = new ArrayList<>();
-
-	    		
-	    		//detailMap.add((HashMap<String, Object>) map.get("orderDetails"));
-	            System.out.println("그럼살어="+  map.get("orderDetails"));
-	            System.out.println("그럼살어="+  map.get("option"));
-
 	            cartMapper.insertCartOrderDetail(map);
 	            
 	        }

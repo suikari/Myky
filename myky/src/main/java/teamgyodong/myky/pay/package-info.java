@@ -72,7 +72,7 @@ package teamgyodong.myky.pay;
 	                    paymentStatus: rsp.status, // 결제 상태
 	                    isCanceled: "N", // 결제 취소 여부
                     	cancelDate: null, // 결제 취소 일시
-	                    productId: null, // 상품 코드
+	                    orderId: null, // 주문번호
 	                    donationId: null, // 후원 코드
 	                    userId: userId // 유저ID (ex. self.userInfo.userId)
 	                };
