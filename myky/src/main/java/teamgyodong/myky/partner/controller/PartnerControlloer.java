@@ -40,4 +40,16 @@ public class PartnerControlloer {
 		
 		return new Gson().toJson(resultMap);
 	}
+	
+	@RequestMapping(value ="favorites/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String favoritesInsert(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		System.out.println(map);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = partnerService.favoritesInsert(map);
+		
+		
+		return new Gson().toJson(resultMap);
+	}
 }

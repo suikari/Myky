@@ -6,5 +6,7 @@ public interface PartnerService {
 
 	HashMap<String, Object> getPartnerDetailList(HashMap<String, Object> map);
 
+	HashMap<String, Object> favoritesInsert(HashMap<String, Object> map);
+
 	
 }

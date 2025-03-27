@@ -21,6 +21,10 @@ public interface PartnerMapper {
 
 	List<partnerdetail> getPartnerList(HashMap<String, Object> map);
 
+	List<partnerdetail> getfavoriteList(HashMap<String, Object> map);
+
+	void addfavorites(HashMap<String, Object> map);
+
 
 
 }
