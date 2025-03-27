@@ -25,6 +25,8 @@ public interface PartnerMapper {
 
 	void addfavorites(HashMap<String, Object> map);
 
+	void favoritesDelete(HashMap<String, Object> map);
+
 
 
 }

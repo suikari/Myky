@@ -3,8 +3,6 @@ package teamgyodong.myky.partner.dao;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,10 +51,11 @@ public class PartnerServiceImpl implements PartnerService {
 		return resultMap;
 	}
 	
-	
+	@Override
 	public HashMap<String, Object> favoritesInsert(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
 		partnerMapper.addfavorites(map);
 //		String userId = (String) map.get("userId");  // 세션에서 userId를 가져오는 코드 확인
 //	    if (userId == null || userId.isEmpty()) {
@@ -67,10 +66,28 @@ public class PartnerServiceImpl implements PartnerService {
 //	    else {
 //	    	 resultMap.put("message", "송공.");
 //	    }
+
+	    
+	 
 		System.out.println("key ==> " + map.get("hospitalNo"));
 		resultMap.put("result", "success");
 		resultMap.put("hospitalNo", map.get("hospitalNo"));
 		System.out.println(map);
 		return resultMap;
 	}
+
+	@Override
+	public HashMap<String, Object> favoritesRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		partnerMapper.favoritesDelete(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+
+	
+	
+	
+
 }

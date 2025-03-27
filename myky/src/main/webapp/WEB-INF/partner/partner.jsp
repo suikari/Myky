@@ -145,6 +145,15 @@
 #category li.on .category_bg {
     background-position-x: -46px;
 }
+/* 즐겨찾기 추가된 상태 */
+button#favoritesButton.favorite {
+  color: gold;
+}
+
+/* 즐겨찾기 안 된 상태 */
+button#favoritesButton.not-favorite {
+  color: grey;
+}
     </style>
 </head>
 <body>
@@ -236,8 +245,9 @@
     const app = Vue.createApp({
     data() {
         return {
+            isFavorite: false,
             sessionId : "${sessionId}",
-            userId : "",
+            userId: "${sessionId}",
             hosName : "",
             hosAddress : "",
             hospitalNo : "",
@@ -702,6 +712,7 @@ addMarkers() {
     displayHospitals(data, hoslist) {
     console.log("displayHospitals" + hoslist); // hoslist의 내용 확인
 
+
     if (Array.isArray(hoslist) && hoslist.length > 0) {
         this.hoslist = hoslist; // hoslist에 데이터를 할당
     } else {
@@ -709,8 +720,9 @@ addMarkers() {
     }
 },
      // 📌 셀렉트(구/동 선택) 기반 병원 정보 표시
-     showInfoWindowForSelect(marker, hospital) {
+     showInfoWindowForSelect(marker, hospital, userId) {
     console.log("showInfoWindowForSelect 호출됨", hospital);
+    console.log(this.userId);
 
     // 기존 infoWindow가 있으면 닫고 초기화
     if (this.infoWindow) {
@@ -734,30 +746,34 @@ addMarkers() {
     const addressLines = Math.ceil(hospital.hosAddress.length / 20); // 주소 길이에 따른 높이 증가
     const dynamicHeight = baseHeight + (addressLines * 18); // 한 줄당 약 18px씩 증가
 
-    // 📌 최종 HTML 조립
-    const content = 
-        "<div style='padding:10px; font-size:13px; width:" + dynamicWidth + "px; " +
+     // 값이 정상적으로 들어있는지 로그로 확인
+    
+     const content = 
+    "<div style='padding:10px; font-size:13px; width:" + dynamicWidth + "px; " +
     "min-height:" + dynamicHeight + "px; word-wrap:break-word; white-space:pre-line; " +
-    "max-width:100%; overflow: visible;'>" + // ← overflow 수정
+    "max-width:100%; overflow: visible;'>" + 
         "<strong>" + hospital.hosName + "</strong><br>" +
         "<div style='white-space:pre-line;'>" + 
             (hospital.hosAddress ? hospital.hosAddress : "주소 정보 없음") + 
         "</div>" +
-        phoneContent +  // ← 여기 포함됨 (이전 코드에서 수정) // 📌 수정된 phoneContent 적용
-            "<div style='display:flex; justify-content:space-between; margin-top:5px;'>" +
-                "<a href='https://map.kakao.com/link/to/" + hospital.hosName + "," + hospital.NY + "," + hospital.NX + 
-                "' target='_blank' style='flex:1; text-align:center; padding:5px; background:#007BFF; " +
-                "color:white; border-radius:5px; text-decoration:none; font-weight:bold; margin-right:5px;'>🗺 길찾기</a>" +
-                
-                "<button onclick='shareToKakao(\"" + hospital.hospitalNo + "\",\"" + hospital.hosName + "\", \"" + hospital.hosAddress + "\", \"" + hospital.phone  + "\")' " +
-                "style='flex:1; padding:5px; background:#FFEB00; border:none; " +
-                "border-radius:5px; font-weight:bold; cursor:pointer; margin-right:5px;'>📢 공유</button>" +
+        phoneContent + 
+        "<div style='display:flex; justify-content:space-between; margin-top:5px;'>" +
+            "<a href='https://map.kakao.com/link/to/" + hospital.hosName + "," + hospital.NY + "," + hospital.NX + 
+            "' target='_blank' style='flex:1; text-align:center; padding:5px; background:#007BFF; " +
+            "color:white; border-radius:5px; text-decoration:none; font-weight:bold; margin-right:5px;'>🗺 길찾기</a>" +
+            
+            "<button id='shareButton'" +
+            "style='flex:1; padding:5px; background:#FFEB00; border:none; " +
+            "border-radius:5px; font-weight:bold; cursor:pointer; margin-right:5px;'>📢 공유</button>" +
 
-                // ⭐ 즐겨찾기 버튼 추가
-                "<button onclick='fnfavorites(\"" + hospital.hospitalNo + "\", \"" + hospital.hosName + "\", \"" + hospital.hosAddress + "\", \"" + hospital.phone + "\")' " +
-                "style='padding:5px; background:none; border:none; font-size:20px; cursor:pointer;'>☆</button>" +
-            "</div>" +
-        "</div>";
+            // ⭐ 즐겨찾기 버튼 추가 (isFavorite 값에 따라 별 색깔 바꿈)
+            "<button id='favoritesButton'" +
+            "style='padding:5px; background:none; border:none; font-size:20px; cursor:pointer;'>" +
+            "<span id='favoriteStar'>" + (this.isFavorite ? '★' : '☆') + "</span>" +
+            "</button>" +
+        "</div>" +
+    "</div>";
+
 
     //console.log("최종 content HTML:", content); // 📌 최종 HTML 확인
 
@@ -768,9 +784,23 @@ addMarkers() {
     });
 
     this.infoWindow.open(this.map, marker);
-}
+    this.$nextTick(() => {
+    var self = this;  // self로 Vue 인스턴스 참조 저장
+    console.log("병원 정보: ", hospital ? hospital : "병원 정보 없음", self.sessionId);
+    // '공유' 버튼에 이벤트 리스너 추가
+    document.getElementById("shareButton").addEventListener("click", () => {
+        self.shareToKakao(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, hospital.phone);            
+    });
 
-,
+    // '즐겨찾기' 버튼에 이벤트 리스너 추가
+    document.getElementById("favoritesButton").addEventListener("click", () => {
+        self.fnfavorites(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, self.sessionId);
+    });
+});
+
+   
+    // 📌 최종 HTML 조립
+     },
         clearMarkers() {
             this.markers.forEach(marker => marker.setMap(null));
             this.markers = [];
@@ -848,7 +878,101 @@ addMarkers() {
                     self.page--;
                 }
                 self.fnMemberList();
+            },
+            //select 공유기능
+            shareToKakao(hospitalNo,hosName,hosAddress) {
+         console.log(hospitalNo);
+     if (!Kakao.isInitialized()) {
+         alert("카카오 SDK가 초기화되지 않았습니다!");
+         return;
+     }
+ 
+     Kakao.Link.sendDefault({
+         objectType: "text",
+         text: "📍 병원이름: " + hosName + "\n🏠 주소: " + hosAddress + "\n🚑 병원 정보를 공유합니다!",
+         link: {
+             mobileWebUrl: "https://m.search.naver.com/search.naver?query="+hosName,
+             webUrl: "https://search.naver.com/search.naver?query="+hosName
+         }
+     });
+ },
+       fnfavorites(hospitalNo, hosName, hosAddress, userId) {
+    if (!this.sessionId) {  // 로그인 안 되어있으면 알림
+        alert("로그인이 필요합니다! 😊");
+        return;
+    }
+    console.log("hospitalNo:", hospitalNo);
+    console.log("hosName:", hosName);
+    console.log("hosAddress:", hosAddress);
+    console.log("userId:", userId);
+
+    var self = this;
+    var nparmap = {
+        hospitalNo: hospitalNo,
+        hosName: hosName,
+        hosAddress: hosAddress,
+        userId: userId,
+    };
+
+    $.ajax({
+        url: "/favorites/add.dox",
+        dataType: "json",	
+        type: "POST", 
+        data: nparmap,
+        success: function(data) { 
+            console.log(data);
+            if (data.result === 'duplicate') {
+                alert("이미 즐겨찾기에 추가된 병원입니다.");
             }
+            else if (data.result == "success") {
+                self.isFavorite = !self.isFavorite; // 즐겨찾기 상태 토글
+                if (self.isFavorite) {
+                    alert(self.hosName + " 즐겨찾기에 추가되었습니다.");
+                } else {
+                    alert(self.hosName + " 즐겨찾기에서 해제되었습니다.");
+                }
+            }
+            console.log("서버로 전송되는 데이터:", nparmap);
+        }
+    });
+},
+fnRemoveFavorite(hospitalNo, hosName, hosAddress, userId) {
+    if (!this.sessionId) {  // 로그인 안 되어있으면 알림
+        alert("로그인이 필요합니다! 😊");
+        return;
+    }
+
+    var self = this;
+    var nparmap = {
+        hospitalNo: hospitalNo,
+        hosName: hosName,
+        hosAddress: hosAddress,
+        userId: userId,
+    };
+
+    $.ajax({
+        url: "/favorites/remove.dox",  // 즐겨찾기 해제 요청
+        dataType: "json",
+        type: "POST",
+        data: nparmap,
+        success: function(data) {
+            if (data.result == "success") {
+                alert(hosName + " 즐겨찾기에서 해제되었습니다.");
+
+                // localStorage에서 해당 병원의 즐겨찾기 상태를 false로 설정
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+                favorites[hospitalNo] = false;
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+
+                // 별 색깔 업데이트
+                const favoriteStar = document.getElementById("favoriteStar-" + hospitalNo);
+                if (favoriteStar) {
+                    favoriteStar.innerHTML = '☆';  // 즐겨찾기 해제 시 별 색 변경
+                }
+            }
+        }
+    });
+}
         
     },
 
@@ -863,23 +987,7 @@ app.mount('#app');
 
 
 
-//select 공유기능
-function shareToKakao(hospitalNo,hosName,hosAddress) {
-        console.log(hospitalNo);
-    if (!Kakao.isInitialized()) {
-        alert("카카오 SDK가 초기화되지 않았습니다!");
-        return;
-    }
 
-    Kakao.Link.sendDefault({
-        objectType: "text",
-        text: "📍 병원이름: " + hosName + "\n🏠 주소: " + hosAddress + "\n🚑 병원 정보를 공유합니다!",
-        link: {
-            mobileWebUrl: "https://m.search.naver.com/search.naver?query="+hosName,
-            webUrl: "https://search.naver.com/search.naver?query="+hosName
-        }
-    });
-}
 //검색 공유기능
 function shareToKakao1(place_name,address_name) {
         
@@ -899,31 +1007,15 @@ function shareToKakao1(place_name,address_name) {
 }
 
 //즐겨찾기 추가
-function fnfavorites(hospitalNo,hosName,hosAddress,userId) {
-    console.log("hospitalNo:", hospitalNo);
-    console.log("hosName:", hosName);
-    console.log("hosAddress:", hosAddress);
-    //console.log("phone:", phone);
-            var self = this;
-				var nparmap = {
-                    hospitalNo : hospitalNo,
-					hosName : hosName,
-                    hosAddress : hosAddress,
-                    userId : userId,
-				};
-				$.ajax({
-					url:"/favorites/add.dox",
-					dataType:"json",	
-					type : "POST", 
-					data : nparmap,
-					success : function(data) { 
-                     
-						console.log(data);
-                        if(data.result == "success") {
-                            alert(hosName  + "즐겨찾기에 추가되었습니다.");
-                            
-                        }
-                    }
-                });
-        }
+
+
+//         function checkAndAddToFavorites(hospitalNo, hosName, hosAddress, phone, userId) {
+//     console.log("현재 로그인한 사용자 ID:", userId); // 콘솔에서 userId 확인
+    
+//     if (!userId) {  // 로그인 안 되어있으면 알림
+//         alert("로그인이 필요합니다! 😊");
+//         return;
+//     }
+//     fnfavorites(hospitalNo, hosName, hosAddress, phone, userId);
+// }
 </script>
