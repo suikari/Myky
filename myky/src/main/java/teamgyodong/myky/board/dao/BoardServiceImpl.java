@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.board.mapper.BoardMapper;
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.boardFile;
@@ -20,6 +21,9 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	BoardMapper boardMapper;
 	
+	@Autowired // 세션용(중요! 유저 로그인 관련!)
+	HttpSession session;
+	
 	@Override
 	//게시글 목록 출력
 	public HashMap<String, Object> getBoardList(HashMap<String, Object> map) {
@@ -32,7 +36,9 @@ public class BoardServiceImpl implements BoardService {
 			System.out.println("keyword: " + map.get("keyword"));
 			
 			List<board> board = boardMapper.selectBoardList(map);			
+						
 			int count = boardMapper.selectBoardCnt(map);
+			
 			Map<String, Object> countMap = new HashMap<>();
 			countMap.put("cnt", count);
 
@@ -61,7 +67,17 @@ public class BoardServiceImpl implements BoardService {
 		
 		if(map.get("option").equals("View")) {
 
-			boardMapper.updateCnt(map);
+		    String boardId = (String) map.get("boardId");
+		    String category = (String) map.get("category");
+
+		    // 1. 세션 기반 조회수 중복 방지 처리
+		    String sessionKey = "viewedBoard_" + boardId;
+
+		    if (session.getAttribute(sessionKey) == null) {
+		        boardMapper.updateCnt(map); // 조회수 1 증가
+		        session.setAttribute(sessionKey, true); // 세션에 기록
+		    }
+		    
 		}
 		
 	    List<comment> cmtList = boardMapper.selectCmtList(map);
