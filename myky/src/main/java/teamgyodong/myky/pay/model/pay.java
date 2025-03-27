@@ -19,7 +19,7 @@ public class pay {
 	private String donationId;
 	private String userId;
 	
-	
+	// product
 	private String productName;
 	private String categoryId;
 	private int price ;
@@ -29,6 +29,7 @@ public class pay {
 	private String productType;
 	private String productCode;
 	
+	// users
 	private String userName;
 	private String address;
 	private String password;
@@ -38,5 +39,12 @@ public class pay {
 	private String phoneNumber;
 	private String birthDate;
 	private String role;
+
+	// point
+	private String pointId;
+	private String usageDate;
+	private String usePoint;
+	private String currentPoint;
+	private String remarks;
 	
 }

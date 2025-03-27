@@ -21,16 +21,18 @@
 	<insert id="insertHistory" parameterType="hashmap" useGeneratedKeys="true" keyColumn="donation_Id" keyProperty="donationId">
 		
 		insert into donation_history
-		values (donation_history_seq.nextval,#{centerId},#{amount},sysdate,#{message},#{userId})
+		values (donation_history_seq.nextval,#{centerId},#{amount},sysdate,#{message},#{userId},#{anonymousYn})
 		
 	</insert>
 	
 	<select id="selectDonationInfo" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
 		
-		select d.* , c.center_name from donation_history d
+		select d.* , c.center_name, u.nickname from donation_history d
 		left join donation_center c on d.center_id = c.center_id
+		join users u on d.user_id = u.user_id
 		
 	</select>
+	
 </mapper>
 
 

@@ -63,10 +63,10 @@
         </h4>
         <p>(30,000원 이상 무료배송)</p>
         <h2 v-if="totalPrice < 30000">
-            <span>총 결제 금액: {{ totalShippingPrice }} 원</span>
+            <span>총 결제 금액: {{ formattedFinTotalShippingPrice }} 원</span>
         </h2>
         <h2 v-else>
-            <span>총 결제 금액: {{ totalPrice }} 원</span>
+            <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
         </h2>
         <button class="orderBtn" @click="orderItems">주문하기</button>
     </div>
@@ -94,7 +94,13 @@
                 },
                 totalShippingPrice() {
                     return (this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
-                }
+                },
+                formattedTotalPrice() {
+                    return this.totalPrice.toLocaleString();
+                },
+                formattedFinTotalShippingPrice() {
+                    return this.totalShippingPrice.toLocaleString();
+                },
             },
             methods: {
                 fnUserInfo(){

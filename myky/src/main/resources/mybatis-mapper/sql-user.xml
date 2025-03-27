@@ -9,6 +9,14 @@
 		WHERE USER_ID = #{userId}
 	</select>
 	
+	<update id="updateLastLogin" parameterType="hashmap">
+		UPDATE USERS
+		SET
+		LAST_LOGIN = SYSDATE
+		WHERE USER_ID = #{userId}
+	</update>
+	
+	
 	<update id="updatePwd" parameterType="hashmap">
 		  UPDATE USERS
 			SET
@@ -29,15 +37,6 @@
 		</if>
 	</select>
 	
-<!--		<if test="searchOption != null and searchOption =='all'">
-		AND (TITLE LIKE '%' ||#{keyword}||'%'
-		OR USERNAME LIKE '%' ||#{keyword}||'%')
-	</if>
-	<if test="searchOption != null and searchOption =='title'">
-		AND TITLE LIKE '%' ||#{keyword}||'%'
-	</if>-->
-	
-	
 	<select id="selectNick" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
 		SELECT *
 		FROM USERS
@@ -45,8 +44,8 @@
 	</select>
 	
 	<insert id="insertUser" parameterType="hashmap" >
-		INSERT INTO USERS(USER_ID,USERNAME,PASSWORD,NICKNAME,EMAIL,PHONE_NUMBER,BIRTH_DATE,ADDRESS,CREATED_AT,ROLE,GENDER,AGREE_YN,EMAIL_YN,PHONE_YN) 
-		VALUES (#{userId},#{userName},#{pwd},#{nickName},#{email},#{phoneNumber},#{birthDate},#{address},SYSDATE,'USER',#{gender},'Y',#{emailYn},#{phoneYn})   
+		INSERT INTO USERS(USER_ID,USERNAME,PASSWORD,NICKNAME,EMAIL,PHONE_NUMBER,BIRTH_DATE,ADDRESS,CREATED_AT,ROLE,GENDER,AGREE_YN,EMAIL_YN,PHONE_YN,DELETE_YN) 
+		VALUES (#{userId},#{userName},#{pwd},#{nickName},#{email},#{phoneNumber},#{birthDate},#{address},SYSDATE,'USER',#{gender},'Y',#{emailYn},#{phoneYn},'N')   
 	</insert>
 	
 	<update id="updateInfo" parameterType="hashmap" >
@@ -60,9 +59,19 @@
 		GENDER = #{gender},
 		EMAIL_YN = #{emailYn},
 		PHONE_YN = #{phoneYn},
-		BIRTH_DATE = #{birthDate}
+		BIRTH_DATE = #{birthDate},
+		UPDATED_AT = SYSDATE
 		WHERE USER_ID = #{userId}
 	</update>
+	
+		<update id="updateWithdraw" parameterType="hashmap" >
+			UPDATE USERS
+			SET
+			DELETE_AT = SYSDATE,
+			DELETE_YN ='Y'
+			WHERE USER_ID = #{userId}
+	</update>
+	
 	
 	
 </mapper>

@@ -43,6 +43,20 @@
 		where  cart_item_id = #{cartItemId}
 	
 	</delete>
+
+	<delete id="deleteCart" parameterType="hashmap">
+	
+		delete cart
+		where  cart_id = #{cartId}
+	
+	</delete>
+
+	<delete id="deleteCartItem" parameterType="hashmap">
+	
+		delete cart_item
+		where  cart_id = #{cartId}
+	
+	</delete>
 	
 	<insert id="insertCartProduct" parameterType="hashmap">
 	
@@ -67,6 +81,7 @@
 
 	<insert id="insertCartOrderDetail" parameterType="hashmap">
 		INSERT ALL 
+		
 		<foreach collection="orderDetails" item="order" separator=" " >
 		into order_details (order_detail_id, product_id, quantity, price, order_id)
 		values

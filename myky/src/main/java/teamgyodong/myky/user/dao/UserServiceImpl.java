@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.user.mapper.UserMapper;
@@ -23,12 +24,22 @@ public class UserServiceImpl implements UserService {
 	@Autowired // 비빌번호 암호화 // 사용 예정
 	PasswordEncoder passwordEncoder;
 
+	@Transactional //쿼리문 2개 실행하기
 	public HashMap<String, Object> userLogin(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		User user = userMapper.getUser(map); // 단일객체로 받음
 		
+	    if (user != null && "Y".equals(user.getDeleteYn())) {
+	        System.out.println("실패");
+	        resultMap.put("reason", "삭제된 아이디 접속 시도");
+	        resultMap.put("result", "fail");
+	        return resultMap;
+	    }
+
 		boolean loginFlg = false; // 해쉬화된 비밀번호 실행// if에서 국한되지 않게 loginFlg를 밖으로 뺴서 선언하자
+		
+		
 		if(user != null) {
 //			// 해쉬화된 비밀번호를 실행
 			loginFlg = passwordEncoder.matches((String)map.get("pwd"), user.getPassword());
@@ -44,6 +55,8 @@ public class UserServiceImpl implements UserService {
 			//session.invalidate(); //모든 세션 정보 삭제
 			//session.removeAttribute("sessionId"); //1개씩 삭제할 떄
 			
+            // 5. 로그인 시간 업데이트 (트랜잭션 내 실행)
+            userMapper.updateLastLogin(user.getUserId());
 			
 			resultMap.put("user", user);
 			resultMap.put("result", "success");
@@ -115,4 +128,36 @@ public class UserServiceImpl implements UserService {
 		resultMap.put("count", count); // 결과 값
 		return resultMap;
 	}
+	
+
+		public HashMap<String, Object> authIdPwd(HashMap<String, Object> map) {
+			// TODO Auto-generated method stub
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			User user = userMapper.getUser(map); // 단일객체로 받음
+			
+			boolean loginFlg = false; // 해쉬화된 비밀번호 실행// if에서 국한되지 않게 loginFlg를 밖으로 뺴서 선언하자
+			if(user != null) {
+//				// 해쉬화된 비밀번호를 실행
+				loginFlg = passwordEncoder.matches((String)map.get("pwd"), user.getPassword());
+			}		
+			if(loginFlg) { //해시용
+				System.out.println("성공");			
+				resultMap.put("result", "success");
+			}else {
+				System.out.println("실패");
+				resultMap.put("result", "fail");
+			}
+			return resultMap;
+		}
+		
+		public HashMap<String, Object> userWithdraw(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			int count = userMapper.updateWithdraw(map);
+			if(count>0) {
+				session.invalidate(); //모든 세션 정보 삭제
+			}
+			resultMap.put("count", count);
+			return resultMap;
+		}
+	
 }

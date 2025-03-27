@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import teamgyodong.myky.donation.mapper.DonationMapper;
 import teamgyodong.myky.donation.model.donation;
+import teamgyodong.myky.membership.mapper.MembershipMapper;
 
 
 @Service
@@ -24,6 +25,9 @@ public class DonationServiceImpl implements DonationService {
 
 	@Autowired
 	DonationMapper donationMapper;
+
+	@Autowired
+	MembershipMapper membershipMapper;
 	
 	@Override
 	public HashMap<String, Object> getCenterList(HashMap<String, Object> map) {
@@ -64,7 +68,11 @@ public class DonationServiceImpl implements DonationService {
 		
 		try {
 			donationMapper.insertHistory(map);
-
+			
+			if(map.get("option").equals("membership")) {
+				membershipMapper.updateDonationYn(map);
+			}
+			
 			resultMap.put("donationId", map.get("donationId"));
 			resultMap.put("result", "success");
 		}catch(Exception e) {

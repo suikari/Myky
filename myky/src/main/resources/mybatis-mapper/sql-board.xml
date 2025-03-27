@@ -63,6 +63,7 @@
 		) U ON F.USER_ID = U.USER_ID
 		WHERE F.BOARD_ID = #{boardId} AND NVL(F.PARENT_COMMENT_ID,0) = 0 ORDER BY F.comment_id ASC
 	</select>
+	
 	<select id="selectParentCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
 		SELECT F.*, U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD_COMMENT F

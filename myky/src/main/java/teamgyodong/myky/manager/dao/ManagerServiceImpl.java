@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import teamgyodong.myky.Main.mapper.MainMapper;
 import teamgyodong.myky.manager.mapper.ManagerMapper;
 import teamgyodong.myky.manager.model.Visit;
+import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
@@ -92,4 +93,48 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> deleteBoardList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.deleteBoardList(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
+	@Override
+	public HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mComment> mComment = managerMapper.selectAllCmtList(map);
+
+			
+
+		
+			resultMap.put("Comment", mComment);
+			resultMap.put("result", "success");
+			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
 }

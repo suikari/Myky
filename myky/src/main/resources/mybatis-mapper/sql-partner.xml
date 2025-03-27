@@ -39,9 +39,12 @@ SELECT DISTINCT
     h.PHONE,
     A.GU, 
     h.NX, 
-    h.NY
+    h.NY,
+    F.*
 FROM 
     Animal_Hospital_Info h
+LEFT JOIN FAVORITES F 
+ON H.HOSPITAL_NO = F.HOSPITAL_NO AND F.USER_ID = #{userId}
 JOIN 
     AREA A
 ON 
@@ -58,10 +61,27 @@ WHERE
 <select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		SELECT DISTINCT PARTNER_DETAIL_ID, NAME,PHONE_NUMBER, ADDRESS, NX, NY,RESERVATION_URL, OPENING_HOURS,REGULAR_HOLIDAY 
 		FROM PARTNER_DETAIL
-	
 
-	</select>
+</select>
 
+<select id="getfavoriteList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		SELECT A.* ,F.*
+		FROM FAVORITES F
+		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+		WHERE F.USER_ID = #{userId}
+
+</select>
+
+<insert id="addfavorites" parameterType="hashmap"  useGeneratedKeys="true" keyColumn="HOSPITAL_NO" keyProperty="hospitalNo">
+	INSERT INTO FAVORITES (FAVORITE_ID,HOSPITAL_NO,USER_ID)
+	VALUES (FAVORITES_SEQ.NEXTVAL,#{hospitalNo},#{userId})
+</insert>
+
+<delete id="favoritesDelete" parameterType="hashmap">
+	DELETE FROM FAVORITES
+	WHERE HOSPITAL_NO = #{hospitalNo}
+
+</delete>
 </mapper>
 
 

@@ -168,8 +168,8 @@
 				return {
 					userId: "",
 					pwd: "",
-					location: "${location}"
-
+					location: "${location}",
+					reUrl : "",
 				};
 			},
 			methods: {
@@ -188,7 +188,7 @@
 							console.log(self);
 							if (data.result == "success") {
 								alert(data.user.userName + "님 환영해여!") //service에서 user로 정의 했으니 멤버로..
-								location.href = "/main.do";
+								location.href = self.reUrl;
 							} else {
 								alert("아이디/패스워드 확인하세요.")
 							}
@@ -214,6 +214,8 @@
 			},
 			mounted() {
 				var self = this;
+				const params = new URLSearchParams(window.location.search);
+				self.reUrl = params.get("redirect") || "/main.do";
 			}
 		});
 		app.mount('#app');
