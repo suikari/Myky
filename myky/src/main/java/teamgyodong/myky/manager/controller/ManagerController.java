@@ -1,31 +1,26 @@
 package teamgyodong.myky.manager.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.http.*;
 
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.LinkedMultiValueMap;
 
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import teamgyodong.myky.Main.dao.MainService;
 import teamgyodong.myky.manager.dao.ManagerService;
 
 
@@ -63,7 +58,15 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
     
-	
+	// centerList
+	@RequestMapping(value = "/admin/cmtList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String cmtList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectAllCmtList(map);
+		return new Gson().toJson(resultMap);
+	}
     
 	// centerList
 	@RequestMapping(value = "/admin/LogList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -75,4 +78,20 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
     
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/remove-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String json = map.get("selectList").toString(); 
+		ObjectMapper mapper = new ObjectMapper();
+		List<Object> list = mapper.readValue(json, new TypeReference<List<Object>>(){});
+		map.put("list", list);
+		System.out.println(list);
+		
+		resultMap = managerService.deleteBoardList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
 }

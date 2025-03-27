@@ -81,6 +81,7 @@
 
 	<insert id="insertCartOrderDetail" parameterType="hashmap">
 		INSERT ALL 
+		
 		<foreach collection="orderDetails" item="order" separator=" " >
 		into order_details (order_detail_id, product_id, quantity, price, order_id)
 		values
