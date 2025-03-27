@@ -8,5 +8,6 @@ public class boardLikeLog {
 	private String boardId;
 	private String userId;
 	private String status;
+	private String nickName;
 
 }

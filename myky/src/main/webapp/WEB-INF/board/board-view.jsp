@@ -271,8 +271,9 @@
             <div class="view-box">
             <a style="font-size:20px">{{info.title}}</a>
                 <!-- 날짜 표시 여기 넣기 -->
+                <div style="color: #fca311;">작성자: {{info.nickName}}</div>
                 <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
-                    작성일: {{ info.updatedTime }}
+                    작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
                 </div>
             </div>
             
@@ -330,7 +331,7 @@
                               
                               <!-- 수정 중인 경우 -->
                               <div v-if="editCommentId == item.commentId">
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.userId }}</div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
                                 <input v-model="editContent" class="cmtInput" />
                           
                                 <div style="display: flex; gap: 5px;">
@@ -342,10 +343,19 @@
                               <!-- 일반 댓글 보기 -->
                               <div v-else>
                                 <!-- 유저 아이디 -->
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.userId }}</div>
+                                 <template v-if="item.isDeleted == 'Y'">
+                                    <div style="font-weight: bold; margin-bottom: 3px;"></div>
                           
-                                <!-- 댓글 내용 -->
-                                <div style="margin-bottom: 5px;">{{ item.content }}</div>
+                                    <!-- 댓글 내용 -->
+                                    <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
+                                 </template>
+                                 <template v-else>
+                                    <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
+                          
+                                    <!-- 댓글 내용 -->
+                                    <div style="margin-bottom: 5px;">{{ item.content }}</div>
+                                 </template>
+
                           
                                 <!-- 날짜 / 버튼들 -->
                                 <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
@@ -356,8 +366,10 @@
                           
                                   <!-- 수정/삭제 -->
                                   <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
+                                      <template v-if="isDeleted == 'N'">
                                     <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
-                                    <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                        <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                    </template>
                                   </template>
                                 </div>
                               </div>
@@ -374,14 +386,14 @@
                             <!-- 대댓글 반복 -->
                             <div v-for="reply in item.replies || []" :key="reply.commentId" style="margin-left: 30px;">
                               <div v-if="editCommentId === reply.commentId">
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.userId }}</div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                 <input v-model="editContent"/>
                                 <button class="cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
                                 <button class="cmtButton2" @click="editCommentId = ''">취소</button>
                               </div>
                           
                               <div v-else>
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.userId }}</div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                 <div style="margin-bottom: 5px;">{{ reply.content }}</div>
                                 <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
                                   <span>{{ reply.updatedTime }}</span>
@@ -440,6 +452,7 @@
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
                         userId : {},
+                        nickName : "",
                         content : "",
                         commentId : "",
                         cmtList: [],
@@ -508,7 +521,6 @@
                                 self.info = data.info
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
-
 				        	}
 				        });
                         self.fnlikestatus();
@@ -564,6 +576,12 @@
                             boardId: self.boardId,
                             category: self.category,
                         };
+
+                        if (!confirm("정말 삭제하시겠습니까?")) {
+                           alert("취소되었습니다.");
+                           return;
+                        } 
+                        
                         $.ajax({
                             url: "/board/remove.dox",
                             dataType: "json",
@@ -613,6 +631,10 @@
                         var nparmap = {
                             commentId: commentId
                         };
+                        if (!confirm("정말 삭제하시겠습니까?")) {
+                           alert("취소되었습니다.");
+                           return;
+                        } 
                         $.ajax({
                             url: "/board/CommentRemove.dox",
                             dataType: "json",
@@ -665,7 +687,7 @@
                             type: "POST",
                             data: nparmap,
                             success: function () {
-                                alert("답글이 등록되었습니다!");
+                                alert("등록되었습니다");
                                 self.replyContent = "";
                                 self.replyFormId = "";
                                 self.fnView(); // 다시 댓글 전체 불러오기
