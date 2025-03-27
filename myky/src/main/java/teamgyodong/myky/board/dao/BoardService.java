@@ -31,7 +31,15 @@ public interface BoardService {
 
 	void insertReply(Map<String, Object> map);
 
-//	HashMap<String, Object> toggleLike(HashMap<String, Object> map);
+	HashMap<String, Object> selectLikeButton(HashMap<String, Object> map);
+
+	HashMap<String, Object>  addlikeCnt(HashMap<String, Object> map);
+
+	HashMap<String, Object> RemoveCnt(HashMap<String, Object> map);
+
+	HashMap<String, Object> addlikeCntBoard(HashMap<String, Object> map);
+
+
 
 
 
