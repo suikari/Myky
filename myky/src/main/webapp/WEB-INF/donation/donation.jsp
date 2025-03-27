@@ -187,13 +187,14 @@
                                 <th>후원항목</th>
                                 <td>
                                     <span>일시후원</span>
-                                    <span>
-                                        <button v-if="!isMembership" @click="goToMembershipPage" class="membershipDonationBtn">
-                                            멤버십 후원
-                                        </button>
-                                        <button v-if="isMembership" :class="{'selected': isMembershipDonation}" @click="toggleMembershipDonation">
-                                            일반 후원
-                                        </button>
+                                    <span v-if="isMembership">
+                                         :: 
+                                        <label>
+                                            <input type="radio" v-model="isMembershipDonation" :value="true" @change="checkMembershipDonation"> 멤버십 후원
+                                        </label>
+                                        <label>
+                                            <input type="radio" v-model="isMembershipDonation" :value="false" > 일반 후원
+                                        </label>
                                     </span>
                                 </td>
                             </tr>
@@ -222,7 +223,7 @@
                             </tr>
                             <tr>
                                 <th>후원금액</th>
-                                <td v-if="!isMembership">
+                                <td v-if="!isMembershipDonation">
                                     <div class="donateAmountContainer">
                                         <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 100}" @click="selectAmount(100)">10,000원</button>
                                         <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 300}" @click="selectAmount(300)">30,000원</button>
@@ -382,8 +383,6 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    isMember: true,
-                    // 멤버십 가입 여부 가져와야함
                     sessionId: "${sessionId}",
                     info: {},
                     centerId: "${map.centerId}",
@@ -391,10 +390,12 @@
                     donateMessage: "",
                     customAmount: null,
                     userInfo: {},
+                    membership:{},
                     donationId: null,
                     showTerms: false,
                     showPrivacyPolicy: false,
                     isMembership: false,
+                    isMembershipDonation: false,
                     isAnonymous: false
                 };
             },
@@ -434,25 +435,41 @@
                         success: function (data) {
                             console.log("userInfo >>> ", data.user);
                             self.userInfo = data.user;
+                            self.fnMembership();
 
-
+                        }
+                    });
+                },
+                fnMembership:function(){
+                    var self = this;
+                    var nparmap = {
+                        userId: self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/membership/info.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("membership >>> ", data.info);
+                            if(data.result == "success"){
+                                self.membership = data.info;
+                                self.isMembership = true;
+                            } 
                         }
                     });
                 },
                 toggleAnonymous() {
                     this.isAnonymous = !this.isAnonymous;
                 },
-                toggleMembershipDonation() {
-                    // if(this.userInfo.donationYn === 'N'){
-                    //     this.isMembershipDonation = !this.isMembershipDonation;
-                    // } else {
-                    //     alert("이번달은 이미 멤버십 후원 기능을 이용하셨습니다. \n후원자님의 따듯한 마음에 감사드립니다.");
-                    //     return;
-                    // }
-                },
-                goToMembershipPage() {
-                    alert("멤버십에 가입해 주세요.");
-                    window.location.href = "/membership/signup";
+                checkMembershipDonation() {
+                    if(this.membership.donationYn === 'Y'){
+                        alert("이번달은 이미 멤버십 후원 기능을 이용하셨습니다. \n후원자님의 따듯한 마음에 감사드립니다.");
+                        
+                        setTimeout(() => {
+                            this.isMembershipDonation = false;
+                        }, 0);
+                    }
                 },
                 toggleTerms() {
                     this.showTerms = !this.showTerms;
@@ -464,13 +481,9 @@
                     this.donateAmount = amount;
                     this.customAmount = "";
                 },
-                selectMembershipDonation() {
-                    this.isMembershipDonation = true;
-                },
                 clearSelection() {
                     this.donateAmount = null;
                 },
-
                 formatCustomAmount() {
                     let rawValue = this.customAmount.replace(/[^0-9]/g, "");
 
@@ -506,34 +519,48 @@
                     
                     console.log("amount >>> ", amount);
 
-                    let anonymousYn = self.isAnonymous ? 'Y' : 'N';
-
-                    // 결제 진행
-
-                    if (typeof IMP === 'undefined') {
-                        console.error('IMP is not initialized');
+                    let anonymousYn = self.isAnonymous ? "Y" : "N";
+                    
+                    if(self.isMembershipDonation){
+                        let donation = {
+                            centerId: self.centerId,
+                            amount: 10000,
+                            message: self.donateMessage,
+                            userId: self.userInfo.userId,
+                            anonymousYn: anonymousYn,
+                            donationYn:"Y",
+                            option:"membership"
+                        };
+                        self.fnMembershipDonation(donation);
                         return;
-                    }
-
-                    IMP.request_pay({
-                        channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
-                        pg: "html5_inicis",
-                        pay_method: "card",
-                        merchant_uid: "merchant_" + new Date().getTime(),
-                        name: self.info.centerName + " 후원 결제",
-                        amount: amount,
-                        buyer_tel: self.userInfo.phoneNumber,
-                    }, function (rsp) {
-                        if (rsp.success) {
-                            alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
-                            self.fnDonation(rsp, amount, anonymousYn);
-                            // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
-                            console.log("결제 정보 >>> ", rsp);
-                        } else {
-                            alert("결제에 실패했습니다.");
-                            console.log("결제 정보 >>> ", rsp.error_msg);
+                    } else {
+                        // 결제 진행
+    
+                        if (typeof IMP === 'undefined') {
+                            console.error('IMP is not initialized');
+                            return;
                         }
-                    });
+    
+                        IMP.request_pay({
+                            channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
+                            pg: "html5_inicis",
+                            pay_method: "card",
+                            merchant_uid: "merchant_" + new Date().getTime(),
+                            name: self.info.centerName + " 후원 결제",
+                            amount: amount,
+                            buyer_tel: self.userInfo.phoneNumber,
+                        }, function (rsp) {
+                            if (rsp.success) {
+                                alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
+                                self.fnDonation(rsp, amount, anonymousYn);
+                                // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
+                                console.log("결제 정보 >>> ", rsp);
+                            } else {
+                                alert("결제에 실패했습니다.");
+                                console.log("결제 정보 >>> ", rsp.error_msg);
+                            }
+                        });
+                    }
                 },
                 fnPaymentHistory: function (rsp) {
                     let self = this;
@@ -594,6 +621,20 @@
                             // DB 저장 후 후원ID 가져오기
                             self.fnPaymentHistory(rsp);
 
+                        }
+                    });
+                },
+                fnMembershipDonation: function (donation) {
+                    var self = this;
+                    var nparmap = donation;
+                    $.ajax({
+                        url: "/center/donate.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("후원 정보 저장 여부 >>> ", data.result);
+                            alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
                         }
                     });
                 }
