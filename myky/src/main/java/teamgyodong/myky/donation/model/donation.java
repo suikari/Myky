@@ -17,4 +17,5 @@ public class donation {
 	private String donationDate;
 	private String message;
 	private String userId;
+	private String anonymousYn;
 }

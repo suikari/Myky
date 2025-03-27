@@ -14,6 +14,10 @@ public interface PayMapper {
 
 	List<pay> selectPayment(HashMap<String, Object> map);
 
+	pay selectCurrentPoint(HashMap<String, Object> map);
+
+	pay insertUsedPoint(HashMap<String, Object> map);
+
 	
 	
 }

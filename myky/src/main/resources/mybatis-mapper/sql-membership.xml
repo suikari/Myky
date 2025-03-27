@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="teamgyodong.myky.membership.mapper.MembershipMapper">
+	
+	<select id="selectMembershipInfo" parameterType="hashmap" resultType="teamgyodong.myky.membership.model.Membership">
+		
+		select * from membership
+		where user_id = #{userId}
+		
+	</select>
+	
+	<update id="updateDonationYn" parameterType="hashmap">
+	
+		update membership
+		set
+			donation_yn = #{donationYn}
+		where user_id = #{userId}
+	
+	</update>
+
+</mapper>
+
+
+
+

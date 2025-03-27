@@ -123,14 +123,6 @@ public class CartServiceImpl implements CartService {
 	            // 주문 정보 삽입
 	            cartMapper.insertCartOrder(map);
 	            
-
-	    		//List<HashMap<String, Object>> detailMap = new ArrayList<>();
-
-	    		
-	    		//detailMap.add((HashMap<String, Object>) map.get("orderDetails"));
-	            System.out.println("그럼살어="+  map.get("orderDetails"));
-	            System.out.println("그럼살어="+  map.get("option"));
-
 	            cartMapper.insertCartOrderDetail(map);
 	            
 	        }
@@ -139,6 +131,21 @@ public class CartServiceImpl implements CartService {
 			System.out.println("오류 발생: " + e.getMessage());
             resultMap.put("result", "fail");
             throw new RuntimeException(e); // 트랜잭션 롤백을 위해 예외 발생			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> removeCart(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			cartMapper.deleteCart(map);
+			cartMapper.deleteCartItem(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
 		}
 		return resultMap;
 	}

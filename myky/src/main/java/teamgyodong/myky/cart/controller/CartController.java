@@ -43,6 +43,12 @@ public class CartController {
 		
 		return "cart/order";
 	}
+
+	@RequestMapping("/cart/orderComplete.do") 
+	public String orderComplete(Model model) throws Exception{
+		
+		return "cart/orderComplete";
+	}
 	
 	// cartList
 	@RequestMapping(value = "/cart/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -71,6 +77,16 @@ public class CartController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = cartService.removeCartProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// cart 비우기 (결제 후 전체삭제)
+	@RequestMapping(value = "/cart/removeCart.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeCart(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.removeCart(map);
 		return new Gson().toJson(resultMap);
 	}
 

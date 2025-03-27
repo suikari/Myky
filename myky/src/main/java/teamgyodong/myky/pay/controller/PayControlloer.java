@@ -38,4 +38,23 @@ public class PayControlloer {
 		return new Gson().toJson(resultMap);
 	}
 	
+	// point 조회
+	@RequestMapping(value = "/point/current.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String currentPoint(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = payService.getCurrentPoint(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// point 수정 - 적립 및 사용
+	@RequestMapping(value = "/point/used.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String usedPoint(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = payService.addUsedPoint(map);
+		return new Gson().toJson(resultMap);
+	}
 }

@@ -31,4 +31,8 @@ public interface CartMapper {
 
 	void insertCartOrderDetail(Map<String, Object> detail);
 
+	void deleteCart(HashMap<String, Object> map);
+
+	void deleteCartItem(HashMap<String, Object> map);
+
 }
