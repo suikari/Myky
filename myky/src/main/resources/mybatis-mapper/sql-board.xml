@@ -25,6 +25,7 @@
 		        AND F.USER_ID LIKE '%' || #{keyword} || '%'
 		    </if>
 		    AND CATEGORY= #{category}
+		    AND IS_DELETED = 'N'
 		ORDER BY 
 		    F.BOARD_ID DESC
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -45,6 +46,8 @@
 				AND (TITLE LIKE '%' || #{keyword} || '%' OR USER_ID LIKE '%' || #{keyword} || '%')
 			</when>
 		</choose>
+			AND CATEGORY= #{category}
+		    AND IS_DELETED = 'N'
 	</select>
 	
 	<select id="selectCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
@@ -134,13 +137,35 @@
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{parentCommentId}, #{content}, SYSDATE, SYSDATE, 'N')
 	</insert>
 	
-	<select id="getUserLikeStatus" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardLikeLog">
-	    SELECT status
-	    FROM FREE_BOARD_LIKE_LOG
-	    WHERE board_id = #{boardId} AND user_id = #{userId}
+	<!-- Like Button-->
+	<select id="selectLike" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardLikeLog" >
+		SELECT *
+		FROM FREE_BOARD_LIKE_LOG
+		WHERE USER_ID = #{userId}
+		  AND BOARD_ID = #{boardId}
 	</select>
 	
+	<insert id="insertLikelog" parameterType="hashmap" >
+		INSERT INTO FREE_BOARD_LIKE_LOG(BOARD_ID, USER_ID, STATUS)
+		VALUES(#{boardId}, #{userId}, #{status})
+	</insert>
 	
+	<delete id="deleteStatus" parameterType="hashmap">
+		DELETE FROM FREE_BOARD_LIKE_LOG
+		WHERE USER_ID = #{userId} AND BOARD_ID = #{boardId}
+	</delete>
+	
+	<update id="updatelikeCntBoard" parameterType="hashmap">
+		UPDATE FREE_BOARD
+		SET
+		    <if test="status != null and status == 'like'">
+						LIKES = LIKES + #{finalstatus}
+		    </if>
+		    <if test="status != null and status == 'dislike'">
+						DISLIKES = DISLIKES + #{finalstatus}
+		    </if>		    
+		WHERE BOARD_ID = #{boardId}
+	</update>
 </mapper>
 
 

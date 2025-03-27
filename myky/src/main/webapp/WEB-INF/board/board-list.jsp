@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 userId: "",
                 index: 0,
                 pageSize: 5,
-                page: 1,
+                page: 0,
                 searchOption: "all",
                 keyword: "",
                 orderKey: "",
