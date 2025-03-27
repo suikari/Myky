@@ -69,8 +69,12 @@ public class ProductServiceImpl implements ProductService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		List<Review> list = productMapper.selectReviewList(map);
 		int count = productMapper.selectReviewCount(map);
-		
+		//리뷰 사진 가져오기
+//		List<Review> imgList = productMapper.selectReviewImg(map);
+				
+				
 		resultMap.put("reviewList", list);
+//		resultMap.put("imgList", imgList);
 		resultMap.put("count", list.size());
 		resultMap.put("totalCount", count); 
 		resultMap.put("result", "success");
@@ -102,11 +106,9 @@ public class ProductServiceImpl implements ProductService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		//리뷰 정보 가져오기
 		Review info = productMapper.selectReview(map);
-		//리뷰 사진 가져오기
-//		List<Review> imgList = productMapper.selectReviewImg(map);
+		
 		
 		resultMap.put("info", info);
-//		resultMap.put("imgList", imgList);
 		resultMap.put("result", "success");
 		return resultMap;
 	}

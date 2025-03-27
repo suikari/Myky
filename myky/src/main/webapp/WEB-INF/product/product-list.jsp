@@ -260,7 +260,7 @@
                             <!-- 할인 있는 경우 -->
                             <template v-if="isMember && item.discount > 0">
                                 <div class="original-price">정상가: {{ formatPrice(item.price) }}</div>
-                                <div class="discount-price">멤버십 할인가: {{ formatPrice(item.price - item.discount) }}</div>
+                                <div class="discount-price">멤버십 할인가: {{ formatPrice(getDiscountedPrice(item)) }}</div>
                             </template>
 
                             <!-- 할인 없는 경우 -->
@@ -334,10 +334,6 @@
                             }
                         });
                     },
-                    formatPrice(price) {
-                        if (price == null) return '';
-                        return price.toLocaleString('ko-KR') + '원';
-                    },
                     fnView: function (productId) {
                         location.href = "/product/view.do?productId=" + productId;
                     },
@@ -368,6 +364,10 @@
                     formatPrice(value) {
                         if (!value && value !== 0) return '';
                         return Number(value).toLocaleString();
+                    },
+                    getDiscountedPrice(item) {
+                        if (!item.discount || item.discount === 0) return item.price;
+                        return Math.floor(item.price * (1 - item.discount / 100));
                     }
                 },
                 setup() {
