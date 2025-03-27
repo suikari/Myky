@@ -59,7 +59,7 @@
         }
 
         .donationTable {
-            width: 60%;
+            width: 100%;
             margin-top: 10px;
             border-collapse: collapse;
             margin-left: 30px;
@@ -67,7 +67,7 @@
         }
 
         .donationTable table {
-            width: 100%;
+            width: 80%;
             border: 1px solid #ddd;
             background: #fff;
             border-radius: 5px;
@@ -84,6 +84,7 @@
         }
 
         .donationTable th {
+            width: 100px;
             background: #FFBC7B;
             font-weight: bold;
         }
@@ -159,18 +160,6 @@
             overflow-y: auto;
         }
 
-        .membershipDonationBtn {
-            background-color: #ff6347;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .membershipDonationBtn.selected {
-            background-color: #4caf50;
-        }
-
     </style>
 </head>
 
@@ -198,12 +187,27 @@
                                 <th>후원항목</th>
                                 <td>
                                     <span>일시후원</span>
-                                    <button v-if="!isMember" @click="goToMembershipPage" class="membershipDonationBtn">
-                                        멤버십으로 후원
-                                    </button>
-                                    <button v-if="isMember" :class="{'selected': isMembershipDonation}" @click="toggleMembershipDonation">
-                                        멤버십으로 후원
-                                    </button>
+                                    <span>
+                                        <button v-if="!isMembership" @click="goToMembershipPage" class="membershipDonationBtn">
+                                            멤버십 후원
+                                        </button>
+                                        <button v-if="isMembership" :class="{'selected': isMembershipDonation}" @click="toggleMembershipDonation">
+                                            일반 후원
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>후원자 정보</th>
+                                <td>
+                                    <div>
+                                        <label>
+                                            <input type="radio" v-model="isAnonymous" :value="false"> 실명으로 후원
+                                        </label>
+                                        <label>
+                                            <input type="radio" v-model="isAnonymous" :value="true"> 익명으로 후원
+                                        </label>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -216,9 +220,9 @@
                             <tr>
                                 <td>{{info.tel}}</td>
                             </tr>
-                            <tr v-if="!isMembershipDonation">
+                            <tr>
                                 <th>후원금액</th>
-                                <td>
+                                <td v-if="!isMembership">
                                     <div class="donateAmountContainer">
                                         <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 100}" @click="selectAmount(100)">10,000원</button>
                                         <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 300}" @click="selectAmount(300)">30,000원</button>
@@ -226,13 +230,15 @@
                                         <input type="text" class="customAmountInput" v-model="customAmount" @input="formatCustomAmount" @focus="clearSelection" placeholder="직접입력">
                                     </div>
                                 </td>
+                                <td v-else>
+                                    <div>멤버십으로 후원이 진행됩니다.</div>
+                                </td>
                             </tr>
                             <tr>
                                 <th>후원 메세지</th>
                                 <td><input class="donationMessage" name="donateMessage" v-model="donateMessage"
                                         placeholder="따듯한 마음을 전하세요"></td>
                             </tr>
-                            <!-- 250322 >> 다음에 익명후원 여부 선택 만들기 -->
                         </table>
                     </div>
                 </section>
@@ -250,50 +256,52 @@
                     </div>
                     <div class="sectionContents">
                         <label>
-                            <input class="donationCheckbox" name="agree" type="checkbox">[필수] 가입약관 동의
+                            <input class="donationCheckbox" name="agree" type="checkbox">[필수] 후원약관 동의
                             <a href="javascript:void(0);" @click="toggleTerms">{{ showTerms ? '[닫기]' : '[보기]' }}</a>
                         </label>
 
                         <div v-if="showTerms" class="terms">
-                            <h3>가입약관</h3>
-                            <p><strong>제1조 (목적)</strong><br>
-                                본 약관은 '회사명' (이하 "회사"라 한다)와 회원 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+                            <h3>후원 약관</h3>
+                            <p>본 후원 약관(이하 "약관")은 후원자(이하 "후원자")가 [회사명] (이하 "회사")의 후원 프로그램에 참여함에 있어 동의해야 할 조건을 규정합니다. 후원자는 본 약관을 충분히 읽고 이해한 후 후원 절차를 진행해 주시기 바랍니다. 후원자가 본 프로그램에 참여함으로써 본 약관에 동의한 것으로 간주됩니다.</p>
 
-                            <p><strong>제2조 (이용계약의 체결)</strong><br>
-                                회원가입은 회사가 제공하는 가입신청서에 필요한 정보를 기입하여 제출함으로써 체결됩니다.</p>
+                            <h4>1. 후원 목적</h4>
+                            <p>회사는 후원자를 통해 모은 후원금으로 [후원 대상 또는 목적 설명]을 지원합니다. 후원금은 [후원금의 사용 목적 또는 구체적인 사용 내역]에 사용되며, 후원자에게 이에 대한 상세한 정보를 제공할 수 있습니다.</p>
 
-                            <p><strong>제3조 (회원의 의무)</strong><br>
-                                1. 회원은 본 약관을 준수하여야 하며, 제공되는 서비스의 규정을 따라야 합니다.<br>
-                                2. 회원은 개인정보 보호 및 안전을 위해 계정 정보를 적절히 관리해야 하며, 타인에게 유출되지 않도록 해야 합니다.</p>
+                            <h4>2. 후원자의 권리</h4>
+                            <ul>
+                                <li>후원자는 후원금의 사용내역 및 결과에 대해 정기적인 보고를 받을 권리가 있습니다.</li>
+                                <li>후원자는 후원한 금액에 대해 세액 공제 혜택을 받을 수 있는 경우, 회사가 제공하는 세액 공제 관련 서류를 요청할 수 있습니다.</li>
+                                <li>후원자는 후원금의 사용 방법에 대해 합리적인 질문을 할 수 있으며, 그에 대한 답변을 받을 권리가 있습니다.</li>
+                            </ul>
 
-                            <p><strong>제4조 (서비스의 제공)</strong><br>
-                                1. 회사는 회원에게 다양한 서비스를 제공합니다.<br>
-                                2. 회사는 서비스의 제공을 중단할 수 있으며, 서비스 제공 여부는 회사의 재량에 따릅니다.</p>
+                            <h4>3. 후원자의 의무</h4>
+                            <ul>
+                                <li>후원자는 후원 절차에서 요구하는 모든 정보를 정확하고 진실하게 제공해야 합니다.</li>
+                                <li>후원자는 후원금이 [후원 대상 또는 목적]에 적합하게 사용될 수 있도록 협력해야 하며, 후원금이 부정확하거나 부적절하게 사용되지 않도록 주의해야 합니다.</li>
+                            </ul>
 
-                            <p><strong>제5조 (개인정보의 처리)</strong><br>
-                                1. 회사는 회원의 개인정보를 보호하기 위해 노력하며, 개인정보 처리 방침에 따라 회원 정보를 수집, 이용합니다.<br>
-                                2. 회원은 언제든지 자신의 개인정보를 열람, 수정하거나 삭제를 요청할 수 있습니다.</p>
+                            <h4>4. 후원금 처리 및 방법</h4>
+                            <p>후원자는 [결제 방법 예: 카드 결제, 계좌 이체 등]을 통해 후원금을 지불하며, 모든 후원금은 결제 후 즉시 처리됩니다.</p>
+                            <p>후원금은 [후원 방법 및 처리 절차 설명]에 따라 처리되며, 후원자가 요청하는 경우 관련 영수증이나 후원 내역을 제공할 수 있습니다.</p>
 
-                            <p><strong>제6조 (서비스 이용의 제한)</strong><br>
-                                회사는 다음의 경우에 서비스 이용을 제한하거나 중지할 수 있습니다.<br>
-                                1. 회원이 본 약관을 위반한 경우<br>
-                                2. 서비스 제공에 큰 장애가 발생한 경우</p>
+                            <h4>5. 후원 취소 및 환불</h4>
+                            <p>후원자는 후원 후 [취소 및 환불 정책]에 따라 후원금 취소 및 환불을 요청할 수 있습니다. 다만, 후원금이 이미 특정 목적에 사용된 경우, 환불이 불가능할 수 있습니다.</p>
+                            <p>후원자의 요청에 의한 취소 및 환불은 회사의 정책에 따라 처리되며, 회사는 환불이 불가능한 경우 이에 대해 설명할 의무가 있습니다.</p>
 
-                            <p><strong>제7조 (면책사항)</strong><br>
-                                1. 회사는 천재지변 또는 불가항력적인 사유로 서비스를 제공할 수 없는 경우 책임을 지지 않습니다.<br>
-                                2. 회사는 회원이 서비스를 이용하며 발생한 손해에 대해 책임을 지지 않습니다.</p>
+                            <h4>6. 개인정보 보호</h4>
+                            <p>후원자는 후원 과정에서 제공하는 개인정보가 회사의 개인정보 보호 정책에 따라 안전하게 처리될 것에 대해 동의합니다.</p>
+                            <p>회사는 후원자의 개인정보를 제3자에게 제공하지 않으며, 오직 후원 프로그램에 필요한 범위 내에서만 사용합니다.</p>
 
-                            <p><strong>제8조 (분쟁해결)</strong><br>
-                                본 약관과 관련된 분쟁은 회사의 본사 소재지를 관할하는 법원을 제1심 법원으로 합니다.</p>
+                            <h4>7. 후원 약관 변경</h4>
+                            <p>회사는 후원 약관을 언제든지 변경할 수 있으며, 변경된 약관은 회사의 웹사이트나 이메일을 통해 후원자에게 통지됩니다.</p>
+                            <p>변경된 약관에 동의하지 않는 경우, 후원자는 후원 참여를 중단할 수 있으며, 이 경우 후원금의 반환 여부는 회사의 환불 정책에 따라 결정됩니다.</p>
 
-                            <p><strong>제9조 (약관의 개정)</strong><br>
-                                1. 회사는 필요에 따라 본 약관을 변경할 수 있습니다.<br>
-                                2. 변경된 약관은 회사의 웹사이트에 공지됩니다.</p>
+                            <h4>8. 법적 책임</h4>
+                            <p>후원자는 본 약관을 준수하여야 하며, 만약 이를 위반할 경우 회사는 후원자의 후원 참여를 취소하거나 법적 책임을 추궁할 수 있습니다.</p>
+                            <p>후원과 관련된 분쟁이 발생한 경우, 관련 법률에 따라 해결됩니다.</p>
 
-                            <p><strong>제10조 (기타)</strong><br>
-                                본 약관에 명시되지 않은 사항은 관련 법령 및 회사의 정책에 따릅니다.</p>
-
-                            <p>위 약관에 동의합니다.</p>
+                            <h4>9. 기타</h4>
+                            <p>본 약관에 명시되지 않은 사항은 [관련 법령 또는 회사의 다른 규정]에 따릅니다.</p>
                         </div>
                     </div>
                     <div class="sectionContents">
@@ -386,7 +394,8 @@
                     donationId: null,
                     showTerms: false,
                     showPrivacyPolicy: false,
-                    isMembershipDonation: false
+                    isMembership: false,
+                    isAnonymous: false
                 };
             },
             computed: {
@@ -430,8 +439,16 @@
                         }
                     });
                 },
+                toggleAnonymous() {
+                    this.isAnonymous = !this.isAnonymous;
+                },
                 toggleMembershipDonation() {
-                    this.isMembershipDonation = !this.isMembershipDonation;
+                    // if(this.userInfo.donationYn === 'N'){
+                    //     this.isMembershipDonation = !this.isMembershipDonation;
+                    // } else {
+                    //     alert("이번달은 이미 멤버십 후원 기능을 이용하셨습니다. \n후원자님의 따듯한 마음에 감사드립니다.");
+                    //     return;
+                    // }
                 },
                 goToMembershipPage() {
                     alert("멤버십에 가입해 주세요.");
@@ -486,7 +503,10 @@
                     }
 
                     let amount = (self.donateAmount != null) ? self.donateAmount : self.customAmount;
+                    
                     console.log("amount >>> ", amount);
+
+                    let anonymousYn = self.isAnonymous ? 'Y' : 'N';
 
                     // 결제 진행
 
@@ -506,7 +526,7 @@
                     }, function (rsp) {
                         if (rsp.success) {
                             alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
-                            self.fnDonation(rsp, amount);
+                            self.fnDonation(rsp, amount, anonymousYn);
                             // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
                             console.log("결제 정보 >>> ", rsp);
                         } else {
@@ -529,16 +549,17 @@
                     console.log("fnPaymentHistory >> self.donationId >>> ", self.donationId);
 
                     var nparmap = {
+                        option:"donation",
                         paymentCode: rsp.merchant_uid,
                         description: rsp.name,
                         amount: rsp.paid_amount,
                         paymentMethod: paymentMethod,
-                        installment: null,
+                        installment: rsp.card_quota,
                         subscriptionPeriod: null,
                         paymentStatus: rsp.status,
                         isCanceled: "N",
                         cancelDate: null,
-                        productId: null,
+                        orderId: null,
                         donationId: self.donationId,
                         userId: self.userInfo.userId
                     };
@@ -552,13 +573,14 @@
                         }
                     });
                 },
-                fnDonation: function (rsp, amount) {
+                fnDonation: function (rsp, amount, anonymousYn) {
                     var self = this;
                     var nparmap = {
                         centerId: self.centerId,
                         amount: amount,
                         message: self.donateMessage,
-                        userId: self.userInfo.userId
+                        userId: self.userInfo.userId,
+                        anonymousYn: anonymousYn
                     };
                     $.ajax({
                         url: "/center/donate.dox",

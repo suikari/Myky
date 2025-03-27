@@ -7,7 +7,12 @@
 	<insert id="insertPayment" parameterType="hashmap"  useGeneratedKeys="true" keyColumn="ORDER_ID" keyProperty="orderId">
 		
 		insert into payment
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId})
+		<if test="option != 'donation'">
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId})		
+		</if>
+		<if test="option == 'donation'">
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},null,#{donationId},#{userId})			
+		</if>
 		
 	</insert>
 

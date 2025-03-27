@@ -96,6 +96,60 @@
             background: #e07b3e;
         }
 
+        .discountTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        .discountTable th, .discountTable td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .discountTable th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .discountTable td {
+            color: #555;
+        }
+
+        .discountTable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .discountTable input[type="text"] {
+            width: 120px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .discountTable button {
+            padding: 6px 10px;
+            border: none;
+            background-color: #FF8C42;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .discountTable button:hover {
+            background-color: #e07b3e;
+        }
+
     </style>
 </head>
 <body>
@@ -128,17 +182,39 @@
                 </tr>
             </tbody>
         </table>
+        <table class="discountTable">
+            <tr v-if="totalPrice < 30000">
+                <th>배송비</th>
+                <td>2,000원</td>
+            </tr>
+            <tr v-if="totalPrice < 30000">
+                <th>총 결제 금액</th>
+                <td>{{ formattedFinTotalShippingPrice }} 원</td>
+            </tr>
+            <tr v-else>
+                <th>총 결제 금액</th>
+                <td>{{ formattedTotalPrice }} 원</td>
+            </tr>
+            <tr>
+                <th>보유 적립금</th>
+                <td>{{ formattedUserPoints }} 원</td>
+            </tr>
+            <tr>
+                <th>사용할 적립금</th>
+                <td>
+                    <input type="text" v-model="usedPoints" @input="validatePoints" placeholder="사용할 적립금 입력" >
+                    <button @click="useAllPoints">전체 사용</button>
+                    <button @click="applyPoints">적용</button>
+                </td>
+            </tr>
+            <tr>
+                <th>할인된 금액</th>
+                <td>- {{ formattedDiscountAmount }} 원</td>
+            </tr>
+        </table>
 
-        <div v-if="totalPrice < 30000">
-            <h3>
-                <span>배송비 : 2,000 원 </span><span> + 상품 금액 : {{ totalPrice }} 원</span>
-            </h3>
-            <h2>총 결제 금액 : {{ totalShippingPrice }} 원</h2>
-        </div>
-        <div v-else>
-            <h3>
-                <span>총 결제 금액 : {{ totalPrice }} 원</span>
-            </h3>
+        <div>
+            <h2>총 결제 금액 : {{ formattedFinalPrice }} 원</h2>
         </div>
 
         <div class="delivery-section">
@@ -208,12 +284,6 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        if (typeof IMP !== 'undefined') {
-	        IMP.init(userCode);
-	    } else {
-	        console.error('IMP is not loaded properly');
-	    }
-        
         const app = Vue.createApp({
             data() {
                 return {
@@ -234,7 +304,10 @@
                         customMessage: "",
                     },
                     orderData: {},
-                    orderDetailData:{}
+                    orderDetailData: {},
+                    userPoints: 50000,
+                    usedPoints:"",
+                    discountAmount: 0
                 };
             },
             computed: {
@@ -242,7 +315,34 @@
                     return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 },
                 totalShippingPrice() {
-                    return (this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
+                    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 2000;
+                },
+                finalPrice() {
+                    let finalPrice = 0;
+                    if(this.totalPrice < 30000){
+                        finalPrice = this.totalShippingPrice;
+                    } else {
+                        finalPrice = this.totalPrice;
+                    }
+                    return finalPrice - this.discountAmount;
+                },
+                formattedTotalPrice() {
+                    return this.totalPrice.toLocaleString();
+                },
+                formattedUserPoints() {
+                    return this.userPoints.toLocaleString();
+                },
+                formattedUsedPoints() {
+                    return this.usedPoints.toLocaleString();
+                },
+                formattedDiscountAmount() {
+                    return this.discountAmount.toLocaleString();
+                },
+                formattedFinTotalShippingPrice() {
+                    return this.totalShippingPrice.toLocaleString();
+                },
+                formattedFinalPrice() {
+                    return this.finalPrice.toLocaleString();
                 }
             },
             methods: {
@@ -274,6 +374,28 @@
                             self.cartItems = data.list;
                         }
                     });
+                },
+                applyPoints() {
+                    let pointsToUse = parseInt(this.usedPoints) || 0;
+                    
+                    if (pointsToUse > this.userPoints) {
+                        alert("보유한 적립금보다 많이 사용할 수 없습니다.");
+                        this.usedPoints = this.userPoints;
+                    }
+                    
+                    if (this.usedPoints > this.finalPrice) {
+                        alert("총 결제 금액을 초과하는 적립금을 사용할 수 없습니다.");
+                        this.usedPoints = this.finalPrice;
+                    }
+
+                    this.discountAmount = parseInt(this.usedPoints) || 0;
+                },
+                useAllPoints() {
+                    this.usedPoints = Math.min(this.userPoints, this.finalPrice);
+                    this.discountAmount = this.usedPoints;
+                },
+                validatePoints() {
+                    this.usedPoints = parseInt(this.usedPoints) || 0;
                 },
                 setDefaultAddress() {
                     let self = this;
@@ -392,15 +514,25 @@
                     let finalAddress = self.deliveryType === "default" ? self.userInfo.address : address;
                     let finalMessage = self.orderInfo.deliveryMessage === "직접 입력" ? self.orderInfo.customMessage : self.orderInfo.deliveryMessage;
                     
+                    console.log(self.finalPrice);
 
-                    // let totalPrice = (self.totalPrice < 30000) ? self.totalShippingPrice : self.totalPrice;
-                    let totalPrice = self.totalPrice;
-                    
-                    console.log("총 결제 금액 >>> ",self.orderData.totalPrice);
-                    
-                    self.fnPayment(totalPrice,finalAddress,finalMessage);
+                    if (self.finalPrice === 0) {
+                        let orderId = "free_order_" + new Date().getTime(); // 결제 없이 주문 ID 생성
+                        let paymentData = {
+                            merchant_uid: orderId,  // 결제 ID 대신 주문 ID 사용
+                            name: "장바구니 - 포인트 결제",
+                            paid_amount: 0,  // 결제 금액 0원
+                            pay_method: "point_only",
+                            status: "paid",
+                            card_quota: null
+                        };
+                        self.fnPaymentHistory(paymentData, 0, finalAddress, finalMessage);
+                        alert("포인트로 결제가 완료되었습니다.");
+                        return;
+                    }
+                    self.fnPayment(self.finalPrice,finalAddress,finalMessage);
                 },
-                fnPayment:function(totalPrice,finalAddress,finalMessage){
+                fnPayment:function(finaPrice,finalAddress,finalMessage){
 	                var self = this;
 	
 	                if (typeof IMP === 'undefined') {
@@ -414,12 +546,12 @@
 	                    pay_method: "card",
 	                    merchant_uid: "merchant_" + new Date().getTime(),
 	                    name: "장바구니 상품 결제",
-	                    amount: totalPrice,
+	                    amount: finaPrice,
 	                    buyer_tel: self.userInfo.phoneNumber,
 	                }, function (rsp) {
 	                    if (rsp.success) {
 	                        console.log("결제 정보 >>> ",rsp);
-                            self.fnPaymentHistory(rsp, totalPrice,finalAddress,finalMessage);
+                            self.fnPaymentHistory(rsp, finaPrice,finalAddress,finalMessage);
 	                    } else {
 	                        alert("결제에 실패했습니다.");
 	                        console.log("결제 정보 >>> ",rsp.error_msg);
@@ -427,7 +559,7 @@
 	                    }
 	                });
 	            },
-	            fnPaymentHistory:function(rsp,totalPrice,finalAddress,finalMessage){
+	            fnPaymentHistory:function(rsp,finaPrice,finalAddress,finalMessage){
 	                let self = this;
 	                
 	                let paymentMethod = "";
@@ -459,12 +591,12 @@
 		                data: nparmap,
 		                success: function (data) {
 	                    	console.log("결제 정보 저장 여부 >>> ",data);
-                            self.fnOrderHistory(totalPrice,rsp.pay_method,finalAddress,finalMessage,data.orderId);
+                            self.fnOrderHistory(finaPrice,rsp.pay_method,finalAddress,finalMessage,data.orderId);
 
 	                	}
 	            	});
             	},
-                fnOrderHistory:function(totalPrice, paymentMethod, finalAddress, finalMessage , orderId) {
+                fnOrderHistory:function(finaPrice, paymentMethod, finalAddress, finalMessage , orderId) {
                     let self = this;
 					let payList = self.cartItems.map(item => ({
                     	orderId : orderId, 
@@ -475,7 +607,7 @@
 					
                     self.orderData = {
                     	orderId : orderId, 
-                        totalPrice: totalPrice,
+                        totalPrice: finaPrice,
                         userId: self.userInfo.userId,
                         receiverName: self.orderInfo.receiver || self.userInfo.userName,
                         receiverPhone: self.orderInfo.phone || self.userInfo.phoneNumber,
