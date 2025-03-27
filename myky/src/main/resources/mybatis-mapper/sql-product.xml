@@ -112,13 +112,19 @@
 	</insert>
 	
 	<!--리뷰 이미지 -->
-
+	<select id="selectReviewImg" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
+		SELECT * 
+		FROM REVIEW_FILE F
+		LEFT JOIN PRODUCT_REVIEWS R ON F.REVIEW_ID = R.REVIEW_ID
+		WHERE F.REVIEW_ID = #{reviewId}
+	</select>
 
 	 <!-- 리뷰 리스트 -->
 	 <select id="selectReviewList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
-	    SELECT P.PRODUCT_ID, P.PRODUCT_NAME, R.REVIEW_ID, R.REVIEW_TEXT, R.RATING ,R.USER_ID, R.TITLE, R.CREATED_AT, R.CNT
+	    SELECT P.PRODUCT_ID, P.PRODUCT_NAME, R.REVIEW_ID, R.REVIEW_TEXT, R.RATING ,R.USER_ID, R.TITLE, R.CREATED_AT, R.CNT , F.*
 		FROM PRODUCT P
 		INNER JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
+		LEFT JOIN REVIEW_FILE F ON R.REVIEW_ID = F.REVIEW_ID AND F.THUMB_YN = 'Y'
 		WHERE P.PRODUCT_ID = #{productId}
 		ORDER BY CREATED_AT DESC
     	OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY

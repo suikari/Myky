@@ -107,10 +107,38 @@
 		
 		/**/
 
+		.scroll-top-btn {
+		    position: fixed;
+		    bottom: 20px;
+		    right: 20px;
+		    width: 50px;
+		    height: 50px;
+		    background-color: #e76f51;
+		    color: white;
+		    border: none;
+		    border-radius: 50%;
+		    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		    cursor: pointer;
+		    display: none;
+		    justify-content: center;
+		    align-items: center;
+		    font-size: 16px;
+		    transition: opacity 0.3s ease, transform 0.3s ease;
+		}
+
+		.scroll-top-btn.show {
+		    display: flex;
+		    opacity: 1;
+		    transform: translateY(0);
+		}
+		
     </style>
 </head>
 <body>
     <div id="footer" class="footer">
+		<button class="scroll-top-btn" @click="scrollToTop">▲</button>
+
+		
     	<div class="footer-con" >
 	        <div class="footer-left">
 	            <h2 class="footer-title">회사 정보</h2>
@@ -137,6 +165,7 @@
 	        </div>
 	    </div>
 	     
+		
     </div>
     
     <script>
@@ -152,10 +181,34 @@
                         email: 'tester@naver.com'
                     }
                 };
-            }
+            },
+			methods: {
+				scrollToTop() {
+				    window.scrollTo({ top: 0, behavior: 'smooth' });
+				},
+			},
+			mounted() {
+				let self = this;
+				const scrollBtn = document.querySelector('.scroll-top-btn');
+
+				window.addEventListener('scroll', () => {
+				    if (window.scrollY > 200) {
+				        scrollBtn.classList.add('show');
+				    } else {
+				        scrollBtn.classList.remove('show');
+				    }
+				});
+
+			}
+			
         });
         
         footer.mount('#footer');
+		
+
+
+
+		
     </script>
 </body>
 </html>
