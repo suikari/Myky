@@ -160,7 +160,7 @@ public class ProductController {
 			System.out.println("fileSize : " + size);
 			System.out.println("saveFileName : " + saveFileName);
 			String path2 = System.getProperty("user.dir");
-			System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img\\product\\Review");
+			System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
 		
 			if (!multi.isEmpty()) {
 				File file = new File(path2 + "\\src\\main\\webapp\\img\\product\\Review", saveFileName);
@@ -173,20 +173,19 @@ public class ProductController {
 				map.put("fileOrgname", fileOrgname);
 				map.put("fileSize",size);
 				map.put("fileEtc", extName); 
-				map.put("thumbYn", "N");
-			
-				
-				
+				map.put("thumbYn", "Y");
 
 				productService.addReviewFile(map);
-	
+				
+				model.addAttribute("fileName", multi.getOriginalFilename());
+				model.addAttribute("uploadPath", file.getAbsolutePath());
 				}
 			}
-			return "redirect:product/view.do";
+			return "redirect:/product/view.do";
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return "redirect:view.do";
+		return "redirect:/product/view.do";
 		}
 		
 	}
