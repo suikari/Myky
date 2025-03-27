@@ -20,6 +20,7 @@ public class User {
 	private String phoneYn;
 	private String emailYn;
 	private String gender;
+	private String deleteYn;
 
 
 

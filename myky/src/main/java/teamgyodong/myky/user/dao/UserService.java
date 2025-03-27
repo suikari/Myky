@@ -18,5 +18,9 @@ public interface UserService {
 
 	HashMap<String, Object> editInfo(HashMap<String, Object> map);
 
+	HashMap<String, Object> authIdPwd(HashMap<String, Object> map);
+
+	HashMap<String, Object> userWithdraw(HashMap<String, Object> map);
+
 	
 }

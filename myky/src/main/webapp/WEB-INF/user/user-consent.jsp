@@ -43,7 +43,7 @@
             <h1 style="text-align: center;">회원 가입</h1>
             <br>
             <br>
-            <div style="font-size: 24px;">전체 동의서 <input type="checkbox" id="" @click="fnAllCheck()"></div>
+            <div style="font-size: 24px;">전체 동의 <input type="checkbox" id="" @click="fnAllCheck()"></div>
             <hr>
             <br>
             <br>

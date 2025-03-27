@@ -46,7 +46,7 @@ public class UserController {
     @Value("${redirect_uri}")
     private String redirect_uri;
 	
-	
+    //유저 로그인 주소
     @RequestMapping("/user/login.do") 
     public String login(Model model) throws Exception{
 		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+client_id+"&redirect_uri="+redirect_uri;
@@ -95,7 +95,6 @@ public class UserController {
 	        return new Gson().toJson(resultMap);
 	}
 
-	
 	private Map<String, Object> getUserInfo(String accessToken) {
 	    String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
 
@@ -121,7 +120,6 @@ public class UserController {
 
         return "user/id-find"; // member 폴더로 묶임
         }
-	
 	
 	
 	//비밀번호 찾기 주소
@@ -239,5 +237,29 @@ public class UserController {
 	}
 	
 
+	//유저 탈퇴 주소
+	@RequestMapping("/user/withdraw.do") 
+    public String withdraw(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		request.setAttribute("map", map);
+        return "user/user-withdraw"; //
+    }
+	
+	//유저 탈퇴 비밀번호 확인
+	@RequestMapping(value = "/user/IdPwdCheak.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String idPwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.authIdPwd(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//유저 탈퇴
+	@RequestMapping(value = "/user/withdraw.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String withdraw(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.userWithdraw(map);
+		return new Gson().toJson(resultMap);
+	}
 
 }

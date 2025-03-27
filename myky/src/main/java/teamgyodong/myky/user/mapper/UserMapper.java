@@ -21,4 +21,10 @@ public interface UserMapper {
 
 	int updateInfo(HashMap<String, Object> map);
 
+	void updateLastLogin(String userId);
+
+	int updateWithdraw(HashMap<String, Object> map);
+
+
+
 }

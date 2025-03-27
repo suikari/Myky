@@ -33,12 +33,34 @@
                 border-bottom: 1px solid #ddd;
             }
 
-            .profile-pic {
-                width: 60px;
-                height: 60px;
-                background: gray;
-                border-radius: 50%;
+            .profile-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* 가운데 정렬 */
                 margin-right: 15px;
+            }
+
+            .profile-pic {
+                width: 120px;
+                height: 120px;
+                background: gray;
+                border-radius: 100%;
+            }
+
+            .profile-container button {
+                margin-top: 10px;
+                padding: 5px 10px;
+                border: none;
+                background: #007bff;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .profile-container button:hover {
+                background: #0056b3;
             }
 
             .summary {
@@ -122,10 +144,13 @@
             <template v-if="userId!=''">
                 <div class="mypage-container">
                     <div class="user-info">
-                        <div class="profile-pic"></div>
+                        <div class="profile-container">
+                            <img :src="user.profileImage" alt="" class="profile-pic">
+                            <button>사진 수정</button>
+                        </div>
                         <div class="user-details">
-                            <h2>안녕하세요, 고객님!</h2>
-                            <p>고객님의 회원등급은 <strong>SILVER</strong>입니다.</p>
+                            <h2>안녕하세요, {{user.userName}}님!</h2>
+                            <p>{{user.userName}}님의 회원등급은 <strong>SILVER</strong>입니다.</p>
                         </div>
                     </div>
                     <div class="summary">
@@ -153,7 +178,8 @@
                             <ul>
                                 <h3>나의 개인정보</h3>
                                 <li><a @click="fnInfo()">회원 정보 수정</a></li>
-                                <li>회원 탈퇴</li>
+                                <li><a @click="fnWithdraw()">회원 탈퇴</a></li>
+                                <li></li>
                             </ul>
                         </aside>
                         <section class="order-status">
@@ -188,6 +214,7 @@
             const app = Vue.createApp({
                 data() {
                     return {
+                        user: {},
                         userId: "${sessionId}",
 
                     };
@@ -196,9 +223,36 @@
 
                 },
                 methods: {
-                    fnInfo : function(){
+                    fnInfo2() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId
+                        };
+                        console.log(self.userId);
+                        $.ajax({
+                            url: "/user/info.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.user = data.user;
+                            }
+                        });
+                    },
+
+                    fnInfo: function () {
                         let self = this;
-                        pageChange("/user/info.do",{userId : self.userId});
+                        pageChange("/user/info.do", { userId: self.userId });
+                    },
+
+                    fnWithdraw: function () {
+                        let self = this;
+                        window.open(
+                            "/user/withdraw.do",
+                            "check",
+                            "width=400, height=300"
+                        );
                     }
 
                 },
@@ -208,6 +262,7 @@
                         alert("로그인 후 이용가능한 서비스입니다.");
                         location.href = "/main.do";
                     }
+                    this.fnInfo2();
 
                 }
             });
