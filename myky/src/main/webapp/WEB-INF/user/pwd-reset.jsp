@@ -4,10 +4,13 @@
 
     <head>
         <meta charset="UTF-8">
-        <script src="https://code.jquery.com/jquery-3.7.1.js"
+            <!-- 카카오 인증용 임포트 -->
+            <script src="https://code.jquery.com/jquery-3.7.1.js" 
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+            <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+            <!-- 카카오 인증용 임포트 -->
+             
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-        <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
         <title>search password page</title>
         <!-- 비밀번호를 찾을 아이디 입력 받기
  비밀번호 찾기 버튼 클릭 시 인증 페이지 호출
@@ -132,7 +135,7 @@
                     <input id="userId" v-model="userId" class="form-input" type="text">
                 </div>
                 <div class="form-group">
-                    <button @click="fnAuth()" class="auth-btn">비밀번호 찾기</button>
+                    <button @click="fnAuth()" class="auth-btn">비밀번호 변경</button>
                     <button @click="fnExit()" class="auth-btn2">취소</button>
                 </div>
                 <button @click="fnIdFind()" class="auth-btn2">아이디 찾기</button>
@@ -196,7 +199,7 @@
                     });
                 },
 
-                fnIdFind : function() {
+                fnIdFind: function () {
                     location.href = "/user/findId.do";
                 },
                 fnAuth: function () {
@@ -243,7 +246,11 @@
 
                 },
                 fnExit: function () {
-                    location.href = "/user/login.do";
+                    if (userId = "${map.userId}") {
+                        location.href = "/user/myPage.do"
+                    } else {
+                        location.href = "/user/login.do";
+                    }
                 }
             },
             mounted() {

@@ -326,6 +326,27 @@ body {
                         }
                         self.user.phoneNumber = self.selectNum + self.num1 + self.num2;
 
+                        if (self.user.birthDate.length != 8 && self.user.birthDate.length != 0) {
+                            alert("생년월일 8자리 혹은 미입력으로 진행해주십시오. ex)20050130");
+                            return;
+                        }else if(self.user.birthDate !=""){
+                             // 연, 월, 일 분리
+                            const year = parseInt(self.user.birthDate.substring(0, 4), 10);
+                            const month = parseInt(self.user.birthDate.substring(4, 6), 10);
+                            const day = parseInt(self.user.birthDate.substring(6, 8), 10);
+
+                            // 날짜 유효성 검사
+                            const date = new Date(year, month - 1, day);
+                            if (
+                                !(date.getFullYear() === year &&
+                                date.getMonth() === month - 1 &&
+                                date.getDate() === day)
+                            ) {
+                                alert("생년월일 8자리가 유효하지 않습니다. 재입력 바랍니다. ex)20050130");
+                                return;
+                            }
+                        }
+
                         if (!self.authFlg) {
                             alert("문자인증 바랍니다.");
                             return;
@@ -408,10 +429,6 @@ body {
                         self.authFlg = true;
                         console.log(self.authFlg);
                     },
-                    // fnView: function (userId) {
-                    //     pageChange("/user/info.do", { userId: userId });
-
-                    // },
                     fnSearchAddr: function () {
                         window.open("/addr.do", "addr", "width=300, height=500")
                     },
