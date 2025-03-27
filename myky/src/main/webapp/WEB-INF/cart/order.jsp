@@ -305,9 +305,10 @@
                     },
                     orderData: {},
                     orderDetailData: {},
-                    userPoints: 50000,
-                    usedPoints:"",
-                    discountAmount: 0
+                    userPoints: {},
+                    usedPoints: "",
+                    discountAmount: 0,
+                    cartId:""
                 };
             },
             computed: {
@@ -358,7 +359,7 @@
                             self.userInfo = data.user;
                             self.loadCart();
                             self.setDefaultAddress();
-
+                            self.fnGetPoint();
                         }
                     });
                 },
@@ -372,6 +373,23 @@
                         data: params,
                         success: function (data) {
                             self.cartItems = data.list;
+                            console.log(self.cartItems);
+                            self.cartId = self.cartItems[0].cartId;
+                            console.log(self.cartId);
+                        }
+                    });
+                },
+                fnGetPoint:function(){
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/point/current.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            console.log(data.point);
+                            self.userPoints = data.point.currentPoint;
                         }
                     });
                 },
@@ -527,10 +545,12 @@
                             card_quota: null
                         };
                         self.fnPaymentHistory(paymentData, 0, finalAddress, finalMessage);
+                        self.fnRemoveCart();
+                        self.fnUsePoint(); // 포인트 사용 내역 DB 저장 (250327.저장안됨)
                         alert("포인트로 결제가 완료되었습니다.");
-                        return;
+                    } else {
+                        self.fnPayment(self.finalPrice,finalAddress,finalMessage);
                     }
-                    self.fnPayment(self.finalPrice,finalAddress,finalMessage);
                 },
                 fnPayment:function(finaPrice,finalAddress,finalMessage){
 	                var self = this;
@@ -552,6 +572,8 @@
 	                    if (rsp.success) {
 	                        console.log("결제 정보 >>> ",rsp);
                             self.fnPaymentHistory(rsp, finaPrice,finalAddress,finalMessage);
+                            self.fnRemoveCart();
+                            self.fnUsePoint();
 	                    } else {
 	                        alert("결제에 실패했습니다.");
 	                        console.log("결제 정보 >>> ",rsp.error_msg);
@@ -630,6 +652,47 @@
                             console.log("주문 정보 저장 여부 >>> ", data.result);
                             if (data.result === "success") {
                                 console.log("주문 상세 정보도 저장 완료");
+                                alert("주문이 완료되었습니다.");
+                                // window.location.href = "/cart/orderComplete.do";
+                            }
+                        }
+                    });
+                },
+                fnRemoveCart:function(){
+                    let self = this;
+                    var nparmap = {
+                        cartId:self.cartId
+                    };
+                    $.ajax({
+                        url: "/cart/removeCart.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            if (data.result === "success") {
+                                console.log("결제 후 장바구니 비우기 >>> ", data.result);
+                            }
+                        }
+                    });
+                },
+                fnUsePoint:function(){
+                    let self = this;
+                    let currentPoint = parseInt(self.userPoints) - parseInt(self.usedPoints);
+                    console.log("현재 포인트 >> ",currentPoint);
+                    var nparmap = {
+                        usedPoints: self.usedPoints,//문제발생중
+                        currentPoint:currentPoint,
+                        remarks: "장바구니_결제",
+                        userId:self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/point/used.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            if (data.result === "success") {
+                                console.log("포인트 사용 내역 저장 >>> ", data.result);
                             }
                         }
                     });

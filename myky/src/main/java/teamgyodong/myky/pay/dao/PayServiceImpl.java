@@ -48,4 +48,35 @@ public class PayServiceImpl implements PayService {
 		}
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> getCurrentPoint(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			pay point =  payMapper.selectCurrentPoint(map);
+			
+			resultMap.put("point", point);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> addUsedPoint(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			pay point =  payMapper.insertUsedPoint(map);
+			
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

@@ -524,7 +524,7 @@
                     if(self.isMembershipDonation){
                         let donation = {
                             centerId: self.centerId,
-                            amount: 10000,
+                            amount: 5000,
                             message: self.donateMessage,
                             userId: self.userInfo.userId,
                             anonymousYn: anonymousYn,
