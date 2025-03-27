@@ -14,7 +14,6 @@
             padding: 40px;
             background-color: #fff;
             border-radius: 10px;
-            /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
             font-family: 'Noto Sans KR', sans-serif;
         }
 
@@ -38,9 +37,13 @@
             color: #202060;
             margin-top: 40px;
             margin-bottom: 10px;
+            max-width: 1000px;
+            align-items: center;
         }
         .view-labelContent {
             height: 500px;
+            text-align: center;
+            align-items: center;
         }
 
         #viewPage .view-box {
@@ -54,6 +57,7 @@
             color: #333;
             word-break: break-word;
             white-space: pre-wrap;
+            align-items: center;
         }
         .view-boxContent{
             border: 1px solid #202060;
@@ -67,9 +71,14 @@
             white-space: pre-wrap;
             min-height: 500px;
             text-align: center;
+            align-items: center;
         }
         #viewPage .view-files {
             margin-top: 10px;
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            align-items: center;
         }
 
         #viewPage .file-link {
@@ -78,6 +87,8 @@
             text-decoration: none;
             margin-right: 10px;
             display: inline-block;
+            align-items: center;
+            text-align: center;
         }
         .view-files {
             margin-bottom: 20px;
@@ -85,6 +96,8 @@
             border: 1px solid #202060;
             border-radius: 6px;
             padding: 15px;
+            text-align: center;
+            align-items: center;
         }
         #viewPage .file-link:hover {
             color: #fca311;
@@ -100,8 +113,6 @@
 
             max-width: 1000px;
         }
-
-    
         .button {
             padding: 10px 20px;
             font-size: 14px;
@@ -156,7 +167,7 @@
         .cmtTextBox{
             border-radius: 6px;
             border: 1px solid #f7f7f8;
-            background-color: #ebebeb;
+            background-color: #f5f5f5;
             max-width: 1000px;
             width: 100%;
             margin: 5px;
@@ -192,7 +203,7 @@
             left:  250px;
             width: 150px;
             height: auto;
-            border: 1px solid #ddd;
+            border: 1px solid #ededed;
             background-color: white;
             padding: 5px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
@@ -214,6 +225,23 @@
             color: #888;
             font-size: 15px;
             cursor: pointer;
+        }
+        .likeButton2{
+            width: 40px;
+            height: 40px;
+        }
+        .likeButton{
+            background-color: white;
+            border: none;
+            color: #202060;
+            cursor: pointer;
+        }
+        .like-button-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 20px;
         }
     </style>
     
@@ -243,35 +271,43 @@
             <div class="view-box">
             <a style="font-size:20px">{{info.title}}</a>
                 <!-- 날짜 표시 여기 넣기 -->
+                <div style="color: #fca311;">작성자: {{info.nickName}}</div>
                 <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
-                    작성일: {{ info.updatedTime }}
+                    작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
                 </div>
             </div>
             
 
             <div class="view-label">CONTENT</div>
             <div class="view-boxContent" v-html="info.content"></div>
+            <!-- 좋아요, 싫어요 버튼 -->
+                <div class="like-button-wrapper">
+                    <template v-if="likeStatus">
+                        <button @click="likeButton('like','M')" class="likeButton">
+                            <img src="../img/buttonImg/smileClick.png" class="likeButton2" alt="좋아요" />
+                            <span>{{ info.likes }}</span>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button @click="likeButton('like','P')" class="likeButton">
+                            <img src="../img/buttonImg/smilenon.png"  class="likeButton2" alt="좋아요" />
+                            <span>{{ info.likes }}</span>
+                        </button>
+                    </template>
 
-            <!-- 좋아요/싫어요 버튼 -->
-            <div style="margin-top: 20px;">
-                <button
-                class="cmtButton2"
-                @click="toggleLike('like')"
-                :style="{ backgroundColor: myLikeStatus === 'like' ? '#fca311' : '#c0c0c0' }"
-                >
-                👍 좋아요 {{ likeCount }}
-                </button>
-            
-                <button
-                class="cmtButton2"
-                @click="toggleLike('dislike')"
-                :style="{ backgroundColor: myLikeStatus === 'dislike' ? '#fca311' : '#c0c0c0' }"
-                >
-                <i class="fi fi-sr-heart-slash"></i>
-                👎 싫어요 {{ dislikeCount }}
-                </button>
-            </div>
-
+                    <template v-if="dislikeStatus">
+                        <button @click="likeButton('dislike','M')"  class="likeButton">
+                            <img src="../img/buttonImg/dislikeClick.png" class="likeButton2" alt="싫어요" />
+                            <span>{{ info.dislikes }}</span>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button @click="likeButton('dislike','P')" class="likeButton">
+                            <img src="../img/buttonImg/dislikenon.png" class="likeButton2" alt="싫어요" />
+                            <span>{{ info.dislikes }}</span>
+                        </button>
+                    </template>
+                </div>
             <div class="view-label">첨부파일</div>
             <div class="view-files">
                 <div v-for="item in fileList">
@@ -295,7 +331,7 @@
                               
                               <!-- 수정 중인 경우 -->
                               <div v-if="editCommentId == item.commentId">
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.userId }}</div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
                                 <input v-model="editContent" class="cmtInput" />
                           
                                 <div style="display: flex; gap: 5px;">
@@ -307,10 +343,19 @@
                               <!-- 일반 댓글 보기 -->
                               <div v-else>
                                 <!-- 유저 아이디 -->
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ item.userId }}</div>
+                                 <template v-if="item.isDeleted == 'Y'">
+                                    <div style="font-weight: bold; margin-bottom: 3px;"></div>
                           
-                                <!-- 댓글 내용 -->
-                                <div style="margin-bottom: 5px;">{{ item.content }}</div>
+                                    <!-- 댓글 내용 -->
+                                    <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
+                                 </template>
+                                 <template v-else>
+                                    <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
+                          
+                                    <!-- 댓글 내용 -->
+                                    <div style="margin-bottom: 5px;">{{ item.content }}</div>
+                                 </template>
+
                           
                                 <!-- 날짜 / 버튼들 -->
                                 <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
@@ -321,8 +366,10 @@
                           
                                   <!-- 수정/삭제 -->
                                   <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
+                                      <template v-if="isDeleted == 'N'">
                                     <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
-                                    <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                        <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                    </template>
                                   </template>
                                 </div>
                               </div>
@@ -339,14 +386,14 @@
                             <!-- 대댓글 반복 -->
                             <div v-for="reply in item.replies || []" :key="reply.commentId" style="margin-left: 30px;">
                               <div v-if="editCommentId === reply.commentId">
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.userId }}</div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                 <input v-model="editContent"/>
                                 <button class="cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
                                 <button class="cmtButton2" @click="editCommentId = ''">취소</button>
                               </div>
                           
                               <div v-else>
-                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.userId }}</div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                 <div style="margin-bottom: 5px;">{{ reply.content }}</div>
                                 <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
                                   <span>{{ reply.updatedTime }}</span>
@@ -384,6 +431,7 @@
                 <button class="button" @click="fnBack(info)">뒤로가기</button>
             </div>
         </div>
+        </div>
     </div>
 
      <jsp:include page="../common/footer.jsp"/>
@@ -404,6 +452,7 @@
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
                         userId : {},
+                        nickName : "",
                         content : "",
                         commentId : "",
                         cmtList: [],
@@ -436,9 +485,13 @@
                         editReplyContent: "",
                         updatedTime : "",
                         createdTime : "",
-                        likeCount: 0,
-                        dislikeCount: 0,
-                        myLikeStatus: "", // 'like', 'dislike', or ''
+                        
+                        likeStatus: false,  // 좋아요 상태
+                        dislikeStatus: false,  // 싫어요 상태
+                        status : "",
+                        likes : "",
+                        dislikes : "",
+
                     };
                 },
                 computed: {
@@ -468,13 +521,45 @@
                                 self.info = data.info
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
-
-                                // 💥 좋아요 데이터 같이 받아옴
-                                self.likeCount = data.likeCount;
-                                self.dislikeCount = data.dislikeCount;
-                                self.myLikeStatus = data.myStatus;
 				        	}
 				        });
+                        self.fnlikestatus();
+                    },
+                    fnlikestatus(){
+                        var self = this;
+
+                        var nparmap = {
+                            boardId: self.boardId,
+                            userId: self.sessionId,
+                        };
+                        $.ajax({
+                            url: "/board/likeStatus.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("7979",data);
+                                
+                                if(data.result == "success"){
+
+                                    if(data.listStatus.status == "like") {
+                                        self.likeStatus = true;
+                                    } else {
+                                        self.likeStatus = false;
+                                    }
+
+                                    if(data.listStatus.status == "dislike"){
+                                        self.dislikeStatus = true;
+                                    } else {
+                                        self.dislikeStatus = false;
+                                    }
+                                }else{
+                                    self.likeStatus = false;
+                                    self.dislikeStatus = false;
+                                }
+
+                            }
+                        });
                     },
                     fnBack : function (info) {
                         let self = this;
@@ -491,6 +576,12 @@
                             boardId: self.boardId,
                             category: self.category,
                         };
+
+                        if (!confirm("정말 삭제하시겠습니까?")) {
+                           alert("취소되었습니다.");
+                           return;
+                        } 
+                        
                         $.ajax({
                             url: "/board/remove.dox",
                             dataType: "json",
@@ -540,6 +631,10 @@
                         var nparmap = {
                             commentId: commentId
                         };
+                        if (!confirm("정말 삭제하시겠습니까?")) {
+                           alert("취소되었습니다.");
+                           return;
+                        } 
                         $.ajax({
                             url: "/board/CommentRemove.dox",
                             dataType: "json",
@@ -581,22 +676,22 @@
                     fnReplySave(parentCommentId) {
                         let self = this;
                         let nparmap = {
-                        boardId: self.boardId,
-                        userId: self.sessionId,
-                        content: self.replyContent,
-                        parentCommentId: parentCommentId
+                            boardId: self.boardId,
+                            userId: self.sessionId,
+                            content: self.replyContent,
+                            parentCommentId: parentCommentId
                         };
-                        $.ajax({
-                        url: "/board/ReplyAdd.dox",
-                        dataType: "json",
-                        type: "POST",
-                        data: nparmap,
-                        success: function () {
-                            alert("답글이 등록되었습니다!");
-                            self.replyContent = "";
-                            self.replyFormId = "";
-                            self.fnView(); // 다시 댓글 전체 불러오기
-                        }
+                            $.ajax({
+                            url: "/board/ReplyAdd.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function () {
+                                alert("등록되었습니다");
+                                self.replyContent = "";
+                                self.replyFormId = "";
+                                self.fnView(); // 다시 댓글 전체 불러오기
+                            }
                         });
                     },
                     fnReply(commentId) {
@@ -609,25 +704,85 @@
 
                         self.replyFormId = commentId;
                     },
-                    toggleLike(type) {
-                        const self = this;
-
-                        $.ajax({
-                        url: "/board/toggleLike.dox",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
+                    likeButton (status, PM ){
+                        let self = this;  
+                        let finalstatus = 0 ;
+                        if (PM == 'M') {
+                            finalstatus = -1;
+                        } else {
+                            finalstatus = 1;
+                        }
+                        var nparmap = {
                             boardId: self.boardId,
                             userId: self.sessionId,
-                            type: type,
-                        },
-                        success: function (res) {
-                            self.likeCount = res.likeCount;
-                            self.dislikeCount = res.dislikeCount;
-                            self.myLikeStatus = res.myStatus;
-                        },
+                            status : status,
+                            likes : self.likes,
+                            dislikes : self.dislikes,
+                            finalstatus : finalstatus
+                        };
+                        
+                        if(self.sessionId == null || self.sessionId == "" ){
+                                    alert("로그인후 이용해 주세요.");
+                                    return;
+                        }
+                        
+                        if(self.likeStatus ) {
+                            if(status == 'dislike' ){
+                                // alert("");
+                                return;
+                            }
+                        }
+
+                        if (self.dislikeStatus) {
+                            if(status == 'like' ){
+                                // alert("");
+                                return;
+                            }
+                        }
+
+                        if (PM == 'M') {
+                            
+                            $.ajax({
+                                url: "/board/removelikeCnt.dox",
+                                dataType: "json",
+                                type: "POST",
+                                data: nparmap,
+                                success: function (data) {
+                                    console.log("eee",data);
+                                    self.fnlikestatus();
+                                }
+                            }); 
+
+                        } else {
+
+                            $.ajax({
+                                url: "/board/addlikeCnt.dox",
+                                dataType: "json",
+                                type: "POST",
+                                data: nparmap,
+                                success: function (data) {
+                                    console.log("eee",data);
+                                    self.fnlikestatus();
+                                }
+                            });  
+
+                        }
+                        
+                        $.ajax({
+                            url: "/board/addlikeCntBoard.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.fnView();
+
+                            }
                         });
-                    },
+                                              
+                    }, 
+
+
                 },
                 mounted() {
                 	let self = this;

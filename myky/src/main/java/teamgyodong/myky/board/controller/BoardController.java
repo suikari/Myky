@@ -245,14 +245,47 @@ public class BoardController {
 	    result.put("status", "success");
 	    return result;
 	}
-//	@RequestMapping(value = "/board/toggleLike.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-//	@ResponseBody
-//	public String toggleLike(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-//	    HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//
-//	    // 좋아요/싫어요 토글 로직 (현재 누른 버튼 상태를 확인하고 처리)
-//	    resultMap = boardService.toggleLike(map);
-//
-//	    return new Gson().toJson(resultMap);
-//	}
+	//좋아요 싫어요 버튼 값 가져오기
+	@RequestMapping(value = "/board/likeStatus.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String likeButton(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+				
+				
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.selectLikeButton(map);
+				
+		return new Gson().toJson(resultMap);
+	}
+	//좋아요 버튼 status insert
+	@RequestMapping(value = "board/addlikeCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String insertLikeCnt(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.addlikeCnt(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	//좋아요 싫어요 버튼 삭제
+	@RequestMapping(value = "/board/removelikeCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String RemoveCnt(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+				
+				
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.RemoveCnt(map);
+				
+		return new Gson().toJson(resultMap);
+	}
+	//좋아요 싫어요 작성
+	@RequestMapping(value = "/board/addlikeCntBoard.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String addAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.addlikeCntBoard(map);
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
 }

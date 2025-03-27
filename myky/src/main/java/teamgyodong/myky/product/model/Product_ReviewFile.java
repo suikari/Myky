@@ -3,19 +3,9 @@ package teamgyodong.myky.product.model;
 import lombok.Data;
 
 @Data
-
-public class Review {
-	private String reviewId;
-	private String userId;
-	private String rating;
-	private String reviewText;
-	private String createdAt;
-	private String productId;
-	private String title;
-	private int cnt;
-	
-	
+public class Product_ReviewFile {
 	private String fileNo;
+	private String reviewId;
 	private String filePath ;
 	private String fileName ;
 	private String fileOrgname ;

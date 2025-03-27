@@ -109,14 +109,12 @@
             .purchase-section {
                 margin-top: 20px;
             }
-
             .qty-box {
                 display: flex;
                 align-items: center;
                 gap: 10px;
                 margin-bottom: 20px;
             }
-
             .qty-controller {
                 display: flex;
                 align-items: center;
@@ -126,7 +124,6 @@
                 width: fit-content;
                 background-color: #fff;
             }
-
             .qty-btn {
                 width: 36px;
                 height: 36px;
@@ -136,12 +133,10 @@
                 cursor: pointer;
                 border-right: 1px solid #ccc;
             }
-
             .qty-btn:last-child {
                 border-left: 1px solid #ccc;
                 border-right: none;
             }
-
             .qty-input {
                 width: 50px;
                 height: 36px;
@@ -622,7 +617,6 @@
                             <button class="cart-btn" @click="fnAddCart()">장바구니</button>
                             <button class="buy-btn">구매하기</button>
                         </div>
-
             </section>
 
             <!-- 상세 설명 -->
@@ -695,7 +689,7 @@
                                 </thead>
                                 <tbody>
                                     <template v-for="(review, index) in reviewList" :key="review.reviewId">
-                                        <tr @click="toggleReviewDetail(review.reviewId)">
+                                        <tr @click="fnReviewView(review.reviewId)">
                                             <td>{{ review.reviewId }}</td>
                                             <td class="review-title">{{ review.title || '(제목 없음)' }}</td>
                                             <td>{{ review.userId }}</td>
@@ -708,8 +702,8 @@
                                                 <div class="review-detail">
                                                     <div class="stars">⭐️ {{ review.rating }}점</div>
                                                     <div v-html="review.reviewText"></div>
-                                                    <div v-if="review.imageUrl">
-                                                        <img :src="review.imageUrl" alt="리뷰 이미지"
+                                                    <div v-if="review.filePath">
+                                                        <img :src="review.filePath" alt="리뷰 이미지"
                                                             style="max-width: 200px;">
                                                     </div>
                                                     <div class="review-actions">
@@ -874,7 +868,7 @@
                         reviewTotal: 0,
                         reviewPages: [],
                         // 상품 문의..
-                        qnaList: []
+                        // qnaList: []
                     };
                 },
                 computed: {
@@ -884,19 +878,16 @@
                         console.log("📦 총 상품 금액:", result);
                         return result;
                     },
-
                     isFreeShipping() {
                         const condition = this.totalProductPrice >= this.info.shippingFreeMinimum;
                         console.log("🚚 무료배송 조건:", this.totalProductPrice, ">=", this.info.shippingFreeMinimum, "→", condition);
                         return condition;
                     },
-
                     shippingCost() {
                         const cost = this.isFreeShipping ? 0 : this.info.shippingFee;
                         console.log("💸 배송비 적용:", cost);
                         return cost;
                     },
-
                     totalPrice() {
                         const total = this.totalProductPrice + this.shippingCost;
                         console.log("💰 총 결제 금액:", total);
@@ -906,7 +897,7 @@
                         return this.totalPrice.toLocaleString();
                     },
                     discountedPrice() {
-                        return this.info.price - this.info.discount;
+                        return Math.floor(this.info.price * (1 - this.info.discount / 100));
                     }
                 },
                 methods: {
@@ -953,7 +944,7 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log("1", data);
+                                console.log("11", data);
                                 self.reviewList = data.reviewList;
                                 self.tabs[1].cmtcount = data.totalCount;
                                 self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
@@ -961,7 +952,7 @@
                         });
                     },
                     //리뷰 조회수
-                    toggleReviewDetail(reviewId) {
+                    fnReviewView(reviewId) {
                         const self = this;
                         if (self.selectedReviewId === reviewId) {
                             self.selectedReviewId = null;
@@ -1079,7 +1070,7 @@
                         self.activeTab = tabId;
                         if (tabId === 'review') {
                             self.fnReviewList();
-                        }else if(abId === 'qna'){
+                        }else if(tabId === 'qna'){
                             self.fnQnaList();
                         }
                     },
@@ -1103,26 +1094,26 @@
                         this.quantity = 1;
                     },
                     // 상품 문의
-                    fnQnaList() {
-                        const self = this;
-                        $.ajax({
-                            url: "/product/qnaList.dox",
-                            type: "POST",
-                            data: { productId: self.productId },
-                            dataType: "json",
-                            success(data) {
-                                console.log("Q&A 목록:", data);
-                                self.qnaList = data.qnaList;
-                                self.tabs[2].cmtcount = data.qnaList.length;
-                            }
-                        });
-                    },
-                    fnQnaView(qnaId) {
-                        location.href = "/product/qnaView.do?productId=" + this.productId + "&qnaId=" + qnaId;
-                    },
-                    fnQnaWrite() {
-                        location.href = "/product/qnaWrite.do?productId=" + this.productId;
-                    }
+                    // fnQnaList() {
+                    //     const self = this;
+                    //     $.ajax({
+                    //         url: "/product/qnaList.dox",
+                    //         type: "POST",
+                    //         data: { productId: self.productId },
+                    //         dataType: "json",
+                    //         success(data) {
+                    //             console.log("Q&A 목록:", data);
+                    //             self.qnaList = data.qnaList;
+                    //             self.tabs[2].cmtcount = data.qnaList.length;
+                    //         }
+                    //     });
+                    // },
+                    // fnQnaView(qnaId) {
+                    //     location.href = "/product/qnaView.do?productId=" + this.productId + "&qnaId=" + qnaId;
+                    // },
+                    // fnQnaWrite() {
+                    //     location.href = "/product/qnaWrite.do?productId=" + this.productId;
+                    // }
 
                 },
                 mounted() {
@@ -1137,7 +1128,7 @@
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
-                    self.fnQnaList();
+                    // self.fnQnaList();
                     self.fnUserInfo();
                 }
             });
