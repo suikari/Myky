@@ -8,5 +8,8 @@ public interface ManagerService {
 	
 	HashMap<String, Object> selectMainList(HashMap<String, Object> map);
 	
+	HashMap<String, Object> deleteBoardList(HashMap<String, Object> map);
 	
+	HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map);
+
 }

@@ -90,24 +90,24 @@
                     </ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'board' }">
-                    <a @click="fnchange('board')" class="nav-link" :class="{ active: menu === 'board' }" href="#">게시판 관리</a>
+                    <a @click="fnchange('board','1')" class="nav-link" :class="{ active: menu === 'board' }" href="#">게시판 관리</a>
                     <ul class="submenu">
-                        <li class="submenu-item" :class="{ active: submenu === '1' }">글 목록</li>
-                        <li class="submenu-item" :class="{ active: submenu === '2' }">댓글 관리</li>
+                        <li @click="fnchange('board','1')" class="submenu-item" :class="{ active: submenu === '1' }">게시글 관리</li>
+                        <li @click="fnchange('board','2')" class="submenu-item" :class="{ active: submenu === '2' }">댓글 관리</li>
                     </ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'product' }">
-                    <a @click="fnchange('product')" class="nav-link" :class="{ active: menu === 'product' }" href="#">상품 관리</a>
+                    <a @click="fnchange('product','1')" class="nav-link" :class="{ active: menu === 'product' }" href="#">상품 관리</a>
                     <ul class="submenu">
-                        <li class="submenu-item" :class="{ active: submenu === '1' }">상품 목록</li>
-                        <li class="submenu-item" :class="{ active: submenu === '2' }"> 카테고리 관리</li>
+                        <li @click="fnchange('product','1')" class="submenu-item" :class="{ active: submenu === '1' }">상품 목록</li>
+                        <li @click="fnchange('product','2')" class="submenu-item" :class="{ active: submenu === '2' }"> 카테고리 관리</li>
                     </ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'membership' }">
-                    <a @click="fnchange('membership')" class="nav-link" :class="{ active: menu === 'membership' }" href="#">멤버쉽 관리</a>
+                    <a @click="fnchange('membership','1')" class="nav-link" :class="{ active: menu === 'membership' }" href="#">멤버쉽 관리</a>
                     <ul class="submenu">
-                        <li class="submenu-item" :class="{ active: submenu === '1' }">회원 등급</li>
-                        <li class="submenu-item" :class="{ active: submenu === '2' }">가입 승인</li>
+                        <li @click="fnchange('membership','1')" class="submenu-item" :class="{ active: submenu === '1' }">회원 등급</li>
+                        <li @click="fnchange('membership','2')" class="submenu-item" :class="{ active: submenu === '2' }">가입 승인</li>
                     </ul>
                 </li>
             </ul>
@@ -125,10 +125,7 @@
             methods: {
             	
                 fnchange(menu, submenu) {
-                   
-                	if(menu == "stat" ) {
-                        location.href="/manager/main.do?menu="+ menu + "&submenu=" + submenu;
-                	}
+                   location.href="/manager/main.do?menu="+ menu + "&submenu=" + submenu;
                 },
                 
             },

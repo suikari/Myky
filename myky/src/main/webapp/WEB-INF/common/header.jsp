@@ -369,7 +369,7 @@
         <div class="top-bar-main">
         	<div v-if="!sessionName" class="top-bar">
 	            <a href="/user/consent.do">회원가입</a> 
-	            | <a href="/user/login.do">로그인</a>
+	            | <a @click="fnLogin"> 로그인</a>
 	            | <a href="/board/list.do?category=A">공지사항</a> 
 	        </div>
 	        
@@ -466,7 +466,8 @@
                 		
                 	},                	
                     fnLogin() {
-                        window.location.href = "/user/login.do";
+                        //window.location.href = "/user/login.do";
+                        window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname);
                     },      
                     toggleSearch() {
                         this.showSearch = !this.showSearch;

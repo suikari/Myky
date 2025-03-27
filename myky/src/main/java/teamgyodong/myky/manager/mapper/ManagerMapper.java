@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.manager.model.Visit;
+import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
@@ -22,8 +23,13 @@ public interface ManagerMapper {
 	List<mPay> selectPaymentList(HashMap<String, Object> map);
 	List<mUser> selectUserList(HashMap<String, Object> map);
 	List<mDonation> selectDonationList(HashMap<String, Object> map);
+	
+	List<mComment> selectAllCmtList(HashMap<String, Object> map);
 
 	
+	
+	int deleteBoardList(HashMap<String, Object> map);
+
 	
 	
 }
