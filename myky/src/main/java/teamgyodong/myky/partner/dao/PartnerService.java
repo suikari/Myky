@@ -15,6 +15,9 @@ public interface PartnerService {
 	HashMap<String, Object> favoritesRemove(HashMap<String, Object> map); //즐겨찾기 삭제
 
 
+	HashMap<String, Object> favoritesList(HashMap<String, Object> map);
+
+
 
 	
 }

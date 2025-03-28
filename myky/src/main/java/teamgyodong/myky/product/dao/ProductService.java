@@ -19,8 +19,12 @@ public interface ProductService {
 
   HashMap<String, Object> getReview(HashMap<String, Object> map);
 
-//  HashMap<String, Object> getReviewCnt(HashMap<String, Object> map);
-  
   HashMap<String, Object> markHelpful(HashMap<String, Object> map);
+
+  HashMap<String, Object> getQnAList(HashMap<String, Object> map);
+
+  HashMap<String, Object> addQna(HashMap<String, Object> map);
+
+  HashMap<String, Object> qnaRemove(HashMap<String, Object> map);
 
 }

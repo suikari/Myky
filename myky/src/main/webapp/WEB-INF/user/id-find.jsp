@@ -269,7 +269,7 @@
             });
           },
           fnPasswordReset: function () {
-            location.href = "/user/resetPwd.do";
+            location.href = "/user/resetpwd.do";
           },
 
           fnExit: function () {

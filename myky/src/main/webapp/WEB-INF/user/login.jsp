@@ -196,11 +196,11 @@
 					});
 				},
 				fnPasswordReset() {
-					location.href="/user/resetPwd.do";
+					location.href="/user/resetpwd.do";
 				},
 
 				fnIdFind() {
-					location.href="/user/findId.do";
+					location.href="/user/findid.do";
 				},
 
 				fnAdd() {
@@ -214,7 +214,7 @@
 			},
 			mounted() {
 				var self = this;
-				const params = new URLSearchParams(window.location.search);
+				const params = new URLSearchParams(window.location.search); // 보드에서 로그인시 보드로
 				self.reUrl = params.get("redirect") || "/main.do";
 			}
 		});

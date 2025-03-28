@@ -20,13 +20,13 @@
 			    COUNT(*) AS visit_count 
 			FROM visit_log
 			WHERE 1=1
-			<if test="year != null and year == '' ">
+			<if test="year != null and year != '' ">
 		        AND  EXTRACT(YEAR FROM access_time) =  #{year} 
 		    </if>
-		    <if test="month != null and month == '' ">
+		    <if test="month != null and month != '' ">
 		        AND  EXTRACT(MONTH FROM access_time) =  #{month} 
 		    </if>
-		    <if test="hour != null and hour == '' ">
+		    <if test="hour != null and hour != '' ">
 		        AND  EXTRACT(HOUR FROM access_time) =  #{hour} 
 		    </if>	
 			GROUP BY TRUNC(access_time)
@@ -41,13 +41,13 @@
 			    COUNT(*) AS visit_count 
 			FROM visit_log
 			WHERE 1=1
-			<if test="year != null and year == '' ">
+			<if test="year != null and year != '' ">
 		        AND  EXTRACT(YEAR FROM access_time) =  #{year} 
 		    </if>
-		    <if test="month != null and month == '' ">
+		    <if test="month != null and month != '' ">
 		        AND  EXTRACT(MONTH FROM access_time) =  #{month} 
 		    </if>
-		    <if test="hour != null and hour == '' ">
+		    <if test="hour != null and hour != '' ">
 		        AND  EXTRACT(HOUR FROM access_time) =  #{hour} 
 		    </if>	
 			GROUP BY EXTRACT(HOUR FROM access_time)
@@ -73,13 +73,13 @@
 		    FROM payment P where nvl(P.subscription_period,0) = 0 ) AS paymentTotalCnt
 			FROM payment P
 			WHERE 1=1
-		    <if test="year != null and year == '' ">
+		    <if test="year != null and year != '' ">
 		        AND  EXTRACT(YEAR FROM PAYMENT_DATE) =  #{year} 
 		    </if>
-		    <if test="month != null and month == '' ">
+		    <if test="month != null and month != '' ">
 		        AND  EXTRACT(MONTH FROM PAYMENT_DATE) =  #{month} 
 		    </if>
-		    <if test="hour != null and hour == '' ">
+		    <if test="hour != null and hour != '' ">
 		        AND  EXTRACT(HOUR FROM PAYMENT_DATE) =  #{hour} 
 		    </if>	
 		    AND nvl(P.subscription_period,0) = 0
@@ -91,13 +91,13 @@
 		    FROM USERS ) AS userTotalCnt
 			FROM USERS U
 			WHERE 1=1
-		    <if test="year != null and year == '' ">
+		    <if test="year != null and year != '' ">
 		        AND  EXTRACT(YEAR FROM CREATED_AT) =  #{year} 
 		    </if>
-		    <if test="month != null and month == '' ">
+		    <if test="month != null and month != '' ">
 		        AND  EXTRACT(MONTH FROM CREATED_AT) =  #{month} 
 		    </if>
-		    <if test="hour != null and hour == '' ">
+		    <if test="hour != null and hour != '' ">
 		        AND  EXTRACT(HOUR FROM CREATED_AT) =  #{hour} 
 		    </if>	
 		    
@@ -109,20 +109,32 @@
 		    FROM donation_history ) AS donationTotalCnt
 			FROM donation_history D
 			WHERE 1=1
-		    <if test="year != null and year == '' ">
+		    <if test="year != null and year != '' ">
 		        AND  EXTRACT(YEAR FROM DONATION_DATE) =  #{year} 
 		    </if>
-		    <if test="month != null and month == '' ">
+		    <if test="month != null and month != '' ">
 		        AND  EXTRACT(MONTH FROM DONATION_DATE) =  #{month} 
 		    </if>
-		    <if test="hour != null and hour == '' ">
+		    <if test="hour != null and hour != '' ">
 		        AND  EXTRACT(HOUR FROM DONATION_DATE) =  #{hour} 
 		    </if>	
 		    
 	</select>	
 
 
+	<select id="selectSearchRanking" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.manager">
+	    SELECT SEARCH_TERM, COUNT(*) AS SEARCH_COUNT
+	    FROM search_history
+	    <where>
+	        <if test="userId != null and userId != ''">
+	            USER_ID = #{userId}
+	        </if>
+	    </where>
+	    GROUP BY SEARCH_TERM
+	    ORDER BY SEARCH_COUNT DESC
+	    OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
 
+	</select>
 
 
 
@@ -136,6 +148,15 @@
 		AND CATEGORY = #{category}
 	</delete>
 
+	<delete id="deleteBoardCmtList" parameterType="hashmap">
+		UPDATE FREE_BOARD_COMMENT
+		SET IS_DELETED = 'Y'
+		WHERE COMMENT_ID IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
 
 	<select id="selectAllCmtList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mComment">
 		
@@ -146,9 +167,54 @@
 			FROM USERS
 		) U ON F.USER_ID = U.USER_ID
 		LEFT JOIN FREE_BOARD B ON F.BOARD_ID = B.BOARD_ID
-		ORDER BY F.comment_id ASC
+		WHERE 1=1 
 		
+		<if test="searchOption != null and searchOption == 'all'">
+	        AND (F.CONTENT LIKE '%' || #{keyword} || '%' OR F.USER_ID LIKE '%' || #{keyword} || '%')
+	    </if>
+	    <if test="searchOption != null and searchOption == 'content'">
+	        AND F.CONTENT LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND F.USER_ID LIKE '%' || #{keyword} || '%'
+	    </if>
+		AND F.IS_DELETED = 'N'
+		ORDER BY F.UPDATED_AT DESC
+		
+		<if test="page != null and pageSize != null" >
+		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		</if>
+		
+
 	</select>
+	
+
+	<select id="selectAllCmtCnt" parameterType="hashmap" resultType="int">
+	
+		SELECT COUNT(*)
+		FROM FREE_BOARD_COMMENT F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		LEFT JOIN FREE_BOARD B ON F.BOARD_ID = B.BOARD_ID
+		WHERE 1=1 
+		
+		<if test="searchOption != null and searchOption == 'all'">
+	        AND (F.CONTENT LIKE '%' || #{keyword} || '%' OR F.USER_ID LIKE '%' || #{keyword} || '%')
+	    </if>
+	    <if test="searchOption != null and searchOption == 'content'">
+	        AND F.CONTENT LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND F.USER_ID LIKE '%' || #{keyword} || '%'
+	    </if>
+	    
+	</select>
+	
+	
+	
+	
 	
 </mapper>
 

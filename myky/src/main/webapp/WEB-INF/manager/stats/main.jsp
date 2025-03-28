@@ -181,6 +181,53 @@
 		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 		}
 
+        /* 검색어 순위 리스트 */
+        .search-rank-container {
+            margin-top: 20px;
+        }
+
+        .search-rank-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .search-rank-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 16px;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .search-rank-item:hover {
+            background-color: #f1f5f9;
+        }
+
+        .search-rank-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-rank-number {
+            font-weight: bold;
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        .search-rank-keyword {
+            flex-grow: 1;
+            margin-left: 10px;
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .search-rank-count {
+            font-size: 14px;
+            color: #6b7280;
+        }
     </style>
     
 </head>
@@ -214,7 +261,7 @@
 				      <div class="stat-icon bg-green">
 				        <i class="bi bi-cash-stack"></i>
 				      </div>
-				      <div class="stat-number mt-2">₩ {{saletot}}</div>
+				      <div class="stat-number mt-2">₩ {{ saletot }}</div>
 				      <div class="stat-label">이달의 판매 금액</div>
 				    </div>
 				  </div>
@@ -223,13 +270,32 @@
 				      <div class="stat-icon bg-orange">
 				        <i class="bi bi-hand-thumbs-up-fill"></i>
 				      </div>
-				      <div class="stat-number mt-2">₩ {{donationtot}}</div>
+				      <div class="stat-number mt-2">₩ {{ donationtot }}</div>
 				      <div class="stat-label">이달의 후원 금액</div>
 				    </div>
 				  </div>
 				</div>
 
-               
+
+		        <div class="row mt-4">
+		            <div class="col-md-6">
+		                <div class="card search-rank-container">
+		                    <div class="card-header">검색어 순위</div>
+		                    <ul class="search-rank-list">
+		                        <li class="search-rank-item" v-for="(word, index) in searchRanks" :key="index">
+		                            <span class="search-rank-number">{{ index + 1 }}</span>
+		                            <span class="search-rank-keyword">{{ word.SearchTerm }}</span>
+		                            <span class="search-rank-count">{{ word.SearchCount }}회</span>
+		                        </li>
+		                    </ul>
+		                </div>
+		            </div>
+		            <div class="col-md-6">
+		                <div class="card-body chart-container">
+		                    <div id="chart"></div>
+		                </div>
+		            </div>
+		        </div>
 
 
         </div>
@@ -252,7 +318,23 @@
                          ],
                          saletot : 0,
                          donationtot : 0,
-                         
+                         searchRanks : {},
+                         options : {
+                                 series: [70],
+                                 chart: {
+                                 height: 350,
+                                 type: 'radialBar',
+                               },
+                               plotOptions: {
+                                 radialBar: {
+                                   hollow: {
+                                     size: '70%',
+                                   }
+                                 },
+                               },
+                               labels: ['신규회원 구매율'],
+                        },
+                        
                      };
                  },
                 computed: {
@@ -285,7 +367,22 @@
                     			}
                     				
                     		}
+                    	
                     	});
+                       	$.ajax({
+                    		url: "/admin/searchList.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("12",data);
+                    			self.searchRanks = data.Search;
+
+                    		}
+                    	
+                    	});
+                    	
+                    	
                     },
                 	
                 	
@@ -298,7 +395,9 @@
                     self.submenu = params.get("submenu") || "1";
                     
                 	self.fnMainList();
-
+                	
+                    var chart = new ApexCharts(document.querySelector("#chart"), self.options);
+                    chart.render();
                 	
                 }
             });

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.product.model.Product;
+import teamgyodong.myky.product.model.Qna;
 import teamgyodong.myky.product.model.Review;
 
 @Mapper
@@ -35,12 +36,21 @@ public interface ProductMapper {
 	Review selectReview(HashMap<String, Object> map);
 	//리뷰 사진 가져오기
 	List<Review> selectReviewImg(HashMap<String, Object> map);
-	//조회수
-//	int ReviewCnt(HashMap<String, Object> map);
 
 	//도움돼요 추천
 	int selectHelpfulByUser(HashMap<String, Object> map);
 	void updateHelpCnt(HashMap<String, Object> map);
+	
+	//문의
+	List<Qna> selectQnaList(HashMap<String, Object> map);
+
+	int selectQnaCnt(HashMap<String, Object> map);
+
+	void insertQna(HashMap<String, Object> map);
+
+	void deleteQna(HashMap<String, Object> map);
+
+//	Qna selectQnaById(HashMap<String, Object> map);
 
 
 }

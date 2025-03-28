@@ -19,11 +19,13 @@ public interface UserMapper {
 
 	int insertUser(HashMap<String, Object> map);
 
-	int updateInfo(HashMap<String, Object> map);
+	void updateInfo(HashMap<String, Object> map);
 
 	void updateLastLogin(String userId);
 
 	int updateWithdraw(HashMap<String, Object> map);
+
+	void insertProfileImg(HashMap<String, Object> map);
 
 
 

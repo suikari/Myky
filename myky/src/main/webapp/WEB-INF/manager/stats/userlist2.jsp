@@ -92,22 +92,10 @@
 		    font-weight: 600;
 		}
 
-        .date-picker-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .date-picker {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+
     </style>
-  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
 </head>
-
 <body>
 
     <div id="app" class="dashboard-container col-9">
@@ -116,23 +104,6 @@
             <div class=" main-content">
                 <h2>통계</h2>
 
-	            <div class="date-picker-container">
-	                <label for="year">연도:</label>
-	                <select id="year" v-model="selectedYear" @change="fnList">
-	                    <option v-for="year in years" :value="year">{{ year }}</option>
-	                </select>
-	                
-	                <label for="month">월:</label>
-	                <select id="month" v-model="selectedMonth" @change="fnList">
-	                    <option v-for="month in months" :value="month">{{ month }}</option>
-	                </select>
-	                
-	                <label for="day">일:</label>
-	                <select id="day" v-model="selectedDay" @change="fnList">
-	                    <option v-for="day in days" :value="day">{{ day }}</option>
-	                </select>
-	            </div>
-	            
                 <div class="card">
                     <div class="card-header">
                         <h5>시간대별 & 날짜별 접속자</h5>
@@ -150,7 +121,10 @@
 						<div id="chart_bar2"></div>
                     </div>
                 </div>
-               
+                
+                
+
+
                 <div class="card">
                     <div class="card-header">
                         <h5>브라우저별 접속자</h5>
@@ -160,7 +134,60 @@
                     </div>
                 </div>
 
+                <!-- Product Sales -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Product Sales</h5>
+                    </div>
+                    <div class="card-body chart-container">
+                    </div>
+                </div>
 
+                <!-- Upcoming Schedules -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Upcoming Schedules</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">09:30 AM - Payment received from John Doe of $385.90</li>
+                            <li class="list-group-item">10:00 AM - New sale recorded #ML-3467</li>
+                            <li class="list-group-item">12:00 PM - Payment made to Michael of $64.95</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Top Paying Clients -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Paying Clients</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Assigned</th>
+                                    <th>Name</th>
+                                    <th>Priority</th>
+                                    <th>Budget</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Sunil Joshi</td>
+                                    <td>Web Designer</td>
+                                    <td>Low</td>
+                                    <td>$3.9k</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Andrew McDownland</td>
+                                    <td>Project Manager</td>
+                                    <td>Medium</td>
+                                    <td>$24.5k</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
 
@@ -175,15 +202,78 @@
             const app = Vue.createApp({
             	 data() {
                      return {
-                         selectedYear: new Date().getFullYear(),
-                         selectedMonth: new Date().getMonth() + 1,
-                         selectedDay: new Date().getDate(),
-                         years: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i),
-                         months: Array.from({ length: 12 }, (_, i) => i + 1),
-                         days: Array.from({ length: 31 }, (_, i) => i + 1),
-                         optionsP: { series: [], chart: { width: 380, type: 'pie' }, labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }] },
-                         optionsB: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } },
-                         optionsBD: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } }
+                    	 optionsP : {
+                             series: [],
+                             chart: {
+                             width: 380,
+                             type: 'pie',
+                             },
+                             labels: [],
+                             responsive: [{
+                             breakpoint: 480,
+                             options: {
+                                 chart: {
+                                 width: 200
+                                 },
+                                 legend: {
+                                 position: 'bottom'
+                                 }
+                             }
+                             }]
+                         },
+                         optionsB : {
+                             series: [{
+                             data: []
+                             }],
+                             chart: {
+                             type: 'bar',
+                             height: 350
+                             },
+                             plotOptions: {
+                             bar: {
+                                 borderRadius: 4,
+                                 borderRadiusApplication: 'end',
+                                 horizontal: true,
+                             }
+                             },
+                             dataLabels: {
+                             enabled: false
+                             },
+                             xaxis: {
+                             categories: [],
+                             }
+                         },
+                         optionsBD : {
+                             series: [{
+                             data: []
+                             }],
+                             chart: {
+                             type: 'bar',
+                             height: 350
+                             },
+                             plotOptions: {
+                             bar: {
+                                 borderRadius: 4,
+                                 borderRadiusApplication: 'end',
+                                 horizontal: true,
+                             }
+                             },
+                             dataLabels: {
+                             enabled: false
+                             },
+                             xaxis: {
+                             categories: [],
+                             }
+                         },
+                         stats: [
+                             { icon: 'bi bi-heart-fill', number: "..", label: '이달의 후원 수', bg: 'bg-blue' },
+                             { icon: 'bi bi-box-fill', number: "..", label: '등록 상품 수', bg: 'bg-yellow' },
+                             { icon: 'bi bi-bag-fill', number: "..", label: '이달의 상품 판매량', bg: 'bg-red' },
+                             { icon: 'bi bi-briefcase-fill', number: "..", label: '이달의 등록자 현황', bg: 'bg-purple' }
+                         ],
+                         saletot : 0,
+                         donationtot : 0,
+                         
                      };
                  },
                 computed: {
@@ -192,16 +282,12 @@
                 methods: {
                 	fnList : function() { 
                         var self = this;
-                        var nparmap = {  
-                        		year: self.selectedYear,
-                        		month: self.selectedMonth,
-                        		day: self.selectedDay
-                        };
+                        var nparmap = { };
                         $.ajax({
                             url: "/admin/LogList.dox",  // 서버 주소 수정 (http:// 포함)
                             dataType: "json",
                             type: "POST", // GET, POST
-                            data: nparmap,   // 서버로 보낼 데이터
+                            data: JSON.stringify(nparmap),   // 서버로 보낼 데이터
                             contentType: "application/json",
                             success: function(data) {
                                 console.log(data);
@@ -251,15 +337,6 @@
                     
                     self.menu = params.get("menu") || "stat";
                     self.submenu = params.get("submenu") || "1";
-                    
-                    flatpickr("#date-picker", {
-                        dateFormat: "Y-m-d",
-                        defaultDate: new Date(),
-                        onChange: function(selectedDates, dateStr) {
-                            self.selectedDate = dateStr;
-                            self.fnList();
-                        }
-                    });
                     
                 	self.fnList();
 

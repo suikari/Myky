@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import teamgyodong.myky.product.mapper.ProductMapper;
 import teamgyodong.myky.product.model.Product;
+import teamgyodong.myky.product.model.Qna;
 import teamgyodong.myky.product.model.Review;
 
 @Service
@@ -52,17 +53,7 @@ public class ProductServiceImpl implements ProductService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
-	//리뷰 가져오기
-//	public HashMap<String, Object> getReviewCnt(HashMap<String, Object> map) {
-//		// TODO Auto-generated method stub
-//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//		int count = productMapper.ReviewCnt(map);
-//
-//		resultMap.put("result", "success");
-//		return resultMap;
-//	}
 	
-
 	//상품 리뷰 리스트 가져오기
 	public HashMap<String, Object> getReviewList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -107,7 +98,6 @@ public class ProductServiceImpl implements ProductService {
 		//리뷰 정보 가져오기
 		Review info = productMapper.selectReview(map);
 		
-		
 		resultMap.put("info", info);
 		resultMap.put("result", "success");
 		return resultMap;
@@ -131,13 +121,54 @@ public class ProductServiceImpl implements ProductService {
 	    return resultMap;
 	}
 
-	
-	
 	//상품 리뷰 파일 업로드
 	public  void addReviewFile(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		productMapper.insertReviewFile(map);
+	}
+	
+	
+	//상품 QnA 페이지
+	public HashMap<String, Object> getQnAList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<Qna> qnalist = productMapper.selectQnaList(map);
+		int count = productMapper.selectQnaCnt(map);
 		
+		resultMap.put("list", qnalist);
+		resultMap.put("totalCount", count);
+		resultMap.put("result", "success");
+		
+		return resultMap;
+	}
+	//상품 QnA 글쓰기
+	public HashMap<String, Object> addQna(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		productMapper.insertQna(map);
+		//System.out.println("Key ==> " +map.get("userId"));
+		
+		resultMap.put("qnaId", map.get("qnaId"));
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//QnA 글 삭제
+	public HashMap<String, Object> qnaRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		// 1. QnA 상세 조회 (작성자 확인용)
+//		Qna qna = productMapper.selectQnaById(map);
+//		
+//		// 2. 세션 유저와 작성자 비교
+//		String sessionUserId = (String) map.get("userId");  
+//	    if (!sessionUserId.equals(qna.getUserId())) {
+//	        resultMap.put("result", "fail");
+//	        resultMap.put("message", "본인만 삭제할 수 있습니다.");
+//	        return resultMap;
+//	    }
+		productMapper.deleteQna(map);
+		resultMap.put("result", "success");
+		return resultMap;
 	}
 	
 }

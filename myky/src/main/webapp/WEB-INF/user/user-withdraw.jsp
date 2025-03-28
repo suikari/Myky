@@ -162,6 +162,7 @@
                                 console.log(data);
                                 if (data.count > 0) {
                                     alert("탈퇴되었습니다!");
+                                    opener.withdrawBack(); // 탈퇴시 mypage
                                     window.close();
                                 }
                             }

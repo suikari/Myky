@@ -13,6 +13,7 @@
 	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
 	<script src="/js/main.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		
     <style>
 		    
@@ -467,7 +468,8 @@
                 	},                	
                     fnLogin() {
                         //window.location.href = "/user/login.do";
-                        window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname);
+                        //window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname);
+                        window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname + window.location.search);
                     },      
                     toggleSearch() {
                         this.showSearch = !this.showSearch;

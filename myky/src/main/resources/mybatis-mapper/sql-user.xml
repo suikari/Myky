@@ -60,7 +60,15 @@
 		EMAIL_YN = #{emailYn},
 		PHONE_YN = #{phoneYn},
 		BIRTH_DATE = #{birthDate},
+		PROFILE_IMAGE = #{profileImage},
 		UPDATED_AT = SYSDATE
+		WHERE USER_ID = #{userId}
+	</update>
+	
+		<update id="insertProfileImg" parameterType="hashmap" >
+		UPDATE USERS
+		SET 
+		PROFILE_IMAGE = #{path}
 		WHERE USER_ID = #{userId}
 	</update>
 	
