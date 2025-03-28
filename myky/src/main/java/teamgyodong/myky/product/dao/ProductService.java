@@ -19,6 +19,8 @@ public interface ProductService {
 
   HashMap<String, Object> getReview(HashMap<String, Object> map);
 
-  HashMap<String, Object> getReviewCnt(HashMap<String, Object> map);
+//  HashMap<String, Object> getReviewCnt(HashMap<String, Object> map);
+  
+  HashMap<String, Object> markHelpful(HashMap<String, Object> map);
 
 }
