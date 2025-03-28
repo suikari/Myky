@@ -45,11 +45,17 @@ public class CartController {
 		return "cart/order";
 	}
 
-	@RequestMapping("/cart/orderComplete.do") 
+	@RequestMapping("/order/orderComplete.do") 
 	public String orderComplete(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		
 		request.setAttribute("map", map);
-		return "cart/orderComplete";
+		return "cart/order-complete";
+	}
+
+	@RequestMapping("/order/orderList.do") 
+	public String orderList(Model model) throws Exception{
+		
+		return "cart/order-list";
 	}
 	
 	// cartList
