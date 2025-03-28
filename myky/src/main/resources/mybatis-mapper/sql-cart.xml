@@ -7,7 +7,7 @@
 	
 	<select id="selectCartList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 		
-		select c.cart_id, c.user_id, c.session_id, c.created_at, ci.cart_item_id, ci.product_id, p.product_name, p.price, p.shipping_fee, p.shipping_free_minimum, ci.quantity, p.filepath
+		select c.cart_id, c.user_id, c.session_id, c.created_at, ci.check_yn, ci.cart_item_id, ci.product_id, p.product_name, p.price, p.shipping_fee, p.shipping_free_minimum, ci.quantity, p.filepath
 		from cart c
 		join cart_item ci on c.cart_id = ci.cart_id
 		join (
@@ -18,6 +18,20 @@
 		where c.user_id = #{userId}
 			
 	</select>
+
+	<select id="selectCartCheckList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
+		
+		select c.cart_id, c.user_id, c.session_id, c.created_at, ci.check_yn, ci.cart_item_id, ci.product_id, p.product_name, p.price, p.shipping_fee, p.shipping_free_minimum, ci.quantity, p.filepath
+		from cart c
+		join cart_item ci on c.cart_id = ci.cart_id
+		join (
+			select p.*, f.filepath
+		    from product p  
+		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
+		) p on ci.product_id = p.product_id
+		where c.user_id = #{userId} and ci.check_yn = 'Y'
+			
+	</select>
 	
 	<update id="updateCartQuantity" parameterType="hashmap">
 	
@@ -25,6 +39,33 @@
 		set
 			quantity = quantity + #{quantity}
 		where cart_id = #{cartId} and product_id = #{productId}
+	
+	</update>
+	
+	<update id="updateCartCheckYn" parameterType="hashmap">
+	
+		update cart_item
+		set
+			check_yn = #{checkYn}
+		where cart_id = #{cartId} and product_id = #{productId}
+	
+	</update>
+
+	<update id="updateCartAllCheckYn" parameterType="hashmap">
+	
+		update cart_item
+		set
+			check_yn = #{checkYn}
+		where cart_id in (select cart_id from cart where user_id = #{userId})
+	
+	</update>
+	
+	<update id="updateCartAllCheckY" parameterType="hashmap">
+	
+		update cart_item
+		set
+			check_yn = 'Y' 
+		where cart_id = #{cartId}
 	
 	</update>
 	
@@ -61,7 +102,7 @@
 	<insert id="insertCartProduct" parameterType="hashmap">
 	
 		insert into cart_item
-		values (cart_item_seq.nextval, #{quantity}, #{cartId}, #{productId})
+		values (cart_item_seq.nextval, #{quantity}, #{cartId}, #{productId}, #{checkYn})
 	
 	</insert>
 	

@@ -172,7 +172,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in cartItems" :key="item.productId">
+                <tr v-for="(item, index) in selectCartItems" :key="item.productId">
                     <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
@@ -202,7 +202,7 @@
             <tr>
                 <th>사용할 적립금</th>
                 <td>
-                    <input type="text" v-model="usedPoints" @input="validatePoints" placeholder="사용할 적립금 입력" >
+                    <input type="text" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력" >
                     <button @click="useAllPoints">전체 사용</button>
                     <button @click="applyPoints">적용</button>
                 </td>
@@ -305,8 +305,8 @@
                     },
                     orderData: {},
                     orderDetailData: {},
-                    userPoints: {},
-                    usedPoints: "",
+                    userPoint: {},
+                    usedPoint: 0,
                     discountAmount: 0,
                     cartId:""
                 };
@@ -331,10 +331,10 @@
                     return this.totalPrice.toLocaleString();
                 },
                 formattedUserPoints() {
-                    return this.userPoints.toLocaleString();
+                    return this.userPoint.toLocaleString();
                 },
                 formattedUsedPoints() {
-                    return this.usedPoints.toLocaleString();
+                    return this.usedPoint.toLocaleString();
                 },
                 formattedDiscountAmount() {
                     return this.discountAmount.toLocaleString();
@@ -357,24 +357,24 @@
                         data: params,
                         success: function (data) {
                             self.userInfo = data.user;
-                            self.loadCart();
+                            self.loadSelectCart();
                             self.setDefaultAddress();
                             self.fnGetPoint();
                         }
                     });
                 },
-                loadCart() {
+                loadSelectCart() {
                     let self = this;
                     let params = { userId: self.userInfo.userId };
                     $.ajax({
-                        url: "/cart/list.dox",
+                        url: "/cart/checkList.dox",
                         dataType: "json",
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            self.cartItems = data.list;
-                            console.log(self.cartItems);
-                            self.cartId = self.cartItems[0].cartId;
+                            console.log("cartList >>> ", data.checkList);
+                            self.selectCartItems = data.checkList;
+                            self.cartId = self.selectCartItems[0].cartId;
                             console.log(self.cartId);
                         }
                     });
@@ -389,31 +389,31 @@
                         data: params,
                         success: function (data) {
                             console.log(data.point);
-                            self.userPoints = data.point.currentPoint;
+                            self.userPoint = data.point.currentPoint;
                         }
                     });
                 },
                 applyPoints() {
-                    let pointsToUse = parseInt(this.usedPoints) || 0;
+                    let pointToUse = parseInt(this.usedPoint) || 0;
                     
-                    if (pointsToUse > this.userPoints) {
+                    if (pointToUse > this.userPoint) {
                         alert("보유한 적립금보다 많이 사용할 수 없습니다.");
-                        this.usedPoints = this.userPoints;
+                        this.usedPoint = this.userPoint;
                     }
                     
-                    if (this.usedPoints > this.finalPrice) {
+                    if (this.usedPoint > this.finalPrice) {
                         alert("총 결제 금액을 초과하는 적립금을 사용할 수 없습니다.");
-                        this.usedPoints = this.finalPrice;
+                        this.usedPoint = this.finalPrice;
                     }
 
-                    this.discountAmount = parseInt(this.usedPoints) || 0;
+                    this.discountAmount = parseInt(this.usedPoint) || 0;
                 },
                 useAllPoints() {
-                    this.usedPoints = Math.min(this.userPoints, this.finalPrice);
-                    this.discountAmount = this.usedPoints;
+                    this.usedPoint = Math.min(this.userPoint, this.finalPrice);
+                    this.discountAmount = this.usedPoint;
                 },
                 validatePoints() {
-                    this.usedPoints = parseInt(this.usedPoints) || 0;
+                    this.usedPoint = parseInt(this.usedPoint) || 0;
                 },
                 setDefaultAddress() {
                     let self = this;
@@ -546,8 +546,7 @@
                         };
                         self.fnPaymentHistory(paymentData, 0, finalAddress, finalMessage);
                         self.fnRemoveCart();
-                        self.fnUsePoint(); // 포인트 사용 내역 DB 저장 (250327.저장안됨)
-                        alert("포인트로 결제가 완료되었습니다.");
+                        self.fnUsePoint();
                     } else {
                         self.fnPayment(self.finalPrice,finalAddress,finalMessage);
                     }
@@ -677,11 +676,12 @@
                 },
                 fnUsePoint:function(){
                     let self = this;
-                    let currentPoint = parseInt(self.userPoints) - parseInt(self.usedPoints);
-                    console.log("현재 포인트 >> ",currentPoint);
+                    let usedPoint = -Math.abs(parseInt(self.usedPoint));
+
+                    console.log("사용 포인트 >> ",usedPoint);
+
                     var nparmap = {
-                        usedPoints: self.usedPoints,//문제발생중
-                        currentPoint:currentPoint,
+                        usedPoint: usedPoint,
                         remarks: "장바구니_결제",
                         userId:self.userInfo.userId
                     };

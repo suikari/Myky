@@ -15,6 +15,7 @@ public class cart {
 	private String productId;
 	private String shippingFee;
 	private String shippingFreeMinimum;
+	private String checkYn;
 	
 	private String productName;
 	private String price;

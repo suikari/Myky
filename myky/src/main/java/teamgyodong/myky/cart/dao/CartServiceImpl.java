@@ -42,6 +42,22 @@ public class CartServiceImpl implements CartService {
 		}
 		return resultMap;
 	}
+
+	@Override
+	public HashMap<String, Object> getCartCheckList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<cart> checkList = cartMapper.selectCartCheckList(map);
+			
+			resultMap.put("checkList", checkList);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 	
 	@Override
 	public HashMap<String, Object> editQuantity(HashMap<String, Object> map) {
@@ -49,6 +65,34 @@ public class CartServiceImpl implements CartService {
 		
 		try {
 			cartMapper.updateQuantity(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> editCheckYn(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			cartMapper.updateCartCheckYn(map);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> editAllCheckYn(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			cartMapper.updateCartAllCheckYn(map);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

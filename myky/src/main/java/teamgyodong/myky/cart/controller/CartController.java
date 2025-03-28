@@ -60,6 +60,16 @@ public class CartController {
 		return new Gson().toJson(resultMap);
 	}
 
+	// cartCheckList
+	@RequestMapping(value = "/cart/checkList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String checkList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getCartCheckList(map);
+		return new Gson().toJson(resultMap);
+	}
+
 	// cart 수량 변경
 	@RequestMapping(value = "/cart/quantity.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -67,6 +77,26 @@ public class CartController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = cartService.editQuantity(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// cart checkYn 변경 - 개별
+	@RequestMapping(value = "/cart/checkYn.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String checkYn(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.editCheckYn(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// cart checkYn 변경 - 전체 (userId, checkYn 필요)
+	@RequestMapping(value = "/cart/AllCheckYn.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String AllCheckYn(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.editAllCheckYn(map);
 		return new Gson().toJson(resultMap);
 	}
 
@@ -90,7 +120,7 @@ public class CartController {
 		return new Gson().toJson(resultMap);
 	}
 
-	// cart 상품 추가 (상세페이지에서 이동 - userId, sessionId, productId, quantity(수량) 필요)
+	// cart 상품 추가 (상세페이지에서 이동 - userId, sessionId, productId, quantity(수량), checkYn 필요)
 	@RequestMapping(value = "/cart/addProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String addCartProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
