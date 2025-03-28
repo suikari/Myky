@@ -38,7 +38,7 @@ public class PartnerServiceImpl implements PartnerService {
 			resultMap.put("gulist", gulist);
 			resultMap.put("donglist", donglist);
 			resultMap.put("silist", silist);
-			resultMap.put("favorites", favoriteList);
+			resultMap.put("favoriteList", favoriteList);
 			resultMap.put("result", "success");			
 			
 			
@@ -87,7 +87,32 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 
 	
-	
+	@Override
+	public HashMap<String, Object> favoritesList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		String result = "";
+		
+		try {
+			List<partnerdetail> favorList = partnerMapper.favorList(map);
+			
+
+			 
+			
+			resultMap.put("favorList", favorList);
+			resultMap.put("result", "success");			
+			
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+
+		}
+
+		partnerMapper.favorList(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
 	
 
 }

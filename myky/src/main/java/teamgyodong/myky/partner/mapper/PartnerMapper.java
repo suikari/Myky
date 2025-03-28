@@ -27,6 +27,8 @@ public interface PartnerMapper {
 
 	void favoritesDelete(HashMap<String, Object> map);
 
+	List<partnerdetail> favorList(HashMap<String, Object> map);
+
 
 
 }

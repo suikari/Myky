@@ -13,7 +13,6 @@
 	<select id="getPartnerSiList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		SELECT DISTINCT SI 
         FROM AREA 
- 		
 	</select>
 	
 	<select id="getPartnerGuList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
@@ -28,60 +27,56 @@
 		FROM AREA  
 		WHERE GU = #{selectgu} AND DONG IS NOT NULL
 		ORDER BY DONG ASC
-
 	</select>
 	
 	<select id="getPartnerHosList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-SELECT DISTINCT
-    h.HOSPITAL_NO, 
-    h.HOS_NAME, 
-    h.HOS_ADDRESS, 
-    h.PHONE,
-    A.GU, 
-    h.NX, 
-    h.NY,
-    F.*
-FROM 
-    Animal_Hospital_Info h
-LEFT JOIN FAVORITES F 
-ON H.HOSPITAL_NO = F.HOSPITAL_NO AND F.USER_ID = #{userId}
-JOIN 
-    AREA A
-ON 
-    h.HOS_ADDRESS LIKE '%' || A.GU || '%' -- GU 값이 있는 경우 일치
-    OR A.GU IS NULL -- GU 값이 널인 경우도 포함
-WHERE 
-    A.GU = #{selectgu} 
-    AND A.GU IS NOT NULL 
-    AND h.HOS_NAME LIKE '%' || #{keyword} || '%' -- 추가된 검색 기능
-
-
+    SELECT DISTINCT H.HOSPITAL_NO, H.HOS_NAME, H.HOS_ADDRESS, H.PHONE, A.GU, H.NX, H.NY, F.*
+    FROM ANIMAL_HOSPITAL_INFO H
+    LEFT JOIN FAVORITES F 
+    ON H.HOSPITAL_NO = F.HOSPITAL_NO AND F.USER_ID = #{userId}
+    JOIN AREA A 
+    ON H.HOS_ADDRESS LIKE '%' || A.GU || '%' OR A.GU IS NULL 
+    WHERE 1=1
+    <if test="keyword != null and keyword != ''">
+        AND H.HOS_NAME LIKE '%' || #{keyword} || '%' -- 추가된 검색 기능
+    </if>    
+    <if test="keyword == ''">
+        AND A.GU = #{selectgu} AND A.GU IS NOT NULL -- 빈 검색어일 경우 지역 정보 추가
+    </if>
 </select>
 
-<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+
+	
+
+	<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		SELECT DISTINCT PARTNER_DETAIL_ID, NAME,PHONE_NUMBER, ADDRESS, NX, NY,RESERVATION_URL, OPENING_HOURS,REGULAR_HOLIDAY 
 		FROM PARTNER_DETAIL
+	</select>
 
-</select>
-
-<select id="getfavoriteList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+	<select id="getfavoriteList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		SELECT A.* ,F.*
 		FROM FAVORITES F
 		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
 		WHERE F.USER_ID = #{userId}
+	</select>
 
-</select>
+	<insert id="addfavorites" parameterType="hashmap"  useGeneratedKeys="true" keyColumn="HOSPITAL_NO" keyProperty="hospitalNo">
+		INSERT INTO FAVORITES (FAVORITE_ID,HOSPITAL_NO,USER_ID)
+		VALUES (FAVORITES_SEQ.NEXTVAL,#{hospitalNo},#{userId})
+	</insert>
 
-<insert id="addfavorites" parameterType="hashmap"  useGeneratedKeys="true" keyColumn="HOSPITAL_NO" keyProperty="hospitalNo">
-	INSERT INTO FAVORITES (FAVORITE_ID,HOSPITAL_NO,USER_ID)
-	VALUES (FAVORITES_SEQ.NEXTVAL,#{hospitalNo},#{userId})
-</insert>
+	<delete id="favoritesDelete" parameterType="hashmap">
+		DELETE FROM FAVORITES
+		WHERE HOSPITAL_NO = #{hospitalNo}
+	</delete>
 
-<delete id="favoritesDelete" parameterType="hashmap">
-	DELETE FROM FAVORITES
-	WHERE HOSPITAL_NO = #{hospitalNo}
 
-</delete>
+	<select id="favorList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		SELECT A.* ,F.*
+		FROM FAVORITES F
+		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+		WHERE F.USER_ID = #{userId}
+	</select>
 </mapper>
 
 

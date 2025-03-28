@@ -196,39 +196,60 @@ button#favoritesButton.not-favorite {
                             <option value="">선택</option>
                             <option v-for="item in donglist" :value="item">{{ item.DONG }}</option>
                         </select>
-                        <button @click="fnfavorites()" 
+                        <button @click="toggleFavoritesList()" 
                             style="padding:10px; background:#FFD700; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">
                             ⭐ 즐겨찾기 목록
                         </button>
                         <div>
-                            검색 : <input v-model="keyword" type="text" placeholder="병원 이름을 검색하세요" @keyup.enter="searchPlaces">
+                            검색 : <input v-model="keyword" type="text" placeholder="병원 이름을 검색하세요" @keyup.enter="searchPlaces" @click="searchPlaces">
                         </div>
                         <button type="searchPlaces">검색하기</button> <!-- type="submit"으로 유지 -->
                     </form>
                     
                 </div>
                 
-                <div v-if="hoslist.length > 0" class="count">
-                    총 {{ hoslist.length }}개 병원이 검색되었습니다.
-                </div>
+                <button @click="moveToCurrentLocation">근처 병원 찾기</button>
                 <hr>
+                
                 
                 
                 <ul id="placesList">
                     
-                    <!-- <li v-if="hoslist.length === 0">로딩 중...</li> -->
                     
-                    <li v-for="(hospital, index) in hoslist" :value="hospital.hospitalNo">
+                    <!-- 병원 목록이 있을 때만 표시 -->
+                    <div v-if="hoslist.length > 0 && !isFavoritesVisible" class="count">
+                        총 {{ hoslist.length }}개 병원이 검색되었습니다.
+                        <hr>
+                    </div>
+                    <li v-if="!isFavoritesVisible" v-for="(hospital, index) in hoslist" :value="hospital.hospitalNo">
+                        
                         <div>{{ hospital.hosName }}</div>
                         <span>{{ hospital.hosAddress }}</span>
                         <hr>
                     </li>
-                    
-                    
-                    <!-- <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)"> <span v-if="page==num" class="black color-blue">{{num}}</span>
-                        <span v-else class="black">{{num}}</span>
-                    </a> -->
+                    <ul id="search-results"></ul>
+                    <!-- <ul v-if="hoslist.length > 0 && !isFavoritesVisible">
+                        <li v-for="(hospital, index) in hoslist" :key="index">
+                            <div>{{ hospital.place_name }}</div>
+                            <span>{{ hospital.address_name }}</span>
+                            <hr>
+                        </li>
+                        </ul> -->
+                    <!-- 즐겨찾기 목록이 표시될 때 -->
+                    <div v-if="isFavoritesVisible" class="favorites-list">
+                        <h3>⭐ 내 즐겨찾기 목록</h3>
+                        <ul>
+                            <li v-for="hospital in favoritesList" :key="hospital.hospitalNo">
+                                {{ hospital.hosName }} - {{ hospital.hosAddress }}
+                                <button @click="fnRemoveFavorite(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, userId)">
+                                    ❌ 삭제
+                                </button>
+                                <hr>
+                            </li>
+                        </ul>
+                    </div>
                 </ul>
+                
                 <div id="pagination">
                         
                 </div>
@@ -245,7 +266,7 @@ button#favoritesButton.not-favorite {
     const app = Vue.createApp({
     data() {
         return {
-            isFavorite: false,
+            favoritesList: [],
             sessionId : "${sessionId}",
             userId: "${sessionId}",
             hosName : "",
@@ -253,6 +274,8 @@ button#favoritesButton.not-favorite {
             hospitalNo : "",
             keyword: "",
             places: [],
+            isFavoritesVisible: false,
+            isLoggedIn: false,
             markers: [],
             map: null,
             gulist: [],
@@ -281,7 +304,97 @@ button#favoritesButton.not-favorite {
         isUserLoggedIn() {
         return !!this.user;  // user 객체가 존재하면 로그인 상태
     },
-    
+    //현재위치~
+    getCurrentLocation() {
+        return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                resolve({ latitude, longitude });
+            },
+            (error) => {
+                reject('위치 정보를 가져올 수 없습니다.');
+            },
+            {
+                enableHighAccuracy: true, // 고정밀도 모드 사용
+                timeout: 10000, // 타임아웃 설정 (10초)
+                maximumAge: 0, // 이전 위치 정보를 사용할 수 없게 설정
+            }
+            );
+        } else {
+            reject('Geolocation은 이 브라우저에서 지원되지 않습니다.');
+        }
+        });
+    },
+
+    async moveToCurrentLocation() {
+          try {
+            // 현재 위치를 가져옴
+            const { latitude, longitude } = await this.getCurrentLocation();
+            
+            // 카카오맵의 LatLng 객체 생성
+            const locPosition = new kakao.maps.LatLng(latitude, longitude);
+            
+            // 지도 중심을 현재 위치로 이동
+            this.map.setCenter(locPosition);
+
+            // 마커를 현재 위치에 표시
+            // const marker = new kakao.maps.Marker({
+            //   position: locPosition,
+            // });
+            // marker.setMap(this.map);
+
+          } catch (error) {
+            alert(error);
+          }
+        },
+
+    searchNearbyHospitals(latitude, longitude) {
+    const ps = new kakao.maps.services.Places(); // Places API
+    const location = new kakao.maps.LatLng(latitude, longitude); // 현재 위치
+
+    const options = {
+        location: location,
+        radius: 5000, // 반경 5km
+        sort: kakao.maps.services.PlacesSortType.DISTANCE, // 가까운 순으로 정렬
+    };
+
+    ps.keywordSearch("병원", (data, status, pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+        // 병원 목록 data에 저장
+        console.log(data);
+        // 데이터 처리 로직 추가
+        } else {
+        console.error('병원 검색 실패:', status);
+         }
+    });
+    },
+    async findNearbyHospitals() {
+        try {
+            const { latitude, longitude } = await this.getCurrentLocation();
+            this.searchNearbyHospitals(latitude, longitude);
+        } catch (error) {
+            console.error("현재 위치를 가져오는 데 실패했습니다:", error);
+        }   
+    },
+    toggleFavoritesList() {
+        if (!this.userId) {
+            alert("로그인이 필요합니다! 😊");
+            return;
+        }
+        
+        // 즐겨찾기 목록을 보여줄 때
+        if (!this.isFavoritesVisible) {
+            this.hoslist = [];  // 병원 목록을 아예 지움
+            this.fnfavorList(); // 즐겨찾기 목록 불러오기
+        } else {
+            this.fnMemberList(); // 병원 목록 불러오기
+        }
+
+        // 즐겨찾기 목록 표시 상태를 토글
+        this.isFavoritesVisible = !this.isFavoritesVisible;
+    },
  // 카테고리별 필터링 함수
  filterByCategory(category) {
         // 1. partnerlist에서 해당 카테고리에 맞는 제휴사만 필터링
@@ -332,32 +445,41 @@ button#favoritesButton.not-favorite {
                 type: "POST",
                 data: nparmap,
                 success: function(data) {
-                    console.log("서버 응답 데이터:", data);
-                    console.log("검색어 : " + self.keyword);
-                    console.log("아이디 테스트" + self.sessionId);
+                    console.log("서버 응답 데이터1:", data);
+                    console.log("검색어2 : " + self.keyword);
+                    console.log("아이디 테스트3" + self.sessionId);
                     self.displayHospitals("t" + data.hoslist);
                     console.log(data.partnerlist);
                     self.pagination.last = Math.ceil(data.count / self.pagination.perPage);  // ✅ 총 페이지 수 업데이트
+                    
                     if (data && data.pagination) {
-                    self.pagination.last = data.pagination.last;
-                    self.displayPagination(); 
-       
-    } else {
-        console.warn("서버 응답에 pagination 정보가 없음");
-    }
+                        self.pagination.last = data.pagination.last;
+                        self.displayPagination();                     
+                    } else {
+                        console.warn("서버 응답에 pagination 정보가 없음");
+                    }
    
 
-    if (self.selectdong.DONG) {
-                self.hoslist = data.hoslist.filter(hospital => {
-                    const hospitalAddress = hospital.hosAddress; // 병원 주소
-                    const selectedDong = self.selectdong.DONG.replace(/[0-9]/g, ""); // 숫자 제거 (ex: "계산1동" → "계산동")
+                if (self.selectdong.DONG) {
+                    self.hoslist = data.hoslist.filter(hospital => {
+                        const hospitalAddress = hospital.hosAddress; // 병원 주소
+                        const selectedDong = self.selectdong.DONG.replace(/[0-9]/g, ""); // 숫자 제거 (ex: "계산1동" → "계산동")
 
-  
-                    return hospitalAddress.includes(selectedDong);
-                });
-            } else {
-                self.hoslist = data.hoslist;
-            }
+    
+                        return hospitalAddress.includes(selectedDong);
+                    });
+                } else {
+                    self.hoslist = data.hoslist;
+                    console.log("검색어5 : " , self.keyword);
+                    console.log("검색어5 : " ,  data);
+
+                    console.log("검색어5 : " ,  data.hoslist);
+
+                }
+
+                self.favoritesList = data.favoriteList;
+                console.log("즐겨찾기 리스트 : " +  self.favoritesList);
+
                 console.log("필터링된 병원 리스트:", self.hoslist);
                     if (data) {
                        
@@ -365,6 +487,7 @@ button#favoritesButton.not-favorite {
                         self.gulist = Array.isArray(data.gulist) ? self.removeDuplicates(data.gulist, "GU") : [];
                         self.donglist = Array.isArray(data.donglist) ? data.donglist : [];
                         self.silist = Array.isArray(data.silist) ? data.silist : [];
+                        
                         self.addMarkers();
 
                     } else {
@@ -466,44 +589,56 @@ button#favoritesButton.not-favorite {
         //     this.map.relayout();  // 지도 리사이즈 후 재배치
         // });
         },
+ // 검색한 병원 리스트 화면에 표시하는 함수
+ displaySearchResults(results) {
+    console.log(paginatedResults);
+    // 검색된 병원 목록을 화면에 표시하는 로직
+    // 예시로, 병원 이름과 주소를 화면에 표시한다고 가정
+    const resultsContainer = document.getElementById('search-results');
+    
+    // 기존에 표시된 결과를 클리어
+    resultsContainer.innerHTML = '';
 
-        searchPlaces() {
-            const keyword = this.keyword.trim();  // 검색어 입력 받기
+    // 검색된 병원 목록을 하나씩 화면에 추가
+    results.forEach(hospital => {
+        const listItem = document.createElement('li');
+        listItem.textContent = hospital.hosName + " - " + hospital.hosAddress;
+        resultsContainer.appendChild(listItem);
+    });
+},
+
+searchPlaces() {
+    this.isFavoritesVisible = false;  // 즐겨찾기 목록 숨기기
+    const keyword = this.keyword.trim();  // 검색어 입력 받기
     if (keyword) {
         this.fnMemberList(keyword);  // 서버에서 병원 리스트만 호출
     } else {
         this.fnMemberList();  // 기본 병원 리스트 호출
     }
- // 현재 페이지에 맞는 데이터 로드 예시
- var page = this.pagination.current;
     
-    // 페이지에 맞는 데이터 로드
-    // 예를 들어, 페이지당 10개의 결과를 표시한다고 가정
-    var startIndex = (page - 1) * 10;
-    var endIndex = startIndex + 10;
-    
-    // 이 부분을 실제 데이터 로딩 로직으로 교체해야 합니다
-    var paginatedResults = this.hoslist.slice(startIndex, endIndex);
-
-    // 검색 결과를 화면에 표시하는 부분
-    displaySearchResults(paginatedResults);
     const ps = new kakao.maps.services.Places();
     const location = new kakao.maps.LatLng(37.4563, 126.7052);  // 인천의 중심 좌표 (위도, 경도)
     
     const options = {
         location: location,  // 검색 범위를 인천으로 설정
-        radius: 10000  // 반경 5km 내의 장소만 검색
+        radius: 10000  // 반경 10km 내의 장소만 검색
     };
 
     // 병원 이름 검색
     ps.keywordSearch(keyword, (data, status, pagination) => {
         if (status === kakao.maps.services.Status.OK) {
-            // "동물병원"이라는 키워드를 포함하는 장소만 필터링
-            const filteredData = data.filter(place => place.place_name.includes("동물병원"));
-            if (filteredData.length > 0) {
-                this.displayPlaces(filteredData, pagination);
+            // 중복 병원 제거
+            const uniqueData = this.removeDuplicates(data);
+
+            if (uniqueData.length > 0) {
+                this.displayPlaces(uniqueData, pagination);
+                
+                // 첫 번째 검색 결과의 위치로 지도 이동
+                const firstPlace = uniqueData[0];
+                const position = new kakao.maps.LatLng(firstPlace.y, firstPlace.x);
+                this.map.setCenter(position); // 지도 이동
             } else {
-                alert('동물병원에 해당하는 결과가 없습니다.');
+                alert('검색된 병원이 없습니다.');
             }
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
             alert('검색 결과가 존재하지 않습니다.');
@@ -511,7 +646,9 @@ button#favoritesButton.not-favorite {
             alert('검색 결과 중 오류가 발생했습니다.');
         }
     }, options);
-        },
+}
+,
+
         
 
     // 검색어에 맞는 병원만 필터링 (서버에서 처리해야 할 수도 있음)
@@ -572,65 +709,64 @@ displayCategoryPlaces(data, pagination, category) {
     }, 500);
 },
 
-showInfoWindowForCategory(marker, place, category) {
-    var content = "<div class='placeinfo'>" +
-                    "<a class='title' href='" + place.place_url + "' target='_blank' title='" + place.place_name + "'>" + place.place_name + "</a>";
+    showInfoWindowForCategory(marker, place, category) {
+        var content = "<div class='placeinfo'>" +
+                        "<a class='title' href='" + place.place_url + "' target='_blank' title='" + place.place_name + "'>" + place.place_name + "</a>";
 
-    if (place.road_address_name) {
-        content += "<span title='" + place.road_address_name + "'>" + place.road_address_name + "</span>" +
-                    "<span class='jibun' title='" + place.address_name + "'>(지번 : " + place.address_name + ")</span>";
-    } else {
-        content += "<span title='" + place.address_name + "'>" + place.address_name + "</span>";
+        if (place.road_address_name) {
+            content += "<span title='" + place.road_address_name + "'>" + place.road_address_name + "</span>" +
+                        "<span class='jibun' title='" + place.address_name + "'>(지번 : " + place.address_name + ")</span>";
+        } else {
+            content += "<span title='" + place.address_name + "'>" + place.address_name + "</span>";
+        }
+
+        content += "<span class='tel'>" + place.phone + "</span>" +
+                    "<div class='category'>카테고리: " + category + "</div>" +
+                    "</div>" +
+                    "<div class='after'></div>";
+
+        // 커스텀 오버레이로 장소 정보 표시
+        this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
+        this.placeOverlay.setContent(content);
+        this.placeOverlay.setMap(this.map);
+    }
+    ,
+    ///1
+    
+    displayPlaces(data, pagination) {
+    if (!this.map) {
+        console.error("지도 객체가 초기화되지 않았습니다.");
+        return; // map이 초기화되지 않았다면 더 이상 진행하지 않음
     }
 
-    content += "<span class='tel'>" + place.phone + "</span>" +
-                "<div class='category'>카테고리: " + category + "</div>" +
-                "</div>" +
-                "<div class='after'></div>";
+    const listContainer = document.getElementById('placesList');
+    listContainer.innerHTML = ''; // 기존 내용 지우기
 
-    // 커스텀 오버레이로 장소 정보 표시
-    this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
-    this.placeOverlay.setContent(content);
-    this.placeOverlay.setMap(this.map);
-}
-,
-///1
-displayPlaces(data, pagination) {
-    this.places = data;  // 검색된 장소 데이터를 저장
-    this.pagination.last = Math.ceil(this.places.length / this.pagination.perPage); // 총 페이지 수 계산
-    console.log("총 페이지 수:", this.pagination.last); // 디버깅용 로그 추가
-    this.pagination.pages = Array.from({ length: this.pagination.last }, (_, i) => i + 1); // 페이지 리스트 업데이트
-    this.clearMarkers(); // 기존 마커 제거
+    data.forEach(place => {
+        const listItem = document.createElement('li');
+        
+        // 병원 이름과 주소를 각각 다른 줄로 표시
+        listItem.innerHTML = place.place_name + "<br>" + place.address_name; // <br>을 삽입
 
-    const bounds = new kakao.maps.LatLngBounds();
+        listContainer.appendChild(listItem);
 
-    data.forEach((place) => {
+        // 마커 표시
         const position = new kakao.maps.LatLng(place.y, place.x);
-        const marker = this.addMarker(position, place);
-
-        // 📌 마커 클릭 이벤트 추가
-        kakao.maps.event.addListener(marker, "click", () => {
-            this.showInfoWindowForSearch(marker, place);
+        const marker = new kakao.maps.Marker({
+            map: this.map,
+            position: position
         });
 
-        bounds.extend(position);
-
-        // 검색된 병원을 hoslist에 추가
-        this.hoslist.push({
-            hosName: place.place_name,
-            hosAddress: place.address_name,
-            phone: place.phone || '정보 없음',
-            lat: place.y,
-            lng: place.x
+        // 마커 클릭시, 해당 위치로 지도 이동
+        kakao.maps.event.addListener(marker, 'click', () => {
+            this.map.setCenter(position); // this.map을 참조
         });
     });
+}
 
-    this.map.setBounds(bounds);
-    setTimeout(() => {
-        this.map.setLevel(3);
-    }, 500);
-},
- 
+
+
+,
     // 키워드 검색 시 병원 목록 초기화
     clearSearchResults() {
         this.hoslist = [];
@@ -638,59 +774,59 @@ displayPlaces(data, pagination) {
     },
 
 
-    // 📌 구 선택 시 병원 마커들을 한 번에 보기 위해 지도 줌 아웃
-handleGuSelection(selectedGu) {
-    // 선택된 구에 해당하는 병원들을 필터링
-    const selectedHospitals = this.hoslist.filter(hospital => hospital.selectedGu === selectedGu);
+        // 📌 구 선택 시 병원 마커들을 한 번에 보기 위해 지도 줌 아웃
+    handleGuSelection(selectedGu) {
+        // 선택된 구에 해당하는 병원들을 필터링
+        const selectedHospitals = this.hoslist.filter(hospital => hospital.selectedGu === selectedGu);
 
-    if (selectedHospitals.length > 0) {
-        // 구에 해당하는 병원의 좌표로 마커를 생성
-        let bounds = new kakao.maps.LatLngBounds(); // 영역 객체
+        if (selectedHospitals.length > 0) {
+            // 구에 해당하는 병원의 좌표로 마커를 생성
+            let bounds = new kakao.maps.LatLngBounds(); // 영역 객체
 
-        // 모든 병원의 위치를 포함하는 영역을 확장
-        selectedHospitals.forEach(hospital => {
-            const position = new kakao.maps.LatLng(hospital.NY, hospital.NX);
-            bounds.extend(position); // 병원의 좌표를 포함하는 범위 확장
-        });
+            // 모든 병원의 위치를 포함하는 영역을 확장
+            selectedHospitals.forEach(hospital => {
+                const position = new kakao.maps.LatLng(hospital.NY, hospital.NX);
+                bounds.extend(position); // 병원의 좌표를 포함하는 범위 확장
+            });
 
-        // 병원 마커 추가
-        this.clearMarkers(); // 이전 마커 삭제
-        this.addMarkers(selectedHospitals); // 선택된 구의 병원들만 마커로 추가
+            // 병원 마커 추가
+            this.clearMarkers(); // 이전 마커 삭제
+            this.addMarkers(selectedHospitals); // 선택된 구의 병원들만 마커로 추가
 
-        // 선택된 구 내의 병원들을 포함하는 영역으로 지도 줌 조정
-        this.map.setBounds(bounds); // 지도 영역을 해당 병원들이 모두 보이도록 설정
-    }
-},
+            // 선택된 구 내의 병원들을 포함하는 영역으로 지도 줌 조정
+            this.map.setBounds(bounds); // 지도 영역을 해당 병원들이 모두 보이도록 설정
+        }
+    },
     // 📌 마커 추가 함수 (병원 리스트로 마커 업데이트)
-addMarkers() {
-    this.clearMarkers(); // 이전 마커 제거
+    addMarkers() {
+        this.clearMarkers(); // 이전 마커 제거
 
-    if (this.hoslist.length === 0) {
-        console.warn("병원 리스트가 비어 있습니다.");
-        return;
-    }
+        if (this.hoslist.length === 0) {
+            console.warn("병원 리스트가 비어 있습니다.");
+            return;
+        }
 
-    //let bounds = new kakao.maps.LatLngBounds(); // 📌 지도 영역 조절 객체 생성
+        //let bounds = new kakao.maps.LatLngBounds(); // 📌 지도 영역 조절 객체 생성
 
-    this.hoslist.forEach((hospital) => {
-        const position = new kakao.maps.LatLng(hospital.NY, hospital.NX);
-        const marker = new kakao.maps.Marker({
-            position: position,
-            title: hospital.hosName
+        this.hoslist.forEach((hospital) => {
+            const position = new kakao.maps.LatLng(hospital.NY, hospital.NX);
+            const marker = new kakao.maps.Marker({
+                position: position,
+                title: hospital.hosName
+            });
+
+            marker.setMap(this.map);
+            //bounds.extend(position); // 📌 모든 마커를 포함하는 영역 확장
+
+            kakao.maps.event.addListener(marker, "click", () => {
+                this.showInfoWindowForSelect(marker, hospital);
+            });
+
+            this.markers.push(marker);
         });
 
-        marker.setMap(this.map);
-        //bounds.extend(position); // 📌 모든 마커를 포함하는 영역 확장
 
-        kakao.maps.event.addListener(marker, "click", () => {
-            this.showInfoWindowForSelect(marker, hospital);
-        });
-
-        this.markers.push(marker);
-    });
-
-
-},
+    },
 
     // 단일 마커 추가(검색어 입력시)
     addMarker(position, place) {
@@ -720,35 +856,51 @@ addMarkers() {
     }
 },
      // 📌 셀렉트(구/동 선택) 기반 병원 정보 표시
-     showInfoWindowForSelect(marker, hospital, userId) {
+     showInfoWindowForSelect(marker, hospital) {
+    favoritesList = this.favoritesList; // 현재 favoritesList 가져오기
     console.log("showInfoWindowForSelect 호출됨", hospital);
-    console.log(this.userId);
-
-    // 기존 infoWindow가 있으면 닫고 초기화
-    if (this.infoWindow) {
-        this.infoWindow.close();
-        this.infoWindow = null;  // 기존 객체 완전히 제거
+    console.log("현재 사용자 ID:", this.userId);
+    console.log("favoritesList:", favoritesList); // favoritesList 확인
+   
+    if (!favoritesList || favoritesList.length === 0) {
+        console.log("favoritesList가 비어있거나 존재하지 않음.");
     }
 
-    // 📌 전화번호 부분 수정 (br 대신 div 사용)
-    let phoneContent = hospital.phone  
-        ? "<div style='margin-top:5px;'>📞 " + hospital.phone  + "</div>" 
-        : "";
+    // 기존 infoWindow 닫기
+    if (this.infoWindow) {
+        this.infoWindow.close();
+        this.infoWindow = null;
+    }
 
-    // 📌 동적 크기 조절
-    const baseWidth = 100; // 기본 너비
-    const textLength = hospital.hosName.length * 10; // 병원이름 길이에 따른 너비 계산
-    const maxWidth = 300; // 최대 너비
-    const minWidth = 190; // 최소 너비
+    const baseWidth = 100;
+    const textLength = hospital.hosName.length * 10;
+    const maxWidth = 300;
+    const minWidth = 190;
     const dynamicWidth = Math.min(maxWidth, Math.max(minWidth, baseWidth + textLength));
 
-    const baseHeight = 50; // 기본 높이
-    const addressLines = Math.ceil(hospital.hosAddress.length / 20); // 주소 길이에 따른 높이 증가
-    const dynamicHeight = baseHeight + (addressLines * 18); // 한 줄당 약 18px씩 증가
+    const baseHeight = 50;
+    const addressLines = Math.ceil(hospital.hosAddress.length / 20);
+    const dynamicHeight = baseHeight + (addressLines * 18);
 
-     // 값이 정상적으로 들어있는지 로그로 확인
-    
-     const content = 
+    let isFavorite = false;
+
+    // 전달받은 favoritesList에서 hospitalNo에 해당하는 병원 찾기
+    if (Array.isArray(favoritesList)) {  // favoritesList가 배열인지 확인
+        for (let i = 0; i < favoritesList.length; i++) {
+            if (favoritesList[i].hospitalNo === hospital.hospitalNo) {
+                isFavorite = true;
+                break;
+            }
+        }
+    } else {
+        console.error("favoritesList는 배열이 아닙니다.");
+    }
+
+    let starIcon = isFavorite ? "★" : "☆"; // 즐겨찾기 되어 있으면 채운 별, 아니면 빈 별
+    console.log("isFavorite:", isFavorite);  // isFavorite 값 확인
+    console.log("starIcon:", starIcon);  // starIcon 값 확인
+
+    let content = 
     "<div style='padding:10px; font-size:13px; width:" + dynamicWidth + "px; " +
     "min-height:" + dynamicHeight + "px; word-wrap:break-word; white-space:pre-line; " +
     "max-width:100%; overflow: visible;'>" + 
@@ -756,7 +908,7 @@ addMarkers() {
         "<div style='white-space:pre-line;'>" + 
             (hospital.hosAddress ? hospital.hosAddress : "주소 정보 없음") + 
         "</div>" +
-        phoneContent + 
+        (hospital.phone ? "<div style='margin-top:5px;'>📞 " + hospital.phone  + "</div>" : "") +
         "<div style='display:flex; justify-content:space-between; margin-top:5px;'>" +
             "<a href='https://map.kakao.com/link/to/" + hospital.hosName + "," + hospital.NY + "," + hospital.NX + 
             "' target='_blank' style='flex:1; text-align:center; padding:5px; background:#007BFF; " +
@@ -764,43 +916,61 @@ addMarkers() {
             
             "<button id='shareButton'" +
             "style='flex:1; padding:5px; background:#FFEB00; border:none; " +
-            "border-radius:5px; font-weight:bold; cursor:pointer; margin-right:5px;'>📢 공유</button>" +
+            "border-radius:5px; font-weight:bold; cursor:pointer; margin-right:5px;'>📢 공유</button>" + 
 
-            // ⭐ 즐겨찾기 버튼 추가 (isFavorite 값에 따라 별 색깔 바꿈)
             "<button id='favoritesButton'" +
             "style='padding:5px; background:none; border:none; font-size:20px; cursor:pointer;'>" +
-            "<span id='favoriteStar'>" + (this.isFavorite ? '★' : '☆') + "</span>" +
+            "<span id='favoriteStar' data-favorite='" + isFavorite + "'>" + starIcon + "</span>" +
             "</button>" +
         "</div>" +
     "</div>";
 
-
-    //console.log("최종 content HTML:", content); // 📌 최종 HTML 확인
-
-    // 📌 infoWindow 생성 및 열기
+    // 새로운 InfoWindow 생성 및 열기
     this.infoWindow = new kakao.maps.InfoWindow({
         content: content,
         removable: true
     });
 
     this.infoWindow.open(this.map, marker);
+
+    // 버튼 이벤트 리스너 설정
     this.$nextTick(() => {
-    var self = this;  // self로 Vue 인스턴스 참조 저장
-    console.log("병원 정보: ", hospital ? hospital : "병원 정보 없음", self.sessionId);
-    // '공유' 버튼에 이벤트 리스너 추가
-    document.getElementById("shareButton").addEventListener("click", () => {
-        self.shareToKakao(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, hospital.phone);            
-    });
+        // 공유 버튼 클릭 시 이벤트 처리
+        document.getElementById("shareButton").addEventListener("click", () => {
+            this.shareToKakao(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, hospital.phone);
+        });
 
-    // '즐겨찾기' 버튼에 이벤트 리스너 추가
-    document.getElementById("favoritesButton").addEventListener("click", () => {
-        self.fnfavorites(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, self.sessionId);
-    });
+        // 즐겨찾기 버튼 클릭 시 이벤트 처리
+        // 즐겨찾기 버튼 클릭 시 이벤트 처리
+        document.getElementById("favoritesButton").addEventListener("click", () => {
+    console.log("현재 즐겨찾기 상태:", this.isFavorite ? "★ (즐겨찾기됨)" : "☆ (즐겨찾기 아님)");
+    if (!this.userId) {  
+        alert("로그인이 필요합니다! 😊");
+        return; // 로그인 안된 상태에서는 더 이상 진행하지 않음
+    }
+    //document.getElementById("hoslist").innerHTML = '';
+    if (isFavorite) {
+        // 이미 즐겨찾기된 상태 → 삭제만 가능
+        this.fnRemoveFavorite(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, this.userId, marker, hospital);
+    } else {
+        // 즐겨찾기 안 된 상태 → 추가만 가능
+        this.fnfavorites(hospital.hospitalNo, hospital.hosName, hospital.hosAddress, this.userId, marker, hospital);
+    }
+
+    // 상태 변경
+    this.isFavorite = !this.isFavorite;
+
+    // UI 업데이트 (별 색깔 & 인포창)
+    setTimeout(() => {
+        this.showInfoWindowForSelect(marker, hospital);
+    }, 100); 
 });
+    });
+}
 
-   
-    // 📌 최종 HTML 조립
-     },
+
+,
+
         clearMarkers() {
             this.markers.forEach(marker => marker.setMap(null));
             this.markers = [];
@@ -896,83 +1066,171 @@ addMarkers() {
          }
      });
  },
-       fnfavorites(hospitalNo, hosName, hosAddress, userId) {
-    if (!this.sessionId) {  // 로그인 안 되어있으면 알림
-        alert("로그인이 필요합니다! 😊");
-        return;
-    }
-    console.log("hospitalNo:", hospitalNo);
-    console.log("hosName:", hosName);
-    console.log("hosAddress:", hosAddress);
-    console.log("userId:", userId);
+    fnfavorites(hospitalNo, hosName, hosAddress, userId, marker, hospital) {
+            // 로그인 안 되어 있으면 알림
+        //     if (!this.userId) {
+        //     alert("로그인이 필요합니다! 😊");
+        //     return;
+        // }
 
-    var self = this;
-    var nparmap = {
-        hospitalNo: hospitalNo,
-        hosName: hosName,
-        hosAddress: hosAddress,
-        userId: userId,
-    };
+            var self = this;
+            var nparmap = {
+                hospitalNo: hospitalNo,
+                hosName: hosName,
+                hosAddress: hosAddress,
+                userId: userId,
+            };
 
-    $.ajax({
-        url: "/favorites/add.dox",
-        dataType: "json",	
-        type: "POST", 
-        data: nparmap,
-        success: function(data) { 
-            console.log(data);
-            if (data.result === 'duplicate') {
-                alert("이미 즐겨찾기에 추가된 병원입니다.");
-            }
-            else if (data.result == "success") {
-                self.isFavorite = !self.isFavorite; // 즐겨찾기 상태 토글
-                if (self.isFavorite) {
-                    alert(self.hosName + " 즐겨찾기에 추가되었습니다.");
-                } else {
-                    alert(self.hosName + " 즐겨찾기에서 해제되었습니다.");
+            $.ajax({
+                url: "/favorites/add.dox",
+                dataType: "json",    
+                type: "POST", 
+                data: nparmap,
+                success: function(data) {  
+                    console.log(data);
+                    if (data.result === "success") {
+                        alert(hosName + " 즐겨찾기에 추가되었습니다! ⭐");
+                        document.getElementById("favoriteStar").innerText = "★";  // 별을 채운 별로 변경
+
+                        self.fnfavorList();
+                        // InfoWindow 닫기
+                        if (self.infoWindow) {
+                            self.infoWindow.close();  // 기존 InfoWindow 닫기
+                            self.infoWindow = null;   // InfoWindow 객체 초기화
+                        }
+
+                        // 잠시 기다린 후에 InfoWindow 다시 열기
+                        setTimeout(() => {
+                            self.showInfoWindowForSelect(marker, hospital);  // 'self'를 사용하여 올바르게 this 참조
+                        }, 100); // 잠시 기다렸다가 InfoWindow 다시 열기
+                    } else {
+                        console.log("서버 응답이 예상과 다릅니다:", data.result);
+                    }
+                    console.log("서버로 전송된 데이터:", nparmap);
+                },
+                error: function(xhr, status, error) {
+                    // 에러 처리
+                }
+            });
+        },
+
+    fnRemoveFavorite(hospitalNo, hosName, hosAddress, userId, marker, hospital) {
+        var self = this;
+        var nparmap = {
+            hospitalNo: hospitalNo,
+            hosName: hosName,
+            hosAddress: hosAddress,
+            userId: userId,
+        };
+
+        $.ajax({
+            url: "/favorites/remove.dox",
+            dataType: "json",
+            type: "POST",
+            data: nparmap,
+            success: function(data) {
+                console.log("해제:" + data);
+                if (data.result == "success") {
+                    alert(hosName + " 즐겨찾기에서 해제되었습니다.");
+
+                    // UI 업데이트
+                    self.fnfavorList();
+
+                    // 기존 InfoWindow 닫기 (100ms 지연)
+                    if (self.infoWindow) {
+                        self.infoWindow.close();
+                        self.infoWindow = null;
+                    }
+
+                    // UI 반영을 위해 상태 변경 후 150ms 후에 InfoWindow 다시 열기
+                    setTimeout(() => {
+                        self.showInfoWindowForSelect(marker, hospital);
+                    }, 150);
                 }
             }
-            console.log("서버로 전송되는 데이터:", nparmap);
-        }
+        });
+    },
+// 📌 키워드 검색 기반 병원 정보 표시
+showInfoWindowForSearch(marker, place) {
+    if (!place || !place.place_name) {
+        console.error("⚠️ place 객체가 없거나 place_name이 없음:", place);
+        return; // 함수 실행 중단 (오류 방지)
+    }
+
+    console.log("place 객체:", place); // 디버깅 로그 추가
+
+    // 이전 인포윈도우가 열려 있으면 닫기
+    if (this.infoWindow) {
+        this.infoWindow.close();
+    }
+
+    // 동적 크기 계산
+    const baseWidth = 100;
+    const textLength = (place.place_name ? place.place_name.length : 0) * 10;
+    const maxWidth = 300;
+    const minWidth = 190;
+    const dynamicWidth = Math.min(maxWidth, Math.max(minWidth, baseWidth + textLength));
+
+    const baseHeight = 50; // 기본 높이
+    const addressLines = Math.ceil(place.address_name.length / 20); // 주소가 길어질수록 높이 증가
+    const dynamicHeight = baseHeight + (addressLines * 18); // 한 줄당 약 18px씩 증가
+
+    let phoneContent = place.phone ? "<br>📞 " + place.phone : "";
+
+    // 인포윈도우 내용 설정
+    const content =
+        "<div style='padding:10px; font-size:14px;'>" +
+        "<strong>" + place.place_name + "</strong><br>" +
+        (place.address_name ? place.address_name : "주소 정보 없음") +
+        phoneContent +
+        "<br><a href='https://map.kakao.com/link/to/" + place.place_name + "," + place.y + "," + place.x + 
+        "' target='_blank'>길찾기</a>" +
+        "<div style='padding:10px; font-size:13px; width:" + dynamicWidth + "px; " +
+        "min-height:" + dynamicHeight + "px; word-wrap:break-word;'>" +
+            "<strong>" + place.place_name + "</strong><br>" +
+            "<div style='white-space:normal;'>" + 
+                (place.address_name ? place.address_name : "주소 정보 없음") + 
+            "</div>" +
+            phoneContent +
+            "<div style='display:flex; justify-content:space-between; margin-top:5px;'>" +
+                "<a href='https://map.kakao.com/link/to/" + place.place_name + "," + place.y + "," + place.x + 
+                "' target='_blank' style='flex:1; text-align:center; padding:5px; background:#007BFF; " +
+                "color:white; border-radius:5px; text-decoration:none; font-weight:bold; margin-right:5px;'>🗺 길찾기</a>" +
+                "<button onclick='shareToKakao1(\"" + place.place_name + "\", \"" + place.address_name + "\")' " +
+                "style='flex:1; padding:5px; background:#FFEB00; border:none; " +
+                "border-radius:5px; font-weight:bold; cursor:pointer;'>📢 공유</button>" +
+            "</div>" +
+        "</div>";
+
+    // 인포윈도우 객체 생성
+    this.infoWindow = new kakao.maps.InfoWindow({
+        content: content,
+        removable: true,
     });
+
+    // 인포윈도우 열기
+    this.infoWindow.open(this.map, marker);
 },
-fnRemoveFavorite(hospitalNo, hosName, hosAddress, userId) {
-    if (!this.sessionId) {  // 로그인 안 되어있으면 알림
-        alert("로그인이 필요합니다! 😊");
-        return;
-    }
+    fnfavorList () {
+        var self = this;
+        var nparmap = {
+                userId : self.userId
+        };
+        $.ajax({
+            url: "/favorites/list.dox",
+            dataType: "json",
+            type: "POST",
+            data: nparmap,
+            success: function (data) {
+                console.log("제발",data);
+                self.favoritesList = data.favorList;
 
-    var self = this;
-    var nparmap = {
-        hospitalNo: hospitalNo,
-        hosName: hosName,
-        hosAddress: hosAddress,
-        userId: userId,
-    };
-
-    $.ajax({
-        url: "/favorites/remove.dox",  // 즐겨찾기 해제 요청
-        dataType: "json",
-        type: "POST",
-        data: nparmap,
-        success: function(data) {
-            if (data.result == "success") {
-                alert(hosName + " 즐겨찾기에서 해제되었습니다.");
-
-                // localStorage에서 해당 병원의 즐겨찾기 상태를 false로 설정
-                let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
-                favorites[hospitalNo] = false;
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-
-                // 별 색깔 업데이트
-                const favoriteStar = document.getElementById("favoriteStar-" + hospitalNo);
-                if (favoriteStar) {
-                    favoriteStar.innerHTML = '☆';  // 즐겨찾기 해제 시 별 색 변경
-                }
+                
             }
-        }
-    });
-}
+        });
+
+        
+    },
         
     },
 
@@ -980,6 +1238,9 @@ fnRemoveFavorite(hospitalNo, hosName, hosAddress, userId) {
         this.initializeMap();
         this.updateMap(); // 기본 지도 설정
         this.fnMemberList();
+        this.fnfavorList();
+
+        
     }
 });
 
