@@ -10,37 +10,11 @@
 	
     <style>
     
-    .order-complete {
-        text-align: center;
-        padding: 20px;
-    }
-
-    .order-info, .reward-info {
-        background: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px auto;
-        width: 50%;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .button-group {
-        margin-top: 20px;
-    }
-
-    .orderCompleteBtn {
-        background: #FF8C42;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        margin: 5px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .orderCompleteBtn:hover {
-        background: #e07b3e;
-    }
+    .order-complete { text-align: center; padding: 20px; }
+    .order-info, .reward-info { background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 10px auto; width: 50%; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); }
+    .button-group { margin-top: 20px; }
+    .orderCompleteBtn { background: #FF8C42; color: white; border: none; padding: 10px 15px; margin: 5px; border-radius: 5px; cursor: pointer; }
+    .orderCompleteBtn:hover { background: #e07b3e; }
 
     </style>
 </head>
@@ -89,16 +63,98 @@
             const app = Vue.createApp({
                 data() {
                     return {
-                        orderInfo: []
+                        userId:"${map.userId}",
+                        orderId:"${map.orderId}",
+                        userPoint:{},
+                        orderInfo: {},
+                        orderList: []
                     
                     };
                 },
                 computed: {
-                    formattedRewardPoints() {
-                        return (this.orderInfo.totalPrice * 0.05).toLocaleString();
+                    rewardPoint(){
+                        return +Math.abs(parseInt(this.orderInfo.totalPrice) * 0.05);
                     },
+                    formattedRewardPoints() {
+                        return this.rewardPoint.toLocaleString();
+                    },
+                    splitPhoneNumber() {
+                        let self = this;
+                        let phone = self.orderInfo.receiverPhone;
+                        if (phone.length === 11) {
+                            return phone.slice(0, 3)+"-"+phone.slice(3, 7)+"-"+phone.slice(7, 11);
+                        } else if (phone.length === 10) {
+                            return phone.slice(0, 3)+"-"+phone.slice(3, 6)+"-"+phone.slice(6, 10);
+                        }
+                        
+                    }
                 },
                 methods: {
+                    fnCurrentPoint:function(){
+                        let self = this;
+                        let params = { userId: self.userId };
+                        $.ajax({
+                            url: "/point/current.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: params,
+                            success: function (data) {
+                                console.log("currentPoint >>> ",data.point.currentPoint);
+                                self.userPoint = data.point.currentPoint;
+                            }
+                        });
+                    },
+                    fnOrderInfo:function(){
+                        let self = this;
+                        console.log("userId >>> ",self.userId," + orderId >>> ",self.orderId);
+                        let params = { userId: self.userId, orderId:self.orderId };
+                        $.ajax({
+                            url: "/order/info.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: params,
+                            success: function (data) {
+                                console.log("주문 목록 >>> ",data.orderInfo);
+                                self.orderInfo = data.orderInfo;
+                                self.fnOrderList();
+                                self.fnGetPoint();
+                            }
+                        });
+                    },
+                    fnOrderList:function(){
+                        let self = this;
+                        let params = { userId: self.userId, orderId:self.orderId };
+                        $.ajax({
+                            url: "/order/list.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: params,
+                            success: function (data) {
+                                console.log("주문 상세 목록 >>> ",data.orderList);
+                                self.orderList = data.orderList;
+                            }
+                        });
+                    },
+                    fnGetPoint:function(){
+                        let self = this;
+                        console.log("적립할 포인트 >>> ",self.rewardPoint);
+
+                        var nparmap = {
+                            usedPoint: self.rewardPoint,
+                            remarks: "결제 적립금",
+                            userId: self.userId
+                        };
+                        $.ajax({
+                            url: "/point/used.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("포인트 적립 내역 저장 >>> ", data.result);
+
+                            }
+                        });
+                    },
                     goToMain() {
                         window.location.href = "/main.do";
                     },
@@ -107,6 +163,9 @@
                     },
                 },
                 mounted() {
+                    let self = this;
+                    self.fnCurrentPoint();
+                    self.fnOrderInfo();
                 	
                 	
                 }

@@ -40,7 +40,7 @@ public class DonationController {
 	}
 	
 	@RequestMapping("/donation.do") 
-	public String donation(HttpServletRequest request,Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+	public String donation(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		
 		request.setAttribute("map", map);
 		return "donation/donation";

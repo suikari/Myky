@@ -143,7 +143,7 @@
 	    select cart_id from cart where user_id = #{userId}
 	
 	</select>
-	
+
 	<select id="findCartItem" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	
 		select c.cart_id, c.user_id, c.session_id, c.created_at, ci.cart_item_id, ci.product_id, p.product_name, p.price, ci.quantity
@@ -151,6 +151,28 @@
 		join cart_item ci on c.cart_id = ci.cart_id
 		join product p on ci.product_id = p.product_id
 		where c.cart_id = #{cartId} and ci.product_id = #{productId}
+	
+	</select>
+	
+	<select id="selectOrderInfo" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
+	   
+	    select order_id, total_price, user_id, receiver_name, receiver_phone, receiver_addr, delivery_message
+	    from orders
+	    where user_id = #{userId} and order_id = #{orderId}
+	
+	</select>
+	
+	<select id="selectOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
+	   
+	    select o.order_id, o.total_price, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.quantity, od.price
+	    from orders o
+	    join order_details od on o.order_id = od.order_id
+	    join (
+			select p.*, f.filepath
+		    from product p  
+		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
+		) p on od.product_id = p.product_id
+	    where user_id = #{userId} and o.order_id = #{orderId}
 	
 	</select>
 	

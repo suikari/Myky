@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.cart.dao.CartService;
 
@@ -45,8 +46,9 @@ public class CartController {
 	}
 
 	@RequestMapping("/cart/orderComplete.do") 
-	public String orderComplete(Model model) throws Exception{
+	public String orderComplete(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		
+		request.setAttribute("map", map);
 		return "cart/orderComplete";
 	}
 	
@@ -143,6 +145,26 @@ public class CartController {
 		map.put("orderDetails", orderDetails);
 		
 		resultMap = cartService.addCartOrder(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// orderInfo -- orders 테이블만
+	@RequestMapping(value = "/order/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String orderInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getOrderInfo(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// orderList -- order_details 테이블까지
+	@RequestMapping(value = "/order/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String orderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getOrderList(map);
 		return new Gson().toJson(resultMap);
 	}
 }

@@ -16,7 +16,7 @@ public interface PayMapper {
 
 	pay selectCurrentPoint(HashMap<String, Object> map);
 
-	pay insertUsedPoint(HashMap<String, Object> map);
+	void insertUsedPoint(HashMap<String, Object> map);
 
 	
 	

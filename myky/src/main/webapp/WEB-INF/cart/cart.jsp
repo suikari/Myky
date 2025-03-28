@@ -227,6 +227,7 @@
                         data : nparmap,
                         success : function(data) {
                             self.cartItems.splice(index, 1);
+                            self.loadSelectCart();
                         }
                     });
                 },

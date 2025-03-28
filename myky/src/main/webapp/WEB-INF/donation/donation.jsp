@@ -164,7 +164,7 @@
 </head>
 
 <body>
-    <jsp:include page="../common/header.jsp" />
+    <jsp:include page="/WEB-INF/common/header.jsp" />
 
 
 
@@ -363,7 +363,7 @@
     </div>
 
 
-    <jsp:include page="../common/footer.jsp" />
+    <jsp:include page="/WEB-INF/common/footer.jsp"/>
 
 
 </body>
