@@ -124,8 +124,12 @@ public class UserServiceImpl implements UserService {
 	
 	public HashMap<String, Object> editInfo(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int count = userMapper.updateInfo(map);
-		resultMap.put("count", count); // 결과 값
+		userMapper.updateInfo(map);
+		System.out.println("key ==>" + map.get("userId")); //
+		session.setAttribute("sessionName", map.get("userName")); // 이름 바꿀시 세션이름을 새로 바꿔줘야 한다
+		resultMap.put("userId", map.get("userId")); // 
+		resultMap.put("result","success");
+		
 		return resultMap;
 	}
 	
@@ -158,6 +162,11 @@ public class UserServiceImpl implements UserService {
 			}
 			resultMap.put("count", count);
 			return resultMap;
+		}
+		
+		public void insertImage(HashMap<String, Object> map) {
+			// TODO Auto-generated method stub
+			userMapper.insertProfileImg(map);
 		}
 	
 }

@@ -138,7 +138,6 @@
                     <button @click="fnAuth()" class="auth-btn">비밀번호 변경</button>
                     <button @click="fnExit()" class="auth-btn2">취소</button>
                 </div>
-                <button @click="fnIdFind()" class="auth-btn2">아이디 찾기</button>
             </div>
 
             <div v-else class="new-password-form">
@@ -200,7 +199,7 @@
                 },
 
                 fnIdFind: function () {
-                    location.href = "/user/findId.do";
+                    location.href = "/user/findid.do";
                 },
                 fnAuth: function () {
                     var self = this;
@@ -247,7 +246,7 @@
                 },
                 fnExit: function () {
                     if (userId = "${map.userId}") {
-                        location.href = "/user/myPage.do"
+                        location.href = "/user/mypage.do"
                     } else {
                         location.href = "/user/login.do";
                     }

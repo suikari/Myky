@@ -10,101 +10,157 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
         <style>
-/* 전체 컨테이너 */
-.user-info-container {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    border-radius: 10px;
-    background: #f9f9f9;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+            /* 전체 컨테이너 */
+            .user-info-container {
+                max-width: 600px;
+                margin: 30px auto;
+                padding: 20px;
+                border-radius: 10px;
+                background: #f9f9f9;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
 
-/* 개별 항목 스타일 */
-.user-info-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
+            /* 프로필 컨테이너 작업 */
 
-.user-info-box2 {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    padding: 12px;
-    gap: 10px;
-    border-bottom: 1px solid #ddd;
-}
+            .profile-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                /* 가운데 정렬 */
+                margin-right: 15px;
+            }
 
-/* 라벨 (항목 제목) 스타일 */
-.user-info-label {
-    font-weight: bold;
-    color: #333;
-}
+            .profile-pic {
+                width: 150px;
+                height: 150px;
+                background: gray;
+                border-radius: 100%;
+            }
 
-/* 값 (텍스트 데이터) 스타일 */
-.user-info-value {
-    color: #666;
-}
+            .profile-container button {
+                margin-top: 10px;
+                padding: 5px 10px;
+                border: none;
+                background: #007bff;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
 
-/* 입력 필드 스타일 */
-.user-info-input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 60%;
-}
+            .profile-container button:hover {
+                background: #0056b3;
+            }
 
-/* 작은 입력 필드 (전화번호) */
-.user-info-input.small {
-    width: 75px;
-    text-align: left;
-}
+            /* 개별 항목 스타일 */
+            .user-info-box {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px;
+                border-bottom: 1px solid #ddd;
+            }
 
-/* 버튼 스타일 */
-.user-info-btn {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+            .user-info-box2 {
+                display: flex;
+                align-items: center;
+                justify-content: left;
+                padding: 12px;
+                gap: 10px;
+                border-bottom: 1px solid #ddd;
+            }
 
-.user-info-btn:hover {
-    background: #45a049;
-}
+            /* 라벨 (항목 제목) 스타일 */
+            .user-info-label {
+                font-weight: bold;
+                color: #333;
+            }
 
-/* 취소 버튼 (빨간색) */
-.user-info-btn.cancel {
-    background: #f44336;
-}
+            /* 값 (텍스트 데이터) 스타일 */
+            .user-info-value {
+                color: #666;
+            }
 
-.user-info-btn.cancel:hover {
-    background: #d32f2f;
-}
+            /* 입력 필드 스타일 */
+            .user-info-input {
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                width: 60%;
+            }
 
-/* 버튼 그룹 정렬 */
-.user-info-btn-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
+            /* 작은 입력 필드 (전화번호) */
+            .user-info-input.small {
+                width: 75px;
+                text-align: left;
+            }
 
-/* 왼쪽 버튼 그룹 */
-.user-info-btn-group-left {
-    display: flex;
-    gap: 10px; /* 버튼 간격 */
-}
+            /* 버튼 스타일 */
+            .user-info-btn {
+                background: #4CAF50;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
 
-/* 오른쪽 버튼 (뒤로) */
-.user-info-btn-group-right {
-    margin-left: auto; /* 자동 마진으로 오른쪽 정렬 */
-}
+            .user-info-btn:hover {
+                background: #45a049;
+            }
 
+            /* 취소 버튼 (빨간색) */
+            .user-info-btn.cancel {
+                background: #f44336;
+            }
+
+            .user-info-btn.cancel:hover {
+                background: #d32f2f;
+            }
+
+            /* 버튼 그룹 정렬 */
+            .user-info-btn-group {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            /* 왼쪽 버튼 그룹 */
+            .user-info-btn-group-left {
+                display: flex;
+                gap: 10px;
+                /* 버튼 간격 */
+            }
+
+            /* 오른쪽 버튼 (뒤로) */
+            .user-info-btn-group-right {
+                margin-left: auto;
+                /* 자동 마진으로 오른쪽 정렬 */
+            }
+
+            /* 파일 업로드 버튼 감추기 */
+            .file-upload input[type="file"] {
+                display: none;
+            }
+
+            /* 사용자 정의 업로드 버튼 스타일 */
+            .custom-file-label {
+                display: inline-block;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                text-align: center;
+                transition: background-color 0.3s;
+            }
+
+            /* 마우스 호버 효과 */
+            .custom-file-label:hover {
+                background-color: #45a049;
+            }
 
         </style>
     </head>
@@ -172,7 +228,7 @@
                         <button class="user-info-btn" @click="fnEdit()">정보 수정</button>
                         <button class="user-info-btn" @click="fnPwd()">비밀번호 변경</button>
                     </div>
-                
+
                     <!-- 오른쪽 버튼 (뒤로) -->
                     <div class="user-info-btn-group-right">
                         <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
@@ -183,6 +239,26 @@
 
             <!-- 수정 칸 -->
             <template v-else>
+                <br>
+                <div class="profile-container">
+                    <template v-if="!picFlg">
+                        <img :src="user.profileImage" alt="" class="profile-pic">
+                    </template>
+                    <template v-else>
+                        <img :src="this.previewImage" alt="" class="profile-pic">
+                    </template>
+                </div>
+
+                <div class="file-upload">
+                    <input type="file" id="file1" name="file1" accept=".jpg, .png" @change="uploadImage">
+                    <label for="file1" class="custom-file-label">프로필 업로드</label>
+                </div>
+                <div>
+                    <button class="custom-file-label"@click="fnDeletePic()">프로필 사진 삭제</button>
+                </div>
+
+                
+
                 <div class="user-info-box2">
                     <div class="user-info-label">이름 :</div>
                     <input type="text" v-model="user.userName" class="user-info-input">
@@ -261,7 +337,7 @@
                     </div>
                 </div>
 
-                <div class="user-info-btn-group"> 
+                <div class="user-info-btn-group">
                     <button class="user-info-btn" @click="fnSave()">저장</button>
                     <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
                 </div>
@@ -297,7 +373,9 @@
                         originalPhone: "",
                         selectNum: "010",
                         num1: "",
-                        num2: ""
+                        num2: "",
+                        previewImage: "",
+                        picFlg: false
 
 
                     };
@@ -330,19 +408,26 @@
                             alert("닉네임 저장 혹은 취소 바랍니다.");
                             return;
                         }
-                        if(self.user.email==null){
-                            self.user.email="";
+                        if (self.user.userName == "") {
+                            alert("이름을 1자 이상 적어주십시오.");
+                            return;
                         }
-                        if(self.user.birthDate==null){
-                            self.user.birthDate="";
+                        if (self.user.profileImage == null) {
+                            self.user.profileImage = "";
+                        }
+                        if (self.user.email == null) {
+                            self.user.email = "";
+                        }
+                        if (self.user.birthDate == null) {
+                            self.user.birthDate = "";
                         }
 
                         if (self.user.birthDate.length != 8 && self.user.birthDate.length != 0) {
                             alert("생년월일 8자리 혹은 미입력으로 진행해주십시오. ex)20050130");
                             return;
-                            
-                        }else if(self.user.birthDate !=""){
-                             // 연, 월, 일 분리
+
+                        } else if (self.user.birthDate != "") {
+                            // 연, 월, 일 분리
                             const year = parseInt(self.user.birthDate.substring(0, 4), 10);
                             const month = parseInt(self.user.birthDate.substring(4, 6), 10);
                             const day = parseInt(self.user.birthDate.substring(6, 8), 10);
@@ -351,8 +436,8 @@
                             const date = new Date(year, month - 1, day);
                             if (
                                 !(date.getFullYear() === year &&
-                                date.getMonth() === month - 1 &&
-                                date.getDate() === day)
+                                    date.getMonth() === month - 1 &&
+                                    date.getDate() === day)
                             ) {
                                 alert("생년월일 8자리가 유효하지 않습니다. 재입력 바랍니다. ex)20050130");
                                 return;
@@ -370,7 +455,35 @@
                             success: function (data) {
                                 alert("수정 완료");
                                 console.log(data);
-                                location.reload();
+
+                                if ($("#file1")[0].files.length > 0) {
+                                    var form = new FormData();
+                                    //form.append( "file1",  $("#file1")[0].files[0]);
+                                    for (let i = 0; i < $("#file1")[0].files.length; i++) {
+                                        form.append("file1", $("#file1")[0].files[i]);
+                                    }
+                                    form.append("userId", data.userId); // 임시 pk
+                                    self.upload(form);
+                                } else {
+                                    location.reload();
+                                }
+
+
+                            }
+                        });
+                    },
+
+                    //파일 업로드
+                    upload: function (form) {
+                        var self = this;
+                        $.ajax({
+                            url: "/user/fileUpload.dox",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            data: form,
+                            success: function (response) {
+                                location.reload()
                             }
                         });
                     },
@@ -380,12 +493,12 @@
                         self.editFlg = true;
                     },
                     fnExit: function () {
-                        location.href = "/user/myPage.do";
+                        location.href = "/user/mypage.do";
                     },
-                    fnPwd : function () {
+                    fnPwd: function () {
                         let self = this;
-                        pageChange("/user/resetPwd.do", {userId : self.user.userId});
-                        
+                        pageChange("/user/resetpwd.do", { userId: self.user.userId });
+
                     },
 
                     fnEditNick: function () {
@@ -474,7 +587,37 @@
                         console.log(addrDetail);
                         console.log(engAddr);
                         console.log(zipNo);
+                    },
+                    //사진 미리보기
+                    uploadImage(event) {
+                        let self = this;
+                        self.picFlg = true;
+                        console.log(self.picFlg);
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                // 단순히 미리보기를 위해 Base64 데이터 URL을 저장
+                                this.previewImage = e.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    },
+                    fnDeletePic : function () {
+                        let self = this;
+                        if(confirm("프로필 사진을 삭제하시겠습니까?")){
+                            self.previewImage ="";
+                            self.user.profileImage ="";
+                            self.picFlg=false;
+                            document.getElementById("file1").value = ""; // 파일 선택 필드 초기화
+
+
+                        }else{
+                            return;
+                        }
+
                     }
+                    
 
                 },
                 mounted() {

@@ -1,5 +1,6 @@
 package teamgyodong.myky.user.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.user.dao.UserService;
 
 
@@ -115,7 +119,7 @@ public class UserController {
 	}
 	
 	//아이디 찾기 주소
-	@RequestMapping("/user/findId.do") //브라우저 웹주소
+	@RequestMapping("/user/findid.do") //브라우저 웹주소
     public String add(Model model) throws Exception{
 
         return "user/id-find"; // member 폴더로 묶임
@@ -123,7 +127,7 @@ public class UserController {
 	
 	
 	//비밀번호 찾기 주소
-    @RequestMapping("/user/resetPwd.do") 
+    @RequestMapping("/user/resetpwd.do") 
     public String searchPwd(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		System.out.println(map);
 		request.setAttribute("map", map);
@@ -203,10 +207,10 @@ public class UserController {
         }
 	
 	//마이 페이지 주소
-	@RequestMapping("/user/myPage.do") //브라우저 웹주소
+	@RequestMapping("/user/mypage.do") //브라우저 웹주소
     public String myPage(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		request.setAttribute("map", map);
-        return "user/user-myPage"; // member 폴더로 묶임
+        return "user/user-mypage"; // member 폴더로 묶임
         }
 	
 
@@ -235,6 +239,52 @@ public class UserController {
 		resultMap = userService.editInfo(map);
 		return new Gson().toJson(resultMap);
 	}
+	
+	// controller
+		@RequestMapping("/user/fileUpload.dox")
+		public String fileUpload(@RequestParam("file1") MultipartFile multi, @RequestParam("userId") String userId,HttpServletRequest request,HttpServletResponse response, Model model)
+		{
+			String url = null;
+			String path="c:\\img\\userProfile";
+			try {
+
+				//String uploadpath = request.getServletContext().getRealPath(path);
+				String uploadpath = path;
+				String originFilename = multi.getOriginalFilename();
+				String extName = originFilename.substring(originFilename.lastIndexOf("."),originFilename.length());
+				long size = multi.getSize();
+				String saveFileName = Common.genSaveFileName(extName);
+				
+				System.out.println("uploadpath : " + uploadpath);
+				System.out.println("originFilename : " + originFilename);
+				System.out.println("extensionName : " + extName);
+				System.out.println("size : " + size);
+				System.out.println("saveFileName : " + saveFileName);
+				String path2 = System.getProperty("user.dir"); // 유저 최상단 주소!
+				System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
+				if(!multi.isEmpty())
+				{
+					File file = new File(path2 + "\\src\\main\\webapp\\img\\userProFile\\", saveFileName); // 사진 저장할 장소
+					multi.transferTo(file); 
+					
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					map.put("path", "../../img/userProfile/" + saveFileName); //db에 경로 장소
+					map.put("userId", userId);
+					// insert 쿼리 실행
+				    userService.insertImage(map);
+				    
+					
+					model.addAttribute("filename", multi.getOriginalFilename());
+					model.addAttribute("uploadPath", file.getAbsolutePath());
+					
+					return "redirect:/user/info.do";
+					// redirect: 스프링 용어
+				}
+			}catch(Exception e) {
+				System.out.println(e);
+			}
+			return "redirect:main.do";
+		}
 	
 
 	//유저 탈퇴 주소

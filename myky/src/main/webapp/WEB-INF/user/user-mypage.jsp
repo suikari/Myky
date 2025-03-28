@@ -33,34 +33,11 @@
                 border-bottom: 1px solid #ddd;
             }
 
-            .profile-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                /* 가운데 정렬 */
-                margin-right: 15px;
-            }
-
             .profile-pic {
-                width: 120px;
-                height: 120px;
+                width: 150px;
+                height: 150px;
                 background: gray;
                 border-radius: 100%;
-            }
-
-            .profile-container button {
-                margin-top: 10px;
-                padding: 5px 10px;
-                border: none;
-                background: #007bff;
-                color: white;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-
-            .profile-container button:hover {
-                background: #0056b3;
             }
 
             .summary {
@@ -87,6 +64,7 @@
                 background: #f1f1f1;
                 padding: 20px;
                 border-radius: 10px;
+                cursor: pointer;
             }
 
             .sidebar ul {
@@ -138,38 +116,48 @@
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
 
-
-
         <div id="app" class="container">
             <template v-if="userId!=''">
                 <div class="mypage-container">
                     <div class="user-info">
-                        <div class="profile-container">
-                            <img :src="user.profileImage" alt="" class="profile-pic">
-                            <button>사진 수정</button>
-                        </div>
+                        <img :src="user.profileImage" alt="" class="profile-pic">
                         <div class="user-details">
                             <h2>안녕하세요, {{user.userName}}님!</h2>
                             <p>{{user.userName}}님의 회원등급은 <strong>SILVER</strong>입니다.</p>
                         </div>
                     </div>
                     <div class="summary">
-                        <div class="summary-item">500원<br>총 적립금</div>
+                        <div class="summary-item">현재 포인트<br>{{point.currentPoint}}P</div>
                         <div class="summary-item">1개<br>쿠폰</div>
                         <div class="summary-item">0건(0회)<br>총 주문</div>
                     </div>
                     <div class="main-content">
                         <aside class="sidebar">
+
+                            <!-- 재원 코딩 -->
                             <ul>
-                                <h3>나의 쇼핑 정보</h3>
-                                <li>주문내역 조회</li>
-                                <li>적립금 내역</li>
-                                <li>쿠폰 내역</li>
+                                <div class="tab-menu">
+                                    <h3>나의 쇼핑 정보</h3>
+                                    <div v-for="tab in tabs" :key="tab.id"
+                                        :class="['tab-item', { active: activeTab === tab.id }]"
+                                        @click="changeTab(tab.id)">
+                                        {{ tab.label }}
+                                    </div>
+                                </div>
                             </ul>
+                            <!-- 재원 코딩 -->
+
+
+                            <!-- <ul>
+                                
+                                <li>주문내역 조회</li>
+                                <li>포인트 내역</li>
+                                <li>쿠폰 내역</li>
+                            </ul> -->
                             <hr>
                             <ul>
                                 <h3>나의 활동 정보</h3>
-                                <li>게시글 내역</li>
+                                <li><a @click="fnMyBoard()">게시글 내역</a></li>
                                 <li>댓글 내역</li>
                                 <li>구독 정보</li>
                                 <li>후원 금액내역</li>
@@ -182,21 +170,36 @@
                                 <li></li>
                             </ul>
                         </aside>
+
+                        <!-- <template v-if="mainFlg"> -->
+
                         <section class="order-status">
-                            <h3>나의 주문처리 현황</h3>
-                            <div class="status-box">
-                                <div>입금<br>0</div>
-                                <div>배송 준비중<br>0</div>
-                                <div>배송 중<br>0</div>
-                                <div>배송 완료<br>0</div>
-                            </div>
-                            <div class="order-list">
-                                <p>주문 내역이 없습니다.</p>
-                            </div>
+                            <span v-if="activeTab === 'order'">
+                                <h3>나의 주문처리 현황</h3>
+                                <div class="status-box">
+                                    <div>입금<br>0</div>
+                                    <div>배송 준비중<br>0</div>
+                                    <div>배송 중<br>0</div>
+                                    <div>배송 완료<br>0</div>
+                                </div>
+                                <div class="order-list">
+                                    <p>주문 내역이 없습니다.</p>
+                                </div>
+                            </span>
                         </section>
+
+
+                        <!-- </template> -->
+
+                        <!-- <template v-if="boardFlg"> -->
+                        <div v-if="activeTab === 'board'">
+                            자유게시판
+                        </div>
+                        <!-- </template> -->
                     </div>
                 </div>
             </template>
+
 
         </div>
 
@@ -209,6 +212,9 @@
     </html>
     <script>
 
+        function withdrawBack() {
+            window.vueObj.fnResult();
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
@@ -216,6 +222,17 @@
                     return {
                         user: {},
                         userId: "${sessionId}",
+                        mainFlg: true,
+                        boardFlg: false,
+                        point: {},
+                        //탭 관련
+                        tabs: [
+                            { id: 'order', label: '주문내역' },
+                            { id: 'point', label: '포인트내역' },
+                            { id: 'coupon', label: '쿠폰내역' },
+                            { id: 'board', label: '나의 게시판 내역' }
+                        ],
+                        activeTab: 'order'
 
                     };
                 },
@@ -241,6 +258,14 @@
                         });
                     },
 
+
+                    fnMyBoard: function () {
+                        let self = this;
+                        self.boardFlg = true;
+                        self.mainFlg = false;
+                    },
+
+
                     fnInfo: function () {
                         let self = this;
                         pageChange("/user/info.do", { userId: self.userId });
@@ -251,11 +276,47 @@
                         window.open(
                             "/user/withdraw.do",
                             "check",
-                            "width=400, height=300"
+                            "width=600, height=230"
                         );
-                    }
+                    },
+                    fnResult: function () {
+                        location.reload();
+                    },
+                    fnPoint() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId
+                        };
+                        console.log(self.userId);
+                        $.ajax({
+                            url: "/point/current.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.point = data.point
+                            }
+                        });
+                    },
 
+                    changeTab(tabId) {
+                        let self = this;
+                        self.activeTab = tabId;
+                    }
+                    // 재원코딩 원본
+                    // changeTab(tabId) {
+                    //     let self = this;
+                    //     self.activeTab = tabId;
+                    //     if (tabId === 'order') {
+
+                    //     } else if (tabId === 'board') {
+
+                    //     }
+                    // }
+                    // 재원코딩 원본
                 },
+
                 mounted() {
                     let self = this;
                     if (self.userId == "") {
@@ -263,6 +324,8 @@
                         location.href = "/main.do";
                     }
                     this.fnInfo2();
+                    this.fnPoint();
+                    window.vueObj = this;
 
                 }
             });

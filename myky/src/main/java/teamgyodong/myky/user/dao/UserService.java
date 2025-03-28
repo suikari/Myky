@@ -22,5 +22,7 @@ public interface UserService {
 
 	HashMap<String, Object> userWithdraw(HashMap<String, Object> map);
 
+	void insertImage(HashMap<String, Object> map);
+
 	
 }
