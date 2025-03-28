@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import teamgyodong.myky.Main.mapper.MainMapper;
+import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.manager.mapper.ManagerMapper;
 import teamgyodong.myky.manager.model.Visit;
 import teamgyodong.myky.manager.model.mComment;
@@ -23,6 +24,7 @@ import teamgyodong.myky.manager.model.mDonation;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
 import teamgyodong.myky.manager.model.mUser;
+import teamgyodong.myky.manager.model.manager;
 
 
 @Service
@@ -112,6 +114,24 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	@Override
+	public HashMap<String, Object> deleteBoardCmtList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.deleteBoardCmtList(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 	
 	@Override
 	public HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map) {
@@ -120,13 +140,15 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		try {
 			List<mComment> mComment = managerMapper.selectAllCmtList(map);
-
 			
-
-		
-			resultMap.put("Comment", mComment);
-			resultMap.put("result", "success");
+			int count = managerMapper.selectAllCmtCnt(map);
 			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+
+			resultMap.put("count", countMap);
+			resultMap.put("result", "success");			
+			resultMap.put("Comment", mComment);			
 		}catch(Exception e) {
 			
 			System.out.println(e.getMessage());
@@ -135,6 +157,28 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		return resultMap;
 	}
+	
+	
+	@Override
+	public HashMap<String, Object> selectSearchRanking(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<manager> Search = managerMapper.selectSearchRanking(map);
+			
+	
+			resultMap.put("result", "success");			
+			resultMap.put("Search", Search);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 	
 	
 }

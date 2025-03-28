@@ -180,108 +180,108 @@
 		    transform: translateY(-5px);
 		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 		}
-
-/* 게시판 테이블 스타일 */
-.board-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-.board-th, .board-td {
-    padding: 10px;
-    text-align: center;
-}
-.board-th {
-    background-color: #f1f5f9;
-    font-weight: bold;
-}
-.board-tr:hover {
-    background-color: #f8fafc;
-}
-.board-title {
-    color: #2563eb;
-    font-weight: 600;
-    text-decoration: none;
-}
-.board-title:hover {
-    text-decoration: underline;
-}
-.board-search {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-.board-search-btn {
-    min-width: 80px;
-}
-.board-page-btn {
-    min-width: 80px;
-}
-.board-select {
-    width: 120px;
-}
-.search-left {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* 요소 사이 여백 */
-    flex-wrap: wrap; /* 화면이 작아지면 자동 줄바꿈 */
-}
-.search-left select,
-.search-left input,
-.search-left button {
-    height: 38px; /* 높이 통일 */
-}
-/* 페이지 버튼 기본 스타일 */
-.board-page-btn {
-    min-width: 40px;
-    padding: 8px 12px;
-    margin: 0 4px;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-/* 숫자 페이지 버튼 스타일 */
-.board-page-btn:not(.prev-next-btn):not(.active) {
-    background-color: #f1f5f9;
-    color: #374151;
-    border-color: #d1d5db;
-}
-
-/* 현재 페이지 버튼 강조 */
-.board-page-btn.active {
-    background-color: #2563eb;
-    color: white;
-    border-color: #2563eb;
-}
-
-/* 이전/다음 페이지 버튼 스타일 */
-.board-page-btn.prev-next-btn {
-    background-color: #ffffff;
-    color: #374151;
-    border-color: #d1d5db;
-}
-
-.board-page-btn.prev-next-btn:hover {
-    background-color: #f1f5f9;
-    color: #2563eb;
-}
-
-/* 이전/다음 페이지 아이콘 크기 */
-.board-page-btn i {
-    font-size: 18px;
-}
-/* 선택 삭제 버튼 스타일 */
-.board-delete-btn {
-    min-width: 120px;
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 5px;
-}
-
-/* 버튼 비활성화 스타일 */
-.board-delete-btn:disabled {
-    background-color: #e5e7eb;
-    color: #9ca3af;
-    cursor: not-allowed;
-}
+		
+		/* 게시판 테이블 스타일 */
+		.board-table {
+		    width: 100%;
+		    border-collapse: collapse;
+		}
+		.board-th, .board-td {
+		    padding: 10px;
+		    text-align: center;
+		}
+		.board-th {
+		    background-color: #f1f5f9;
+		    font-weight: bold;
+		}
+		.board-tr:hover {
+		    background-color: #f8fafc;
+		}
+		.board-title {
+		    color: #2563eb;
+		    font-weight: 600;
+		    text-decoration: none;
+		}
+		.board-title:hover {
+		    text-decoration: underline;
+		}
+		.board-search {
+		    flex-grow: 1;
+		    margin-right: 10px;
+		}
+		.board-search-btn {
+		    min-width: 80px;
+		}
+		.board-page-btn {
+		    min-width: 80px;
+		}
+		.board-select {
+		    width: 120px;
+		}
+		.search-left {
+		    display: flex;
+		    align-items: center;
+		    gap: 10px; /* 요소 사이 여백 */
+		    flex-wrap: wrap; /* 화면이 작아지면 자동 줄바꿈 */
+		}
+		.search-left select,
+		.search-left input,
+		.search-left button {
+		    height: 38px; /* 높이 통일 */
+		}
+		/* 페이지 버튼 기본 스타일 */
+		.board-page-btn {
+		    min-width: 40px;
+		    padding: 8px 12px;
+		    margin: 0 4px;
+		    border-radius: 5px;
+		    font-size: 14px;
+		}
+		
+		/* 숫자 페이지 버튼 스타일 */
+		.board-page-btn:not(.prev-next-btn):not(.active) {
+		    background-color: #f1f5f9;
+		    color: #374151;
+		    border-color: #d1d5db;
+		}
+		
+		/* 현재 페이지 버튼 강조 */
+		.board-page-btn.active {
+		    background-color: #2563eb;
+		    color: white;
+		    border-color: #2563eb;
+		}
+		
+		/* 이전/다음 페이지 버튼 스타일 */
+		.board-page-btn.prev-next-btn {
+		    background-color: #ffffff;
+		    color: #374151;
+		    border-color: #d1d5db;
+		}
+		
+		.board-page-btn.prev-next-btn:hover {
+		    background-color: #f1f5f9;
+		    color: #2563eb;
+		}
+		
+		/* 이전/다음 페이지 아이콘 크기 */
+		.board-page-btn i {
+		    font-size: 18px;
+		}
+		/* 선택 삭제 버튼 스타일 */
+		.board-delete-btn {
+		    min-width: 120px;
+		    padding: 8px 12px;
+		    font-size: 14px;
+		    border-radius: 5px;
+		}
+		
+		/* 버튼 비활성화 스타일 */
+		.board-delete-btn:disabled {
+		    background-color: #e5e7eb;
+		    color: #9ca3af;
+		    cursor: not-allowed;
+		}
 
     </style>
     

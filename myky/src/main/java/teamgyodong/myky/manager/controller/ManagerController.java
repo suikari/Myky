@@ -68,6 +68,17 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
     
+    
+	// centerList
+	@RequestMapping(value = "/admin/searchList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String searchList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectSearchRanking(map);
+		return new Gson().toJson(resultMap);
+	}
+	
 	// centerList
 	@RequestMapping(value = "/admin/LogList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -91,6 +102,22 @@ public class ManagerController {
 		System.out.println(list);
 		
 		resultMap = managerService.deleteBoardList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/remove-cmt-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeCmtList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String json = map.get("selectList").toString(); 
+		ObjectMapper mapper = new ObjectMapper();
+		List<Object> list = mapper.readValue(json, new TypeReference<List<Object>>(){});
+		map.put("list", list);
+		System.out.println(list);
+		
+		resultMap = managerService.deleteBoardCmtList(map);
 		return new Gson().toJson(resultMap);
 	}
 	
