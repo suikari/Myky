@@ -68,18 +68,10 @@
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
 	 </select>
-	 
-	 <!--조회수 -->
-	<!-- <update id="ReviewCnt" parameterType="hashmap">
-	    UPDATE PRODUCT_REVIEWS
-	    SET 
-	    	CNT = CNT + 1
-	    WHERE REVIEW_ID = #{reviewId}
-	</update>-->
- 
+	
 	  <!-- 리뷰 글쓰기 -->
 	 <insert id="insertReview" parameterType="hashmap" useGeneratedKeys="true" keyColumn="REVIEW_ID" keyProperty="reviewId">
-	 	INSERT INTO PRODUCT_REVIEWS (REVIEW_ID,USER_ID,RATING,REVIEW_TEXT,CREATED_AT,PRODUCT_ID, TITLE, CNT) 
+	 	INSERT INTO PRODUCT_REVIEWS (REVIEW_ID,USER_ID,RATING,REVIEW_TEXT,CREATED_AT,PRODUCT_ID, TITLE, HELPCNT) 
 	 	VALUES (PRODUCT_REVIEWS_SEQ.NEXTVAL, #{userId}, #{rating}, #{reviewText}, SYSDATE, #{productId}, #{title}, 0)
 	 </insert>
 	 <!--리뷰 삭제 -->
@@ -151,6 +143,42 @@
     	WHERE REVIEW_ID = #{reviewId}
 	</update>
 
+	<!--QnA 목록 조회-->
+	<select id="selectQnaList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Qna">
+	    SELECT *
+	    FROM PRODUCT_QNA
+	    WHERE PRODUCT_ID = #{productId}
+	    ORDER BY QNA_ID DESC
+	    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	<!--QnA 총 개수-->
+	<select id="selectQnaCnt" parameterType="hashmap" resultType="int">
+	    SELECT COUNT(*)
+	    FROM PRODUCT_QNA 
+	    WHERE PRODUCT_ID = #{productId}
+	</select>
+	
+	<!-- QnA 글쓰기 -->
+	 <insert id="insertQna" parameterType="hashmap" useGeneratedKeys="true" keyColumn="QNA_ID" keyProperty="qnaId">
+	 	INSERT INTO PRODUCT_QNA ( QnA_ID, PRODUCT_ID, USER_ID, TITLE, QUESTION_TEXT, CREATED_AT) 
+	 	VALUES (SEQ_PRODUCT_QNA.NEXTVAL, #{productId}, #{userId}, #{title}, #{questionText}, SYSDATE)
+	 </insert>
+	 
+  <!--	QnA 상세 조회
+	 <select id="selectQnaById" parameterType="hashmap" resultType="Qna">
+	    SELECT * 
+	    FROM PRODUCT_QNA
+	    WHERE QNA_ID = #{qnaId}
+	</select>-->
+	
+	<!-- QnA 글 삭제-->
+	<delete id="deleteQna" parameterType="hashmap">
+		DELETE 
+		FROM PRODUCT_QNA 
+		WHERE QNA_ID = #{qnaId} 
+      		AND USER_ID = #{userId}
+	</delete>
+	
 </mapper>
 
 

@@ -115,7 +115,7 @@
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
         <div id="app" class="container">
-            <h2>상품 사용후기</h2>
+            <h2>멍냥꽁냥 상품 사용후기</h2>
             <div class="form-box">
                 <div class="form-group">
                     <label for="title">제목</label>
