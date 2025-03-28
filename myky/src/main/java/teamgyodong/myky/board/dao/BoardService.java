@@ -39,6 +39,12 @@ public interface BoardService {
 
 	HashMap<String, Object> addlikeCntBoard(HashMap<String, Object> map);
 
+	HashMap<String, Object> vetBoardList(HashMap<String, Object> map);
+
+	HashMap<String, Object> vetBoardView(HashMap<String, Object> map);
+
+	HashMap<String, Object> vetBoardAdd(HashMap<String, Object> map);
+
 
 
 

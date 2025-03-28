@@ -20,14 +20,18 @@
 		WHERE 
 		    1=1
 		    <if test="searchOption != null and searchOption == 'all'">
-		        AND (F.TITLE LIKE '%' || #{keyword} || '%' OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
+		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
 		    </if>
 		    <if test="searchOption != null and searchOption == 'title'">
 		        AND F.TITLE LIKE '%' || #{keyword} || '%'
 		    </if>
-		    <if test="searchOption != null and searchOption == 'userId'">
-		        AND F.USER_ID LIKE '%' || #{keyword} || '%'
-		    </if>
+		 	<if test="searchOption != null and searchOption == 'userId'">
+			    AND F.USER_ID LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+			</if>
 		    AND CATEGORY= #{category}
 		    AND IS_DELETED = 'N'
 		ORDER BY 
@@ -37,21 +41,38 @@
 	
 	<select id="selectBoardCnt" parameterType="hashmap" resultType="int">
 		SELECT COUNT(*)
-		FROM FREE_BOARD
+		FROM FREE_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
 		WHERE 1=1
-		<choose>
-			<when test="searchOption == 'title' and keyword != null and keyword != ''">
-				AND TITLE LIKE '%' || #{keyword} || '%'
-			</when>
-			<when test="searchOption == 'userId' and keyword != null and keyword != ''">
-				AND USER_ID LIKE '%' || #{keyword} || '%'
-			</when>
-			<when test="searchOption == 'all' and keyword != null and keyword != ''">
-				AND (TITLE LIKE '%' || #{keyword} || '%' OR USER_ID LIKE '%' || #{keyword} || '%')
-			</when>
-		</choose>
+			<if test="searchOption != null and searchOption == 'all'">
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
+		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		    </if>
+		    <if test="searchOption != null and searchOption == 'title'">
+		        AND F.TITLE LIKE '%' || #{keyword} || '%'
+		    </if>
+		 	<if test="searchOption != null and searchOption == 'userId'">
+			    AND F.USER_ID LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+			</if>
 			AND CATEGORY= #{category}
 		    AND IS_DELETED = 'N'
+	</select>
+	
+	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
+		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		FROM FREE_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE F.BOARD_ID = #{boardId}
+		AND F.CATEGORY= #{category}
 	</select>
 	
 	<select id="selectCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
@@ -80,17 +101,7 @@
 			CNT = CNT + 1
 		WHERE BOARD_ID = #{boardId}
 	</update>
-	
-	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
-		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
-		FROM FREE_BOARD F
-		LEFT JOIN (
-			SELECT *
-			FROM USERS
-		) U ON F.USER_ID = U.USER_ID
-		WHERE F.BOARD_ID = #{boardId}
-		AND F.CATEGORY= #{category}
-	</select>
+
 	
 	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
 		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, LIKES, DISLIKES, CATEGORY, CNT)
@@ -185,6 +196,93 @@
 		    </if>		    
 		WHERE BOARD_ID = #{boardId}
 	</update>
+	
+
+	<!-- 수의사 게시판 -->
+	<select id="selectVetBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetBoard" >
+		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime,
+			(SELECT COUNT(*)
+			FROM VET_BOARD C
+		    WHERE C.VET_BOARD_ID = F.VET_BOARD_ID) AS COMMENT_COUNT
+		FROM VET_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE 
+		    1=1
+		    <if test="searchOption != null and searchOption == 'all'">
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
+		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		    </if>
+		    <if test="searchOption != null and searchOption == 'title'">
+		        AND F.TITLE LIKE '%' || #{keyword} || '%'
+		    </if>
+		 	<if test="searchOption != null and searchOption == 'userId'">
+			    AND F.USER_ID LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+			</if>
+		    AND IS_DELETED = 'N'
+		ORDER BY 
+		    F.VET_BOARD_ID DESC
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	
+	<select id="selectVetBoardCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM VET_BOARD F
+		LEFT JOIN USERS U ON F.USER_ID = U.USER_ID
+		WHERE 1=1
+		<if test="searchOption != null and searchOption == 'all'">
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%'
+		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		    </if>
+		    <if test="searchOption != null and searchOption == 'title'">
+		        AND F.TITLE LIKE '%' || #{keyword} || '%'
+		    </if>
+		    <if test="searchOption != null and searchOption == 'userId'">
+			    AND F.USER_ID LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+			</if>
+		    AND F.IS_DELETED = 'N'
+	</select>
+	<select id="selectVetAnList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetAnswer">
+		SELECT F.*, U.*, V.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		FROM VET_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		LEFT JOIN(
+			SELECT *
+			FROM VET_ANSWER
+		) V ON F.VET_ID = V.VET_ID
+		WHERE F.VET_BOARD_ID = #{vetBoardId}
+	</select>
+	<select id="selectVetBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetBoard">
+		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		FROM VET_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE F.VET_BOARD_ID = #{vetBoardId}
+	</select>
+	<update id="updateVetBoardCnt" parameterType="hashmap">
+		UPDATE VET_BOARD
+		SET
+			CNT = CNT + 1
+		WHERE VET_BOARD_ID = #{vetBoardId}
+	</update>
+	
+	<insert id="insertVetBoard" parameterType="hashmap">
+		INSERT INTO VET_BOARD(VET_BOARD_ID, TITLE, CONTENT,  USER_ID, CREATED_AT, UPDATED_AT, IS_DELETED, CNT)
+		VALUES(VET_BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{userId}, SYSDATE, SYSDATE, 'N', 0)
+	</insert>
 </mapper>
 
 

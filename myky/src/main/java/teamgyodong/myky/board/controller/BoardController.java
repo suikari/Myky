@@ -62,7 +62,34 @@ public class BoardController {
 
 	    return "board/board-remove";
 	}
-	
+	//FAQ 게시글 보기
+	@RequestMapping("/board/FAQView.do") 
+	public String FAQView(HttpServletRequest request, Model model,  @RequestParam HashMap<String, Object> map) throws Exception{
+			
+		request.setAttribute("map", map);
+		
+        return "board/board-FAQView";
+    }
+	//수의사 게시판 게시글리스트 주소
+	@RequestMapping("/board/vetBoardList.do") 
+    public String vetBoardList(Model model) throws Exception{
+
+        return "board/board-vetBoardList";
+    }
+	//수의사 게시판 상세보기
+	@RequestMapping("/board/vetBoardView.do") 
+	public String vetBoardView(HttpServletRequest request, Model model,  @RequestParam HashMap<String, Object> map) throws Exception{
+			
+		request.setAttribute("map", map);
+		
+        return "board/board-vetBoardView";
+    }
+	//게시글 추가
+	@RequestMapping("/board/vetBoardAdd.do") 
+    public String vetBoardAdd(Model model) throws Exception{
+
+        return "board/board-vetBoardAdd";
+    }
 	//게시글 목록출력
 	@RequestMapping(value = "board/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -287,5 +314,49 @@ public class BoardController {
 		
 		resultMap = boardService.addlikeCntBoard(map);
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
+	//FAQ 게시글 목록 출력
+	@RequestMapping(value = "board/FAQView.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String FAQList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		resultMap = boardService.FAQList(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	//수의사 게시판 목록 출력
+	@RequestMapping(value = "board/vetBoardList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.vetBoardList(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	//수의사 게시글 상세보기
+	@RequestMapping(value = "board/vetBoardView.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.vetBoardView(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	//게시글 추가
+	@RequestMapping(value = "board/vetBoardAdd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.vetBoardAdd(map);
+		
+		return new Gson().toJson(resultMap);
 	}
 }

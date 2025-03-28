@@ -219,6 +219,7 @@
                 <select v-model="searchOption">
                     <option value="all">전체</option>
                     <option value="title">제목</option>
+                    <option value="content">내용</option>
                     <option value="userId">작성자</option>
                 </select>
                 <input v-model="keyword" @keyup.enter="fnBoardSearch" placeholder="🔍 검색어 입력" />
@@ -253,7 +254,15 @@
         </a>
         <a href="javascript:;" @click="fnPageMove('next')" v-if="page != index"> > </a>
     </div>
-    <button class="button" @click="fnAdd" v-if="sessionId">글쓰기</button>
+
+    <template  v-if="category == 'A'">
+        <button class="button" @click="fnAdd" v-if="sessionRole == 'ADMIN'">글쓰기</button>
+    </template>
+    
+    <template  v-else>
+        <button class="button" @click="fnAdd" v-if="sessionId">글쓰기</button>
+    </template>
+
 </div>
 <jsp:include page="../common/footer.jsp"/>
 </body>
@@ -266,6 +275,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 list: [],
                 boardId: "",
                 userId: "",
+                nickName : "",
+                title : "",
                 index: 0,
                 pageSize: 5,
                 page: 0,
@@ -274,6 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 orderKey: "",
                 orderType: "",
                 sessionId : "${sessionId}" || "",
+                sessionRole: "${sessionRole}" || "",
                 category : "",
             };
         },

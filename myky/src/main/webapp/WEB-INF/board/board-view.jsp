@@ -366,7 +366,7 @@
                           
                                   <!-- 수정/삭제 -->
                                   <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
-                                      <template v-if="isDeleted == 'N'">
+                                      <template v-if="item.isDeleted == 'N'">
                                     <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
                                         <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
                                     </template>
