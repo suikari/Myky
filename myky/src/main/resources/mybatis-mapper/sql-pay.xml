@@ -41,7 +41,20 @@
 	 <insert id="insertUsedPoint" parameterType="hashmap">
 	 
 	 	insert into point
-	 	values (point_seq.nextval, sysdate, #{usedPoint}, (select coalesce(max(current_point), 0) #{usedPoint} from point where user_id = #{userId}), #{remarks}, #{userId})
+	 	values (
+			point_seq.nextval, 
+			sysdate, 
+			#{usedPoint}, 
+			(
+				select coalesce(current_point, 0) + #{usedPoint} 
+				from point 
+				where user_id = #{userId}
+				order by usage_date desc
+				fetch first 1 rows only
+			), 
+			#{remarks}, 
+			#{userId}
+		)
 	 
 	 </insert>
 	 
