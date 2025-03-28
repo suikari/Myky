@@ -163,13 +163,6 @@
 	 	INSERT INTO PRODUCT_QNA ( QnA_ID, PRODUCT_ID, USER_ID, TITLE, QUESTION_TEXT, CREATED_AT) 
 	 	VALUES (SEQ_PRODUCT_QNA.NEXTVAL, #{productId}, #{userId}, #{title}, #{questionText}, SYSDATE)
 	 </insert>
-	 
-  <!--	QnA 상세 조회
-	 <select id="selectQnaById" parameterType="hashmap" resultType="Qna">
-	    SELECT * 
-	    FROM PRODUCT_QNA
-	    WHERE QNA_ID = #{qnaId}
-	</select>-->
 	
 	<!-- QnA 글 삭제-->
 	<delete id="deleteQna" parameterType="hashmap">
@@ -178,6 +171,21 @@
 		WHERE QNA_ID = #{qnaId} 
       		AND USER_ID = #{userId}
 	</delete>
+	<!--QnA 글 수정-->
+	 <update id="UpdateQna" parameterType="hashmap" >
+		UPDATE PRODUCT_QNA
+		SET
+			TITLE = #{title},
+			QUESTION_TEXT = #{questionText}
+		WHERE QNA_ID = #{qnaId} 
+	 </update>
+	 <!--QnA 가져오기 -->
+	 <select id="selectQna"  parameterType="hashmap" resultType="teamgyodong.myky.product.model.Qna">
+	 	SELECT * 
+		FROM PRODUCT_QNA
+		WHERE QNA_ID = #{qnaId} 
+		ORDER BY CREATED_AT DESC
+	 </select>
 	
 </mapper>
 

@@ -60,7 +60,12 @@ public class ProductController {
 		
 		return "product/product-qna";
 	}
+	//상품 문의 글 수정
+	@RequestMapping("/product/qnaEdit.do") 
+    public String qnaEdit(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 	
+		return "product/product-qnaEdit"; 
+    }
 	
 	
 	//상품 리스트 호출
@@ -167,6 +172,24 @@ public class ProductController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap = productService.qnaRemove(map);
+		return new Gson().toJson(resultMap);
+	}
+	//QnA 글 수정
+	@RequestMapping(value = "/product/qnaEdit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String QnaEdit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.qnaEdit(map);
+		return new Gson().toJson(resultMap);
+	}
+	//QnA 하나만 가져오기
+	@RequestMapping(value = "/product/getQna.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getQna(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.getQna(map);
 		return new Gson().toJson(resultMap);
 	}
 	

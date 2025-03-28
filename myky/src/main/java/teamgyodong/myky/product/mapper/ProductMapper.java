@@ -50,7 +50,10 @@ public interface ProductMapper {
 
 	void deleteQna(HashMap<String, Object> map);
 
-//	Qna selectQnaById(HashMap<String, Object> map);
+	void UpdateQna(HashMap<String, Object> map);
+
+	Qna selectQna(HashMap<String, Object> map);
+
 
 
 }

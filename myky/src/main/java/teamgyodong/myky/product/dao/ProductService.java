@@ -27,4 +27,8 @@ public interface ProductService {
 
   HashMap<String, Object> qnaRemove(HashMap<String, Object> map);
 
+  HashMap<String, Object> qnaEdit(HashMap<String, Object> map);
+
+  HashMap<String, Object> getQna(HashMap<String, Object> map);
+
 }

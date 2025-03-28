@@ -17,7 +17,6 @@
                 box-sizing: border-box;
                 background-color: #ffffff;
             }
-
             .container {
                 max-width: 1100px;
                 margin: 20px auto;
@@ -28,7 +27,6 @@
                 display: block;
                 flex-wrap: wrap;
             }
-
             .product-detail {
                 display: flex;
                 flex-wrap: wrap;
@@ -109,7 +107,6 @@
             .purchase-section {
                 margin-top: 20px;
             }
-
             .qty-box {
                 display: flex;
                 align-items: center;
@@ -602,7 +599,13 @@
                 border-radius: 8px;
                 margin-bottom: 10px;
             }
-
+            /* .qna-title {
+                font-size: 15px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 8px;
+                line-height: 1.5;
+            } */
             .qna-block.answer {
                 background-color: #fff;
                 border-left: 4px solid #7b61ff;
@@ -628,10 +631,42 @@
             }
 
             .qna-info {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 10px;
                 font-size: 13px;
                 color: #888;
-                text-align: right;
+                margin-top: 6px;
             }
+            .qna-label {
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 6px;
+                font-size: 14px;
+            }
+
+            .qna-user-id {
+                font-weight: normal;
+                color: #555;
+                margin-left: 8px;
+                font-size: 13px;
+            }
+
+            .qna-delete-btn {
+                background: none;
+                border: none;
+                color: #999;
+                cursor: pointer;
+                font-size: 13px;
+                padding: 0;
+            }
+
+            .qna-delete-btn:hover {
+                color: #d32f2f;
+                text-decoration: none;
+            }
+
 
             .qna-block.pending {
                 background-color: #fcfcfc;
@@ -853,14 +888,12 @@
                         <div v-else>
                             <div class="review-card" v-for="review in reviewList" :key="review.reviewId">
                                 <div class="review-card-header">
-                                    <div class="star-rating">
-                                        <span v-for="n in 5" :key="n" class="star"
-                                            :class="{ filled: n <= review.rating }">★</span>
+                                    <div class="review-left">
+                                        <div class="star-rating">
+                                          <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= review.rating }">★</span>
+                                        </div>
+                                        <span class="review-user-id">[{{ review.userId }}]</span>
                                         <span class="rating-text">{{ review.rating }} / 5</span>
-                                    </div>
-                                    <div class="review-meta">
-                                        <span class="review-user">{{ review.userId }}</span>
-                                        <span class="review-date">{{ review.createdAt }}</span>
                                     </div>
                                 </div>
                                 <div class="review-card-body">
@@ -875,7 +908,7 @@
                                         <button @click="markHelpful(review.reviewId)">도움돼요 👍</button>
                                         <span>{{ review.helpCnt || 0 }}명에게 도움이 되었어요</span>
                                     </div>
-                                    <div class="review-actions">
+                                    <div class="review-actions" v-if="sessionId === review.userId">
                                         <button @click.stop="fnEdit(review.reviewId)">수정</button>
                                         <button @click.stop="fnDelete(review.reviewId)">삭제</button>
                                     </div>
@@ -921,16 +954,18 @@
                         <div v-else class="qna-list">
                             <div class="qna-item" v-for="qna in qnaList" :key="qna.qnaId">
                                 <div class="qna-block question">
-                                    <div class="qna-label">질문</div>
+                                    <div class="qna-label">
+                                        질문 <span class="qna-user-id">[{{ qna.userId }}]</span>
+                                    </div>
+                                    <!-- <h5 class="qna-title" v-if="qna.title">{{ qna.title }}</h5> -->
                                     <div class="qna-text" v-html="qna.questionText"></div>
                                     <div class="qna-info">
-                                        <span class="qna-user">{{ qna.userId }}</span>
                                         <span class="qna-date">{{ qna.createdAt }}</span>
-                                        <button v-if="qna.userId === sessionId" @click="fnQnaDelete(qna.qnaId)" class="delete-btn">
-                                            삭제
-                                        </button>
+                                        <button v-if="qna.userId === sessionId" @click="fnQnaEdit(qna.qnaId)" class="qna-delete-btn">수정</button>
+                                        <button v-if="qna.userId === sessionId" @click="fnQnaDelete(qna.qnaId)" class="qna-delete-btn">삭제</button>
                                     </div>
                                 </div>
+                                
                                 <!-- 답변 있을 경우 -->
                                 <div class="qna-block answer" v-if="qna.answerText">
                                     <div class="qna-label answer-label"> ⤷ 답변 [멍냥꽁냥 관리자]</div>
@@ -1314,6 +1349,7 @@
                         this.isSelected = false;
                         this.quantity = 1;
                     },
+                    //QnA 목록 보여주기
                     fnQnaList() {
                         let self = this;
                         let nparmap = {
@@ -1321,6 +1357,7 @@
                             page: (self.qnaPage - 1) * self.qnaPageSize,
                             pageSize: self.qnaPageSize
                         };
+                        self.qnaList = [];
                         $.ajax({
                             url: "/product/qnaList.dox",
                             type: "POST",
@@ -1377,6 +1414,11 @@
                                 }
                             }
                         });
+                    },
+                    //QnA 글 수정
+                    fnQnaEdit(qnaId) {
+                        let self = this;
+                        location.href = "/product/qnaEdit.do?qnaId=" + qnaId + "&productId=" + self.productId;
                     }
                 },
                 mounted() {
