@@ -13,6 +13,8 @@ public interface CartMapper {
 
 	List<cart> selectCartList(HashMap<String, Object> map);
 
+	List<cart> selectCartCheckList(HashMap<String, Object> map);
+
 	void updateQuantity(HashMap<String, Object> map);
 
 	void deleteCartProduct(HashMap<String, Object> map);
@@ -26,6 +28,12 @@ public interface CartMapper {
 	cart findCartItem(HashMap<String, Object> map);
 
 	void updateCartQuantity(HashMap<String, Object> map);
+
+	void updateCartCheckYn(HashMap<String, Object> map);
+
+	void updateCartAllCheckYn(HashMap<String, Object> map);
+
+	void updateCartAllCheckY(HashMap<String, Object> map);
 
 	void insertCartOrder(HashMap<String, Object> map);
 

@@ -17,6 +17,9 @@
         .quantityBtn { cursor: pointer; padding: 5px 10px; }
         .removeBtn { background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; }
         .orderBtn { width: 100%; padding: 10px; background: #FF8C42; color: white; font-size: 16px; border: none; cursor: pointer; margin-top: 20px; }
+        .orderTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .orderTable th, .orderTable td {  padding: 12px; border: 1px solid #ddd; text-align: center; }
+        .orderTable th { background: #f5f5f5; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -29,6 +32,7 @@
         <table class="cartTable">
             <thead>
                 <tr>
+                    <th><input type="checkbox" @click="fnAllCheck" :checked="selectCheck.length === cartItems.length"></th>
                     <th>상품 이미지</th>
                     <th>상품명</th>
                     <th>가격</th>
@@ -39,6 +43,7 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in cartItems" :key="item.productId">
+                    <td><input type="checkbox" v-model="selectCheck" :value="item.productId" @change="fnCheckYn(item)"></td>
                     <td v-if="item.filepath"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
@@ -54,6 +59,28 @@
             </tbody>
         </table>
 
+        <h3>주문 상품</h3>
+        <table class="orderTable">
+            <thead>
+                <tr>
+                    <th>상품 이미지</th>
+                    <th>상품명</th>
+                    <th>가격</th>
+                    <th>수량</th>
+                    <th>총 금액</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in selectCartItems" :key="item.productId">
+                    <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
+                    <td v-else><img src="/img/product/product update.png" width="50"></td>
+                    <td>{{ item.productName }}</td>
+                    <td>{{ item.price }} 원</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ (item.price * item.quantity) }} 원</td>
+                </tr>
+            </tbody>
+        </table>
 
         <h4 v-if="totalPrice < 30000">
             <span>배송비 : 2,000 원 </span>
@@ -85,15 +112,18 @@
                 return {
                     sessionId:"${sessionId}",
                     userInfo:{},
-                    cartItems: []
+                    cartItems: [],
+                    selectCartItems: [],
+                    selectCheck:[],
+                    checked:false
                 };
             },
             computed: {
                 totalPrice() {
-                    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    return this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 },
                 totalShippingPrice() {
-                    return (this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
+                    return (this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
                 },
                 formattedTotalPrice() {
                     return this.totalPrice.toLocaleString();
@@ -118,6 +148,7 @@
                             console.log("userInfo >>> ", data.user);
                             self.userInfo = data.user;
                             self.loadCart();
+                            self.loadSelectCart();
                             
                         }
                     });
@@ -135,6 +166,27 @@
                         success : function(data) { 
                             console.log("cartList >>> ", data.list);
                             self.cartItems = data.list;
+                            self.selectCheck = self.cartItems
+                            .filter(item => item.checkYn === "Y")
+                            .map(item => item.productId);
+                            console.log(self.selectCheck);
+                        }
+                    });
+                },
+                loadSelectCart() {
+                    let self = this;
+                    var nparmap = {
+                        userId : self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/cart/checkList.dox",
+                        dataType:"json",	
+                        type : "POST", 
+                        data : nparmap,
+                        success : function(data) { 
+                            console.log("cartCheckList >>> ", data.checkList);
+                            self.selectCartItems = data.checkList;
+                            
                             
                         }
                     });
@@ -157,6 +209,7 @@
                         data : nparmap,
                         success : function(data) { 
                             self.cartItems[index].quantity = newQuantity;
+                            self.loadSelectCart();
                         }
                     });
                 },
@@ -179,12 +232,65 @@
                 },
                 orderItems() {
                     let self = this;
-                    if (self.cartItems.length === 0) {
-                        alert("장바구니가 비어 있습니다.");
+                    if (self.selectCartItems.length === 0) {
+                        alert("선택된 상품이 없습니다.");
                         return;
                     }
                     alert("주문 페이지로 이동합니다.");
                     location.href = "/cart/order.do";
+                },
+                fnCheckYn:function(item) {
+                    let self = this;
+                    let checkYnValue = self.selectCheck.includes(item.productId) ? "Y" : "N";
+                    console.log(checkYnValue);
+
+                    let params = {
+                        cartId: item.cartId,
+                        productId: item.productId,
+                        checkYn: checkYnValue
+                    };
+
+                    $.ajax({
+                        url: "/cart/checkYn.dox",
+                        type: "POST",
+                        data: params,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.result === "success") {
+                                console.log("체크 상태 업데이트 완료: ", checkYnValue);
+                                self.loadSelectCart();
+                            } else {
+                                console.error("체크 상태 업데이트 실패");
+                            }
+                        },
+                        error: function () {
+                            console.error("서버 오류 발생");
+                        }
+                    });
+                },
+                fnAllCheck(event) {
+                    let self = this;
+                    let isChecked = event.target.checked;
+
+                    self.selectCheck = isChecked ? self.cartItems.map(item => item.productId) : [];
+
+                    let params = {
+                        checkYn: isChecked ? "Y" : "N",
+                        userId: self.userInfo.userId
+                    };
+
+                    $.ajax({
+                        url: "/cart/AllCheckYn.dox",
+                        type: "POST",
+                        data: params,
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.result === "success") {
+                                console.log("모든 체크 상태 업데이트 완료: ", isChecked ? "Y" : "N");
+                                self.loadSelectCart();
+                            }
+                        }
+                    });
                 }
             },
             mounted() {
