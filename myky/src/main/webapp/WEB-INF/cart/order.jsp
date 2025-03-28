@@ -678,7 +678,7 @@
                             if (data.result === "success") {
                                 console.log("주문 상세 정보도 저장 완료");
                                 alert("주문이 완료되었습니다.");
-                                pageChange("/cart/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
+                                pageChange("/order/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
                             }
                         }
                     });
