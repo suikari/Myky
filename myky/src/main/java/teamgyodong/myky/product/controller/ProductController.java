@@ -56,8 +56,6 @@ public class ProductController {
     }
 	
 	
-
-	
 	
 	//상품 리스트 호출
 	@RequestMapping(value = "/product/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -89,14 +87,14 @@ public class ProductController {
 		return new Gson().toJson(resultMap);
 	}
 	//리뷰 가져오기
-	@RequestMapping(value = "/product/reviewCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String getreview(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		
-		resultMap = productService.getReviewCnt(map);
-		return new Gson().toJson(resultMap);
-	}
+//	@RequestMapping(value = "/product/reviewCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public String getreview(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		
+//		resultMap = productService.getReviewCnt(map);
+//		return new Gson().toJson(resultMap);
+//	}
 	
 	//리뷰 리스트 가져오기
 	@RequestMapping(value = "/product/reviewList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -136,6 +134,17 @@ public class ProductController {
 		return new Gson().toJson(resultMap);
 	}
 	
+	//리뷰 도움체크
+	@RequestMapping(value = "/product/reviewHelpCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String helpCnt(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = productService.markHelpful(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
 	
 	// 첨부파일
 	@RequestMapping("/Review/fileUpload.dox")
@@ -147,7 +156,6 @@ public class ProductController {
 		try {
 			
 			for(MultipartFile multi : files) {
-			// String uploadpath = request.getServletContext().getRealPath(path);
 			String uploadpath = path;
 			String fileOrgname = multi.getOriginalFilename();
 			String extName = fileOrgname.substring(fileOrgname.lastIndexOf("."), fileOrgname.length());
