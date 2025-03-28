@@ -109,12 +109,14 @@
             .purchase-section {
                 margin-top: 20px;
             }
+
             .qty-box {
                 display: flex;
                 align-items: center;
                 gap: 10px;
                 margin-bottom: 20px;
             }
+
             .qty-controller {
                 display: flex;
                 align-items: center;
@@ -124,6 +126,7 @@
                 width: fit-content;
                 background-color: #fff;
             }
+
             .qty-btn {
                 width: 36px;
                 height: 36px;
@@ -133,10 +136,12 @@
                 cursor: pointer;
                 border-right: 1px solid #ccc;
             }
+
             .qty-btn:last-child {
                 border-left: 1px solid #ccc;
                 border-right: none;
             }
+
             .qty-input {
                 width: 50px;
                 height: 36px;
@@ -351,7 +356,6 @@
                 max-width: 1100px;
                 margin: 0 auto;
             }
-
             .review-header {
                 display: flex;
                 justify-content: space-between;
@@ -378,93 +382,145 @@
             .review-buttons .btn:hover {
                 background-color: #f7f7f7;
             }
-
             .review-empty {
                 text-align: center;
                 color: #777;
                 font-size: 14px;
                 margin-top: 100px;
             }
-
             .line-review {
                 padding: 20px 0;
                 border-bottom: 1px solid #e0e0e0;
                 font-family: 'Noto Sans KR', sans-serif;
             }
-
             .line-review-header {
                 font-weight: bold;
                 color: #333;
                 font-size: 16px;
                 margin-bottom: 8px;
             }
-
             .line-review-header .stars {
                 color: #ffcc00;
                 margin-right: 10px;
             }
-
             .line-review-body p {
                 font-size: 15px;
                 color: #444;
                 margin-bottom: 10px;
                 line-height: 1.6;
             }
-
-            .review-image img {
-                width: 120px;
-                height: 120px;
-                object-fit: cover;
-                border-radius: 8px;
-                margin-top: 5px;
-            }
-
             .line-review-footer {
                 font-size: 13px;
                 color: #888;
                 text-align: right;
                 margin-top: 5px;
             }
-
-            .review-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 10px;
-            }
-
-            .review-table th,
-            .review-table td {
-                border-bottom: 1px solid #ddd;
-                padding: 12px;
-                text-align: center;
-            }
-
-            .review-table th {
-                background-color: #f2f2f2;
-                color: #555;
-                font-weight: bold;
-            }
-
-            .review-table .review-title {
-                text-align: left;
-                color: #333;
-                font-weight: 500;
-                cursor: pointer;
-            }
-
             .review-detail {
                 background-color: #f9f9f9;
                 padding: 15px;
                 text-align: left;
             }
-
-            .review-actions {
-                display: flex;
-                justify-content: flex-end;
-                gap: 8px;
-                margin-top: 20px;
+            .review-card {
+                border-bottom: 1px solid #ddd;
+                padding: 20px 0;
+                background-color: transparent;
             }
 
+            .review-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .star-rating {
+                font-size: 18px;
+                color: #ddd;
+            }
+
+            .star-rating .star.filled {
+                color: #FFD700;
+            }
+            
+            .review-card-header,
+            .review-card-body,
+            .review-card-footer {
+                padding: 0 10px;
+            }
+            .rating-text {
+                font-size: 14px;
+                color: #555;
+                margin-left: 8px;
+            }
+
+            .review-meta {
+                font-size: 13px;
+                color: #999;
+            }
+
+            .review-card-body {
+                margin-top: 10px;
+            }
+
+            .review-text {
+                font-size: 15px;
+                color: #444;
+                line-height: 1.6;
+                margin-bottom: 10px;
+            }
+
+            .review-image img {
+                width: 130px;
+                height: 130px;
+                object-fit: cover;
+                border-radius: 8px;
+                border: 1px solid #eee;
+            }
+
+            .review-card-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+                font-size: 13px;
+                color: #888;
+            }
+
+            .review-actions button {
+                background-color: transparent;
+                border: none;
+                color: #007BFF;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 13px;
+            }
+            .review-helpful {
+                margin-top: 10px;
+                font-size: 14px;
+                color: #444;
+            }
+
+            .review-helpful button {
+                background: none;
+                border: 1px solid #28a745;
+                color: #28a745;
+                padding: 5px 12px;
+                border-radius: 20px;
+                cursor: pointer;
+                margin-right: 8px;
+                transition: 0.2s;
+                font-size: 14px;
+            }
+
+            .review-helpful button:hover {
+                background-color: #28a745;
+                color: #fff;
+            }
+            
+
+            .review-actions button:hover {
+                text-decoration: underline;
+            }
 
             /* 배송, 교환, 환불 영역 */
             .policy-section {
@@ -615,7 +671,7 @@
 
                         <div class="action-buttons">
                             <button class="cart-btn" @click="fnAddCart()">장바구니</button>
-                            <button class="buy-btn">구매하기</button>
+                            <button class="buy-btn" @click="fnBuy()">구매하기</button>
                         </div>
             </section>
 
@@ -677,45 +733,34 @@
                             현재 게시물이 없습니다
                         </div>
                         <div v-else>
-                            <table class="review-table">
-                                <thead>
-                                    <tr>
-                                        <th>번호</th>
-                                        <th>제목</th>
-                                        <th>작성자</th>
-                                        <th>작성일</th>
-                                        <th>조회</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template v-for="(review, index) in reviewList" :key="review.reviewId">
-                                        <tr @click="fnReviewView(review.reviewId)">
-                                            <td>{{ review.reviewId }}</td>
-                                            <td class="review-title">{{ review.title || '(제목 없음)' }}</td>
-                                            <td>{{ review.userId }}</td>
-                                            <!-- <td>{{ maskedUserId(review.userId) }}</td> -->
-                                            <td>{{ review.createdAt }}</td>
-                                            <td>{{ review.cnt }}</td>
-                                        </tr>
-                                        <tr v-if="selectedReviewId === review.reviewId">
-                                            <td colspan="5">
-                                                <div class="review-detail">
-                                                    <div class="stars">⭐️ {{ review.rating }}점</div>
-                                                    <div v-html="review.reviewText"></div>
-                                                    <div v-if="review.filePath">
-                                                        <img :src="review.filePath" alt="리뷰 이미지"
-                                                            style="max-width: 200px;">
-                                                    </div>
-                                                    <div class="review-actions">
-                                                        <button @click.stop="fnEdit(review.reviewId)">수정</button>
-                                                        <button @click.stop="fnDelete(review.reviewId)">삭제</button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
+                            <div class="review-card" v-for="review in reviewList" :key="review.reviewId">
+                                <div class="review-card-header">
+                                    <div class="star-rating">
+                                        <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= review.rating }">★</span>
+                                        <span class="rating-text">{{ review.rating }} / 5</span>
+                                    </div>
+                                    <div class="review-meta">
+                                        <span class="review-user">{{ review.userId }}</span>
+                                        <span class="review-date">{{ review.createdAt }}</span>
+                                    </div>
+                                </div>
+                                <div class="review-card-body">
+                                     <p class="review-text" v-html="review.reviewText"></p>
+                                    <div v-if="review.filePath" class="review-image">
+                                        <img :src="review.filePath" alt="리뷰 이미지">
+                                    </div>
+                                </div>
+                                <div class="review-card-footer">
+                                    <div class="review-helpful">
+                                        <button @click="markHelpful(review.reviewId)">도움돼요 👍</button>
+                                        <span>{{ review.helpCnt || 0 }}명에게 도움이 되었어요</span>
+                                    </div>
+                                    <div class="review-actions">
+                                        <button @click.stop="fnEdit(review.reviewId)">수정</button>
+                                        <button @click.stop="fnDelete(review.reviewId)">삭제</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="pagination" style="margin-top: 30px;">
@@ -732,47 +777,42 @@
                     </div>
 
                     <!-- 상품 문의 -->
-                    <div v-else-if="activeTab === 'qna'">
-                        <!-- 상품 문의 -->
-                        <div v-else-if="activeTab === 'qna'" class="review-section">
-                            <div class="review-header">
-                                <h3>상품 Q&A</h3>
-                                <div class="review-buttons">
-                                    <button class="btn" @click="fnQnaWrite()">글쓰기</button>
-                                </div>
-                            </div>
-
-                            <div v-if="qnaList.length === 0" class="review-empty">
-                                등록된 Q&A가 없습니다.
-                            </div>
-                            <div v-else>
-                                <table class="review-table">
-                                    <thead>
-                                        <tr>
-                                            <th>번호</th>
-                                            <th>제목</th>
-                                            <th>작성자</th>
-                                            <th>작성일</th>
-                                            <th>조회</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template v-for="qna in qnaList" :key="qna.qnaId">
-                                            <tr @click="fnQnaView(qna.qnaId)">
-                                                <td>{{ qna.qnaId }}</td>
-                                                <td class="review-title">{{ qna.title || '(제목 없음)' }}</td>
-                                                <td>{{ qna.userId }}</td>
-                                                <td>{{ qna.createdAt }}</td>
-                                                <td>{{ qna.viewCount }}</td>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
+                    <div v-else-if="activeTab === 'qna'" class="review-section">
+                        <div class="review-header">
+                            <h3>상품 Q&A</h3>
+                            <div class="review-buttons">
+                                <button class="btn" @click="fnQnaWrite()">글쓰기</button>
                             </div>
                         </div>
 
+                        <div v-if="qnaList.length === 0" class="review-empty">
+                            등록된 Q&A가 없습니다.
+                        </div>
+                        <div v-else>
+                            <table class="review-table">
+                                <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>작성자</th>
+                                        <th>작성일</th>
+                                        <th>조회</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="qna in qnaList" :key="qna.qnaId">
+                                        <tr @click="fnQnaView(qna.qnaId)">
+                                            <td>{{ qna.qnaId }}</td>
+                                            <td class="review-title">{{ qna.title || '(제목 없음)' }}</td>
+                                            <td>{{ qna.userId }}</td>
+                                            <td>{{ qna.createdAt }}</td>
+                                            <td>{{ qna.viewCount }}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
                     <!-- 배송, 교환, 환불 설명 -->
                     <div v-else-if="activeTab === 'policy'" class="policy-section">
                         <div class="policy-grid">
@@ -826,11 +866,11 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </section>
-
         </div>
+
+
+
         <jsp:include page="../common/footer.jsp" />
 
 
@@ -853,6 +893,7 @@
                         quantity: 1,
                         isSelected: false,
                         selectedReviewId: null,
+                        alreadyClicked: {},
                         //탭 관련
                         tabs: [
                             { id: 'detail', label: '상세정보', cmtcount: "" },
@@ -868,7 +909,7 @@
                         reviewTotal: 0,
                         reviewPages: [],
                         // 상품 문의..
-                        // qnaList: []
+                        qnaList: []
                     };
                 },
                 computed: {
@@ -951,32 +992,27 @@
                             }
                         });
                     },
-                    //리뷰 조회수
-                    fnReviewView(reviewId) {
+                    //리뷰 도움체크
+                    markHelpful(reviewId) {
+                        if (this.alreadyClicked[reviewId]) return;
+
                         const self = this;
-                        if (self.selectedReviewId === reviewId) {
-                            self.selectedReviewId = null;
-                            return;
-                        }
                         $.ajax({
-                            url: "/product/reviewCnt.dox",
+                            url: "/product/reviewHelpCnt.dox",
                             type: "POST",
                             data: { reviewId: reviewId },
                             dataType: "json",
                             success: function (data) {
-                                console.log("조회수 증가 결과:", data);
-                                // 조회수 증가 후 리스트 다시 불러오기
-                                self.fnReviewList();
+                                if (data.result === "success") {
+                                    alert("리뷰가 도움이 되었다고 표시되었습니다!");
+                                    self.fnReviewList();
+                                    self.alreadyClicked[reviewId] = true;
+                                } else {
+                                    alert(data.message || "이미 추천한 리뷰입니다.");
+                                }
                             }
                         });
-                        self.selectedReviewId = reviewId;
-
-                        // this.selectedReviewId = this.selectedReviewId === reviewId ? null : reviewId;
                     },
-                    // maskedUserId(userId) {
-                    //     // 예: 네이버 스타일 아이디 마스킹 (aa1234 → aa****)
-                    //     return userId.slice(0, 2) + "****";
-                    // },
                     //상품 리뷰 페이징
                     fnReviewPage(num) {
                         this.reviewPage = num;
@@ -1048,11 +1084,11 @@
                     fnAddCart() {
                         const self = this;
                         const nparmap = {
-                            // userId, sessionId, productId, quantity(수량) 필요)
                             productId: self.productId,
                             sessionId: self.sessionId,
                             userId: self.userInfo.userId,
-                            quantity: self.quantity
+                            quantity: self.quantity,
+                            checkYn : "N"
                         };
                         $.ajax({
                             url: "/cart/addProduct.dox",
@@ -1065,12 +1101,50 @@
                             }
                         });
                     },
+                    //바로 구매
+                    fnBuy : function(){
+                        const self = this;
+                        const nparmap = {
+                            userId: self.userInfo.userId,
+                            checkYn : "N"
+                        };
+                        $.ajax({
+                            url: "/cart/AllCheckYn.dox",
+                            type: "POST",
+                            data: nparmap,
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                self.fnAddBuy();
+                            }
+                        });
+                    },
+                    fnAddBuy() {
+                        const self = this;
+                        const nparmap = {
+                            productId: self.productId,
+                            sessionId: self.sessionId,
+                            userId: self.userInfo.userId,
+                            quantity: self.quantity,
+                            checkYn : "Y"
+                        };
+                        $.ajax({
+                            url: "/cart/addProduct.dox",
+                            type: "POST",
+                            data: nparmap,
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                location.href="/cart/order.do";
+                            }
+                        });
+                    },
                     changeTab(tabId) {
                         let self = this;
                         self.activeTab = tabId;
                         if (tabId === 'review') {
                             self.fnReviewList();
-                        }else if(tabId === 'qna'){
+                        } else if (tabId === 'qna') {
                             self.fnQnaList();
                         }
                     },
@@ -1092,29 +1166,7 @@
                     cancelSelection() {
                         this.isSelected = false;
                         this.quantity = 1;
-                    },
-                    // 상품 문의
-                    // fnQnaList() {
-                    //     const self = this;
-                    //     $.ajax({
-                    //         url: "/product/qnaList.dox",
-                    //         type: "POST",
-                    //         data: { productId: self.productId },
-                    //         dataType: "json",
-                    //         success(data) {
-                    //             console.log("Q&A 목록:", data);
-                    //             self.qnaList = data.qnaList;
-                    //             self.tabs[2].cmtcount = data.qnaList.length;
-                    //         }
-                    //     });
-                    // },
-                    // fnQnaView(qnaId) {
-                    //     location.href = "/product/qnaView.do?productId=" + this.productId + "&qnaId=" + qnaId;
-                    // },
-                    // fnQnaWrite() {
-                    //     location.href = "/product/qnaWrite.do?productId=" + this.productId;
-                    // }
-
+                    }
                 },
                 mounted() {
                     const params = new URLSearchParams(window.location.search);
@@ -1128,8 +1180,9 @@
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
-                    // self.fnQnaList();
                     self.fnUserInfo();
+                    // self.fnQnaList();
+                    // self.fnBuy();
                 }
             });
 

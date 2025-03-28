@@ -12,7 +12,7 @@ public class Review {
 	private String createdAt;
 	private String productId;
 	private String title;
-	private int cnt;
+	private int helpCnt;
 	
 	
 	private String fileNo;

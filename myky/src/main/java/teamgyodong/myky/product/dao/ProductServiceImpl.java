@@ -53,14 +53,14 @@ public class ProductServiceImpl implements ProductService {
 		return resultMap;
 	}
 	//리뷰 가져오기
-	public HashMap<String, Object> getReviewCnt(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int count = productMapper.ReviewCnt(map);
-
-		resultMap.put("result", "success");
-		return resultMap;
-	}
+//	public HashMap<String, Object> getReviewCnt(HashMap<String, Object> map) {
+//		// TODO Auto-generated method stub
+//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+//		int count = productMapper.ReviewCnt(map);
+//
+//		resultMap.put("result", "success");
+//		return resultMap;
+//	}
 	
 
 	//상품 리뷰 리스트 가져오기
@@ -113,6 +113,26 @@ public class ProductServiceImpl implements ProductService {
 		return resultMap;
 	}
 
+	// 도움돼요 추천 처리
+	public HashMap<String, Object> markHelpful(HashMap<String, Object> map) {
+	    HashMap<String, Object> resultMap = new HashMap<>();
+
+	    // 이미 추천했는지 확인
+	    int check = productMapper.selectHelpfulByUser(map);
+
+	    if (check > 0) {
+	        resultMap.put("result", "fail");
+	        resultMap.put("message", "이미 추천한 리뷰입니다.");
+	    } else {
+	        productMapper.updateHelpCnt(map);   // 리뷰 테이블에서 helpCnt + 1
+	        resultMap.put("result", "success");
+	    }
+
+	    return resultMap;
+	}
+
+	
+	
 	//상품 리뷰 파일 업로드
 	public  void addReviewFile(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
