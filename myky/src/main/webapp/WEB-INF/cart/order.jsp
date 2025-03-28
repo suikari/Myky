@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>멍냥꽁냥 주문하기</title>
-	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
-	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
     <style>
@@ -17,7 +17,7 @@
             font-family: Arial, sans-serif;
         }
 
-        .ordercontainer h2, 
+        .ordercontainer h2,
         .ordercontainer h3 {
             text-align: center;
             margin-bottom: 15px;
@@ -29,7 +29,7 @@
             margin-top: 20px;
         }
 
-        .orderTable th, 
+        .orderTable th,
         .orderTable td {
             padding: 12px;
             border: 1px solid #ddd;
@@ -105,7 +105,8 @@
             overflow: hidden;
         }
 
-        .discountTable th, .discountTable td {
+        .discountTable th,
+        .discountTable td {
             padding: 12px;
             border: 1px solid #ddd;
             text-align: left;
@@ -149,12 +150,12 @@
         .discountTable button:hover {
             background-color: #e07b3e;
         }
-
     </style>
 </head>
+
 <body>
-	<jsp:include page="/WEB-INF/common/header.jsp"/>
- 
+    <jsp:include page="/WEB-INF/common/header.jsp" />
+
 
 
     <div id="app" class="ordercontainer">
@@ -202,7 +203,7 @@
             <tr>
                 <th>사용할 적립금</th>
                 <td>
-                    <input type="text" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력" >
+                    <input type="text" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
                     <button @click="useAllPoints">전체 사용</button>
                     <button @click="applyPoints">적용</button>
                 </td>
@@ -221,32 +222,39 @@
             <h3>배송 정보</h3>
             <div>
                 <label>
-                    <input type="radio" name="deliveryType" value="default" v-model="deliveryType" @change="setDefaultAddress">
-                    기본 배송지  ({{ userInfo.address }})
+                    <input type="radio" name="deliveryType" value="default" v-model="deliveryType"
+                        @change="setDefaultAddress">
+                    기본 배송지 ({{ userInfo.address }})
                 </label>
                 <label>
-                    <input type="radio" name="deliveryType" value="new" v-model="deliveryType" @change="setDefaultAddress">
+                    <input type="radio" name="deliveryType" value="new" v-model="deliveryType"
+                        @change="setDefaultAddress">
                     새로운 배송지 입력
                 </label>
             </div>
-            
+
             <div>
-                <label>수령인: <input type="text" ref="receiverInput" class="inputField" v-model="orderInfo.receiver" required></label><br>
+                <label>수령인: <input type="text" ref="receiverInput" class="inputField" v-model="orderInfo.receiver"
+                        required></label><br>
                 <label>우편번호:
-                    <input type="text" ref="zipcodeInput" class="inputField short" v-model="orderInfo.zipcode" placeholder="우편번호" readonly>
+                    <input type="text" ref="zipcodeInput" class="inputField short" v-model="orderInfo.zipcode"
+                        placeholder="우편번호" readonly>
                     <button type="button" @click="searchAddress">우편번호 검색</button>
                 </label><br>
-            
-                <label>기본 주소: 
-                    <input type="text" class="inputField" v-model="orderInfo.baseAddress" placeholder="기본 주소" readonly>
+
+                <label>기본 주소:
+                    <input type="text" class="inputField" v-model="orderInfo.baseAddress" placeholder="기본 주소"
+                        readonly>
                 </label><br>
-            
-                <label>상세 주소: 
-                    <input type="text" ref="detailAddress" class="inputField" v-model="orderInfo.detailAddress" placeholder="상세 주소 입력">
+
+                <label>상세 주소:
+                    <input type="text" ref="detailAddress" class="inputField" v-model="orderInfo.detailAddress"
+                        placeholder="상세 주소 입력">
                 </label><br>
 
                 <label>휴대폰 번호:
-                    <select v-model="orderInfo.phonePrefix" @change="focusPhoneMiddle" class="inputField short" required>
+                    <select v-model="orderInfo.phonePrefix" @change="focusPhoneMiddle" class="inputField short"
+                        required>
                         <option value="010">010</option>
                         <option value="011">011</option>
                         <option value="016">016</option>
@@ -254,32 +262,38 @@
                         <option value="018">018</option>
                         <option value="019">019</option>
                     </select> -
-                    <input type="text" ref="phoneMiddleInput" class="inputField short" v-model="orderInfo.phoneMiddle" maxlength="4" placeholder="1234" @input="checkPhoneMiddle" required> -
-                    <input type="text" class="inputField short" v-model="orderInfo.phoneSuffix" maxlength="4" placeholder="5678" ref="phoneSuffixInput" required>
+                    <input type="text" ref="phoneMiddleInput" class="inputField short"
+                        v-model="orderInfo.phoneMiddle" maxlength="4" placeholder="1234" @input="checkPhoneMiddle"
+                        required> -
+                    <input type="text" class="inputField short" v-model="orderInfo.phoneSuffix" maxlength="4"
+                        placeholder="5678" ref="phoneSuffixInput" required>
                 </label><br>
             </div>
 
-        <h3>배송 요청 사항</h3>
-        <select v-model="orderInfo.deliveryMessage">
-            <option value="">배송 메시지를 선택해주세요</option>
-            <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
-            <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
-            <option value="배송 전 연락 부탁드립니다">배송 전 연락 부탁드립니다</option>
-            <option value="직접 입력">직접 입력</option>
-        </select>
-        <input v-if="orderInfo.deliveryMessage === '직접 입력'" type="text" class="inputField" v-model="orderInfo.customMessage" placeholder="배송 요청사항 입력">
+            <h3>배송 요청 사항</h3>
+            <select v-model="orderInfo.deliveryMessage">
+                <option value="">배송 메시지를 선택해주세요</option>
+                <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
+                <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
+                <option value="배송 전 연락 부탁드립니다">배송 전 연락 부탁드립니다</option>
+                <option value="직접 입력">직접 입력</option>
+            </select>
+            <input v-if="orderInfo.deliveryMessage === '직접 입력'" type="text" class="inputField"
+                v-model="orderInfo.customMessage" placeholder="배송 요청사항 입력">
 
-        <button class="payBtn" @click="submitOrder">결제하기</button>
+            <button class="payBtn" @click="submitOrder">결제하기</button>
+            <button class="payBtn" @click="test">주문완료페이지테스트</button>
+        </div>
     </div>
 
+        <jsp:include page="/WEB-INF/common/footer.jsp"/>
 
-	<!-- <jsp:include page="/WEB-INF/common/footer.jsp"/> -->
-
-    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+        <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 </body>
+
 </html>
 <script>
-    
+
     const userCode = "imp40283074";
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -289,16 +303,16 @@
                 return {
                     sessionId: "${sessionId}",
                     userInfo: {},
-                    cartItems: [],
+                    selectCartItems: [],
                     deliveryType: "default",
                     orderInfo: {
                         receiver: "",
                         zipcode: "",
                         baseAddress: "",
                         detailAddress: "",
-                        phonePrefix:"010",
-                        phoneMiddle:"",
-                        phoneSuffix:"",
+                        phonePrefix: "010",
+                        phoneMiddle: "",
+                        phoneSuffix: "",
                         phone: "",
                         deliveryMessage: "",
                         customMessage: "",
@@ -308,22 +322,25 @@
                     userPoint: {},
                     usedPoint: 0,
                     discountAmount: 0,
-                    cartId:""
+                    cartId: "",
+                    paid_amount:0
                 };
             },
             computed: {
                 totalPrice() {
-                    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    return this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 },
                 totalShippingPrice() {
-                    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 2000;
+                    return this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 2000;
                 },
                 finalPrice() {
                     let finalPrice = 0;
-                    if(this.totalPrice < 30000){
+                    if (this.totalPrice < 30000) {
                         finalPrice = this.totalShippingPrice;
+                        this.paid_amount = this.totalShippingPrice;
                     } else {
                         finalPrice = this.totalPrice;
+                        this.paid_amount = this.totalPrice;
                     }
                     return finalPrice - this.discountAmount;
                 },
@@ -332,9 +349,6 @@
                 },
                 formattedUserPoints() {
                     return this.userPoint.toLocaleString();
-                },
-                formattedUsedPoints() {
-                    return this.usedPoint.toLocaleString();
                 },
                 formattedDiscountAmount() {
                     return this.discountAmount.toLocaleString();
@@ -379,7 +393,7 @@
                         }
                     });
                 },
-                fnGetPoint:function(){
+                fnGetPoint: function () {
                     let self = this;
                     let params = { userId: self.userInfo.userId };
                     $.ajax({
@@ -394,19 +408,26 @@
                     });
                 },
                 applyPoints() {
-                    let pointToUse = parseInt(this.usedPoint) || 0;
-                    
-                    if (pointToUse > this.userPoint) {
-                        alert("보유한 적립금보다 많이 사용할 수 없습니다.");
-                        this.usedPoint = this.userPoint;
+                    let self = this;
+                    let usedPoints = parseInt(self.usedPoint) || 0;
+                    let userPoints = parseInt(self.userPoint) || 0;
+                    let finalPrice = 0;
+                    if (parseInt(self.totalPrice) < 30000) {
+                        finalPrice = parseInt(self.totalShippingPrice) || 0;
+                    } else {
+                        finalPrice = parseInt(self.totalPrice) || 0;
                     }
                     
-                    if (this.usedPoint > this.finalPrice) {
-                        alert("총 결제 금액을 초과하는 적립금을 사용할 수 없습니다.");
-                        this.usedPoint = this.finalPrice;
+                    if (usedPoints > finalPrice) {
+                        alert("총 결제 금액보다 많은 포인트를 사용할 수 없습니다.");
+                        self.usedPoint = finalPrice;
+                    } else if (usedPoints > userPoints) {
+                        alert("보유한 포인트보다 많은 포인트를 사용할 수 없습니다.");
+                        self.usedPoint = userPoints;
+                    } else {
+                        self.usedPoint = usedPoints;
                     }
-
-                    this.discountAmount = parseInt(this.usedPoint) || 0;
+                    self.discountAmount = self.usedPoint;
                 },
                 useAllPoints() {
                     this.usedPoint = Math.min(this.userPoint, this.finalPrice);
@@ -420,7 +441,7 @@
                     if (self.deliveryType === "default") {
                         self.orderInfo.receiver = self.userInfo.userName;
                         self.orderInfo.phone = self.userInfo.phoneNumber;
-                        if(self.userInfo.address){
+                        if (self.userInfo.address) {
                             let parsedAddress = self.parseAddress(self.userInfo.address);
                             if (parsedAddress) {
                                 self.orderInfo.zipcode = parsedAddress.zipcode;
@@ -469,8 +490,8 @@
                             self.orderInfo.phoneMiddle = phone.slice(3, 6);
                             self.orderInfo.phoneSuffix = phone.slice(6, 10);
                         }
-                    } 
-                    if(self.deliveryType === "new") {
+                    }
+                    if (self.deliveryType === "new") {
                         self.orderInfo.phonePrefix = "010";
                         self.orderInfo.phoneMiddle = "";
                         self.orderInfo.phoneSuffix = "";
@@ -478,9 +499,9 @@
                 },
                 searchAddress() {
                     let self = this;
-                    
+
                     new daum.Postcode({
-                        oncomplete: function(data) {
+                        oncomplete: function (data) {
                             self.orderInfo.zipcode = data.zonecode;
                             self.orderInfo.baseAddress = data.address;
                             self.orderInfo.detailAddress = "";
@@ -505,129 +526,134 @@
                 submitOrder() {
                     let self = this;
 
-                    self.orderInfo.phone = (self.deliveryType === "new") ? self.orderInfo.phonePrefix+self.orderInfo.phoneMiddle+self.orderInfo.phoneSuffix : "";
+                    self.orderInfo.phone = (self.deliveryType === "new") ? self.orderInfo.phonePrefix + self.orderInfo.phoneMiddle + self.orderInfo.phoneSuffix : "";
 
-                    if(!self.orderInfo.receiver){
+                    if (!self.orderInfo.receiver) {
                         alert("수령인 성함을 정확히 입력해주세요.");
                         self.$nextTick(() => {
                             self.$refs.receiverInput.focus();
                         });
                         return;
                     }
-                    if(!self.orderInfo.baseAddress){
+                    if (!self.orderInfo.baseAddress) {
                         alert("배송받을 주소를 정확히 입력해주세요.");
                         self.$nextTick(() => {
                             self.$refs.zipcodeInput.focus();
                         });
                         return;
                     }
-                    if(!self.orderInfo.phoneMiddle || !self.orderInfo.phoneSuffix){
+                    if (!self.orderInfo.phoneMiddle || !self.orderInfo.phoneSuffix) {
                         alert("휴대폰 번호를 정확히 입력해주세요.");
                         self.$nextTick(() => {
                             self.$refs.phoneMiddleInput.focus();
                         });
                         return;
                     }
-                    let address = self.orderInfo.baseAddress+","+self.orderInfo.detailAddress+","+self.orderInfo.zipcode;
+                    let address = self.orderInfo.baseAddress + "," + self.orderInfo.detailAddress + "," + self.orderInfo.zipcode;
                     let finalAddress = self.deliveryType === "default" ? self.userInfo.address : address;
                     let finalMessage = self.orderInfo.deliveryMessage === "직접 입력" ? self.orderInfo.customMessage : self.orderInfo.deliveryMessage;
-                    
+
                     console.log(self.finalPrice);
 
                     if (self.finalPrice === 0) {
-                        let orderId = "free_order_" + new Date().getTime(); // 결제 없이 주문 ID 생성
+                        // 포인트 결제
+                        let merchantUid = "free_order_" + new Date().getTime();
+                        
                         let paymentData = {
-                            merchant_uid: orderId,  // 결제 ID 대신 주문 ID 사용
+                            merchant_uid: merchantUid,
                             name: "장바구니 - 포인트 결제",
-                            paid_amount: 0,  // 결제 금액 0원
+                            paid_amount: self.paid_amount,
                             pay_method: "point_only",
                             status: "paid",
                             card_quota: null
                         };
-                        self.fnPaymentHistory(paymentData, 0, finalAddress, finalMessage);
+                        self.fnPaymentHistory(paymentData, self.paid_amount, finalAddress, finalMessage);
                         self.fnRemoveCart();
                         self.fnUsePoint();
                     } else {
-                        self.fnPayment(self.finalPrice,finalAddress,finalMessage);
+                        // 일반 결제
+                        self.fnPayment(self.finalPrice, finalAddress, finalMessage);
                     }
                 },
-                fnPayment:function(finaPrice,finalAddress,finalMessage){
-	                var self = this;
-	
-	                if (typeof IMP === 'undefined') {
-	                    console.error('IMP is not initialized');
-	                    return;
-	                }
-	
-	                IMP.request_pay({
-	                    channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
-	                    pg: "html5_inicis",
-	                    pay_method: "card",
-	                    merchant_uid: "merchant_" + new Date().getTime(),
-	                    name: "장바구니 상품 결제",
-	                    amount: finaPrice,
-	                    buyer_tel: self.userInfo.phoneNumber,
-	                }, function (rsp) {
-	                    if (rsp.success) {
-	                        console.log("결제 정보 >>> ",rsp);
-                            self.fnPaymentHistory(rsp, finaPrice,finalAddress,finalMessage);
+                fnPayment: function (finaPrice, finalAddress, finalMessage) {
+                    var self = this;
+
+                    if (typeof IMP === 'undefined') {
+                        console.error('IMP is not initialized');
+                        return;
+                    }
+
+                    IMP.request_pay({
+                        channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
+                        pg: "html5_inicis",
+                        pay_method: "card",
+                        merchant_uid: "merchant_" + new Date().getTime(),
+                        name: "장바구니 상품 결제",
+                        amount: finaPrice,
+                        buyer_tel: self.userInfo.phoneNumber,
+                    }, function (rsp) {
+                        if (rsp.success) {
+                            console.log("결제 정보 >>> ", rsp);
+                            self.fnPaymentHistory(rsp, self.paid_amount, finalAddress, finalMessage);
                             self.fnRemoveCart();
                             self.fnUsePoint();
-	                    } else {
-	                        alert("결제에 실패했습니다.");
-	                        console.log("결제 정보 >>> ",rsp.error_msg);
+                        } else {
+                            alert("결제에 실패했습니다.");
+                            console.log("결제 정보 >>> ", rsp.error_msg);
 
-	                    }
-	                });
-	            },
-	            fnPaymentHistory:function(rsp,finaPrice,finalAddress,finalMessage){
-	                let self = this;
-	                
-	                let paymentMethod = "";
-	                if(rsp.pay_method == "card"){
-	                    paymentMethod = rsp.pay_method,"-",rsp.card_name,rsp.card_number;
-	                } else {
-	                    paymentMethod = rsp.pay_method;
-	                }
-	                
-	                console.log("paymentMethod >>> ",paymentMethod);
-	
-	                var nparmap = {
-	                    paymentCode: rsp.merchant_uid,
-	                    description: rsp.name,
-	                    amount: rsp.paid_amount,
-	                    paymentMethod: paymentMethod,
-	                    installment: rsp.card_quota,
-	                    subscriptionPeriod: null,
-	                    paymentStatus: rsp.status,
-	                    isCanceled: "N",
-                    	cancelDate: null,
-	                    donationId: null,
-	                    userId: self.userInfo.userId
-	                };
-		            $.ajax({
-		                url: "/payment.dox",
-		                dataType: "json",
-		                type: "POST",
-		                data: nparmap,
-		                success: function (data) {
-	                    	console.log("결제 정보 저장 여부 >>> ",data);
-                            self.fnOrderHistory(finaPrice,rsp.pay_method,finalAddress,finalMessage,data.orderId);
-
-	                	}
-	            	});
-            	},
-                fnOrderHistory:function(finaPrice, paymentMethod, finalAddress, finalMessage , orderId) {
+                        }
+                    });
+                },
+                fnPaymentHistory: function (rsp, finaPrice, finalAddress, finalMessage) {
                     let self = this;
-					let payList = self.cartItems.map(item => ({
-                    	orderId : orderId, 
+
+                    let paymentMethod = "";
+                    if (rsp.pay_method === "card" && self.usedPoint == 0) {
+                        paymentMethod = rsp.pay_method + "-" + rsp.card_name;
+                    } else if (rsp.pay_method === "card" && self.usedPoint > 0) {
+                        paymentMethod = rsp.pay_method + "-" + rsp.card_name + " + point";
+                    } else {
+                        paymentMethod = rsp.pay_method;
+                    }
+
+                    console.log("paymentMethod >>> ", paymentMethod);
+
+                    var nparmap = {
+                        paymentCode: rsp.merchant_uid,
+                        description: rsp.name,
+                        amount: self.paid_amount,
+                        paymentMethod: paymentMethod,
+                        installment: rsp.card_quota,
+                        subscriptionPeriod: null,
+                        paymentStatus: rsp.status,
+                        isCanceled: "N",
+                        cancelDate: null,
+                        donationId: null,
+                        userId: self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/payment.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("결제 정보 저장 여부 >>> ", data);
+                            self.fnOrderHistory(finaPrice, paymentMethod, finalAddress, finalMessage, data.orderId);
+
+                        }
+                    });
+                },
+                fnOrderHistory: function (finaPrice, paymentMethod, finalAddress, finalMessage, orderId) {
+                    let self = this;
+                    let payList = self.selectCartItems.map(item => ({
+                        orderId: orderId,
                         productId: item.productId,
                         quantity: item.quantity,
                         price: item.quantity * item.price
-					}))
-					
+                    }))
+
                     self.orderData = {
-                    	orderId : orderId, 
+                        orderId: orderId,
                         totalPrice: finaPrice,
                         userId: self.userInfo.userId,
                         receiverName: self.orderInfo.receiver || self.userInfo.userName,
@@ -636,7 +662,7 @@
                         paymentMethod: paymentMethod,
                         deliveryMessage: finalMessage,
                         option: "order",
-						orderDetails : JSON.stringify(payList)
+                        orderDetails: JSON.stringify(payList)
                     };
 
                     console.log("주문 데이터 >>>", self.orderData);
@@ -652,15 +678,15 @@
                             if (data.result === "success") {
                                 console.log("주문 상세 정보도 저장 완료");
                                 alert("주문이 완료되었습니다.");
-                                // window.location.href = "/cart/orderComplete.do";
+                                pageChange("/cart/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
                             }
                         }
                     });
                 },
-                fnRemoveCart:function(){
+                fnRemoveCart: function () {
                     let self = this;
                     var nparmap = {
-                        cartId:self.cartId
+                        cartId: self.cartId
                     };
                     $.ajax({
                         url: "/cart/removeCart.dox",
@@ -674,16 +700,16 @@
                         }
                     });
                 },
-                fnUsePoint:function(){
+                fnUsePoint: function () {
                     let self = this;
                     let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
-                    console.log("사용 포인트 >> ",usedPoint);
+                    console.log("사용 포인트 >> ", usedPoint);
 
                     var nparmap = {
                         usedPoint: usedPoint,
                         remarks: "장바구니_결제",
-                        userId:self.userInfo.userId
+                        userId: self.userInfo.userId
                     };
                     $.ajax({
                         url: "/point/used.dox",
@@ -691,11 +717,13 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            if (data.result === "success") {
-                                console.log("포인트 사용 내역 저장 >>> ", data.result);
-                            }
+                            console.log("포인트 사용 내역 저장 >>> ", data.result);
+
                         }
                     });
+                },
+                test:function(){
+                    pageChange("/cart/orderComplete.do",{userId:"as879",orderId:100});
                 }
             },
             mounted() {
@@ -703,7 +731,7 @@
                 self.fnUserInfo();
 
                 if (typeof IMP !== 'undefined') {
-                    IMP.init(userCode); 
+                    IMP.init(userCode);
                     console.log('IMP initialized');
                 } else {
                     console.error('IMP is not loaded properly');

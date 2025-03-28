@@ -70,7 +70,8 @@ public class PayServiceImpl implements PayService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			pay point =  payMapper.insertUsedPoint(map);
+			
+			payMapper.insertUsedPoint(map);
 			
 			resultMap.put("result", "success");
 		}catch(Exception e) {

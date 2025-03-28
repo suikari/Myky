@@ -89,7 +89,7 @@ div .donationBtn:hover {
     </style>
 </head>
 <body>
-    <jsp:include page="../common/header.jsp"/>
+    <jsp:include page="/WEB-INF/common/header.jsp" />
     <!-- 헤더 -->
     
     <div id="app" class="centerContainer">
@@ -109,7 +109,7 @@ div .donationBtn:hover {
         </div>
     </div>
 
-    <jsp:include page="../common/footer.jsp"/>
+    <jsp:include page="/WEB-INF/common/footer.jsp"/>
     <!-- 푸터 -->
     
 </body>

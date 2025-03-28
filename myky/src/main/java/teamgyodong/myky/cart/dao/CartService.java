@@ -22,4 +22,8 @@ public interface CartService {
 
 	HashMap<String, Object> editAllCheckYn(HashMap<String, Object> map);
 
+	HashMap<String, Object> getOrderList(HashMap<String, Object> map);
+
+	HashMap<String, Object> getOrderInfo(HashMap<String, Object> map);
+
 }
