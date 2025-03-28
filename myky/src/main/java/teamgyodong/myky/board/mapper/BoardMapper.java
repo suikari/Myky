@@ -10,6 +10,8 @@ import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.boardFile;
 import teamgyodong.myky.board.model.boardLikeLog;
 import teamgyodong.myky.board.model.comment;
+import teamgyodong.myky.board.model.vetAnswer;
+import teamgyodong.myky.board.model.vetBoard;
 
 @Mapper
 public interface BoardMapper {
@@ -57,6 +59,18 @@ public interface BoardMapper {
 	int deleteStatus(HashMap<String, Object> map);
 	
 	void updatelikeCntBoard (HashMap<String, Object> map);
+
+	List<vetBoard> selectVetBoardList(HashMap<String, Object> map);
+
+	int selectVetBoardCnt(HashMap<String, Object> map);
+
+	List<vetAnswer> selectVetAnList(HashMap<String, Object> map);
+
+	vetBoard selectVetBoard(HashMap<String, Object> map);
+
+	void updateVetBoardCnt(HashMap<String, Object> map);
+
+	void insertVetBoard(HashMap<String, Object> map);
 	
 
 

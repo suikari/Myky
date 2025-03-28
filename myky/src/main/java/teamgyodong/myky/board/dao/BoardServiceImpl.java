@@ -13,6 +13,8 @@ import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.boardFile;
 import teamgyodong.myky.board.model.boardLikeLog;
 import teamgyodong.myky.board.model.comment;
+import teamgyodong.myky.board.model.vetAnswer;
+import teamgyodong.myky.board.model.vetBoard;
 
 
 @Service
@@ -54,12 +56,6 @@ public class BoardServiceImpl implements BoardService {
 
 		return resultMap;
 	}
-	//게시글 이미지 출력
-	public void addBoardFile(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		
-		boardMapper.insertBoardFile(map);
-	}
 	//게시글 상세보기
 	public HashMap<String, Object> boardView(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -98,6 +94,12 @@ public class BoardServiceImpl implements BoardService {
 	    resultMap.put("result", "success");
 
 	    return resultMap;
+	}
+	//게시글 이미지 출력
+	public void addBoardFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		
+		boardMapper.insertBoardFile(map);
 	}
 	//게시글 추가
 	public HashMap<String, Object> boardAdd(HashMap<String, Object> map) {
@@ -216,7 +218,7 @@ public class BoardServiceImpl implements BoardService {
 		return resultMap;
 
 	}
-	//좋아요 갯수 DB저장^^
+	//좋아요 갯수 DB저장
 	public HashMap<String, Object> addlikeCntBoard(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -224,5 +226,81 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.updatelikeCntBoard(map);
 		return resultMap;
 	}
+	//수의사 게시판 목록 출력
+	public HashMap<String, Object> vetBoardList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		String result = "";
+		
+		try {
+			System.out.println("searchOption: " + map.get("searchOption"));
+			System.out.println("keyword: " + map.get("keyword"));
+			
+			List<vetBoard> vetBoard = boardMapper.selectVetBoardList(map);			
+						
+			int count = boardMapper.selectVetBoardCnt(map);
+			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+
+			resultMap.put("count", countMap);
+			resultMap.put("result", "success");			
+			resultMap.put("vetBoard", vetBoard);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+
+		}
+
+		return resultMap;
+	}
+	//수의사 게시글 상세보기
+		public HashMap<String, Object> vetBoardView(HashMap<String, Object> map) {
+			// TODO Auto-generated method stub
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			
+			
+			if(map.get("option").equals("View")) {
+
+			    String vetBoardId = (String) map.get("vetBoardId");
+
+			    // 1. 세션 기반 조회수 중복 방지 처리
+			    String sessionKey = "viewedBoard_" + vetBoardId;
+
+			    if (session.getAttribute(sessionKey) == null) {
+			        boardMapper.updateVetBoardCnt(map); // 조회수 1 증가
+			        session.setAttribute(sessionKey, true); // 세션에 기록
+			    }
+			    
+			}
+			
+			try {
+				vetBoard vetboard = boardMapper.selectVetBoard(map);
+				List<vetAnswer> answers = boardMapper.selectVetAnList(map);
+				
+				resultMap.put("info", vetboard);
+				resultMap.put("answerList", answers);
+				resultMap.put("result", "success");
+			}catch (Exception e){
+				 e.printStackTrace();
+				 resultMap.put("result", "fail");
+
+			}
+			return resultMap;
+		}
+		//수의사 게시글 추가
+		public HashMap<String, Object> vetBoardAdd(HashMap<String, Object> map) {
+			// TODO Auto-generated method stub
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			
+			boardMapper.insertVetBoard(map);
+			
+			resultMap.put("vetBoardId", map.get("vetBoardId"));
+			resultMap.put("result", "success");
+			
+			return resultMap;
+		}
 }
 	

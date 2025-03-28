@@ -22,7 +22,6 @@ public class board {
 	private String cnt;
 	private String commentCount;
 	private String updatedTime;
-	
 	private String nickName;
 	
 	
