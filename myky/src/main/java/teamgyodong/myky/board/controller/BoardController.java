@@ -142,8 +142,7 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = boardService.boardRemove(map);
 			
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
-		//return new Gson().toJson(resultMap);
+		return new Gson().toJson(resultMap); 
 	}
 	//댓글 작성
 	@RequestMapping(value = "/board/CommentAdd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -153,7 +152,7 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap = boardService.CommentAdd(map);
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+		return new Gson().toJson(resultMap);
 	}
 	//댓글 삭제
 	@RequestMapping(value = "/board/CommentRemove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
