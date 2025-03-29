@@ -339,21 +339,21 @@
                                   <button class="cmtButton2" @click="editCommentId = ''">취소</button>
                                 </div>
                               </div>
-                          
                               <!-- 일반 댓글 보기 -->
                               <div v-else>
-                                <!-- 유저 아이디 -->
-                                 <template v-if="item.isDeleted == 'Y'">
-                                    <div style="font-weight: bold; margin-bottom: 3px;"></div>
-                                    <!-- 댓글 내용 -->
-                                    <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
-                                 </template>
-                                 <template v-else>
-                                    <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
-                          
-                                    <!-- 댓글 내용 -->
-                                    <div style="margin-bottom: 5px;">{{ item.content }}</div>
-                                 </template>
+                                  <!-- 유저 아이디 -->
+                                  <template v-if="item.isDeleted == 'Y'">
+                                      <div style="font-weight: bold; margin-bottom: 3px;"></div>
+                                      <!-- 댓글 내용 -->
+                                      <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
+                                    </template>
+                                    <template v-else>
+                                        <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
+                                        
+                                        <!-- 댓글 내용 -->
+                                        <div style="margin-bottom: 5px;">{{ item.content }}</div>
+                                    </template>
+                                </div>
 
                           
                                 <!-- 날짜 / 버튼들 -->
@@ -404,9 +404,6 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          
-                        </div>
                     </tr>
                 </table>
                 
