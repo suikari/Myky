@@ -488,7 +488,17 @@
                 border-radius: 8px;
                 border: 1px solid #eee;
             }
+            .review-deleted-content {
+                padding: 20px 10px;
+                text-align: left;
+            }
 
+            .review-deleted-content .review-text {
+                font-size: 15px;
+                color: #999;
+                font-style: italic;
+                margin: 0;
+            }
             .review-card-footer {
                 display: flex;
                 justify-content: space-between;
@@ -599,13 +609,6 @@
                 border-radius: 8px;
                 margin-bottom: 10px;
             }
-            /* .qna-title {
-                font-size: 15px;
-                font-weight: bold;
-                color: #333;
-                margin-bottom: 8px;
-                line-height: 1.5;
-            } */
             .qna-block.answer {
                 background-color: #fff;
                 border-left: 4px solid #7b61ff;
@@ -885,15 +888,21 @@
                         <div v-if="reviewList.length === 0" class="review-empty">
                             현재 게시물이 없습니다
                         </div>
-                        <div v-else>
+                        
                             <div class="review-card" v-for="review in reviewList" :key="review.reviewId">
+                            <!-- 삭제된 리뷰일 경우 -->
+                            <div v-if="review.deleteYn === 'Y'" class="review-deleted-content">
+                                <p class="review-text">삭제된 리뷰입니다.</p>
+                            </div>
+                            <div v-else>
+
                                 <div class="review-card-header">
                                     <div class="review-left">
                                         <div class="star-rating">
                                           <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= review.rating }">★</span>
                                         </div>
                                         <span class="review-user-id">[{{ review.userId }}]</span>
-                                        <span class="rating-text">{{ review.rating }} / 5</span>
+                                        <span class="rating-text">{{ review.rating ?? 0 }} / 5</span>
                                     </div>
                                 </div>
                                 <div class="review-card-body">
@@ -908,7 +917,7 @@
                                         <button @click="markHelpful(review.reviewId)">도움돼요 👍</button>
                                         <span>{{ review.helpCnt || 0 }}명에게 도움이 되었어요</span>
                                     </div>
-                                    <div class="review-actions" v-if="sessionId === review.userId">
+                                    <div class="review-actions" v-if="sessionId && sessionId === review.userId">
                                         <button @click.stop="fnEdit(review.reviewId)">수정</button>
                                         <button @click.stop="fnDelete(review.reviewId)">삭제</button>
                                     </div>
@@ -1084,6 +1093,7 @@
                         reviewPageSize: 5,
                         reviewTotal: 0,
                         reviewPages: [],
+                        deleteYn: "Y",
 
                         // 상품 문의..
                         qnaList: [],
@@ -1210,6 +1220,11 @@
                     //상품 리뷰 글쓰기
                     fnReviewWtite: function () {
                         let self = this;
+                        if (!self.sessionId || self.sessionId === "") {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do"; // ← 로그인 페이지 경로
+                            return;
+                        }
                         location.href = "/product/review.do?productId=" + self.productId;
                     },
                     //개인 리뷰 삭제
@@ -1390,6 +1405,11 @@
                     //QnA 글쓰기 이동
                     fnQna() {
                         let self = this;
+                        if (!self.sessionId || self.sessionId === "") {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         location.href = "/product/qnawrite.do?productId=" + self.productId;
                     },
                     //QnA 글 삭제
@@ -1435,7 +1455,6 @@
                     self.fnReviewList();
                     self.fnUserInfo();
                     self.fnQnaList();
-                    // self.fnBuy();
                 }
             });
 
