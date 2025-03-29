@@ -212,6 +212,10 @@
                 <th>할인된 금액</th>
                 <td>- {{ formattedDiscountAmount }} 원</td>
             </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
         </table>
 
         <div>
@@ -723,7 +727,7 @@
                     });
                 },
                 test:function(){
-                    pageChange("/cart/orderComplete.do",{userId:"as879",orderId:100});
+                    pageChange("/order/orderComplete.do",{userId:"as879",orderId:100});
                 }
             },
             mounted() {

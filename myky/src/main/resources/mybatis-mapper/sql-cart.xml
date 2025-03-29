@@ -156,7 +156,7 @@
 	
 	<select id="selectOrderInfo" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	   
-	    select order_id, total_price, user_id, receiver_name, receiver_phone, receiver_addr, delivery_message
+	    select order_id, total_price, ordered_at, user_id, receiver_name, receiver_phone, receiver_addr, delivery_message
 	    from orders
 	    where user_id = #{userId} and order_id = #{orderId}
 	

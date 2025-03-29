@@ -40,4 +40,24 @@ public class MembershipServiceImpl implements MembershipService {
 		return resultMap;
 	}
 	
+	@Override
+	public HashMap<String, Object> getMembershipActive(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			Membership membership = membershipMapper.selectValidMembership(map);
+			
+			if(membership != null) {
+				resultMap.put("membership", membership);
+				resultMap.put("result", "success");
+			} else {
+				resultMap.put("membership", null);
+				resultMap.put("result", "no_membership");				
+			}
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

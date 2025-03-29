@@ -20,12 +20,23 @@ public class MembershipController {
 	@Autowired
 	MembershipService membershipService;
 	
+	// 멤버십 정보 조회
 	@RequestMapping(value = "/membership/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String info(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = membershipService.getMembershipInfo(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 멤버십 활성화 여부 확인
+	@RequestMapping(value = "/membership/active.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String active(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = membershipService.getMembershipActive(map);
 		return new Gson().toJson(resultMap);
 	}
 }
