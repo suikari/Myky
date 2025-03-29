@@ -10,6 +10,14 @@
 		where user_id = #{userId}
 		
 	</select>
+
+	<select id="selectValidMembership" parameterType="hashmap" resultType="teamgyodong.myky.membership.model.Membership">
+		
+		select membership_type, expiration_date
+		from membership
+		where user_id = #{userId} and expiration_date >= sysdate
+		
+	</select>
 	
 	<update id="updateDonationYn" parameterType="hashmap">
 	

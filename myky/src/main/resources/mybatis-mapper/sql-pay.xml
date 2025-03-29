@@ -38,7 +38,7 @@
 
 	 </select>
 	 
-	 <insert id="insertUsedPoint" parameterType="hashmap">
+	 <insert id="insertUsedPoint" parameterType="hashmap" useGeneratedKeys="true" keyColumn="current_point" keyProperty="currentPoint">
 	 
 	 	insert into point
 	 	values (

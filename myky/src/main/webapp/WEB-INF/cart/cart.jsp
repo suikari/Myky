@@ -115,7 +115,8 @@
                     cartItems: [],
                     selectCartItems: [],
                     selectCheck:[],
-                    checked:false
+                    checked:false,
+                    isMembership:false
                 };
             },
             computed: {
@@ -149,6 +150,7 @@
                             self.userInfo = data.user;
                             self.loadCart();
                             self.loadSelectCart();
+                            self.fnGetMembership();
                             
                         }
                     });
@@ -188,6 +190,23 @@
                             self.selectCartItems = data.checkList;
                             
                             
+                        }
+                    });
+                },
+                fnGetMembership: function () {
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/membership/active.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            console.log("멤버십 활성 여부 >>> ",data.result);
+                            if(data.membership != null){
+                                self.isMembership = true;
+                            }
+                            // 멤버십 활성 여부까지 확인 가능. html 부분 변경해야함
                         }
                     });
                 },
