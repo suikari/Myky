@@ -502,7 +502,7 @@
                     },
                     myPage: function(){
                     	console.log("user");
-                    	location.href = "/user/myPage.do";
+                    	location.href = "/user/mypage.do";
 
                     },
                     myCart: function(){

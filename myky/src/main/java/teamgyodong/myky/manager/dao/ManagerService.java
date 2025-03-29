@@ -15,5 +15,9 @@ public interface ManagerService {
 	HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map);
 	
 	HashMap<String, Object> selectSearchRanking(HashMap<String, Object> map);
-
+	
+	
+	HashMap<String, Object> selectAllUserList(HashMap<String, Object> map);
 }
+	
+	
