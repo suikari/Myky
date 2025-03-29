@@ -110,6 +110,79 @@
                 color: inherit;
                 /* 링크의 색상 제거 */
             }
+
+            /* 미니 게시판 테이블 */
+            .board-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-family: Arial, sans-serif;
+            }
+
+            /* 테이블 헤더 스타일 */
+            .board-table th {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                text-align: left;
+                font-size: 16px;
+            }
+
+            /* 테이블 데이터 셀 스타일 */
+            .board-table td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            /* 호버 효과 - 각 셀에 마우스를 올렸을 때 */
+            .board-table tr:hover {
+                background-color: #f1f1f1;
+            }
+
+            /* 삭제되지 않은 항목만 보여주는 조건 스타일 */
+            .board-table tr[style*="display: none"] {
+                display: none;
+            }
+
+            /* 제목 링크 스타일 */
+            .board-table a {
+                color: #333;
+                text-decoration: none;
+            }
+
+            .board-table a:hover {
+                color: #4CAF50;
+                text-decoration: underline;
+            }
+
+            /* 테이블의 번호, 제목, 작성일, 조회수 칼럼 간격 */
+            .board-table th,
+            .board-table td {
+                padding: 12px 15px;
+            }
+
+            /* 작성일 칼럼의 날짜 포맷에 맞춰 정렬 */
+            .board-table td:nth-child(3) {
+                text-align: center;
+            }
+
+            /* 번호 컬럼 중앙 정렬 */
+            .board-table td:nth-child(1) {
+                text-align: center;
+            }
+
+            /* 반응형 스타일 (작은 화면에서 테이블이 잘 보이도록 조정) */
+            @media (max-width: 768px) {
+                .board-table {
+                    font-size: 14px;
+                }
+
+                .board-table th,
+                .board-table td {
+                    padding: 8px;
+                }
+            }
         </style>
     </head>
 
@@ -148,8 +221,7 @@
                             <!-- 재원 코딩 -->
 
 
-                            <!-- <ul>
-                                
+                            <!-- <ul> 
                                 <li>주문내역 조회</li>
                                 <li>포인트 내역</li>
                                 <li>쿠폰 내역</li>
@@ -186,15 +258,34 @@
                                     <p>주문 내역이 없습니다.</p>
                                 </div>
                             </span>
+                            <div v-if="activeTab === 'board'">
+                                <table class="board-table">
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>작성일</th>
+                                        <th>조회수</th>
+                                    </tr>
+                                    <tr v-for="item in board">
+                                        <template v-if="item.isDeleted == 'N'">
+                                            <td>{{item.boardId}}</td>
+                                            <td><a href="javascript:;" @click="fnView2(item.boardId)">{{item.title}}
+                                                    <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="cmtCountColor">({{item.commentCount}})</span>
+                                                </a></td>
+                                            <td>{{item.createdAt}}</td>
+                                            <td>{{item.cnt}}</td>
+                                        </template>
+                                    </tr>
+                                </table>
+                            </div>
+
                         </section>
 
 
                         <!-- </template> -->
 
                         <!-- <template v-if="boardFlg"> -->
-                        <div v-if="activeTab === 'board'">
-                            자유게시판
-                        </div>
+
                         <!-- </template> -->
                     </div>
                 </div>
@@ -232,7 +323,13 @@
                             { id: 'coupon', label: '쿠폰내역' },
                             { id: 'board', label: '나의 게시판 내역' }
                         ],
-                        activeTab: 'order'
+                        activeTab: 'order',
+                        board: [],
+                        searchOption: "",
+                        keyword: "",
+                        category: "F",
+                        pageSize: 5,
+                        page: 0
 
                     };
                 },
@@ -245,7 +342,6 @@
                         var nparmap = {
                             userId: self.userId
                         };
-                        console.log(self.userId);
                         $.ajax({
                             url: "/user/info.dox",
                             dataType: "json",
@@ -287,7 +383,6 @@
                         var nparmap = {
                             userId: self.userId
                         };
-                        console.log(self.userId);
                         $.ajax({
                             url: "/point/current.dox",
                             dataType: "json",
@@ -303,7 +398,7 @@
                     changeTab(tabId) {
                         let self = this;
                         self.activeTab = tabId;
-                    }
+                    },
                     // 재원코딩 원본
                     // changeTab(tabId) {
                     //     let self = this;
@@ -315,6 +410,35 @@
                     //     }
                     // }
                     // 재원코딩 원본
+
+                    fnBoardList2() {
+                        var self = this;
+                        var nparmap = {
+                            searchOption: "userId",
+                            keyword: self.userId,
+                            userId: self.userId,
+                            category: self.userId,
+                            pageSize: self.pageSize,
+                            page: self.page
+                        };
+                        console.log(nparmap);
+                        $.ajax({
+                            url: "/board/list.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.board = data.board;
+                            }
+                        });
+                    },
+
+                    fnView2(boardId) {
+                        let self = this;
+                        localStorage.setItem("page", self.page);
+                        location.href = "/board/view.do?boardId=" + boardId + "&category=" + self.category;
+                    }
                 },
 
                 mounted() {
@@ -323,8 +447,9 @@
                         alert("로그인 후 이용가능한 서비스입니다.");
                         location.href = "/main.do";
                     }
-                    this.fnInfo2();
-                    this.fnPoint();
+                    self.fnInfo2();
+                    self.fnPoint();
+                    self.fnBoardList2();
                     window.vueObj = this;
 
                 }
