@@ -345,7 +345,6 @@
                                 <!-- 유저 아이디 -->
                                  <template v-if="item.isDeleted == 'Y'">
                                     <div style="font-weight: bold; margin-bottom: 3px;"></div>
-                          
                                     <!-- 댓글 내용 -->
                                     <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
                                  </template>
@@ -362,6 +361,7 @@
                                   <span>{{ item.updatedTime }}</span>
                           
                                   <!-- 답글 -->
+                                <div v-if="sessionId">
                                   <a class="cmt2button" @click="fnReply(item.commentId)">답글 달기</a>
                           
                                   <!-- 수정/삭제 -->
@@ -371,7 +371,7 @@
                                         <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
                                     </template>
                                   </template>
-                                </div>
+                                </div>                                
                               </div>
                           
                             </div>
@@ -410,7 +410,7 @@
                     </tr>
                 </table>
                 
-                <table class="cmtButtonBox">
+                <table class="cmtButtonBox" v-if="sessionId">
                     <tr>
                         <th style="margin-right: 10px;"> 댓글 </th>
                         <td>
