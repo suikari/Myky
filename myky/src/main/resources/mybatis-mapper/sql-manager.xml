@@ -213,6 +213,42 @@
 	</select>
 	
 	
+	<select id="selectAllUserList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mUser">
+		
+		select u.* , m.*
+        from users u 
+        left join  ( select membership_type, expiration_date , user_id
+		from membership
+		Where expiration_date >= sysdate) m 
+        on u.user_id = m.user_id
+        Where 1=1
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND u.USER_ID LIKE '%' || #{keyword} || '%'
+	    </if>
+		ORDER BY U.CREATED_AT DESC
+		<if test="page != null and pageSize != null" >
+		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		</if>
+		
+
+	</select>
+	
+
+	<select id="selectAllUserCnt" parameterType="hashmap" resultType="int">
+	
+		SELECT COUNT(*)
+        from users u 
+        left join  ( select membership_type, expiration_date , user_id
+		from membership
+		Where expiration_date >= sysdate) m 
+        on u.user_id = m.user_id
+        Where 1=1
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND u.USER_ID LIKE '%' || #{keyword} || '%'
+	    </if>
+	    
+	</select>
+	
 	
 	
 	

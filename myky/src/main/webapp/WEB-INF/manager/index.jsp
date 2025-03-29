@@ -77,7 +77,22 @@
              <% } %>
              
         <% } else if ("reports".equals(menu)) { %>
-        <% } else { %>
+			<% if ("1".equals(submenu)) { %>
+			<% } else if ("2".equals(submenu)) { %>
+			<% } else if ("3".equals(submenu)) { %>
+			<% } else if ("4".equals(submenu)) { %>
+			<% } %>
+			
+		<% } else if ("member".equals(menu)) { %>
+			<% if ("1".equals(submenu)) { %>
+			    <jsp:include page="/WEB-INF/manager/member/main.jsp"/>
+			<% } else if ("2".equals(submenu)) { %>
+			<% } else if ("3".equals(submenu)) { %>
+			<% } else if ("4".equals(submenu)) { %>
+			<% } %>
+			
+		<% } else { %>
+			
         <% } %>
         
    

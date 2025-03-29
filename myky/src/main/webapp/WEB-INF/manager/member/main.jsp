@@ -181,6 +181,57 @@
 		    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 		}
 
+		/* 테이블 스타일 */
+		.member-table {
+		    width: 100%;
+		}
+
+		.member-table th {
+		    background-color: #f1f5f9;
+		    font-weight: 600;
+		    color: #475569;
+		}
+
+		.member-table td {
+		    color: #374151;
+		    font-size: 14px;
+		}
+
+		/* 회원 상태 뱃지 */
+		.status-active {
+		    background-color: #d1fae5;
+		    color: #10b981;
+		    padding: 5px 10px;
+		    border-radius: 10px;
+		    font-size: 12px;
+		    font-weight: 600;
+		}
+
+		.status-inactive {
+		    background-color: #fee2e2;
+		    color: #dc2626;
+		    padding: 5px 10px;
+		    border-radius: 10px;
+		    font-size: 12px;
+		    font-weight: 600;
+		}
+
+		/* 버튼 스타일 */
+		.btn-edit {
+		    background-color: #0d6efd;
+		    color: white;
+		    border: none;
+		    padding: 5px 10px;
+		    border-radius: 5px;
+		}
+
+		.btn-delete {
+		    background-color: #dc3545;
+		    color: white;
+		    border: none;
+		    padding: 5px 10px;
+		    border-radius: 5px;
+		}
     </style>
     
 </head>
@@ -190,10 +241,51 @@
        
          <!-- Main Content1 -->
          <div class=" main-content">
-                <h2>예제</h2>
+                <h2>회원 관리</h2>
 
 
-               
+				<div class="card p-3">
+	                <div class="card-header">등록된 회원</div>
+	                
+	                <table class="table member-table">
+	                    <thead>
+	                        <tr>
+	                            <th>번호</th>
+	                            <th>이름</th>
+								<th>닉네임</th>
+	                            <th>이메일</th>
+	                            <th>가입일</th>
+	                            <th>상태</th>
+								<th>멤버쉽<th>
+	                            <th>관리</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr v-for="(member, index) in members" :key="member.id">
+	                            <td>{{ index + 1 }}</td>
+	                            <td>{{ member.userName }}</td>
+								<td>{{ member.nickName }}</td>								
+	                            <td>{{ member.email }}</td>
+	                            <td>{{ member.createdAt }}</td>
+	                            <td>
+	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
+	                                    {{ member.DeleteYn === 'N' ? '회원' : '탈퇴회원' }}
+	                                </span>
+	                            </td>
+								<td>
+								    <span :class="member.membershipType ? 'status-active' : 'status-inactive'">
+								        {{ member.membershipType ? '멤버쉽' : '일반회원' }}
+								    </span>
+								</td>
+	                            <td>
+	                                <button class="btn-edit me-2">수정</button>
+	                                <button class="btn-delete">삭제</button>
+	                            </td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+
 
 
         </div>
@@ -208,8 +300,10 @@
             const app = Vue.createApp({
             	 data() {
                      return {
-						menu = '',
-						submenu = '',                 
+						menu : '',
+						submenu : '',  
+						members : []
+               
                      };
                  },
                 computed: {
@@ -221,12 +315,13 @@
                     	var nparmap = {
                     	};
                     	$.ajax({
-                    		url: "/admin/mainList.dox",
+                    		url: "/admin/memberList.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("main",data);
+								self.members = data.User;
                     			                    				
                     		}
                     	});
@@ -240,7 +335,7 @@
                     
                     self.menu = params.get("menu") || "stat";
                     self.submenu = params.get("submenu") || "1";
-
+					self.fnMainList();
 
                 	
                 }
