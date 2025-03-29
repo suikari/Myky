@@ -13,6 +13,7 @@ public class Review {
 	private String productId;
 	private String title;
 	private int helpCnt;
+	private String deleteYn;
 	
 	
 	private String fileNo;
