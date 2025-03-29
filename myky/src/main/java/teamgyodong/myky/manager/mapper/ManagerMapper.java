@@ -28,10 +28,13 @@ public interface ManagerMapper {
 	List<mComment> selectAllCmtList(HashMap<String, Object> map);
 	
 	List<manager> selectSearchRanking(HashMap<String, Object> map);
+	
+	List<mUser> selectAllUserList(HashMap<String, Object> map);
 
 	
 	
 	int selectAllCmtCnt(HashMap<String, Object> map);
+	int selectAllUserCnt(HashMap<String, Object> map);
 
 	
 	
@@ -39,5 +42,6 @@ public interface ManagerMapper {
 	int deleteBoardList(HashMap<String, Object> map);
 	int deleteBoardCmtList(HashMap<String, Object> map);
 
+	
 	
 }

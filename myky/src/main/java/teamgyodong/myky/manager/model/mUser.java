@@ -19,8 +19,13 @@ public class mUser {
 	private String agreeYn;
 	private String phoneYn;
 	private String emailYn;
+	private String createdAt;
+	private String DeleteYn;
+
+	
 	private int userTotalCnt;
 
 
-
+	private String membershipType;
+	private String expirationDate;
 }

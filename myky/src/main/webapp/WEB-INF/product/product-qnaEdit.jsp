@@ -5,9 +5,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>상품 사용후기</title>
+        <title>멍냥꽁냥 상품 문의</title>
+        <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.prod.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
         <style>
@@ -19,65 +20,47 @@
             }
 
             .container {
-                max-width: 1000px;
-                margin: 40px auto;
-                padding: 20px;
+                max-width: 800px;
+                margin: 50px auto;
+                padding: 30px;
             }
 
             h2 {
                 text-align: center;
-                font-size: 24px;
+                font-size: 26px;
                 font-weight: bold;
                 margin-bottom: 30px;
+                color: #333;
             }
 
             .form-box {
-                border: 1px solid #ddd;
-                padding: 20px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 30px;
+                background-color: white;
             }
 
             .form-group {
-                display: flex;
-                align-items: center;
-                margin-bottom: 15px;
+                margin-bottom: 20px;
             }
 
             .form-group label {
-                width: 120px;
-                font-weight: bold;
-            }
-
-            .form-group input[type="text"],
-            .form-group input[type="file"] {
-                flex: 1;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-            .rating-label {
                 display: block;
+                margin-bottom: 8px;
                 font-weight: bold;
-                font-size: 16px;
-                color: #000;
-                margin-bottom: 6px;
+                font-size: 15px;
+                /* color: #333; */
             }
 
-            .star-rating .stars {
-                display: inline-block;
+            .form-group input[type="text"] {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 15px;
+                box-sizing: border-box;
             }
 
-            .star-rating .star {
-                font-size: 24px;
-                cursor: pointer;
-                color: #eee;
-                transition: color 0.2s;
-                user-select: none;
-
-            }
-
-            .star-rating .star.filled {
-                color: #f5b301;
-            }
             .editor-container {
                 height: 300px;
                 border: 1px solid #ccc;
@@ -97,13 +80,22 @@
             }
 
             .btn-submit {
-                background-color: #000;
+                background-color: #7b61ff;
                 color: white;
+                margin-left: 10px;
+            }
+
+            .btn-submit:hover {
+                background-color: #6a54e2;
             }
 
             .btn-cancel {
                 background-color: #eee;
                 color: #333;
+            }
+
+            .btn-cancel:hover {
+                background-color: #ddd;
             }
         </style>
     </head>
@@ -111,40 +103,34 @@
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
         <div id="app" class="container">
-            <h2>리뷰 수정</h2>
+            <h2>멍냥꽁냥 상품 문의</h2>
             <div class="form-box">
                 <div class="form-group">
                     <label for="title">제목</label>
                     <input type="text" id="title" v-model="title">
                 </div>
-                <div class="form-group star-rating">
-                    <label class="rating-label" for="rating">별점</label>
-                    <div class="stars" :key="rating">
-                        <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= rating }"
-                            @click="rating = star">★</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>첨부파일1</label>
-                    <input type="file" id="file1" name="file1" accept=".jpg,.png">
-                </div>
+
                 <div class="form-group">
                     <label>내용</label>
                     <div style="flex: 1;">
                         <div id="editor" class="editor-container"></div>
                     </div>
                 </div>
+
                 <div class="button-box">
-                    <button class="btn-cancel" @click="fnCancel">수정 취소</button>
-                    <button class="btn-submit" @click="fnEdit">리뷰 수정</button>
+                    <button class="btn-cancel" @click="fnCancel()">수정 취소</button>
+                    <button class="btn-submit" @click="fnEdit()">문의 수정</button>
                 </div>
             </div>
         </div>
         <jsp:include page="/WEB-INF/common/footer.jsp" />
+
+
     </body>
 
     </html>
     <script>
+
 
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
@@ -153,32 +139,30 @@
                         sessionId: "${sessionId}",
                         productId: "",
                         title: "",
-                        reviewText: "",
-                        rating : "",
-                        reviewId: ""
-                    }
+                        questionText: "",
+                        qnaId: ""
+                    };
                 },
                 computed: {
 
                 },
                 methods: {
-                    fnGetReview(){
+                    fnGetQna() {
                         var self = this;
                         var nparmap = {
-                            reviewId : self.reviewId,
-                            option : "UPDATE"
+                            qnaId: self.qnaId,
+                            option: "UPDATE"
                         };
                         $.ajax({
-                            url:"/product/getReview.dox",
-                            dataType:"json",	
-                            type : "POST", 
-                            data : nparmap,
-                            success : function(data) { 
+                            url: "/product/getQna.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
                                 console.log(data);
                                 self.productId = data.info.productId,
                                 self.title = data.info.title,
-                                self.reviewText = data.info.reviewText,
-                                self.rating = data.info.rating
+                                self.questionText = data.info.questionText,
                                 self.fnQuill();
                             }
                         });
@@ -186,55 +170,24 @@
                     fnEdit() {
                         var self = this;
                         var nparmap = {
-                            reviewId: self.reviewId, 
+                            qnaId: self.qnaId,
                             title: self.title,
-                            reviewText: self.reviewText,
+                            questionText: self.questionText,
                             userId: self.sessionId,
-                            rating : self.rating,
-                            productId : self.productId
+                            productId: self.productId
                         };
                         $.ajax({
-                            url: "/product/reviewEdit.dox",
+                            url: "/product/qnaEdit.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("1",data);
+                                console.log("1", data);
                                 if (data.result == "success") {
                                     alert("수정 완료.");
-
-                                    if ($("#file1")[0].files.length > 0) {
-                                        var form = new FormData();
-                                        for (let i = 0; i < $("#file1")[0].files.length; i++) {
-                                            form.append("file1", $("#file1")[0].files[i]);
-                                        }
-                                        form.append("reviewId", self.reviewId); 
-                                        self.upload(form); 
-                                    
-                                } else {
-                                    console.log("2", self.productId);
-                                        location.href = "/product/view.do?productId=" +  self.productId;
-                                }
-                            }else{
-                                console.log("3","3");
                                     location.href = "/product/view.do?productId=" +  self.productId;
-                            }
-                                
-                            }
-                        });
-                    },
-                    //파일 업로드
-                    upload: function (form) {
-                        var self = this;
-                        $.ajax({
-                            url: "/Review/fileUpload.dox",
-                            type: "POST",
-                            processData: false,
-                            contentType: false,
-                            data: form,
-                            success: function (response) {
-                                console.log("4","4");
-                                location.href = "/product/view.do?productId=" +  self.productId;
+                                }
+
                             }
                         });
                     },
@@ -257,10 +210,10 @@
                                 ]
                             }
                         });
-                        quill.root.innerHTML = self.reviewText;
+                        quill.root.innerHTML = self.questionText;
                         // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
                         quill.on('text-change', function () {
-                            self.reviewText = quill.root.innerHTML;
+                            self.questionText = quill.root.innerHTML;
                         });
                     }
                 },
@@ -268,10 +221,12 @@
                     let self = this;
                     const params = new URLSearchParams(window.location.search);
                     self.productId = params.get("productId") || "";
-                    self.reviewId = params.get("reviewId") || "";
-                    self.fnGetReview();
+                    self.qnaId = params.get("qnaId") || "";
+                    self.fnGetQna();
+
                 }
             });
+
             app.mount("#app");
         });
     </script>

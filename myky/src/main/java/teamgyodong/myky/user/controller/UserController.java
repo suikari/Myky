@@ -311,5 +311,6 @@ public class UserController {
 		resultMap = userService.userWithdraw(map);
 		return new Gson().toJson(resultMap);
 	}
+	
 
 }

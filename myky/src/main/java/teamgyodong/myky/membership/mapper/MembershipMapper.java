@@ -14,4 +14,6 @@ public interface MembershipMapper {
 	
 	void updateDonationYn(HashMap<String, Object> map);
 
+	Membership selectValidMembership(HashMap<String, Object> map);
+
 }

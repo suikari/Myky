@@ -82,7 +82,7 @@
             <h3>멍냥꽁냥 관리자</h3>
             <ul class="nav flex-column">
                 <li class="nav-item" :class="{ active: menu === 'stat' }"  >
-                    <a @click="fnchange('stat','1')" class="nav-link"  :class="{ active: menu === 'stat' }" href="#">통계 관리</a>
+                    <a @click="fnchange('stat','1')" class="nav-link"  :class="{ active: menu === 'stat' }" href="#">통계</a>
                     <ul class="submenu">
                         <li @click="fnchange('stat','1')" class="submenu-item" :class="{ active: submenu === '1' }">요약 통계</li>
                         <li @click="fnchange('stat','2')" class="submenu-item" :class="{ active: submenu === '2' }">접속자 통계</li>
@@ -103,11 +103,12 @@
                         <li @click="fnchange('product','2')" class="submenu-item" :class="{ active: submenu === '2' }"> 카테고리 관리</li>
                     </ul>
                 </li>
-                <li class="nav-item" :class="{ active: menu === 'membership' }">
-                    <a @click="fnchange('membership','1')" class="nav-link" :class="{ active: menu === 'membership' }" href="#">멤버쉽 관리</a>
+                <li class="nav-item" :class="{ active: menu === 'member' }">
+                    <a @click="fnchange('member','1')" class="nav-link" :class="{ active: menu === 'member' }" href="#">회원 관리</a>
                     <ul class="submenu">
-                        <li @click="fnchange('membership','1')" class="submenu-item" :class="{ active: submenu === '1' }">회원 등급</li>
-                        <li @click="fnchange('membership','2')" class="submenu-item" :class="{ active: submenu === '2' }">가입 승인</li>
+                        <li @click="fnchange('member','1')" class="submenu-item" :class="{ active: submenu === '1' }">회원 관리</li>
+                        <li @click="fnchange('member','2')" class="submenu-item" :class="{ active: submenu === '2' }">멤버쉽 관리</li>
+						<li @click="fnchange('member','3')" class="submenu-item" :class="{ active: submenu === '3' }">제휴사 관리</li>
                     </ul>
                 </li>
             </ul>

@@ -139,8 +139,8 @@
                     </div>
                 </div>
                 <div class="button-box">
-                    <button class="btn-cancel" @click="fnCancel()">취소</button>
-                    <button class="btn-submit" @click="fnSave()">등록</button>
+                    <button class="btn-cancel" @click="fnCancel()">리뷰 취소</button>
+                    <button class="btn-submit" @click="fnSave()">리뷰 등록</button>
                 </div>
             </div>
         </div>
@@ -183,7 +183,7 @@
                             success: function (data) {
                                 console.log(data);
                                 if (data.result == "success") {
-                                    alert("글쓰기 완료.");
+                                    alert("리뷰 작성 완료.");
 
                                     if ($("#file1")[0].files.length > 0) {
                                         var form = new FormData();

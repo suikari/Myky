@@ -156,17 +156,28 @@ public class ProductServiceImpl implements ProductService {
 	public HashMap<String, Object> qnaRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		// 1. QnA 상세 조회 (작성자 확인용)
-//		Qna qna = productMapper.selectQnaById(map);
-//		
-//		// 2. 세션 유저와 작성자 비교
-//		String sessionUserId = (String) map.get("userId");  
-//	    if (!sessionUserId.equals(qna.getUserId())) {
-//	        resultMap.put("result", "fail");
-//	        resultMap.put("message", "본인만 삭제할 수 있습니다.");
-//	        return resultMap;
-//	    }
+
 		productMapper.deleteQna(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//리뷰 수정
+	public HashMap<String, Object> qnaEdit(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		productMapper.UpdateQna(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//QnA 하나만 가져오기
+	public HashMap<String, Object> getQna(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		//리뷰 정보 가져오기
+		Qna info = productMapper.selectQna(map);
+		
+		resultMap.put("info", info);
 		resultMap.put("result", "success");
 		return resultMap;
 	}
