@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.manager.model.Visit;
 import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
@@ -30,6 +31,10 @@ public interface ManagerMapper {
 	List<manager> selectSearchRanking(HashMap<String, Object> map);
 	
 	List<mUser> selectAllUserList(HashMap<String, Object> map);
+	List<Vet> selectAllVetList(HashMap<String, Object> map);
+
+	
+	mPay selectLogFristJoinBuy(HashMap<String, Object> map);
 
 	
 	

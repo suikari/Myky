@@ -127,18 +127,20 @@
 	                    <option v-for="month in months" :value="month">{{ month }}</option>
 	                </select>
 	                
-	                <label for="day">일:</label>
-	                <select id="day" v-model="selectedDay" @change="fnList">
-	                    <option v-for="day in days" :value="day">{{ day }}</option>
+	                <label for="time">시간 :</label>
+	                <select id="time" v-model="selectedTime" @change="fnList">
+	                    <option v-for="time in times" :value="time">{{ time }}</option>
 	                </select>
 	            </div>
 	            
                 <div class="card">
                     <div class="card-header">
-                        <h5>시간대별 & 날짜별 접속자</h5>
+                        <h5>시간대별 접속자</h5>
                     </div>
                     <div class="card-body chart-container">
-                        <div id="chart_bar"></div>
+						<div v-if="optionsB.series[0].data.length === 0">검색 결과가 없습니다.</div>
+						<!-- v-show로 차트를 숨기고, 데이터가 있으면 차트를 렌더링 -->
+						<div id="chart_bar" v-show="optionsB.series[0].data.length > 0"></div> <!-- 차트가 있을 경우 차트 렌더링 -->
                     </div>
                 </div>
                 
@@ -147,7 +149,8 @@
                         <h5>날짜별 접속자</h5>
                     </div>
                     <div class="card-body chart-container">
-						<div id="chart_bar2"></div>
+						<div v-if="optionsBD.series[0].data.length === 0">검색 결과가 없습니다.</div>
+						<div id="chart_bar2" v-show="optionsBD.series[0].data.length > 0"></div>
                     </div>
                 </div>
                
@@ -156,7 +159,8 @@
                         <h5>브라우저별 접속자</h5>
                     </div>
                     <div class="card-body chart-container">
-                   		<div id="chart_per"></div>
+						<div v-if="optionsP.series.length === 0">검색 결과가 없습니다.</div>
+						<div id="chart_per" v-show="optionsP.series.length > 0"></div>
                     </div>
                 </div>
 
@@ -177,13 +181,19 @@
                      return {
                          selectedYear: new Date().getFullYear(),
                          selectedMonth: new Date().getMonth() + 1,
-                         selectedDay: new Date().getDate(),
+                         selectedTime: "",
                          years: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i),
                          months: Array.from({ length: 12 }, (_, i) => i + 1),
-                         days: Array.from({ length: 31 }, (_, i) => i + 1),
+                         times: Array.from({ length: 24 }, (_, i) => i + 1),
                          optionsP: { series: [], chart: { width: 380, type: 'pie' }, labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }] },
                          optionsB: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } },
-                         optionsBD: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } }
+                         optionsBD: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } },
+						 chartInstances: {
+						     pie: null,
+						     bar: null,
+						     bar2: null
+						 }
+						 
                      };
                  },
                 computed: {
@@ -193,56 +203,85 @@
                 	fnList : function() { 
                         var self = this;
                         var nparmap = {  
-                        		year: self.selectedYear,
-                        		month: self.selectedMonth,
-                        		day: self.selectedDay
+                        		year  : self.selectedYear,
+                        		month : self.selectedMonth,
+                        		hour  : self.selectedTime
                         };
                         $.ajax({
                             url: "/admin/LogList.dox",  // 서버 주소 수정 (http:// 포함)
                             dataType: "json",
                             type: "POST", // GET, POST
                             data: nparmap,   // 서버로 보낼 데이터
-                            contentType: "application/json",
                             success: function(data) {
-                                console.log(data);
-                                
-                                
-                                
-                                self.optionsP.series = [];
-                                self.optionsP.labels = [];
-                                for (i=0;i<data.Browser.length;i++) {
-                                    self.optionsP.series.push(data.Browser[i].visitCount);
-                                    self.optionsP.labels.push(data.Browser[i].userAgentBrowser);
-                                }
-                                var chart = new ApexCharts(document.querySelector("#chart_per"), self.optionsP);
-                                chart.render();
-                                
-                                
-                                self.optionsB.series[0].data = [];
-                                self.optionsB.xaxis.categories = [];
-                                for (i=0;i<data.Time.length;i++) {
-                                    self.optionsB.series[0].data.push(data.Time[i].visitCount);
-                                    self.optionsB.xaxis.categories.push(data.Time[i].visitHour);
-                                }
-                                chart = new ApexCharts(document.querySelector("#chart_bar"), self.optionsB);
-                                chart.render();
-                                
-                                self.optionsBD.series[0].data = [];
-                                self.optionsBD.xaxis.categories = [];
-                                for (i=0;i<data.Date.length;i++) {
-                                    self.optionsBD.series[0].data.push(data.Date[i].visitCount);
-                                    self.optionsBD.xaxis.categories.push(data.Date[i].visitDate);
-                                }
-                                chart = new ApexCharts(document.querySelector("#chart_bar2"), self.optionsBD);
-                                chart.render();
-                                
+								console.log(data);
+
+								  // 📌 기존 데이터 초기화
+								 self.optionsP.series = [];
+					             self.optionsP.labels = [];
+					             self.optionsB.series[0].data = [];
+					             self.optionsB.xaxis.categories = [];
+					             self.optionsBD.series[0].data = [];
+					             self.optionsBD.xaxis.categories = [];
+
+					             // 🔹 새로운 데이터 추가
+					             if (data.Browser) {
+					                 data.Browser.forEach(item => {
+					                     self.optionsP.series.push(item.visitCount);
+					                     self.optionsP.labels.push(item.userAgentBrowser);
+					                 });
+					             }
+
+					             if (data.Time) {
+					                 data.Time.forEach(item => {
+					                     self.optionsB.series[0].data.push(item.visitCount);
+					                     self.optionsB.xaxis.categories.push(item.visitHour);
+					                 });
+					             }
+
+					             if (data.Date) {
+					                 data.Date.forEach(item => {
+					                     self.optionsBD.series[0].data.push(item.visitCount);
+					                     self.optionsBD.xaxis.categories.push(item.visitDate);
+					                 });
+					             }
+
+					             // ✅ 차트 업데이트 (데이터 로딩 후 실행)
+					             setTimeout(() => {
+					                 self.updateChart("pie", self.optionsP);
+					                 self.updateChart("bar", self.optionsB);
+					                 self.updateChart("bar2", self.optionsBD);
+					             }, 100); // 약간의 지연을 줘서 데이터가 반영되도록 함                                
                             }
 
                         });
 
                         
 
-                    },               	
+                    },
+					updateChart(chartKey, options) {
+					    if (this.chartInstances[chartKey]) {
+					        // 데이터가 있는지 확인
+					        let hasData = options.series && options.series.length > 0 && options.series.some(s => s.data && s.data.length > 0);
+
+					        if (hasData) {
+					            // 데이터가 있으면 차트 렌더링
+					            this.chartInstances[chartKey].updateSeries(options.series);
+					            this.chartInstances[chartKey].updateOptions({ xaxis: options.xaxis || {} });
+					        } else {
+					            // 데이터가 없으면 "검색 결과가 없습니다." 메시지 표시
+					            this.chartInstances[chartKey].destroy();
+					            this.chartInstances[chartKey] = null;
+					        }
+					    } else {
+					        // 차트 인스턴스가 없다면 새로 생성
+					        let chartElementId = chartKey === "pie" ? "#chart_per" 
+					                                               : chartKey === "bar" ? "#chart_bar" 
+					                                               : "#chart_bar2";
+
+					        this.chartInstances[chartKey] = new ApexCharts(document.querySelector(chartElementId), options);
+					        this.chartInstances[chartKey].render();
+					    }
+					}    	
                 	
                 },
                 mounted() {

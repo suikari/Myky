@@ -8,6 +8,16 @@
 	<select id="selectLogBrowserList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.Visit">
 	
 			select user_agent_browser, count(*) visit_count from VISIT_LOG 
+			WHERE 1=1
+			<if test="year != null and year != '' ">
+		        AND  EXTRACT(YEAR FROM access_time) =  #{year} 
+		    </if>
+		    <if test="month != null and month != '' ">
+		        AND  EXTRACT(MONTH FROM access_time) =  #{month} 
+		    </if>
+		    <if test="hour != null and hour != '' ">
+		        AND  EXTRACT(HOUR FROM access_time) =  #{hour} 
+		    </if>	
 			group by user_agent_browser
 			
 	</select>
@@ -55,10 +65,18 @@
 			
 	</select>
 
+	<select id="selectLogFristJoinBuy" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mPay">
 
+		SELECT 
+		    COUNT(CASE WHEN p.PAYMENT_ID IS NOT NULL THEN 1 END) AS PURCHASED_MEMBERS,
+		    COUNT(CASE WHEN p.PAYMENT_ID IS NULL THEN 1 END) AS NON_PURCHASED_MEMBERS
+		FROM 
+		    users u
+		LEFT JOIN 
+		    PAYMENT p ON u.USER_ID = p.USER_ID
 
-	
-	
+	</select>
+
 	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mProduct">
 			select P.*  , 
 			(SELECT COUNT(*)
@@ -249,6 +267,15 @@
 	    
 	</select>
 	
+	
+	<select id="selectAllVetList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.Vet">
+	
+		SELECT *
+		FROM veterinarian
+	    
+	</select>
+	
+
 	
 	
 	
