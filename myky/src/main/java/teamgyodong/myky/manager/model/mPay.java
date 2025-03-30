@@ -39,4 +39,7 @@ public class mPay {
 	private String birthDate;
 	private String role;
 	
+	private String  purchasedMembers;
+	private String  nonPurchasedMembers;
+
 }

@@ -108,7 +108,7 @@
                     <ul class="submenu">
                         <li @click="fnchange('member','1')" class="submenu-item" :class="{ active: submenu === '1' }">회원 관리</li>
                         <li @click="fnchange('member','2')" class="submenu-item" :class="{ active: submenu === '2' }">멤버쉽 관리</li>
-						<li @click="fnchange('member','3')" class="submenu-item" :class="{ active: submenu === '3' }">제휴사 관리</li>
+						<li @click="fnchange('member','3')" class="submenu-item" :class="{ active: submenu === '3' }">수의사 관리</li>
                     </ul>
                 </li>
             </ul>

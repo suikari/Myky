@@ -5,7 +5,8 @@ import java.util.HashMap;
 public interface ManagerService {
 	
 	HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map);
-	
+	HashMap<String, Object> selectLogFristJoinBuy(HashMap<String, Object> map);
+
 	HashMap<String, Object> selectMainList(HashMap<String, Object> map);
 	
 	HashMap<String, Object> deleteBoardList(HashMap<String, Object> map);
@@ -17,7 +18,10 @@ public interface ManagerService {
 	HashMap<String, Object> selectSearchRanking(HashMap<String, Object> map);
 	
 	
+	
 	HashMap<String, Object> selectAllUserList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllVetList(HashMap<String, Object> map);
+
 }
 	
 	

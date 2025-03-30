@@ -320,7 +320,7 @@
                          donationtot : 0,
                          searchRanks : {},
                          options : {
-                                 series: [70],
+                                 series: [],
                                  chart: {
                                  height: 350,
                                  type: 'radialBar',
@@ -381,7 +381,25 @@
                     		}
                     	
                     	});
-                    	
+						
+						$.ajax({
+							url: "/admin/fristBuyer.dox",
+							dataType: "json",
+							type: "POST",
+							data: nparmap,
+							success: function (data) {
+								console.log("123",data);
+								var per =  (parseInt(data.Pay.purchasedMembers) / (parseInt(data.Pay.purchasedMembers) + parseInt(data.Pay.nonPurchasedMembers))) * 100;
+								self.options.series.push(per.toFixed(0));
+
+								var chart = new ApexCharts(document.querySelector("#chart"), self.options);
+								chart.render();
+								
+							}
+
+						});
+						
+						
                     	
                     },
                 	
@@ -396,8 +414,7 @@
                     
                 	self.fnMainList();
                 	
-                    var chart = new ApexCharts(document.querySelector("#chart"), self.options);
-                    chart.render();
+
                 	
                 }
             });

@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import teamgyodong.myky.Main.mapper.MainMapper;
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.manager.mapper.ManagerMapper;
+import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.manager.model.Visit;
 import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
@@ -205,5 +206,45 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	
+	@Override
+	public HashMap<String, Object> selectLogFristJoinBuy(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			mPay mPay = managerMapper.selectLogFristJoinBuy(map);
+			
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Pay", mPay);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> selectAllVetList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Vet> Vet = managerMapper.selectAllVetList(map);
+			
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Vet", Vet);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
 	
 }

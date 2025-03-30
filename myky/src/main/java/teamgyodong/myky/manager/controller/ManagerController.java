@@ -99,7 +99,27 @@ public class ManagerController {
 		resultMap = managerService.selectLogBrowserList(map);
 		return new Gson().toJson(resultMap);
 	}
-    
+	// centerList
+	@RequestMapping(value = "/admin/fristBuyer.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String fristBuyer(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectLogFristJoinBuy(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// centerList
+	@RequestMapping(value = "/admin/VetList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String VetList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectAllVetList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
 	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/remove-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
