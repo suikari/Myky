@@ -80,6 +80,14 @@
 			WHERE USER_ID = #{userId}
 	</update>
 	
+	<select id="selectComm" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
+        SELECT *
+        FROM FREE_BOARD_COMMENT C
+        INNER JOIN FREE_BOARD B ON C.BOARD_ID = B.BOARD_ID
+        WHERE C.USER_ID = #{userId}
+        ORDER BY C.CREATED_AT DESC
+	</select>
+	
 	
 	
 </mapper>

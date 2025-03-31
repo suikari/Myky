@@ -1,6 +1,7 @@
 package teamgyodong.myky.user.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpSession;
+import teamgyodong.myky.board.model.comment;
 import teamgyodong.myky.user.mapper.UserMapper;
 import teamgyodong.myky.user.model.User;
 
@@ -167,6 +169,15 @@ public class UserServiceImpl implements UserService {
 		public void insertImage(HashMap<String, Object> map) {
 			// TODO Auto-generated method stub
 			userMapper.insertProfileImg(map);
+		}
+		
+		public HashMap<String, Object> userComment(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			List<comment> comment = userMapper.selectComm(map);
+			resultMap.put("comment", comment);
+			resultMap.put("result", "success"); // 결과 값
+
+			return resultMap;
 		}
 	
 }
