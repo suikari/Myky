@@ -26,8 +26,6 @@ public interface CartService {
 
 	HashMap<String, Object> getOrderInfo(HashMap<String, Object> map);
 
-	HashMap<String, Object> getAllOrderInfo(HashMap<String, Object> map);
-
 	HashMap<String, Object> getAllOrderList(HashMap<String, Object> map);
 
 }
