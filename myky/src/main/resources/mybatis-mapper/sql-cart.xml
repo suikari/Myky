@@ -178,7 +178,7 @@
 	
 	<select id="selectAllOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	   
-	    select o.order_id, o.total_price, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.quantity, od.price
+	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.quantity, od.price
 	    from orders o
 	    join order_details od on o.order_id = od.order_id
 	    join (
@@ -186,7 +186,7 @@
 		    from product p  
 		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
 		) p on od.product_id = p.product_id
-	    where o.user_id = #{userId} and o.ordered_at between #{startDate} and #{endDate}
+	    where o.user_id = #{userId} and o.ordered_at between #{startDate} and #{endDate} and o.order_status = #{orderStatus}
 	    order by o.ordered_at desc;
 	
 	</select>
