@@ -161,7 +161,7 @@ button#favoritesButton.not-favorite {
         <div class="map_wrap">
             <div id="map" style="width: 100%; height: 100%; position: relative; overflow: hidden;"></div>
             <ul id="category">
-                <li id="AD5" data-order="0" @click="filterByCategory('숙소')"> 
+                <li id="AD5" data-order="0" @click="displayAllPartners('숙소')"> 
                     <span class="category_bg accommodation"></span>
                     숙소
                 </li>       
@@ -283,6 +283,7 @@ button#favoritesButton.not-favorite {
             donglist: [],
             silist: [],
             hoslist: [],
+            partnerlist : [],
             selectgu: {
                 GU: "",
             },
@@ -372,7 +373,19 @@ addMarkersByCurrentLocation(currentLat, currentLng) {
         this.markers.push(marker);
     });
 },
-
+categorizeByName(name) {
+        if (name.includes("식당") || name.includes("한식") || name.includes("음식")) {
+            return "식당";
+        } else if (name.includes("숙소") || name.includes("호텔") || name.includes("게스트하우스")) {
+            return "숙소";
+        } else if (name.includes("카페") || name.includes("커피")) {
+            return "카페";
+        } else if (name.includes("공원")) {
+            return "공원";
+        }
+        // 기본적으로 알 수 없는 경우는 "기타"로 처리
+        return "기타";
+    },
 // 📌 두 좌표 간 거리 계산 함수 (단위: 미터)
 calculateDistance(lat1, lng1, lat2, lng2) {
     const radian = Math.PI / 180;
@@ -454,24 +467,149 @@ calculateDistance(lat1, lng1, lat2, lng2) {
         // 즐겨찾기 목록 표시 상태를 토글
         this.isFavoritesVisible = !this.isFavoritesVisible;
     },
+
+    displayAllPartners() {
+    if (!this.partnerlist || this.partnerlist.length === 0) {
+        console.log("❌ 표시할 제휴사 데이터가 없습니다.");
+        return;
+    }
+
+    // 🛠 지도 객체 확인
+    if (!this.map) {
+        console.error("🚨 지도 객체(this.map)가 없습니다! 마커를 표시할 수 없음.");
+        return;
+    }
+
+    console.log("📍 지도에 표시할 제휴사 목록:", this.partnerlist);
+
+    // 기존 마커 삭제
+    //this.removeMarkers();
+
+    // 마커 추가
+    this.partnerlist.forEach(function(partner, index) {
+        if (partner.NY && partner.NX) {  // 좌표가 존재하는 경우만 처리
+            var position = new kakao.maps.LatLng(partner.NY, partner.NX);
+            var marker = new kakao.maps.Marker({
+                position: position,
+                map: this.map  // ✅ 지도 객체 확인 후 설정
+            });
+
+            console.log("✅ 마커 " + (index + 1) + " 생성 완료:", marker, "📍 지도 객체:", this.map);
+
+            // 클릭 이벤트 등록 (예: 제휴사 이름 표시)
+            kakao.maps.event.addListener(marker, 'click', function() {
+                alert("🏢 제휴사: " + partner.name);
+            });
+
+            this.markers.push(marker); // 마커 리스트에 추가
+        } else {
+            console.warn("⚠️ 제휴사 " + (index + 1) + " (" + partner.name + ") 좌표 없음");
+        }
+    }, this);  // `this` 바인딩을 위한 설정
+
+    // ✅ 첫 번째 마커 기준으로 지도 이동
+    if (this.partnerlist.length > 0) {
+        var firstPartner = this.partnerlist[0];
+        var centerPosition = new kakao.maps.LatLng(firstPartner.NY, firstPartner.NX);
+        console.log("🗺 지도 중심 이동 →", centerPosition);
+        this.map.setCenter(centerPosition);
+    }
+}
+
+
+
+
+,
  // 카테고리별 필터링 함수
  filterByCategory(category) {
-        // 1. partnerlist에서 해당 카테고리에 맞는 제휴사만 필터링
-        const filteredList = this.partnerlist.filter(partner => partner.category === category);
+    console.log("선택된 카테고리:", category);
+    //console.log("category 비교:", partner.category.trim().toLowerCase(), "vs", category.trim().toLowerCase());
+    // ✅ 필터링 전에 전체 리스트 확인
+    console.log("전체 파트너 리스트:", this.partnerlist);
 
-        // 2. 기존 마커 삭제
-        this.clearMarkers();
+    // ✅ partnerlist 내부 데이터 확인
+    this.partnerlist.forEach((partner, index) => {
+        console.log("제휴사 " + (index + 1) + " - 카테고리: " + partner.category);
+    });
 
-        // 3. 필터링된 리스트로 지도에 마커 표시
-        this.displayMarkers(filteredList);
-    },
+    // ✅ 필터링 수행
+    this.filteredPartnerlist = this.partnerlist.filter(partner => {
+        console.log("🔍 필터링 중 - " + partner.category + " === " + category + " ?", partner.category === category);
 
+        return partner.category === category;
+    });
+
+    // ✅ 필터링 결과 확인
+    if (this.filteredPartnerlist.length === 0) {
+        console.log("🚫 해당 카테고리에 대한 제휴사가 없습니다.");
+    } else {
+        console.log("✅ 필터링된 제휴사 목록:", this.filteredPartnerlist);
+    }
+
+    // ✅ 마커 업데이트
+    this.displayPartnerPlaces(this.filteredPartnerlist);
+}
+
+
+,
+displayPartnerPlaces(partnerlist) {
+    //removeMarker();  // 기존 마커들을 제거
+    console.log("Displaying partner places:", partnerlist);
+    // 각 제휴사에 대해 마커 생성
+    partnerlist.forEach(partner => {
+        const position = new kakao.maps.LatLng(partner.latitude, partner.longitude);
+        const order = getCategoryOrder(partner.category);  // 카테고리에 맞는 마커 이미지 순서
+
+        const marker = addMarker(position, order);
+
+        kakao.maps.event.addListener(marker, 'click', function() {
+            displayPartnerInfo(partner);
+        });
+    });
+},
+displayPartnerInfo(partner) {
+    const content = `
+        <div class="placeinfo">
+            <a class="title" href="${partner.website}" target="_blank">${partner.name}</a>
+            <span>${partner.address}</span>
+            <span class="tel">${partner.phone}</span>
+            <span>운영시간: ${partner.open_time} ~ ${partner.close_time}</span>
+        </div>
+    `;
+    contentNode.innerHTML = content;
+    placeOverlay.setPosition(new kakao.maps.LatLng(partner.latitude, partner.longitude));
+    placeOverlay.setMap(map);
+},
+addCategoryClickEvent() {
+    const category = document.getElementById('category');
+    const children = category.children;
+
+    for (let i = 0; i < children.length; i++) {
+        children[i].onclick = onClickCategory;
+    }
+},
+onClickCategory() {
+    const id = this.id;
+    const className = this.className;
+
+    placeOverlay.setMap(null);
+
+    if (className === 'on') {
+        currCategory = '';
+        changeCategoryClass();
+        removeMarker();
+    } else {
+        currCategory = id;
+        changeCategoryClass(this);
+        filterByCategory(currCategory);  // 카테고리 필터링
+    }
+},
     // 지도에 마커 표시하는 함수
-    displayMarkers(partnerList) {
-        partnerList.forEach(partner => {
+    displayMarkers(partnerlist) {
+        partnerlist.forEach(partner => {
             const marker = new kakao.maps.Marker({
                 map: this.map,
-                position: new kakao.maps.LatLng(partner.lat, partner.lng)
+                position: new kakao.maps.LatLng(partner.NX, partner.NY)
             });
             this.markers.push(marker);
         });
@@ -509,6 +647,9 @@ calculateDistance(lat1, lng1, lat2, lng2) {
                     console.log("아이디 테스트3" + self.sessionId);
                     self.displayHospitals("t" + data.hoslist);
                     console.log(data.partnerlist);
+
+                    self.partnerlist = data.partnerlist || [];
+                    
                     self.pagination.last = Math.ceil(data.count / self.pagination.perPage);  // ✅ 총 페이지 수 업데이트
                     
                     if (data && data.pagination) {
@@ -878,7 +1019,6 @@ displayCategoryPlaces(data, pagination, category) {
         this.clearMarkers(); // 이전 마커 제거
 
         if (this.hoslist.length === 0) {
-            console.warn("병원 리스트가 비어 있습니다.");
             return;
         }
 
@@ -904,6 +1044,30 @@ displayCategoryPlaces(data, pagination, category) {
 
     },
 
+partneraddMarkers(partnerlist) {
+    this.clearMarkers();  // 이전 마커 제거
+
+        if (filteredData.length === 0) {
+            console.warn("선택된 카테고리에 해당하는 제휴사 리스트가 비어 있습니다.");
+            return;
+        }
+
+        filteredData.forEach((partner) => {
+            const position = new kakao.maps.LatLng(partner.NX, partner.NY);
+            const marker = new kakao.maps.Marker({
+                position: position,
+                title: partner.name
+            });
+
+            marker.setMap(this.map);
+
+            kakao.maps.event.addListener(marker, "click", () => {
+                this.showInfoWindowForSelect(marker, partner);
+            });
+
+            this.markers.push(marker);
+        });
+},
     // 단일 마커 추가(검색어 입력시)
     addMarker(position, place) {
     const marker = new kakao.maps.Marker({
