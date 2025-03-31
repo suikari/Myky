@@ -11,6 +11,7 @@ public interface ManagerService {
 	
 	HashMap<String, Object> deleteBoardList(HashMap<String, Object> map);
 	HashMap<String, Object> deleteBoardCmtList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllnotVetList(HashMap<String, Object> map);
 
 	
 	HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map);
@@ -23,8 +24,12 @@ public interface ManagerService {
 	HashMap<String, Object> selectAllVetList(HashMap<String, Object> map);
 
 	
-	HashMap<String, Object> updateUser (HashMap<String, Object> map);
+	HashMap<String, Object> updateUser(HashMap<String, Object> map);
+	
+	HashMap<String, Object> updateVet(HashMap<String, Object> map);
 
+	
+	
 }
 	
 	

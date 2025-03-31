@@ -227,7 +227,8 @@
 	    <if test="searchOption != null and searchOption == 'userId'">
 	        AND F.USER_ID LIKE '%' || #{keyword} || '%'
 	    </if>
-	    
+	    AND F.IS_DELETED = 'N'
+
 	</select>
 	
 	
@@ -268,6 +269,16 @@
 	</select>
 	
 	
+	
+	<select id="selectAllnotVetList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mUser">
+	
+		SELECT u.* 
+		FROM users u
+		LEFT JOIN veterinarian v ON u.USER_ID = v.USER_ID
+		WHERE v.USER_ID IS NULL
+		
+	</select>
+	
 	<select id="selectAllVetList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.Vet">
 	
 		SELECT *
@@ -297,12 +308,12 @@
 	
 
 	
-	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
+	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
 		INSERT INTO veterinarian(vet_number,vet_id, name, email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
 		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{name}, email, phoneNumber, affiliatedHospital, null, SYSDATE, null, '')
 	</insert>
 	
-		<update id="updateVet" parameterType="hashmap" >
+	<update id="updateVet" parameterType="hashmap" >
 		UPDATE veterinarian
 		SET 
 		<if test="vetId != null and vetId != ''">
@@ -320,12 +331,11 @@
 	    <if test="affiliatedHospital != null and affiliatedHospital != ''">
 			affiliated_hospital = #{affiliatedHospital},
 	    </if>
-	    <if test="userId != null and userId
-	     != ''">
+	    <if test="userId != null ">
 			user_id = #{userId},
 	    </if>				        	
 		UPDATED_AT = SYSDATE
-		WHERE USER_ID = #{userId}
+		WHERE vet_number = #{vetNumber}
 	</update>
 	
 	

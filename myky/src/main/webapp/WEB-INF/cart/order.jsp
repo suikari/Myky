@@ -190,11 +190,7 @@
         </table>
         <table class="discountTable">
             <tr v-if="totalPrice < 30000">
-                <th>배송비</th>
-                <td>2,000원</td>
-            </tr>
-            <tr v-if="totalPrice < 30000">
-                <th>총 결제 금액</th>
+                <th>결제 금액 (배송비 포함)</th>
                 <td>{{ formattedTotalShippingPrice }} 원</td>
             </tr>
             <tr v-else>
@@ -208,7 +204,7 @@
             <tr>
                 <th>사용할 포인트</th>
                 <td>
-                    <input type="text" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
+                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
                     <button @click="useAllPoints">전체 사용</button>
                     <button @click="applyPoints">적용</button>
                 </td>
@@ -290,7 +286,7 @@
             <input v-if="orderInfo.deliveryMessage === '직접 입력'" type="text" class="inputField"
                 v-model="orderInfo.customMessage" placeholder="배송 요청사항 입력">
 
-            <button class="payBtn" @click="submitOrder">결제하기</button>
+            <button class="payBtn" @click="submitOrderCheck">결제하기</button>
             <button class="payBtn" @click="test">주문완료페이지테스트</button>
         </div>
     </div>
@@ -473,6 +469,10 @@
                         self.usedPoint = usedPoints;
                     }
                     self.discountAmount = self.usedPoint;
+                    self.$nextTick(() => {
+                        self.$refs.usedPoint.focus();
+                    });
+                    return;
                 },
                 useAllPoints() {
                     this.usedPoint = Math.min(this.userPoint, this.finalPrice);
@@ -568,10 +568,8 @@
                         });
                     }
                 },
-                submitOrder() {
+                submitOrderCheck() {
                     let self = this;
-
-                    self.orderInfo.phone = (self.deliveryType === "new") ? self.orderInfo.phonePrefix + self.orderInfo.phoneMiddle + self.orderInfo.phoneSuffix : "";
 
                     if (!self.orderInfo.receiver) {
                         alert("수령인 성함을 정확히 입력해주세요.");
@@ -594,10 +592,39 @@
                         });
                         return;
                     }
+                    
+                    self.submitPointCheck();
+                },
+                submitPointCheck(){
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/point/current.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            if(self.userPoint != data.point.currentPoint){
+                                alert("보유 포인트에 변동이 있습니다. 확인 후 결제해주세요.");
+                                self.fnGetPoint();
+                                self.$nextTick(() => {
+                                    self.$refs.usedPoint.focus();
+                                });
+                                return;
+                            } else {
+                                self.submitOrder();
+                            }
+                        }
+                    });
+                },
+                submitOrder:function(){
+                    let self = this;
+
+                    self.orderInfo.phone = (self.deliveryType === "new") ? self.orderInfo.phonePrefix + self.orderInfo.phoneMiddle + self.orderInfo.phoneSuffix : "";
                     let address = self.orderInfo.baseAddress + "," + self.orderInfo.detailAddress + "," + self.orderInfo.zipcode;
                     let finalAddress = self.deliveryType === "default" ? self.userInfo.address : address;
                     let finalMessage = self.orderInfo.deliveryMessage === "직접 입력" ? self.orderInfo.customMessage : self.orderInfo.deliveryMessage;
-
+    
                     console.log(self.finalPrice);
 
                     if (self.finalPrice === 0) {

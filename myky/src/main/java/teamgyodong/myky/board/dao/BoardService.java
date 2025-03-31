@@ -45,6 +45,10 @@ public interface BoardService {
 
 	HashMap<String, Object> vetBoardAdd(HashMap<String, Object> map);
 
+	HashMap<String, Object> vetBoardEdit(HashMap<String, Object> map);
+
+	HashMap<String, Object> vetBoardRemove(HashMap<String, Object> map);
+
 
 
 

@@ -5,14 +5,27 @@
 <mapper namespace="teamgyodong.myky.product.mapper.ProductMapper">
 
 	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Product">
-		SELECT * 
+		SELECT 
+		    P.PRODUCT_ID,
+		    P.PRODUCT_NAME,
+		    P.PRICE,
+		    P.CATEGORY_ID,
+		    P.MANUFACTURER,
+		    P.SHIPPING_FEE,
+		    P.SHIPPING_FREE_MINIMUM,
+		    P.DISCOUNT,
+		    P.PRODUCT_CODE,
+		    P.REGISTRATION_DATE,
+		    F.FILEPATH,
+		    NVL(AVG(R.RATING), 0) AS AVG_RATING
 		FROM PRODUCT P
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'
+		LEFT JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
 		WHERE 1=1
 		<if test="searchOption != null and searchOption == 'all'">
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%' 
 		</if>
-			<if test="searchOption != null and searchOption == 'search'">
+		<if test="searchOption != null and searchOption == 'search'">
 		    AND P.PRODUCT_NAME LIKE '%' || #{keyword} || '%' 
 		</if>
 		<if test="searchOption != null and searchOption == 'dog'">
@@ -27,9 +40,33 @@
 		    AND P.CATEGORY_ID LIKE '%' || '영양제' || '%'
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
-		ORDER BY P.CATEGORY_ID ASC
+	
+		GROUP BY 
+			P.PRODUCT_ID, P.PRODUCT_NAME, P.PRICE, P.CATEGORY_ID, P.MANUFACTURER,
+	        P.SHIPPING_FEE, P.SHIPPING_FREE_MINIMUM, P.DISCOUNT,
+	        P.PRODUCT_CODE, P.REGISTRATION_DATE, F.FILEPATH
+	
+		<choose>
+	        <when test="sortOption == 'high'">
+	            ORDER BY P.PRICE DESC
+	        </when>
+	        <when test="sortOption == 'low'">
+	            ORDER BY P.PRICE ASC
+	        </when>
+	        <when test="sortOption == 'name'">
+	            ORDER BY P.PRODUCT_NAME ASC
+	        </when>
+	        <when test="sortOption == 'rating'">    
+	            ORDER BY AVG_RATING DESC
+	        </when>
+	        <otherwise>
+	            ORDER BY P.CATEGORY_ID ASC , P.REGISTRATION_DATE DESC
+	        </otherwise>
+	    </choose>
+	
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
+
 	 
 	 <select id="selectProduct" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Product">
 	 	SELECT P.*, F.FILEPATH, F.FILENAME
@@ -132,6 +169,7 @@
 	    SELECT COUNT(*)
 	    FROM PRODUCT_REVIEWS 
 	    WHERE PRODUCT_ID = #{productId}
+	    	AND DELETE_YN != 'Y'
 	</select>
 	
 	<!--도움돼요-->

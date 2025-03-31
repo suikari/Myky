@@ -174,18 +174,8 @@ public class CartController {
 		resultMap = cartService.getOrderList(map);
 		return new Gson().toJson(resultMap);
 	}
-	
-	// orderInfo -- orders 테이블만 모두 조회 (userId)
-	@RequestMapping(value = "/order/AllInfo.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String allOrderInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = cartService.getAllOrderInfo(map);
-		return new Gson().toJson(resultMap);
-	}
 
-	// orderList -- order_details 테이블까지 모두 조회 (userId)
+	// orderList -- 모두 조회 (userId)
 	@RequestMapping(value = "/order/AllList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String allOrderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {

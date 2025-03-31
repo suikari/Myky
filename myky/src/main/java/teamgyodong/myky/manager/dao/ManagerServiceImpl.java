@@ -234,9 +234,6 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		try {
 			List<Vet> Vet = managerMapper.selectAllVetList(map);
-			
-			
-			
 			int count = managerMapper.selectAllVetCnt(map);
 			
 			Map<String, Object> countMap = new HashMap<>();
@@ -255,6 +252,25 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	@Override
+	public HashMap<String, Object> selectAllnotVetList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mUser> mUser = managerMapper.selectAllnotVetList(map);
+			
+			
+			resultMap.put("result", "success");			
+			resultMap.put("User", mUser);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
 	
 	@Override
 	public HashMap<String, Object> updateUser(HashMap<String, Object> map) {
@@ -263,6 +279,24 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		try {
 			int count = managerMapper.updateUser(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> updateVet(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.updateVet(map);
 
 			resultMap.put("count", count);
 			resultMap.put("result", "success");

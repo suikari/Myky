@@ -302,8 +302,6 @@
                         </div>
                     </div>
                 </div>
-                <table>
-                </table>
             <div>
                 <button class="buttonStyle" @click="fnEdit">저장</button>
                 <button class="button" @click="fnBack(info)">뒤로가기</button>
@@ -467,8 +465,7 @@
                     const params = new URLSearchParams(window.location.search);
                     self.boardId = params.get("boardId") || "";
                     self.category = params.get("category") || "F";
-                	self.fnView();
-                        
+                	self.fnView();                        
                 }
             });
             app.mount("#app");

@@ -32,6 +32,10 @@
 			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
 			</if>
+			<if test="searchOption != null and searchOption == 'userId2'">
+                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+                AND F.TITLE LIKE '%' || #{keyword2} || '%')
+            </if>
 		    AND CATEGORY= #{category}
 		    AND IS_DELETED = 'N'
 		ORDER BY 
@@ -283,6 +287,21 @@
 		INSERT INTO VET_BOARD(VET_BOARD_ID, TITLE, CONTENT,  USER_ID, CREATED_AT, UPDATED_AT, IS_DELETED, CNT)
 		VALUES(VET_BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{userId}, SYSDATE, SYSDATE, 'N', 0)
 	</insert>
+	<update id="updateVetBoard" parameterType="hashmap">
+		UPDATE VET_BOARD
+		SET
+			TITLE = #{title},
+			CONTENT = #{content},
+			CREATED_AT = SYSDATE
+		WHERE VET_BOARD_ID = #{vetBoardId}
+	</update>
+	<update id="updateRemoveVetBoard" parameterType="hashmap">
+		UPDATE VET_BOARD
+		SET
+		IS_DELETED = 'Y',
+		UPDATED_AT = SYSDATE
+		WHERE VET_BOARD_ID = #{vetBoardId}
+	</update>
 </mapper>
 
 
