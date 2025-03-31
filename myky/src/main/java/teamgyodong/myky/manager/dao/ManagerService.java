@@ -27,6 +27,8 @@ public interface ManagerService {
 	HashMap<String, Object> updateUser(HashMap<String, Object> map);
 	
 	HashMap<String, Object> updateVet(HashMap<String, Object> map);
+	
+	HashMap<String, Object> insertVet(HashMap<String, Object> map);
 
 	
 	

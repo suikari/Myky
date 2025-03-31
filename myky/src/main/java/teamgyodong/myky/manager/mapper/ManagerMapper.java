@@ -50,6 +50,8 @@ public interface ManagerMapper {
 	int deleteBoardCmtList(HashMap<String, Object> map);
 
 	
+	int insertVet(HashMap<String, Object> map);
+
 	
 	
 	int updateVet(HashMap<String, Object> map);
