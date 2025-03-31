@@ -264,7 +264,7 @@
 	    <if test="searchOption != null and searchOption == 'userId'">
 	        AND u.USER_ID LIKE '%' || #{keyword} || '%'
 	    </if>
-	    
+
 	</select>
 	
 	
@@ -272,10 +272,109 @@
 	
 		SELECT *
 		FROM veterinarian
+		Where 1=1
+	 	<if test="searchOption != null and searchOption == 'userId'">
+	        AND NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	    </if>   
+	     ORDER BY CREATED_AT DESC
+		<if test="page != null and pageSize != null" >
+		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		</if>
+		
+	</select>
+	
+	
+	<select id="selectAllVetCnt" parameterType="hashmap" resultType="int">
+	
+		SELECT COUNT(*)
+        from veterinarian 
+        Where 1=1
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND  NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	    </if>
 	    
 	</select>
 	
 
+	
+	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
+		INSERT INTO veterinarian(vet_number,vet_id, name, email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
+		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{name}, email, phoneNumber, affiliatedHospital, null, SYSDATE, null, '')
+	</insert>
+	
+		<update id="updateVet" parameterType="hashmap" >
+		UPDATE veterinarian
+		SET 
+		<if test="vetId != null and vetId != ''">
+			vet_id = #{vetId},
+	    </if>
+	    <if test="name != null and name != ''">
+			name = #{name},
+	    </if>
+	    <if test="email != null and email != ''">
+			email = #{email},
+	    </if>
+	    <if test="phoneNumber != null and phoneNumber != ''">
+			phone_number = #{phoneNumber},
+	    </if>
+	    <if test="affiliatedHospital != null and affiliatedHospital != ''">
+			affiliated_hospital = #{affiliatedHospital},
+	    </if>
+	    <if test="userId != null and userId
+	     != ''">
+			user_id = #{userId},
+	    </if>				        	
+		UPDATED_AT = SYSDATE
+		WHERE USER_ID = #{userId}
+	</update>
+	
+	
+
+	<update id="updateUser" parameterType="hashmap" >
+		UPDATE USERS
+		SET 
+		<if test="userName != null and userName != ''">
+			USERNAME = #{userName},
+	    </if>
+	    <if test="nickName != null and nickName != ''">
+			NICKNAME = #{nickName},
+	    </if>
+	    <if test="email != null and email != ''">
+			EMAIL = #{email},
+	    </if>
+	    <if test="email != null and email != ''">
+			EMAIL = #{email},
+	    </if>
+	    <if test="phoneNumber != null and phoneNumber != ''">
+			PHONE_NUMBER = #{phoneNumber},
+	    </if>
+	    <if test="address != null and address != ''">
+			ADDRESS = #{address},
+	    </if>		
+	    <if test="gender != null and gender != ''">
+			GENDER = #{gender},
+	    </if>			    
+	    <if test="emailYn != null and emailYn != ''">
+			EMAIL_YN = #{emailYn},
+	    </if>			    
+	    <if test="phoneYn != null and phoneYn != ''">
+			PHONE_YN = #{phoneYn},
+	    </if>			    
+	    <if test="birthDate != null and birthDate != ''">
+			BIRTH_DATE = #{birthDate},
+	    </if>			    
+	    <if test="address != null and address != ''">
+			ADDRESS = #{address},
+	    </if>	
+	    <if test="profileImage != null and profileImage != ''">
+			PROFILE_IMAGE = #{profileImage},
+	    </if>
+	    <if test="DeleteYn != null and DeleteYn != ''">
+			Delete_Yn = #{DeleteYn},
+	    </if>				        	
+		UPDATED_AT = SYSDATE
+		WHERE USER_ID = #{userId}
+	</update>
 	
 	
 	

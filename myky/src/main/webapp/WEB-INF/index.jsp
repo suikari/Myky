@@ -463,7 +463,7 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log(data);
+                    			//console.log(data);
                     			self.freeposts = data.board;
 
                     		}
@@ -481,7 +481,7 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log(data);
+                    			//console.log(data);
 								self.products = data.list;
 
                     		}
@@ -497,7 +497,7 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("dona",data);
+                    			//console.log("dona",data);
                     			self.donations = data.info;
                     		}
                     	});
