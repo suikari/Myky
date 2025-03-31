@@ -16,7 +16,7 @@ public class comment {
 	private String updatedAt;
 	private String isDeleted;
 	private String updatedTime;
-	
+	private String title;
 	private String nickName;
 
 	
