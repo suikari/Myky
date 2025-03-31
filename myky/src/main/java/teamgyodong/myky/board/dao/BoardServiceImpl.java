@@ -311,7 +311,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultMap;
 	}
-	//게시글 삭제
+	//수의사 게시글 삭제
 	public HashMap<String, Object> vetBoardRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
