@@ -173,6 +173,17 @@
                     <input type="file" id="file1" name="file1"  multiple>
                 </div>
             </div>
+            <div>
+                <div class="title-label">
+                    POINT
+                    <div>
+                        현재 point 조회
+                        {{point.currentPoint}}개
+                    </div>
+                    <input>개 사용
+                    <button @click="selectPoint">사용</button>
+                </div>
+            </div>
             <div class="title-label">CONTENT</div>
             <div>
                 <div id="editor" style="height: 300px;"></div>
@@ -197,7 +208,11 @@
                        content : "",
                        sessionId : "${sessionId}",
                        vetBoardId : "",
-
+                       selectPoint : "",
+                       point : "",
+                       currentPoint : "",
+                       usePoint : "",
+                       usedPoint : "",
                     };
                 },
                 computed: {
@@ -210,6 +225,7 @@
                             title : self.title,
                             content : self.content,
                             userId : self.sessionId,
+                            usedPoint : self.usedPoint,
                         }
                         $.ajax({
 				    	    url:"/board/vetBoardAdd.dox",
@@ -217,25 +233,53 @@
 				    	    type : "POST", 
 				    	    data : nparmap,
 				    	    success : function(data) { 
-                                alert("저장되었습니다.");
+                                // if(){
 
-                                if( $("#file1")[0].files.length > 0){
-                                    var form = new FormData();
-                                    for(let i=0; i<$("#file1")[0].files.length; i++){
-                                        form.append( "file1",  $("#file1")[0].files[i]);
-                                    }
-                                    form.append("vetBoardId", data.vetBoardId); // 임시 pk
-                                    self.upload(form); 
-
-                                } else {
-                                    location.href="/board/vetBoardlist.do";
-                                }
+                                // }
                             }
+				        });
+                        $.ajax({
+				        	url:"/point/used.dox",
+				        	dataType:"json",	
+				        	type : "POST", 
+				        	data : nparmap,
+				        	success : function(data) { 
+				        		console.log("11",data);
+                                if(confirm("정말 저장하시겠습니까? 저장 후, 사용한 포인트는 차감됩니다.")){
+                                    alert("저장되었습니다.");
+                                } else {                                
+                                    alert("취소되었습니다.");
+                                }
+				        	}
+				        });
+                    },
+                    selectPoint : function (){
+                        let self = this;
+                        let nparmap = {
+                            userId : self.sessionId,
+                        };
+                    },
+                    getPoints : function(){
+                        let self = this;
+                        let nparmap = {
+                            userId : self.sessionId,
+                        };
+                        $.ajax({
+				        	url:"/point/current.dox",
+				        	dataType:"json",	
+				        	type : "POST", 
+				        	data : nparmap,
+				        	success : function(data) { 
+				        		console.log("11",data);
+                                self.point = data.point;
+
+				        	}
 				        });
                     },
                 },
                 mounted() {
                 	let self = this;
+                    self.getPoints();
                 	
                 }
             });

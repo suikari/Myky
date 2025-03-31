@@ -40,12 +40,15 @@ public interface ManagerMapper {
 	
 	int selectAllCmtCnt(HashMap<String, Object> map);
 	int selectAllUserCnt(HashMap<String, Object> map);
+	int selectAllVetCnt(HashMap<String, Object> map);
 
 	
 	
 	
 	int deleteBoardList(HashMap<String, Object> map);
 	int deleteBoardCmtList(HashMap<String, Object> map);
+
+	int updateUser(HashMap<String, Object> map);
 
 	
 	

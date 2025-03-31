@@ -6,7 +6,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>상품 상세보기</title>
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
         <style>
@@ -32,18 +31,22 @@
                 flex-wrap: wrap;
                 justify-content: space-between;
                 width: 100%;
+                align-items: flex-start;
             }
 
             .product-image-container {
                 flex: 1;
                 max-width: 70%;
                 text-align: left;
+                margin-top: 25px;
             }
 
             .product-image-container img {
-                width: 100%;
-                max-width: 420px;
-                border-radius: 8px;
+                width: 420px;
+                height: 420px;
+                object-fit: cover;
+                border: 2px solid #000;
+                border-radius: 20px;
                 box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
             }
 
@@ -54,8 +57,9 @@
             }
 
             .product-image-thumbNails img {
-                width: 55px;
-                height: 55px;
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
                 margin: 5px;
                 cursor: pointer;
                 border-radius: 5px;
@@ -64,7 +68,7 @@
             }
 
             .product-image-thumbNails img:hover {
-                border: 2px solid #28a745;
+                border: 2px solid #f08008;
             }
 
             .product-info {

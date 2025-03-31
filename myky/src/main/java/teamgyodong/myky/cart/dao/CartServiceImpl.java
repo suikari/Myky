@@ -240,4 +240,36 @@ public class CartServiceImpl implements CartService {
 		}
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> getAllOrderInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<cart> orderInfo = cartMapper.selectAllOrderInfo(map);
+
+			resultMap.put("orderInfo", orderInfo);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> getAllOrderList(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<cart> orderList = cartMapper.selectAllOrderList(map);
+
+			resultMap.put("orderList", orderList);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }

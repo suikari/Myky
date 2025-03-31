@@ -236,10 +236,37 @@ public class ManagerServiceImpl implements ManagerService {
 			List<Vet> Vet = managerMapper.selectAllVetList(map);
 			
 			
+			
+			int count = managerMapper.selectAllVetCnt(map);
+			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+
+			resultMap.put("count", countMap);
+			
 			resultMap.put("result", "success");			
 			resultMap.put("Vet", Vet);			
 		}catch(Exception e) {
 			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
+	@Override
+	public HashMap<String, Object> updateUser(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.updateUser(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
 			System.out.println(e.getMessage());
 			resultMap.put("result", "fail");			
 		}

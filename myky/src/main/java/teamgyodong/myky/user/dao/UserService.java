@@ -24,5 +24,7 @@ public interface UserService {
 
 	void insertImage(HashMap<String, Object> map);
 
+	HashMap<String, Object> userComment(HashMap<String, Object> map);
+
 	
 }

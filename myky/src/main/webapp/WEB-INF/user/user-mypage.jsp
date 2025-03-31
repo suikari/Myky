@@ -117,6 +117,7 @@
                 border-collapse: collapse;
                 margin: 20px 0;
                 font-family: Arial, sans-serif;
+
             }
 
             /* 테이블 헤더 스타일 */
@@ -124,15 +125,16 @@
                 background-color: #4CAF50;
                 color: white;
                 padding: 10px;
-                text-align: left;
+                text-align: center;
                 font-size: 16px;
             }
 
             /* 테이블 데이터 셀 스타일 */
             .board-table td {
                 padding: 10px;
-                text-align: left;
+                text-align: center;
                 border-bottom: 1px solid #ddd;
+
             }
 
             /* 호버 효과 - 각 셀에 마우스를 올렸을 때 */
@@ -183,6 +185,74 @@
                     padding: 8px;
                 }
             }
+
+            .comment-page {
+                font-family: 'Arial', sans-serif;
+                margin: 20px;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+            }
+
+            /* 테이블 스타일 */
+            .comment-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .comment-table-header {
+                background-color: #4CAF50;
+                color: white;
+                text-align: left;
+                font-weight: bold;
+            }
+
+            .comment-table-column {
+                padding: 12px 20px;
+                text-align: left;
+            }
+
+            .comment-table-row {
+                border-bottom: 1px solid #ddd;
+            }
+
+            .comment-table-row:hover {
+                background-color: #f1f1f1;
+            }
+
+            /* 제목 스타일 */
+            .comment-title {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+                padding-right: 10px;
+            }
+
+            /* 댓글 내용 스타일 */
+            .comment-content {
+                font-size: 14px;
+                color: #555;
+                max-width: 300px;
+                word-wrap: break-word;
+                padding: 10px;
+            }
+
+            .comment-link {
+                color: #007BFF;
+                text-decoration: none;
+            }
+
+            .comment-link:hover {
+                text-decoration: underline;
+            }
+
+            /* 작성일 스타일 */
+            .comment-date {
+                font-size: 12px;
+                color: #888;
+                padding-left: 10px;
+            }
         </style>
     </head>
 
@@ -196,7 +266,7 @@
                         <img :src="user.profileImage" alt="" class="profile-pic">
                         <div class="user-details">
                             <h2>안녕하세요, {{user.userName}}님!</h2>
-                            <p>{{user.userName}}님의 회원등급은 <strong>SILVER</strong>입니다.</p>
+                            <p>{{user.userName}}님의 회원등급은 <strong>{{user.role}}</strong>입니다.</p>
                         </div>
                     </div>
                     <div class="summary">
@@ -219,20 +289,16 @@
                                 </div>
                             </ul>
                             <!-- 재원 코딩 -->
-
-
-                            <!-- <ul> 
-                                <li>주문내역 조회</li>
-                                <li>포인트 내역</li>
-                                <li>쿠폰 내역</li>
-                            </ul> -->
                             <hr>
                             <ul>
-                                <h3>나의 활동 정보</h3>
-                                <li><a @click="fnMyBoard()">게시글 내역</a></li>
-                                <li>댓글 내역</li>
-                                <li>구독 정보</li>
-                                <li>후원 금액내역</li>
+                                <div class="tab-menu">
+                                    <h3>나의 활동 정보</h3>
+                                    <div v-for="tab in tabs2" :key="tab.id"
+                                        :class="['tab-item', { active: activeTab === tab.id }]"
+                                        @click="changeTab(tab.id)">
+                                        {{ tab.label }}
+                                    </div>
+                                </div>
                             </ul>
                             <hr>
                             <ul>
@@ -259,6 +325,12 @@
                                 </div>
                             </span>
                             <div v-if="activeTab === 'board'">
+                                <div>
+                                    <select v-model="pageSize" @change="fnMyBoardList">
+                                        <option value="5">5개</option>
+                                        <option value="10">10개</option>
+                                    </select>
+                                </div>
                                 <table class="board-table">
                                     <tr>
                                         <th>번호</th>
@@ -270,15 +342,66 @@
                                         <template v-if="item.isDeleted == 'N'">
                                             <td>{{item.boardId}}</td>
                                             <td><a href="javascript:;" @click="fnView2(item.boardId)">{{item.title}}
-                                                    <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="cmtCountColor">({{item.commentCount}})</span>
+                                                    <span v-if="parseInt(item.commentCount) > 0 && category == 'F'"
+                                                        class="cmtCountColor">({{item.commentCount}})</span>
                                                 </a></td>
                                             <td>{{item.createdAt}}</td>
                                             <td>{{item.cnt}}</td>
                                         </template>
                                     </tr>
                                 </table>
+                                <div>
+                                    <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
+                                        @click="fnPageMove('pvev')">
+                                        < </a>
+                                            <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
+                                                <span v-if="page == num" class="bgColer">{{num}}</span>
+                                                <span v-else class="bgColer2">{{num}}</span>
+                                            </a>
+                                            <a v-if="page != index" id="index" href="javascript:;" class="bgColer2"
+                                                @click="fnPageMove('next')">
+                                                >
+                                            </a>
+                                </div>
                             </div>
 
+                            <div v-if="activeTab === 'comment'" class="comment-page">
+                                <table class="comment-table">
+                                    <thead>
+                                        <tr class="comment-table-header">
+                                            <th class="comment-table-column">게시글</th>
+                                            <th class="comment-table-column">댓글내용</th>
+                                            <th class="comment-table-column">작성일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in commentList" :key="item.commentId" class="comment-table-row">
+                                            <template v-if="item.isDeleted === 'N'">
+                                                <td class="comment-title">{{ item.title }}</td>
+                                                <td class="comment-content">
+                                                    <a href="javascript:;"
+                                                        @click="fnView2(item.boardId, item.commentId)"
+                                                        class="comment-link">
+                                                        {{ item.content }}
+                                                    </a>
+                                                </td>
+                                                <td class="comment-date">{{ item.updatedAt }}</td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
+                                    @click="fnPageMove('pvev')">
+                                    < </a>
+                                        <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
+                                            <span v-if="page == num" class="bgColer">{{num}}</span>
+                                            <span v-else class="bgColer2">{{num}}</span>
+                                        </a>
+                                        <a v-if="page != index" id="index" href="javascript:;" class="bgColer2"
+                                            @click="fnPageMove('next')">
+                                            >
+                                        </a> -->
+                            </div>
                         </section>
 
 
@@ -313,15 +436,18 @@
                     return {
                         user: {},
                         userId: "${sessionId}",
-                        mainFlg: true,
-                        boardFlg: false,
                         point: {},
                         //탭 관련
                         tabs: [
-                            { id: 'order', label: '주문내역' },
-                            { id: 'point', label: '포인트내역' },
-                            { id: 'coupon', label: '쿠폰내역' },
-                            { id: 'board', label: '나의 게시판 내역' }
+                            { id: 'order', label: '주문 내역' },
+                            { id: 'point', label: '포인트 내역' },
+                            { id: 'coupon', label: '쿠폰 내역' }
+                        ],
+                        tabs2: [
+                            { id: 'board', label: '게시글 내역' },
+                            { id: 'comment', label: '댓글 내역' },
+                            { id: 'subscribe', label: '구독 내역' },
+                            { id: 'donation', label: '후원금 내역' }
                         ],
                         activeTab: 'order',
                         board: [],
@@ -329,7 +455,9 @@
                         keyword: "",
                         category: "F",
                         pageSize: 5,
-                        page: 0
+                        page: 1,
+                        index: 0,
+                        commentList: {}
 
                     };
                 },
@@ -352,13 +480,6 @@
                                 self.user = data.user;
                             }
                         });
-                    },
-
-
-                    fnMyBoard: function () {
-                        let self = this;
-                        self.boardFlg = true;
-                        self.mainFlg = false;
                     },
 
 
@@ -411,15 +532,14 @@
                     // }
                     // 재원코딩 원본
 
-                    fnBoardList2() {
+                    fnMyBoardList() {
                         var self = this;
                         var nparmap = {
                             searchOption: "userId",
                             keyword: self.userId,
-                            userId: self.userId,
-                            category: self.userId,
+                            category: self.category,
                             pageSize: self.pageSize,
-                            page: self.page
+                            page: (self.page - 1) * self.pageSize // 페이지 시작점
                         };
                         console.log(nparmap);
                         $.ajax({
@@ -430,14 +550,58 @@
                             success: function (data) {
                                 console.log(data);
                                 self.board = data.board;
+                                if (data.count && data.count.cnt !== undefined) { // 율 코드 문의하기
+                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                } else {
+                                    self.index = 0;
+                                    console.warn("count 정보 없음!", data);
+                                }
+
                             }
                         });
                     },
 
-                    fnView2(boardId) {
+                    fnPage: function (num) {
                         let self = this;
+                        self.page = num;
+                        self.fnMyBoardList();
+
+
+                    },
+                    fnPageMove: function (direction) {
+                        let self = this;
+                        if (direction == "next") {
+                            self.page++;
+                        } else {
+                            self.page--;
+
+                        }
+                        self.fnMyBoardList();
+                    },
+
+                    fnView2(boardId, commentId) {
+                        let self = this;
+                        if (commentId == null) {
+                            commentId = ""
+                        }
                         localStorage.setItem("page", self.page);
                         location.href = "/board/view.do?boardId=" + boardId + "&category=" + self.category;
+                    },
+                    fnSeachComm() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId
+                        };
+                        $.ajax({
+                            url: "/user/comment.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.commentList = data.comment;
+                            }
+                        });
                     }
                 },
 
@@ -449,7 +613,8 @@
                     }
                     self.fnInfo2();
                     self.fnPoint();
-                    self.fnBoardList2();
+                    self.fnMyBoardList();
+                    self.fnSeachComm();
                     window.vueObj = this;
 
                 }

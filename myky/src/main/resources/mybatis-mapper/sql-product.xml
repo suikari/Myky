@@ -42,6 +42,7 @@
 	 	SELECT * 
 		FROM PRODUCT_FILE
 		WHERE PRODUCT_ID = #{productId}
+		ORDER BY PRODUCT_ID DESC
 	 </select>
 	 
 	 <select id="selectProductCnt" parameterType="hashmap" resultType="int">
