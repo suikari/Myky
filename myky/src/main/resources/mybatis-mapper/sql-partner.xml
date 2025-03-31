@@ -30,19 +30,19 @@
 	</select>
 	
 	<select id="getPartnerHosList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-    SELECT DISTINCT H.HOSPITAL_NO, H.HOS_NAME, H.HOS_ADDRESS, H.PHONE, A.GU, H.NX, H.NY, F.*
-    FROM ANIMAL_HOSPITAL_INFO H
-    LEFT JOIN FAVORITES F 
-    ON H.HOSPITAL_NO = F.HOSPITAL_NO AND F.USER_ID = #{userId}
-    JOIN AREA A 
-    ON H.HOS_ADDRESS LIKE '%' || A.GU || '%' OR A.GU IS NULL 
-    WHERE 1=1
-    <if test="keyword != null and keyword != ''">
-        AND H.HOS_NAME LIKE '%' || #{keyword} || '%' -- 추가된 검색 기능
-    </if>    
-    <if test="keyword == ''">
-        AND A.GU = #{selectgu} AND A.GU IS NOT NULL -- 빈 검색어일 경우 지역 정보 추가
-    </if>
+    SELECT H.HOSPITAL_NO, H.HOS_NAME, H.HOS_ADDRESS, H.PHONE, 
+       MAX(A.GU) AS GU, H.NX, H.NY, MAX(F.FAVORITE_ID) AS FAVORITE_ID
+	FROM ANIMAL_HOSPITAL_INFO H
+	LEFT JOIN FAVORITES F ON H.HOSPITAL_NO = F.HOSPITAL_NO AND F.USER_ID = #{userId}
+	LEFT JOIN AREA A ON H.HOS_ADDRESS LIKE '%' || A.GU || '%'
+	WHERE 1=1
+	<if test="keyword != null and keyword != ''">
+	    AND H.HOS_NAME LIKE '%' || #{keyword} || '%'
+	</if>    
+	<if test="keyword == ''">
+	    AND A.GU = #{selectgu} AND A.GU IS NOT NULL
+	</if>
+	GROUP BY H.HOSPITAL_NO, H.HOS_NAME, H.HOS_ADDRESS, H.PHONE, H.NX, H.NY
 </select>
 
 
