@@ -7,6 +7,10 @@
     <title>Vue3 레이아웃 예제</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+    <!-- Quill CDN -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
 	
     <style>
         body {
@@ -153,11 +157,9 @@
  
     <div id="app" class="container">
 
-        <div class="section-header" v-if="category == 'F'">
+
+        <div class="section-header">
             ADD
-        </div>
-        <div class="section-header" v-if="category == 'A'">
-            NOTICE ADD
         </div>
             <div class="section-headerDown">
                 게시글 내용을 작성합니다.
@@ -177,11 +179,10 @@
                 <div class="title-label">
                     POINT
                     <div>
-                        현재 point 조회
-                        {{point.currentPoint}}개
+                        현재 point 
+                        {{currentPoint.currentPoint}}개
                     </div>
-                    <input>개 사용
-                    <button @click="selectPoint">사용</button>
+                    <input v-model="usedPoint">개 사용
                 </div>
             </div>
             <div class="title-label">CONTENT</div>
@@ -211,7 +212,6 @@
                        selectPoint : "",
                        point : "",
                        currentPoint : "",
-                       usePoint : "",
                        usedPoint : "",
                     };
                 },
@@ -227,37 +227,51 @@
                             userId : self.sessionId,
                             usedPoint : self.usedPoint,
                         }
+
+                        let point = '';
+                        let nparmap1 = {
+                            userId : self.sessionId,
+                        };
+                        $.ajax({
+				        	url:"/point/current.dox",
+				        	dataType:"json",	
+				        	type : "POST", 
+				        	data : nparmap1,
+				        	success : function(data) { 
+				        		console.log("11",data);
+                                let currentPoint = data.point;
+                                let usedPoint = self.usedPoint;
+                                usedPoint = data.point;
+
+                                if(currentPoint < usedPoint){
+                                    alert("포인트가 부족합니다.");
+            
+                                    return;
+                                }
+				        	}
+				        });
                         $.ajax({
 				    	    url:"/board/vetBoardAdd.dox",
 				    	    dataType:"json",	
 				    	    type : "POST", 
 				    	    data : nparmap,
-				    	    success : function(data) { 
-                                // if(){
-
-                                // }
-                            }
-				        });
-                        $.ajax({
-				        	url:"/point/used.dox",
-				        	dataType:"json",	
-				        	type : "POST", 
-				        	data : nparmap,
-				        	success : function(data) { 
-				        		console.log("11",data);
+				    	    success : function(data) {
                                 if(confirm("정말 저장하시겠습니까? 저장 후, 사용한 포인트는 차감됩니다.")){
-                                    alert("저장되었습니다.");
-                                } else {                                
+                                    $.ajax({
+                                        url:"/point/used.dox",
+                                        dataType:"json",	
+                                        type : "POST", 
+                                        data : nparmap,
+                                        success : function(data) { 
+                                            console.log("11",data);
+                                            location.href = "/board/vetBoardList.do"
+                                        }
+                                    });
+                                } else {
                                     alert("취소되었습니다.");
-                                }
-				        	}
-				        });
-                    },
-                    selectPoint : function (){
-                        let self = this;
-                        let nparmap = {
-                            userId : self.sessionId,
-                        };
+                                } 
+                            },
+				        });                        
                     },
                     getPoints : function(){
                         let self = this;
@@ -271,19 +285,39 @@
 				        	data : nparmap,
 				        	success : function(data) { 
 				        		console.log("11",data);
-                                self.point = data.point;
-
+                                self.currentPoint = data.point;
 				        	}
 				        });
+                    },
+                    fnBack : function (info) {
+                        let self = this;
+                        location.href="/board/vetBoardList.do";
+                        
                     },
                 },
                 mounted() {
                 	let self = this;
+                    const params = new URLSearchParams(window.location.search);
+
                     self.getPoints();
-                	
+                    var quill = new Quill('#editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link', 'image'],
+                            ['clean'],
+                            [{ 'color': [] }, { 'background': [] }],  
+                        ]
+                    }
+                });
+                    quill.on('text-change', function() {
+                                self.content = quill.root.innerHTML;
+                    });
                 }
             });
-
             app.mount("#app");
         });
     </script>

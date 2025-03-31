@@ -71,6 +71,10 @@ public interface BoardMapper {
 	void updateVetBoardCnt(HashMap<String, Object> map);
 
 	void insertVetBoard(HashMap<String, Object> map);
+
+	void updateVetBoard(HashMap<String, Object> map);
+
+	int updateRemoveVetBoard(HashMap<String, Object> map);
 	
 
 

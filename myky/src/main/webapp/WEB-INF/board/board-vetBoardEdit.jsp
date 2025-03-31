@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자유게시판</title>
-    <!-- Quill CSS -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <!-- Quill JS -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    
+    <title>Vue3 레이아웃 예제</title>
+	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+	    <!-- Quill CSS -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <!-- Quill JS -->
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <style>
         body {
             padding-bottom: 120px; /* 푸터 높이만큼 확보 */
@@ -262,18 +264,14 @@
         .link-container:hover .preview-image {
             display: block;
         }
-</style>
+    </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
- 
     <div id="app" class="container">
         <div id="viewPage">
-            <div class="section-header" v-if="category == 'F'">
+            <div class="section-header">
                 EDIT
-            </div>
-            <div class="section-header" v-if="category == 'A'">
-                NOTICE EDIT
             </div>
             <div class="section-headerDown" >
                 게시글 내용을 수정합니다.
@@ -284,47 +282,32 @@
             <div class="title-input">
                 <input v-model="info.title">
             </div>
-            <div class="title-inputImg">
-                <input type="file" id="file1" name="file1" multiple>
-            </div>
+
             <div class="title-label">CONTENT</div>
             <div>
                 <div id="editor" style="height: 300px;"></div>
             </div>
-            <div class="view-label">첨부파일</div>
-                <div class="view-files">
-                    <div v-for="item in fileList" :key="reload">
-                        <div class="link-container">
-                            <span class="FileDownload">{{item.fileName}}</span>
-                            <span class="FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb) </span></a>
-                                <button class="buttonStyle" @click="fnRemove(item.fileId)">삭제</button>
-                            <img :src="item.filePath" :alt="item.fileName" class="preview-image">
-                        </div>
-                    </div>
-                </div>
             <div>
                 <button class="buttonStyle" @click="fnEdit">저장</button>
                 <button class="button" @click="fnBack(info)">뒤로가기</button>
             </div>
         </div>
     </div>
-
-
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
-
 </body>
 </html>
 <script>
     
-                const app = Vue.createApp({
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            const app = Vue.createApp({
                 data() {
                     return {
-                        boardId :"${map.boardId}",
-                        info : {},
-                        content : "",
-                        title : "",
-                        reload : 0,
-                        category : "",
+                       info : {},
+                       content : "",
+                       title : "",
+                       vetBoardId : "${map.vetBoardId}",
+                       answerList : [],
                     };
                 },
                 computed: {
@@ -334,41 +317,19 @@
                     fnView(){
 				        var self = this;
 				        var nparmap = {
-                            boardId : self.boardId,
-                            page: self.page,
+                            vetBoardId : self.vetBoardId,
                             option: "UPDATE",
-                            category : self.category,
                         };
 				        $.ajax({
-				        	url:"/board/view.dox",
+				        	url:"/board/vetBoardView.dox",
 				        	dataType:"json",	
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-				        		console.log(data);
+				        		console.log("view",data);
                                     self.info = data.info;
-                                    self.fileList = data.fileList;
+                                    self.answerList = data.answerList;
                                     self.fnQuill();
-
-				        	}
-				        });
-                    },
-                    fnFileView(){
-				        var self = this;
-				        var nparmap = {
-                            boardId : self.boardId,
-                            page: self.page,
-                            option: "UPDATE"
-                        };
-				        $.ajax({
-				        	url:"/board/view.dox",
-				        	dataType:"json",	
-				        	type : "POST", 
-				        	data : nparmap,
-				        	success : function(data) { 
-				        		console.log(data);
-                                self.fileList = data.fileList;
-                                self.reload += 1; 
 				        	}
 				        });
                     },
@@ -377,33 +338,23 @@
 				        var nparmap = {
                             title : self.info.title,
                             content : self.info.content,
-                            boardId : self.boardId
+                            vetBoardId : self.vetBoardId
                         }
 				        $.ajax({
-				        	url:"/board/edit.dox",
+				        	url:"/board/vetBoardEdit.dox",
 				        	dataType:"json",	
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
                                 alert("수정되었습니다.");
-
-                                if( $("#file1")[0].files.length > 0){
-                                    var form = new FormData();
-                                    for(let i=0; i<$("#file1")[0].files.length; i++){
-                                        form.append( "file1",  $("#file1")[0].files[i]);
-                                    }
-                                    form.append( "boardId", self.boardId); // 임시 pk
-                                    self.upload(form);
-
-                                } else {
-                                    location.href="/board/list.do?category="+self.category;
-                                }
+                                    location.href="/board/vetBoardList.do";
 				        	}
 				        });
                     },
                     fnBack : function (info) {
                         let self = this;
-                        location.href="/board/list.do?category="+self.category;                   
+                        location.href="/board/vetBoardList.do";   
+                                    
                     },
                     fnQuill() {
                         let self = this;
@@ -426,48 +377,13 @@
                             self.info.content = quill.root.innerHTML;
                         });
                     },
-                    //파일업로드
-                    upload : function(form){
-                    	var self = this;
-                    	 $.ajax({
-                    		 url : "/fileUpload.dox"
-                    	   , type : "POST"
-                    	   , processData : false
-                    	   , contentType : false
-                    	   , data : form
-                    	   , success:function(response) { 
-                            location.href="/board/list.do?category="+self.category;
-
-                    	   }	           
-                       });
-                    },
-                    fnRemove : function (fileId) {
-                        var self = this;
-                        var nparmap = {
-                            fileId : fileId,
-                        };
-                        $.ajax({
-                            url: "/board/removeFile.dox",
-                            dataType: "json",
-                            type: "POST",
-                            data: nparmap,
-                            success: function (data) {
-                                console.log(data);
-                                alert("삭제되었습니다!");
-                                self.fnFileView();
-                            }
-                        });
-                    },
                 },
                 mounted() {
                 	var self = this;
-
                     const params = new URLSearchParams(window.location.search);
-                    self.boardId = params.get("boardId") || "";
-                    self.category = params.get("category") || "F";
-                	self.fnView();                        
+                	self.fnView();
                 }
-            });
+            }); 
             app.mount("#app");
-
+        }); 
     </script>

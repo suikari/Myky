@@ -257,50 +257,66 @@ public class BoardServiceImpl implements BoardService {
 		return resultMap;
 	}
 	//수의사 게시글 상세보기
-		public HashMap<String, Object> vetBoardView(HashMap<String, Object> map) {
-			// TODO Auto-generated method stub
-			HashMap<String, Object> resultMap = new HashMap<String, Object>();
-			
-			
-			if(map.get("option").equals("View")) {
+	public HashMap<String, Object> vetBoardView(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		if(map.get("option").equals("View")) {
 
-			    String vetBoardId = (String) map.get("vetBoardId");
+		    String vetBoardId = (String) map.get("vetBoardId");
 
-			    // 1. 세션 기반 조회수 중복 방지 처리
-			    String sessionKey = "viewedBoard_" + vetBoardId;
+		    // 1. 세션 기반 조회수 중복 방지 처리
+		    String sessionKey = "viewedBoard_" + vetBoardId;
 
-			    if (session.getAttribute(sessionKey) == null) {
-			        boardMapper.updateVetBoardCnt(map); // 조회수 1 증가
-			        session.setAttribute(sessionKey, true); // 세션에 기록
-			    }
-			    
-			}
-			
-			try {
-				vetBoard vetboard = boardMapper.selectVetBoard(map);
-				List<vetAnswer> answers = boardMapper.selectVetAnList(map);
-				
-				resultMap.put("info", vetboard);
-				resultMap.put("answerList", answers);
-				resultMap.put("result", "success");
-			}catch (Exception e){
-				 e.printStackTrace();
-				 resultMap.put("result", "fail");
-
-			}
-			return resultMap;
+		    if (session.getAttribute(sessionKey) == null) {
+		        boardMapper.updateVetBoardCnt(map); // 조회수 1 증가
+		        session.setAttribute(sessionKey, true); // 세션에 기록
+		    }
+		    
 		}
-		//수의사 게시글 추가
-		public HashMap<String, Object> vetBoardAdd(HashMap<String, Object> map) {
-			// TODO Auto-generated method stub
-			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			vetBoard vetboard = boardMapper.selectVetBoard(map);
+			List<vetAnswer> answers = boardMapper.selectVetAnList(map);
 			
-			boardMapper.insertVetBoard(map);
-			
-			resultMap.put("vetBoardId", map.get("vetBoardId"));
+			resultMap.put("info", vetboard);
+			resultMap.put("answerList", answers);
 			resultMap.put("result", "success");
-			
-			return resultMap;
+		}catch (Exception e){
+			 e.printStackTrace();
+			 resultMap.put("result", "fail");
+
 		}
+		return resultMap;
+	}
+	//수의사 게시글 추가
+	public HashMap<String, Object> vetBoardAdd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		boardMapper.insertVetBoard(map);
+		
+		resultMap.put("vetBoardId", map.get("vetBoardId"));
+		resultMap.put("result", "success");
+		
+		return resultMap;
+	}
+	//수의사 게시글 수정
+	public HashMap<String, Object> vetBoardEdit(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.updateVetBoard(map);
+		resultMap.put("result", "success");
+		
+		return resultMap;
+	}
+	//게시글 삭제
+	public HashMap<String, Object> vetBoardRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int num = boardMapper.updateRemoveVetBoard(map);
+		return null;
+	}
 }
 	
