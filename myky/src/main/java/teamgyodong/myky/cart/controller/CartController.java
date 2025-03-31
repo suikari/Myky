@@ -53,8 +53,9 @@ public class CartController {
 	}
 
 	@RequestMapping("/order/orderList.do") 
-	public String orderList(Model model) throws Exception{
+	public String orderList(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		
+		request.setAttribute("map", map);
 		return "cart/order-list";
 	}
 	
@@ -154,7 +155,7 @@ public class CartController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	// orderInfo -- orders 테이블만
+	// orderInfo -- orders 테이블만 (userId, orderId)
 	@RequestMapping(value = "/order/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String orderInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -164,13 +165,33 @@ public class CartController {
 		return new Gson().toJson(resultMap);
 	}
 
-	// orderList -- order_details 테이블까지
+	// orderList -- order_details 테이블까지 (userId, orderId)
 	@RequestMapping(value = "/order/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String orderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = cartService.getOrderList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// orderInfo -- orders 테이블만 모두 조회 (userId)
+	@RequestMapping(value = "/order/AllInfo.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String allOrderInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getAllOrderInfo(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// orderList -- order_details 테이블까지 모두 조회 (userId)
+	@RequestMapping(value = "/order/AllList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String allOrderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getAllOrderList(map);
 		return new Gson().toJson(resultMap);
 	}
 }

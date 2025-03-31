@@ -177,7 +177,10 @@
                     <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
-                    <td v-if="isMembership">{{ getDiscountPrice(item.price) }} 원</td>
+                    <td v-if="isMembership">
+                        <div><del>{{ item.price }} 원</del></div>
+                        <div><strong>{{ getDiscountPrice(item.price) }} 원</strong></div>
+                    </td>
                     <td v-else>{{ item.price }} 원</td>
                     <td>{{ item.quantity }}</td>
                     <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
@@ -195,7 +198,7 @@
                 <td>{{ formattedTotalShippingPrice }} 원</td>
             </tr>
             <tr v-else>
-                <th>총 결제 금액</th>
+                <th>결제 금액</th>
                 <td>{{ formattedTotalPrice }} 원</td>
             </tr>
             <tr>
@@ -211,7 +214,7 @@
                 </td>
             </tr>
             <tr>
-                <th>할인된 금액</th>
+                <th>할인 금액</th>
                 <td>- {{ formattedDiscountAmount }} 원</td>
             </tr>
             <tr>
@@ -325,7 +328,7 @@
                     },
                     orderData: {},
                     orderDetailData: {},
-                    userPoint: {},
+                    userPoint: 0,
                     usedPoint: 0,
                     discountAmount: 0,
                     cartId: "",
@@ -372,7 +375,7 @@
                     } else {
                         finalPrice = this.totalPrice;
                     }
-                    return Math.abs(finalPrice * 0.05);
+                    return Math.floor(finalPrice * 0.05);
                 },
                 formattedRewardPoints() {
                     return this.rewardPoint.toLocaleString();
@@ -407,7 +410,7 @@
                         success: function (data) {
                             console.log("cartList >>> ", data.checkList);
                             self.selectCartItems = data.checkList;
-                            self.cartId = data.checkList.cartId;
+                            self.cartId = data.checkList[0].cartId;
                             console.log("cartId >>> ",self.cartId);
                         }
                     });
@@ -421,8 +424,8 @@
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            console.log(data.point);
-                            self.userPoint = data.point.currentPoint;
+                            self.userPoint = parseInt(data.point.currentPoint);
+                            console.log(self.userPoint);
                         }
                     });
                 },
