@@ -443,14 +443,41 @@
                 margin-bottom: 10px;
             }
 
-            .star-rating {
+            .star-rating .star {
+                display: inline-block;
+                font-size: 20px;
+                color: #ddd;
+                position: relative;
+            }
+
+            .star-rating .star.filled::before {
+                content: "★";
+                color: #FFD700;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            .star-rating .star.half::before {
+                content: "★";
+                color: #FFD700;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 50%;
+                overflow: hidden;
+            }
+
+            /* .star-rating {
                 font-size: 18px;
                 color: #ddd;
             }
 
             .star-rating .star.filled {
                 color: #FFD700;
-            }
+            } */
 
             .review-card-header,
             .review-card-body,
@@ -792,6 +819,14 @@
                             <span v-if="userInfo.membershipFlg !== 'Y'" ></span>
                         </p>
                     </div>
+                    <p>
+                        평균 별점 : 
+                        <span class="star-rating">
+                            <span v-for="n in 5" :key="n" class="star" :class="getStarClass(n)"> ★ </span>
+                        </span>
+                        <span v-if="averageRating > 0">({{ averageRating }} / 5)</span>
+                        <span v-else>별점 없음</span>
+                    </p>
                     <p>제조사 : {{ info.manufacturer }}</p>
                     <p>배송비 : {{ info.shippingFee }}원</p>
                     <div v-if="info.shippingFreeMinimum" class="shipping-note">
@@ -1084,6 +1119,8 @@
                         isSelected: false,
                         selectedReviewId: null,
                         alreadyClicked: {},
+                        averageRating: 0,
+                        
 
                         //탭 관련
                         tabs: [
@@ -1187,8 +1224,26 @@
                                 self.reviewList = data.reviewList;
                                 self.tabs[1].cmtcount = data.totalCount;
                                 self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
+
+                                // ⭐ 평균 별점 계산
+                                const validReviews = self.reviewList.filter(r => !isNaN(r.rating) && Number(r.rating) > 0 && r.deleteYn !== 'Y');
+                                const totalRating = validReviews.reduce((sum, r) => sum + Number(r.rating), 0);
+                                self.averageRating = validReviews.length > 0
+                                    ? (totalRating / validReviews.length).toFixed(1)
+                                    : 0;
                             }
                         });
+                    },
+                    //별점
+                    getStarClass(index) {
+                        const rating = this.averageRating;
+                        if (rating >= index) {
+                            return "filled";
+                        } else if (rating >= index - 0.5) {
+                            return "half";
+                        } else {
+                            return "";
+                        }
                     },
                     //리뷰 도움체크
                     markHelpful(reviewId) {

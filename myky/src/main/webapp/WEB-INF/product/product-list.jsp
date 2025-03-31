@@ -237,11 +237,12 @@
                         총 <strong>{{ totalCount }}</strong>개의 상품이 있습니다.
                     </div>
                     <div class="sort-box">
-                        <select v-model="sortOption" @change="fnSortList" class="sort-select">
+                        <select v-model="sortOption" @change="fnChangeSort" class="sort-select">
                             <option value="">:: 정렬방식 ::</option>
                             <option value="high">높은 가격순</option>
                             <option value="low">낮은 가격순</option>
                             <option value="name">상품명 순</option>
+                            <option value="rating">평점 높은 순</option>
                         </select>
                     </div>
                 </div>
@@ -307,7 +308,9 @@
                         membershipDiscountRate: 0.9,
                         sessionRole: "${sessionRole}",
                         sortOption: "",
-                        totalCount: 0
+                        totalCount: 0,
+                        sort : "",
+                        productList : []
                     };
                 },
                 methods: {
@@ -317,7 +320,8 @@
                             keyword: self.keyword,
                             searchOption: self.searchOption,
                             pageSize: self.pageSize,
-                            page: (self.page - 1) * self.pageSize
+                            page: (self.page - 1) * self.pageSize,
+                            sortOption: self.sortOption 
                         };
                         $.ajax({
                             url: "/product/list.dox",
@@ -329,7 +333,6 @@
                                 self.list = data.list;
                                 self.index = Math.ceil(data.count / self.pageSize);
                                 self.totalCount = data.count;
-                                self.fnSortList();
                             }
                         });
                     },
@@ -350,15 +353,10 @@
                         }
                         self.fnProductList();
                     },
-                    fnSortList() {
+                    fnChangeSort() {
                         let self = this;
-                        if (self.sortOption === "high") {
-                            self.list.sort((a, b) => b.price - a.price);
-                        } else if (self.sortOption === "low") {
-                            self.list.sort((a, b) => a.price - b.price);
-                        } else if (self.sortOption === "name") {
-                            self.list.sort((a, b) => a.productName.localeCompare(b.productName));
-                        }
+                        self.page = 1; 
+                        self.fnProductList();
                     },
                     formatPrice(value) {
                         if (!value && value !== 0) return '';
@@ -373,8 +371,11 @@
                     const params = new URLSearchParams(window.location.search);
                     const keyword = params.get("keyword") || "";
                     const searchOption = params.get("searchOption") || "";
+                    const sortOption = params.get("sortOption") || "";
+                    const page = Number(params.get("page")) || 1;
 
-                    return { keyword, searchOption };
+                    return { keyword, searchOption, sortOption, page };
+
                 },
                 mounted() {
                     this.fnProductList();
