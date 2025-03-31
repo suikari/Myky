@@ -32,6 +32,8 @@ public interface UserMapper {
 
 	List<comment> selectComm(HashMap<String, Object> map);
 
+	int selectCommentCnt(HashMap<String, Object> map);
+
 
 
 }

@@ -253,6 +253,69 @@
                 color: #888;
                 padding-left: 10px;
             }
+
+            /* 기본 링크 스타일 */
+            #index2,
+            #index {
+                text-decoration: none;
+                font-size: 14px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            /* "bgColer2" 클래스: 기본 배경색 */
+            .bgColer2 {
+                background-color: #f0f0f0;
+                color: #333;
+                border-radius: 3px;
+                padding: 5px 10px;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            /* "bgColer" 클래스: 선택된 항목 스타일 */
+            .bgColer {
+                background-color: #007bff;
+                color: white;
+                border-radius: 3px;
+                padding: 5px 10px;
+            }
+
+            /* 페이지네이션 왼쪽과 오른쪽 화살표 */
+            a#prev,
+            a#next {
+                font-size: 16px;
+                font-weight: bold;
+                margin: 0 5px;
+            }
+
+            /* 페이지가 선택된 상태일 때 */
+            .bgColer {
+                background-color: #007bff;
+                /* 선택된 페이지는 파란색 */
+                color: white;
+                /* 글자는 흰색 */
+            }
+
+            /* 페이지가 선택되지 않은 상태일 때 */
+            .bgColer2 {
+                background-color: #f0f0f0;
+                /* 비선택 페이지는 회색 */
+                color: #333;
+                /* 글자는 검정색 */
+            }
+
+            /* "next", "prev" 화살표 hover 효과 */
+            a#prev:hover,
+            a#next:hover {
+                background-color: #007bff;
+                color: white;
+            }
+
+            /* 페이지 번호 호버 효과 */
+            a#index2:hover {
+                background-color: #007bff;
+                color: white;
+            }
         </style>
     </head>
 
@@ -324,92 +387,109 @@
                                     <p>주문 내역이 없습니다.</p>
                                 </div>
                             </span>
-                            <div v-if="activeTab === 'board'">
-                                <div>
-                                    <select v-model="pageSize" @change="fnMyBoardList">
-                                        <option value="5">5개</option>
-                                        <option value="10">10개</option>
-                                    </select>
-                                </div>
-                                <table class="board-table">
-                                    <tr>
-                                        <th>번호</th>
-                                        <th>제목</th>
-                                        <th>작성일</th>
-                                        <th>조회수</th>
-                                    </tr>
-                                    <tr v-for="item in board">
-                                        <template v-if="item.isDeleted == 'N'">
-                                            <td>{{item.boardId}}</td>
-                                            <td><a href="javascript:;" @click="fnView2(item.boardId)">{{item.title}}
-                                                    <span v-if="parseInt(item.commentCount) > 0 && category == 'F'"
-                                                        class="cmtCountColor">({{item.commentCount}})</span>
-                                                </a></td>
-                                            <td>{{item.createdAt}}</td>
-                                            <td>{{item.cnt}}</td>
-                                        </template>
-                                    </tr>
-                                </table>
-                                <div>
-                                    <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
-                                        @click="fnPageMove('pvev')">
-                                        < </a>
-                                            <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
-                                                <span v-if="page == num" class="bgColer">{{num}}</span>
-                                                <span v-else class="bgColer2">{{num}}</span>
-                                            </a>
-                                            <a v-if="page != index" id="index" href="javascript:;" class="bgColer2"
-                                                @click="fnPageMove('next')">
-                                                >
-                                            </a>
-                                </div>
+                            <div v-if="activeTab === 'board'" class="comment-page">
+                                <h3>작성한 게시글 수 : 총 <span style="color: red;">{{boardCnt.cnt}} </span>개</h3>
+                                <template v-if="boardCnt.cnt!=0">
+                                    <div>
+                                        <select v-model="pageSize" @change="fnMyBoardList">
+                                            <option value="5">5개</option>
+                                            <option value="10">10개</option>
+                                        </select>
+
+                                        
+                                    </div>
+                                    <table class="board-table">
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>제목</th>
+                                            <th>작성일</th>
+                                            <th>조회수</th>
+                                        </tr>
+                                        <tr v-for="item in board">
+                                            <template v-if="item.isDeleted == 'N'">
+                                                <td>{{item.boardId}}</td>
+                                                <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}
+                                                        <span v-if="parseInt(item.commentCount) > 0 && category == 'F'"
+                                                            class="cmtCountColor">({{item.commentCount}})</span>
+                                                    </a></td>
+                                                <td>{{item.createdAt}}</td>
+                                                <td>{{item.cnt}}</td>
+                                            </template>
+                                        </tr>
+                                    </table>
+                                    <div>
+                                        <br>
+                                        <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
+                                            @click="fnPageMove('pvev')">
+                                            < </a>
+                                                <a id="index" href="javascript:;" v-for="num in index"
+                                                    @click="fnPage(num)">
+                                                    <span v-if="page == num" class="bgColer">{{num}}</span>
+                                                    <span v-else class="bgColer2">{{num}}</span>
+                                                </a>
+                                                <a v-if="page != index" id="index" href="javascript:;" class="bgColer2"
+                                                    @click="fnPageMove('next')">
+                                                    >
+                                                </a>
+                                    </div>
+                                </template>
+                                
+                                <template v-else >
+                                    <h2>작성된 댓글이 없습니다.</h2>
+                                    <button @click=fnBoardList()>게시글 작성하기</button>
+                                </template>
+
                             </div>
 
                             <div v-if="activeTab === 'comment'" class="comment-page">
-                                <table class="comment-table">
-                                    <thead>
-                                        <tr class="comment-table-header">
-                                            <th class="comment-table-column">게시글</th>
-                                            <th class="comment-table-column">댓글내용</th>
-                                            <th class="comment-table-column">작성일</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="item in commentList" :key="item.commentId" class="comment-table-row">
-                                            <template v-if="item.isDeleted === 'N'">
-                                                <td class="comment-title">{{ item.title }}</td>
-                                                <td class="comment-content">
-                                                    <a href="javascript:;"
-                                                        @click="fnView2(item.boardId, item.commentId)"
-                                                        class="comment-link">
-                                                        {{ item.content }}
-                                                    </a>
-                                                </td>
-                                                <td class="comment-date">{{ item.updatedAt }}</td>
-                                            </template>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!-- <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
-                                    @click="fnPageMove('pvev')">
-                                    < </a>
-                                        <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
-                                            <span v-if="page == num" class="bgColer">{{num}}</span>
-                                            <span v-else class="bgColer2">{{num}}</span>
-                                        </a>
-                                        <a v-if="page != index" id="index" href="javascript:;" class="bgColer2"
-                                            @click="fnPageMove('next')">
-                                            >
-                                        </a> -->
+
+                                <h3>작성한 댓글 수 : 총 <span style="color: red;">{{commCnt}} </span>개</h3>
+                                <template v-if="commCnt!=0">
+                                    <table class="comment-table" v-if="commCnt!=null">
+                                        <thead>
+                                            <tr class="comment-table-header">
+                                                <th class="comment-table-column">게시글</th>
+                                                <th class="comment-table-column">댓글내용</th>
+                                                <th class="comment-table-column">작성일</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in commentList" :key="item.commentId"
+                                                class="comment-table-row">
+                                                <template v-if="item.isDeleted === 'N'">
+                                                    <td class="comment-title">{{ item.title }}</td>
+                                                    <td class="comment-content">
+                                                        <a href="javascript:;"
+                                                            @click="fnView(item.boardId,item.commentId)"
+                                                            class="comment-link">
+                                                            {{ item.content }}
+                                                        </a>
+                                                    </td>
+                                                    <td class="comment-date">{{ item.updatedAt }}</td>
+                                                </template>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <a v-if="page2 != 1" id="index2" href="javascript:;" class="bgColer2"
+                                        @click="fnPageMove2('pvev')">
+                                        < </a>
+                                            <a id="index2" href="javascript:;" v-for="num2 in index2"
+                                                @click="fnCommPage(num2)">
+                                                <span v-if="page2 == num2" class="bgColer">{{num2}}</span>
+                                                <span v-else class="bgColer2">{{num2}}</span>
+                                            </a>
+                                            <a v-if="page2 != index2" id="index2" href="javascript:;" class="bgColer2"
+                                                @click="fnPageMove2('next')">
+                                                >
+                                            </a>
+                                </template>
+                                <template v-else>
+                                    <h2>작성된 댓글이 없습니다.</h2>
+                                    <button @click=fnBoardList()>댓글 작성하기</button>
+                                </template>
                             </div>
                         </section>
-
-
-                        <!-- </template> -->
-
-                        <!-- <template v-if="boardFlg"> -->
-
-                        <!-- </template> -->
                     </div>
                 </div>
             </template>
@@ -456,8 +536,13 @@
                         category: "F",
                         pageSize: 5,
                         page: 1,
+                        boardCnt: 0,
+                        pageSize2: 10,
+                        page2: 1,
                         index: 0,
-                        commentList: {}
+                        index2: 0,
+                        commentList: [],
+                        commCnt: 0
 
                     };
                 },
@@ -550,6 +635,7 @@
                             success: function (data) {
                                 console.log(data);
                                 self.board = data.board;
+                                self.boardCnt = data.count;
                                 if (data.count && data.count.cnt !== undefined) { // 율 코드 문의하기
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                 } else {
@@ -565,9 +651,8 @@
                         let self = this;
                         self.page = num;
                         self.fnMyBoardList();
-
-
                     },
+
                     fnPageMove: function (direction) {
                         let self = this;
                         if (direction == "next") {
@@ -579,7 +664,7 @@
                         self.fnMyBoardList();
                     },
 
-                    fnView2(boardId, commentId) {
+                    fnView(boardId, commentId) {
                         let self = this;
                         if (commentId == null) {
                             commentId = ""
@@ -587,10 +672,13 @@
                         localStorage.setItem("page", self.page);
                         location.href = "/board/view.do?boardId=" + boardId + "&category=" + self.category;
                     },
+
                     fnSeachComm() {
                         var self = this;
                         var nparmap = {
-                            userId: self.userId
+                            userId: self.userId,
+                            pageSize2: self.pageSize2,
+                            page2: (self.page2 - 1) * self.pageSize2 // 페이지 시작점
                         };
                         $.ajax({
                             url: "/user/comment.dox",
@@ -600,8 +688,31 @@
                             success: function (data) {
                                 console.log(data);
                                 self.commentList = data.comment;
+                                self.commCnt = data.count2;
+                                self.index2 = Math.ceil(data.count2 / self.pageSize2);
+                                console.log(self.index2);
                             }
                         });
+                    },
+
+                    fnCommPage: function (num2) {
+                        let self = this;
+                        self.page2 = num2;
+                        self.fnSeachComm();
+                    },
+
+                    fnPageMove2: function (direction) {
+                        let self = this;
+                        if (direction == "next") {
+                            self.page2++;
+                        } else {
+                            self.page2--;
+                        }
+                        self.fnSeachComm();
+                    },
+
+                    fnBoardList() {
+                        location.href = "/board/list.do"
                     }
                 },
 
