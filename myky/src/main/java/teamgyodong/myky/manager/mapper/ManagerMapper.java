@@ -32,6 +32,7 @@ public interface ManagerMapper {
 	
 	List<mUser> selectAllUserList(HashMap<String, Object> map);
 	List<Vet> selectAllVetList(HashMap<String, Object> map);
+	List<mUser> selectAllnotVetList(HashMap<String, Object> map);
 
 	
 	mPay selectLogFristJoinBuy(HashMap<String, Object> map);
@@ -47,6 +48,11 @@ public interface ManagerMapper {
 	
 	int deleteBoardList(HashMap<String, Object> map);
 	int deleteBoardCmtList(HashMap<String, Object> map);
+
+	
+	
+	
+	int updateVet(HashMap<String, Object> map);
 
 	int updateUser(HashMap<String, Object> map);
 
