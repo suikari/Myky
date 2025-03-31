@@ -10,10 +10,11 @@
 
     <title>Vue3 레이아웃 예제</title>
 	<script src="/js/vue3b.js"></script>
-	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
-	<script src="/js/main.js"></script>
+<!-- 	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
+ -->	<script src="/js/main.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		
     <style>
 		    
@@ -350,17 +351,13 @@
 				 <div class="search-container">
 				    <button class="close-button" @click="toggleSearch">&times;</button>
 				    <div class="search_box">
-				      <input type="text" placeholder="검색어를 입력해주세요" v-model="searchQuery" @keyup.enter="fnSearch()"   class="search-input" />
-				      <button @click="fnSearch" class="search-button">🔍</button>
+				      <input type="text" placeholder="검색어를 입력해주세요" v-model="searchQuery" @keyup.enter="fnSearch('')"   class="search-input" />
+				      <button @click="fnSearch('')" class="search-button">🔍</button>
 				    </div>
 				    <div class="popular-search">
 				      <h3 class="title">인기 검색어</h3>
 				      <div class="keyword-list">
-				        <span Click="" class="keyword">강아지</span>
-				        <span class="keyword">고양이</span>
-				        <span class="keyword">패드</span>
-				        <span class="keyword">사료</span>
-				        <span class="keyword">간식</span>
+				        <span v-for="keyword in searchList" @Click="fnSearch(keyword.SearchTerm)" class="keyword">{{keyword.SearchTerm}}</span>
 				      </div>
 				    </div>
 				  </div>
@@ -418,6 +415,7 @@
                         sessionId   : '${sessionId}' || '' ,
                         sessionName : '${sessionName}',
                         sessionRole : '${sessionRole}',
+                        searchList : {},
                         showSearch: false,
                         searchQuery: '',
                     };
@@ -465,7 +463,25 @@
                         });
                         
                 		
-                	},                	
+                	},        
+                	fnSearchList () {
+                		
+                		var self = this;
+                        var nparmap = { };
+                        
+                       	$.ajax({
+                    		url: "/admin/searchList.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("12",data);
+                    			self.searchList = data.Search;
+
+                    		}
+                    	
+                    	});
+                	},               	
                     fnLogin() {
                         //window.location.href = "/user/login.do";
                         //window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname);
@@ -474,9 +490,14 @@
                     toggleSearch() {
                         this.showSearch = !this.showSearch;
                     },
-                    fnSearch() {
+                    fnSearch(query) {
                     	let self = this;
-                      console.log("검색어:", self.searchQuery);
+                    	
+                    	if ( query != '' ){
+                    		self.searchQuery = query;
+                    	}
+                    	
+                        console.log("검색어:", self.searchQuery);
                       
                       if ( self.searchQuery === '' ) {
                     	  alert("검색어를 입력해주세요.")
@@ -515,6 +536,9 @@
                 mounted() {
                 	let self = this;
                 	self.fnMenuList();
+                	self.fnSearchList();
+
+                	
                 	//console.log(self.sessionId);
                 	//console.log(self.sessionName);
                 	//console.log(self.sessionRole);

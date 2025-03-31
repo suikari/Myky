@@ -232,6 +232,95 @@
 		    padding: 5px 10px;
 		    border-radius: 5px;
 		}
+		
+		
+/* 수정 폼 스타일 - 부트스트랩 사용 */
+.edit-form {
+    display: flex;
+    gap: 15px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 각 입력 요소가 가로로 꽉 차게 하기 위해 col 사용 */
+.edit-form .col {
+    flex: 1;  /* 모든 항목들이 고르게 넓어지도록 설정 */
+}
+
+/* 버튼 영역을 오른쪽 끝에 배치 */
+.edit-form .col.d-flex.justify-content-end {
+    flex: 0;
+}
+
+/* 스위치 토글 크기 */
+.form-check-input {
+    width: 40px;
+    height: 20px;
+}
+/* 버튼 글자 크기 맞추기 */
+.custom-btn {
+    font-size: 14px; /* 글자 크기를 텍스트에 맞게 조정 */
+    padding: 5px 15px; /* 적당한 여백을 설정 */
+    text-align: center;
+}
+
+		/* 페이지 버튼 기본 스타일 */
+		.board-page-btn {
+		    min-width: 40px;
+		    padding: 8px 12px;
+		    margin: 0 4px;
+		    border-radius: 5px;
+		    font-size: 14px;
+		}
+		
+		/* 숫자 페이지 버튼 스타일 */
+		.board-page-btn:not(.prev-next-btn):not(.active) {
+		    background-color: #f1f5f9;
+		    color: #374151;
+		    border-color: #d1d5db;
+		}
+		
+		/* 현재 페이지 버튼 강조 */
+		.board-page-btn.active {
+		    background-color: #2563eb;
+		    color: white;
+		    border-color: #2563eb;
+		}
+		
+		/* 이전/다음 페이지 버튼 스타일 */
+		.board-page-btn.prev-next-btn {
+		    background-color: #ffffff;
+		    color: #374151;
+		    border-color: #d1d5db;
+		}
+		
+		.board-page-btn.prev-next-btn:hover {
+		    background-color: #f1f5f9;
+		    color: #2563eb;
+		}
+		
+		/* 이전/다음 페이지 아이콘 크기 */
+		.board-page-btn i {
+		    font-size: 18px;
+		}
+		/* 선택 삭제 버튼 스타일 */
+		.board-delete-btn {
+		    min-width: 120px;
+		    padding: 8px 12px;
+		    font-size: 14px;
+		    border-radius: 5px;
+		}
+		
+		/* 버튼 비활성화 스타일 */
+		.board-delete-btn:disabled {
+		    background-color: #e5e7eb;
+		    color: #9ca3af;
+		    cursor: not-allowed;
+		}
+
+    
     </style>
     
 </head>
@@ -245,8 +334,37 @@
 
 
 				<div class="card p-3">
-	                <div class="card-header">등록된 회원</div>
-	                
+	               	 <div class="row g-2 align-items-center mb-3">
+						    <!-- N개씩 보기 -->
+						    <div class="col-auto">
+						        <select v-model="pageSize" class="form-select board-select" @change="fnMainList">
+						            <option value="5">5개씩</option>
+						            <option value="10">10개씩</option>
+						            <option value="15">15개씩</option>
+						            <option value="20">20개씩</option>
+						        </select>
+						    </div>
+						
+						    <!-- 검색 옵션 -->
+						    <div class="col-auto">
+						        <select v-model="searchOption" class="form-select">
+						            <option value="all">전체</option>
+						            <option value="title">제목</option>
+						            <option value="userId">작성자</option>
+						        </select>
+						    </div>
+						
+						    <!-- 검색어 입력 -->
+						    <div class="col">
+						        <input v-model="keyword" @keyup.enter="fnMainList" class="form-control board-search" placeholder="🔍 검색어 입력" />
+						    </div>
+						
+						    <!-- 검색 버튼 -->
+						    <div class="col-auto">
+						        <button class="btn btn-primary board-search-btn" @click="fnBoardSearch">검색</button>
+						    </div>
+					</div>
+						
 	                <table class="table member-table">
 	                    <thead>
 	                        <tr>
@@ -256,12 +374,13 @@
 	                            <th>이메일</th>
 	                            <th>가입일</th>
 	                            <th>상태</th>
-								<th>멤버쉽<th>
+								<th>멤버쉽</th>
 	                            <th>관리</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
-	                        <tr v-for="(member, index) in members" :key="member.id">
+	                    	<template v-for="(member, index) in members" >
+	                        <tr >
 	                            <td>{{ index + 1 }}</td>
 	                            <td>{{ member.userName }}</td>
 								<td>{{ member.nickName }}</td>								
@@ -278,12 +397,61 @@
 								    </span>
 								</td>
 	                            <td>
-	                                <button class="btn-edit me-2">수정</button>
-	                                <button class="btn-delete">삭제</button>
+           							<button class="btn-edit me-2" @click="fnEdit(member.userId)">수정</button>
+	                                <!-- <button class="btn-delete">삭제</button> -->
 	                            </td>
 	                        </tr>
+	                        
+                            <!-- 토글되는 수정 입력란 -->
+							<tr v-if="selectedMemberId === member.userId">
+								<td colspan="8">
+								    <div class="edit-form d-flex align-items-center p-3 border rounded">
+								        <!-- 이름 입력 필드 -->
+								        <div class="col">
+								            <label for="userName" class="form-label">이름:</label>
+								            <input type="text" id="userName" v-model="editData.userName" class="form-control">
+								        </div>
+										<!-- 탈퇴 여부 토글 스위치 -->
+								        <div class="col-auto d-flex align-items-center">
+								            <label for="deleteYn" class="form-label me-2">회원 상태:</label>
+								            <div class="form-check form-switch">
+								                <input class="form-check-input" type="checkbox" id="deleteYn" v-model="editData.DeleteYn" 
+								                    true-value="N" false-value="Y">
+								            </div>
+								        </div>
+								
+								        <!-- 저장 및 취소 버튼 -->
+								        <div class="col-auto d-flex justify-content-end">
+								            <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
+								            <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
+								        </div>
+								    </div>
+								</td>
+						    </tr> 
+    						</template>
 	                    </tbody>
 	                </table>
+	                
+					<div class="d-flex justify-content-center align-items-center mt-3">
+					    <!-- 페이지네이션 버튼 -->
+					    <div>
+					        <!-- 이전 페이지 버튼 -->
+					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
+					            <i class="bi bi-chevron-left"></i>
+					        </a>
+					
+					        <!-- 페이지 번호 -->
+					        <a href="javascript:;" v-for="num in index" @click="fnPage(num)" class="btn btn-outline-secondary board-page-btn" :class="{ 'active': page === num }">
+					            {{ num }}
+					        </a>
+					
+					        <!-- 다음 페이지 버튼 -->
+					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="page != index">
+					            <i class="bi bi-chevron-right"></i>
+					        </a>
+					    </div>
+					</div>
+					
 	            </div>
 
 
@@ -300,10 +468,20 @@
             const app = Vue.createApp({
             	 data() {
                      return {
+ 	                    index: 0,
 						menu : '',
 						submenu : '',  
-						members : []
-               
+						members : [],
+						selectedMemberId : null,
+				        editData: {
+				            userName : '',
+				            DeleteYn : '',
+				        },
+	                    searchOption: 'userId',
+	                    page: 1,
+	                    pageSize: 5,
+	                    keyword: '',
+
                      };
                  },
                 computed: {
@@ -313,6 +491,10 @@
                 	fnMainList : function() {
                     	var self = this;
                     	var nparmap = {
+                                searchOption: self.searchOption,
+                                page: (self.page - 1) * self.pageSize,
+                                pageSize: self.pageSize,
+                                keyword: self.keyword,
                     	};
                     	$.ajax({
                     		url: "/admin/memberList.dox",
@@ -322,11 +504,79 @@
                     		success: function (data) {
                     			console.log("main",data);
 								self.members = data.User;
-                    			                    				
+                                if (data.count && data.count.cnt !== undefined) {
+                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                    console.log("1!", self.index);
+
+                                } else {
+                                    self.index = 0;
+                                    console.warn("count 정보 없음!", data);
+                                }		
                     		}
                     	});
                     },
-                	
+                    fnEdit(userId) {
+                    	var self = this;
+
+                    	console.log("1",userId);
+                        if (self.selectedMemberId === userId) {
+                        	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
+                        	console.log("2",userId);
+
+                        } else {
+                            const member = self.members.find(m => m.userId === userId);
+                            self.editData = { ...member };  // 수정할 데이터 채우기
+                            self.selectedMemberId = userId;
+                        	console.log("3",userId);
+
+                        }
+                    },
+                    fnSave () {
+                    	var self = this;
+                    	var nparmap = {
+                    			userId : self.selectedMemberId,
+    				            userName : self.editData.userName ,
+    				            DeleteYn : self.editData.DeleteYn,
+                    	};
+                    	$.ajax({
+                    		url: "/admin/updateUser.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			//console.log("main",data);
+                    			alert("수정 완료");
+                            	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
+                				self.fnMainList();
+                    		}
+                    	});
+                    },
+                    fnView(boardId) {
+                        let self = this;
+                        localStorage.setItem("page", self.page);
+                        location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
+                    },
+                    fnPage(num) {
+                        this.page = num;
+                        this.fnMainList();
+                    },
+                    fnPageMove(direction) {
+                        if (direction === "next") this.page++;
+                        else this.page--;
+                        this.fnMainList();
+                    },
+                    fnOrder(orderKey) {
+                        if (this.orderKey !== orderKey) this.orderType = "";
+                        this.orderKey = orderKey;
+                        this.orderType = this.orderType === "ASC" ? "DESC" : "ASC";
+                        this.fnMainList();
+                    },
+                    fnBoardSearch : function(){
+                        let self = this;
+                        let pageCnt = 1;
+                        self.page = pageCnt;
+                        self.fnMainList();
+                    },
                 	
                 },
                 mounted() {
