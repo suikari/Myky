@@ -56,7 +56,7 @@
 	        <when test="sortOption == 'name'">
 	            ORDER BY P.PRODUCT_NAME ASC
 	        </when>
-	        <when test="sortOption == 'rating'">
+	        <when test="sortOption == 'rating'">    
 	            ORDER BY AVG_RATING DESC
 	        </when>
 	        <otherwise>
