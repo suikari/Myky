@@ -25,6 +25,8 @@ public class vetBoard {
 	private String commentCount;
 	private String cnt;
 	
+	private String currentPoint;
+	
     // ✅ 추가
     private List<comment> replies;
 

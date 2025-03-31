@@ -84,7 +84,7 @@ public class BoardController {
 		
         return "board/board-vetBoardView";
     }
-	//게시글 추가
+	//수의사 게시판 게시글 추가
 	@RequestMapping("/board/vetBoardAdd.do") 
     public String vetBoardAdd(Model model) throws Exception{
 
@@ -347,7 +347,7 @@ public class BoardController {
 		
 		return new Gson().toJson(resultMap);
 	}
-	//게시글 추가
+	//수의사 게시판 게시글 추가
 	@RequestMapping(value = "board/vetBoardAdd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String vetBoardAdd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
