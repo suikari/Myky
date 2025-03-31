@@ -395,8 +395,9 @@
                                             <option value="5">5개</option>
                                             <option value="10">10개</option>
                                         </select>
+                                        <input v-model="keyword2" placeholder="검색어" @keyup.enter="fnMyBoardList()">
+                                        <button @click="fnMyBoardList()">검색</button>
 
-                                        
                                     </div>
                                     <table class="board-table">
                                         <tr>
@@ -444,7 +445,9 @@
                             <div v-if="activeTab === 'comment'" class="comment-page">
 
                                 <h3>작성한 댓글 수 : 총 <span style="color: red;">{{commCnt}} </span>개</h3>
-                                <template v-if="commCnt!=0">
+                                    <template v-if="commCnt!=0">
+                                    <input v-model="commKeyword" placeholder="검색어" @keyup.enter="fnSeachComm()">
+                                    <button @click="fnSeachComm()">검색</button>
                                     <table class="comment-table" v-if="commCnt!=null">
                                         <thead>
                                             <tr class="comment-table-header">
@@ -533,6 +536,7 @@
                         board: [],
                         searchOption: "",
                         keyword: "",
+                        keyword2:"",
                         category: "F",
                         pageSize: 5,
                         page: 1,
@@ -542,7 +546,8 @@
                         index: 0,
                         index2: 0,
                         commentList: [],
-                        commCnt: 0
+                        commCnt: 0,
+                        commKeyword:""
 
                     };
                 },
@@ -620,8 +625,9 @@
                     fnMyBoardList() {
                         var self = this;
                         var nparmap = {
-                            searchOption: "userId",
+                            searchOption: "userId2",
                             keyword: self.userId,
+                            keyword2: self.keyword2,
                             category: self.category,
                             pageSize: self.pageSize,
                             page: (self.page - 1) * self.pageSize // 페이지 시작점
@@ -678,8 +684,10 @@
                         var nparmap = {
                             userId: self.userId,
                             pageSize2: self.pageSize2,
-                            page2: (self.page2 - 1) * self.pageSize2 // 페이지 시작점
+                            page2: (self.page2 - 1) * self.pageSize2, // 페이지 시작점
+                            commKeyword: self.commKeyword
                         };
+                        console.log(nparmap);
                         $.ajax({
                             url: "/user/comment.dox",
                             dataType: "json",

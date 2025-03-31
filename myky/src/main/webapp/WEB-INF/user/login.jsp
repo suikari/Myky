@@ -188,7 +188,9 @@
 							if (data.result == "success") {
 								alert(data.user.userName + "님 환영해여!") //service에서 user로 정의 했으니 멤버로..
 								location.href = self.reUrl;
-							} else {
+							} else if(data.result == "suspended"){
+								alert("정지 혹은 탈퇴한 회원입니다.")
+							}else {
 								alert("아이디/패스워드 확인하세요.")
 							}
 						}
