@@ -332,6 +332,16 @@
                                     self.fnQuill();
 				        	}
 				        });
+                         $.ajax({
+				        	url:"/board/vetBoardEdit.dox",
+				        	dataType:"json",	
+				        	type : "POST", 
+				        	data : nparmap,
+				        	success : function(data) { 
+                                alert("수정되었습니다.");
+                                    location.href="/board/vetBoardList.do";
+				        	}
+				        });
                     },
                     fnEdit : function (){
                         var self = this;
