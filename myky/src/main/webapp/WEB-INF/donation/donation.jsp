@@ -440,7 +440,26 @@
                         }
                     });
                 },
-                fnMembership:function(){
+                fnValidMembership:function(){
+                    var self = this;
+                    var nparmap = {
+                        userId: self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/membership/active.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("validMembership >>> ", data.result);
+                            if(data.result === "success"){
+                                self.fnMembership();
+                                self.isMembership = true;
+                            } 
+                        }
+                    });
+                },
+                fnMembership(){
                     var self = this;
                     var nparmap = {
                         userId: self.userInfo.userId
@@ -451,10 +470,9 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("membership >>> ", data.info);
-                            if(data.result == "success"){
+                            console.log("membershipInfo >>> ", data.info);
+                            if(data.result === "success"){
                                 self.membership = data.info;
-                                self.isMembership = true;
                             } 
                         }
                     });
