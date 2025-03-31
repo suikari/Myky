@@ -113,8 +113,8 @@ public class ProductServiceImpl implements ProductService {
 	    if (check > 0) {
 	        resultMap.put("result", "fail");
 	        resultMap.put("message", "이미 추천한 리뷰입니다.");
-	    } else {
-	        productMapper.updateHelpCnt(map);   // 리뷰 테이블에서 helpCnt + 1
+	    } else { 
+	        productMapper.updateHelpCnt(map);  
 	        resultMap.put("result", "success");
 	    }
 
