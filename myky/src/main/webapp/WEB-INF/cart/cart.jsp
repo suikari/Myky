@@ -47,13 +47,18 @@
                     <td v-if="item.filepath"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
-                    <td>{{ item.price }} 원</td>
+                    <td v-if="isMembership">
+                        <div><del>{{ item.price }} 원</del></div>
+                        <div><strong>{{ getDiscountPrice(item.price) }} 원</strong></div>
+                    </td>
+                    <td v-else>{{ item.price }} 원</td>
                     <td>
                         <button class="quantityBtn" @click="updateQuantity(index, -1)">-</button>
                         {{ item.quantity }}
                         <button class="quantityBtn" @click="updateQuantity(index, 1)">+</button>
                     </td>
-                    <td>{{ (item.price * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
+                    <td v-else>{{ (item.price * item.quantity) }} 원</td>
                     <td><button class="removeBtn" @click="removeItem(index)">삭제</button></td>
                 </tr>
             </tbody>
@@ -75,9 +80,11 @@
                     <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
-                    <td>{{ item.price }} 원</td>
+                    <td v-if="isMembership">{{ getDiscountPrice(item.price) }} 원</td>
+                    <td v-else>{{ item.price }} 원</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ (item.price * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
+                    <td v-else>{{ (item.price * item.quantity) }} 원</td>
                 </tr>
             </tbody>
         </table>
@@ -90,7 +97,7 @@
         </h4>
         <p>(30,000원 이상 무료배송)</p>
         <h2 v-if="totalPrice < 30000">
-            <span>총 결제 금액: {{ formattedFinTotalShippingPrice }} 원</span>
+            <span>총 결제 금액: {{ formattedTotalShippingPrice }} 원</span>
         </h2>
         <h2 v-else>
             <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
@@ -121,17 +128,17 @@
             },
             computed: {
                 totalPrice() {
-                    return this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0);
                 },
                 totalShippingPrice() {
-                    return (this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0))+2000;
+                    return (this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0))+2000;
                 },
                 formattedTotalPrice() {
                     return this.totalPrice.toLocaleString();
                 },
-                formattedFinTotalShippingPrice() {
+                formattedTotalShippingPrice() {
                     return this.totalShippingPrice.toLocaleString();
-                },
+                }
             },
             methods: {
                 fnUserInfo(){
@@ -203,12 +210,18 @@
                         data: params,
                         success: function (data) {
                             console.log("멤버십 활성 여부 >>> ",data.result);
-                            if(data.membership != null){
+                            if(data.result === "success"){
                                 self.isMembership = true;
+
                             }
-                            // 멤버십 활성 여부까지 확인 가능. html 부분 변경해야함
                         }
                     });
+                },
+                getDiscountPrice(price){
+                    return Math.round(price * 0.9);
+                },
+                getTotalPrice(item) {
+                    return item.quantity * (this.isMembership ? this.getDiscountPrice(item.price) : item.price);
                 },
                 updateQuantity(index, change) {
                     let self = this;

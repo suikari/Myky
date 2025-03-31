@@ -177,9 +177,11 @@
                     <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
-                    <td>{{ item.price }} 원</td>
+                    <td v-if="isMembership">{{ getDiscountPrice(item.price) }} 원</td>
+                    <td v-else>{{ item.price }} 원</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ (item.price * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
+                    <td v-else>{{ (item.price * item.quantity) }} 원</td>
                 </tr>
             </tbody>
         </table>
@@ -190,18 +192,18 @@
             </tr>
             <tr v-if="totalPrice < 30000">
                 <th>총 결제 금액</th>
-                <td>{{ formattedFinTotalShippingPrice }} 원</td>
+                <td>{{ formattedTotalShippingPrice }} 원</td>
             </tr>
             <tr v-else>
                 <th>총 결제 금액</th>
                 <td>{{ formattedTotalPrice }} 원</td>
             </tr>
             <tr>
-                <th>보유 적립금</th>
+                <th>보유 포인트</th>
                 <td>{{ formattedUserPoints }} 원</td>
             </tr>
             <tr>
-                <th>사용할 적립금</th>
+                <th>사용할 포인트</th>
                 <td>
                     <input type="text" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
                     <button @click="useAllPoints">전체 사용</button>
@@ -213,8 +215,8 @@
                 <td>- {{ formattedDiscountAmount }} 원</td>
             </tr>
             <tr>
-                <th></th>
-                <td></td>
+                <th>결제 후 적립되는 포인트</th>
+                <td>{{ formattedRewardPoints }}</td>
             </tr>
         </table>
 
@@ -327,15 +329,16 @@
                     usedPoint: 0,
                     discountAmount: 0,
                     cartId: "",
-                    paid_amount:0
+                    paid_amount:0,
+                    isMembership:false
                 };
             },
             computed: {
                 totalPrice() {
-                    return this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0);
                 },
                 totalShippingPrice() {
-                    return this.selectCartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 2000;
+                    return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0) + 2000;
                 },
                 finalPrice() {
                     let finalPrice = 0;
@@ -357,12 +360,23 @@
                 formattedDiscountAmount() {
                     return this.discountAmount.toLocaleString();
                 },
-                formattedFinTotalShippingPrice() {
+                formattedTotalShippingPrice() {
                     return this.totalShippingPrice.toLocaleString();
                 },
                 formattedFinalPrice() {
                     return this.finalPrice.toLocaleString();
-                }
+                },
+                rewardPoint(){
+                    if (this.totalPrice < 30000) {
+                        finalPrice = this.totalShippingPrice;
+                    } else {
+                        finalPrice = this.totalPrice;
+                    }
+                    return Math.abs(finalPrice * 0.05);
+                },
+                formattedRewardPoints() {
+                    return this.rewardPoint.toLocaleString();
+                },
             },
             methods: {
                 fnUserInfo() {
@@ -378,6 +392,7 @@
                             self.loadSelectCart();
                             self.setDefaultAddress();
                             self.fnGetPoint();
+                            self.fnGetMembership();
                         }
                     });
                 },
@@ -392,8 +407,8 @@
                         success: function (data) {
                             console.log("cartList >>> ", data.checkList);
                             self.selectCartItems = data.checkList;
-                            self.cartId = self.selectCartItems[0].cartId;
-                            console.log(self.cartId);
+                            self.cartId = data.checkList.cartId;
+                            console.log("cartId >>> ",self.cartId);
                         }
                     });
                 },
@@ -410,6 +425,29 @@
                             self.userPoint = data.point.currentPoint;
                         }
                     });
+                },
+                fnGetMembership: function () {
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/membership/active.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            console.log("멤버십 활성 여부 >>> ",data.result);
+                            if(data.result === "success"){
+                                self.isMembership = true;
+
+                            }
+                        }
+                    });
+                },
+                getDiscountPrice(price){
+                    return Math.round(price * 0.9);
+                },
+                getTotalPrice(item) {
+                    return item.quantity * (this.isMembership ? this.getDiscountPrice(item.price) : item.price);
                 },
                 applyPoints() {
                     let self = this;
