@@ -339,7 +339,7 @@
                     </div>
                 </div>
                 <div>
-                    포인트 {{info.point}}
+                    포인트 {{data.currentPoint}}
                 </div>
                 <div class="view-label">CONTENT</div>
                 <div class="view-boxContent" v-html="info.content"></div>
@@ -399,13 +399,13 @@
                         page: "${param.page}",
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
-                        userId : {}, 
                         nickName : "",
                         content : "",
                         updatedTime : "",
                         createdTime : "",
                         status : "",
                         answerList:[],
+                        data : {},
             
                     };
                 },
@@ -426,11 +426,28 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-				        		console.log(data);
+				        		console.log("dpgpdgpd",data.info);
                                 self.info = data.info;
                                 self.answerList = data.answerList;
+                                self.getCurrent();
 				        	}
 				        });
+                    },
+                    getCurrent : function(){
+                        let self = this;
+                        let nparmap = {
+                            userId : self.info.userId,
+                        }
+                        $.ajax({
+                            url:"/point/current.dox",
+                            dataType:"json",	
+                            type : "POST", 
+                            data : nparmap,
+                            success : function(data) {
+                                console.log("ㅁㅇㄴㄹ", self.info.userId)
+                                self.data = data.point;
+                            }
+                        });
                     },
                     fnBack : function (info) {
                         let self = this;
@@ -463,6 +480,7 @@
                                 alert("삭제되었습니다!");
                             }
                         });
+                    }
                 },
                 mounted() {
                     let self = this;

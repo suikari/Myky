@@ -182,7 +182,7 @@
                         현재 point 
                         {{currentPoint.currentPoint}}개
                     </div>
-                    <input v-model="usedPoint">개 사용
+                    <input v-model="usedPoint" @input="fnCheck">개 사용
                 </div>
             </div>
             <div class="title-label">CONTENT</div>
@@ -200,7 +200,7 @@
 </body>
 </html>
 <script>    
-    
+        
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
                 data() {
@@ -213,6 +213,7 @@
                        point : "",
                        currentPoint : "",
                        usedPoint : "",
+                       remark : "수의사 상담 point 차감"
                     };
                 },
                 computed: {
@@ -221,17 +222,29 @@
                 methods: {
                     fnSave(){
                         let self = this;
+                        let usedPoint = -Math.abs(parseInt(self.usedPoint));
+
+                        
+                        if(!usedPoint){
+                            alert("숫자만 입력해주세요");
+                            return;
+                        }
                         let nparmap = {
                             title : self.title,
                             content : self.content,
                             userId : self.sessionId,
-                            usedPoint : self.usedPoint,
+                            points : self.usedPoint,
                         }
-
-                        let point = '';
+                        let pointUsed = {
+                            userId : self.sessionId,
+                            usedPoint : usedPoint,
+                            remarks : self.remark,
+                        }
+                        
                         let nparmap1 = {
                             userId : self.sessionId,
                         };
+
                         $.ajax({
 				        	url:"/point/current.dox",
 				        	dataType:"json",	
@@ -240,12 +253,9 @@
 				        	success : function(data) { 
 				        		console.log("11",data);
                                 let currentPoint = data.point;
-                                let usedPoint = self.usedPoint;
-                                usedPoint = data.point;
 
-                                if(currentPoint < usedPoint){
+                                if(currentPoint < self.usedPoint){
                                     alert("포인트가 부족합니다.");
-            
                                     return;
                                 }
 				        	}
@@ -261,7 +271,7 @@
                                         url:"/point/used.dox",
                                         dataType:"json",	
                                         type : "POST", 
-                                        data : nparmap,
+                                        data : pointUsed,
                                         success : function(data) { 
                                             console.log("11",data);
                                             location.href = "/board/vetBoardList.do"
@@ -272,6 +282,11 @@
                                 } 
                             },
 				        });                        
+                    },
+                    fnCheck : function (){
+                        let self = this;
+                        self.usedPoint = self.usedPoint.replace(/[^0-9]/g,'');
+
                     },
                     getPoints : function(){
                         let self = this;

@@ -643,9 +643,22 @@
                     },
                     fnCreate() {
                     	let self = this;
-                        console.log("저장할 Vet 데이터:", this.newVet);
-                        // 여기에 AJAX로 서버에 저장하는 로직 추가
-                        this.isCreating = false; // 저장 후 폼 닫기
+                        console.log("저장할 Vet 데이터:", self.newVet);                        
+                        nparmap =  self.newVet;
+                    	$.ajax({
+                    		url: "/admin/insertVet.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("main1",data);
+                    			
+                    		}
+                    	});
+                    	
+                        self.isCreating = false; // 저장 후 폼 닫기
+    					self.fnMainList();
+
                     }
                     
                     
@@ -659,7 +672,6 @@
                     self.submenu = params.get("submenu") || "1";
 					self.fnMainList();
 
-                	
                 }
             });
             
