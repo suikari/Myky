@@ -91,6 +91,17 @@ public class ManagerController {
 	}
 	
 	// centerList
+	@RequestMapping(value = "/admin/notVetList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String notVetList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectAllnotVetList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+	// centerList
 	@RequestMapping(value = "/admin/LogList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String LogList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -162,5 +173,18 @@ public class ManagerController {
 		resultMap = managerService.updateUser(map);
 		return new Gson().toJson(resultMap);
 	}
+	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/updateVet.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String updateVet(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.updateVet(map);
+		return new Gson().toJson(resultMap);
+	}
+		
+	
 	
 }

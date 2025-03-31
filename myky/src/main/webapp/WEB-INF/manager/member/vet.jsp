@@ -386,8 +386,8 @@
 	                            <td>{{ member.email }}</td>
 	                            <td>{{ member.createdAt }}</td>
 	                            <td>
-	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
-	                                    {{ member.userId !== '' ? '미연동' : '활동 중' }}
+	                                <span :class="member.userId ? 'status-active' : 'status-inactive'">
+	                                    {{ member.userId ?'활동 중' : '미연동' }}
 	                                </span>
 	                            </td>
 	                            <td>
@@ -398,15 +398,15 @@
 	                        
                             <!-- 토글되는 수정 입력란 -->
 							<tr v-if="selectedMemberId === member.vetNumber">
-								<td colspan="8">
-								    <div class="edit-form d-flex align-items-center p-3 border rounded">
-								        <!-- 이름 입력 필드 -->
-								        <div class="col">
-								            <label for="userName" class="form-label">이름:</label>
-								            <input type="text" id="userName" v-model="editData.name" class="form-control">
-								        </div>
-								        
-							            <!-- 사용자 ID 셀렉트 박스 -->
+							    <td colspan="8">
+							        <div class="edit-form d-flex align-items-center p-3 border rounded">
+							            <!-- 이름 입력 필드 -->
+							            <div class="col">
+							                <label for="userName" class="form-label">이름:</label>
+							                <input type="text" id="userName" v-model="editData.name" class="form-control">
+							            </div>
+							
+							            <!-- 사용자 ID 셀렉트 박스 및 연동해제 버튼 -->
 							            <div class="col-auto d-flex align-items-center">
 							                <label for="userId" class="form-label me-2">사용자 ID:</label>
 							                <select v-model="editData.userId" id="userId" class="form-select">
@@ -414,24 +414,27 @@
 							                        {{ user.userId }}
 							                    </option>
 							                </select>
+							                <button class="btn btn-danger ms-2 custom-btn" @click="editData.userId = ''">
+							                    연동해제
+							                </button>
 							            </div>
-								
-								        <!-- 저장 및 취소 버튼 -->
-								        <div class="col-auto d-flex justify-content-end">
-								            <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
-								            <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
-								        </div>
-								    </div>
-								</td>
-						    </tr> 
+							
+							            <!-- 저장 및 취소 버튼 -->
+							            <div class="col-auto d-flex justify-content-end">
+							                <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
+							                <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
+							            </div>
+							        </div>
+							    </td>
+							</tr>
     						</template>
 	                    </tbody>
 	                </table>
 						                
 					<div class="d-flex justify-content-between align-items-center mt-3">
-					    <!-- 생성 버튼 왼쪽에 배치 -->
-					    <div>
-					        <button class="btn btn-success" @click="fnCreate">생성</button>
+				    <!-- 생성 버튼 왼쪽에 배치 -->
+				    <div>
+					        <button class="btn btn-success" @click="isCreating = !isCreating">생성</button>
 					    </div>
 					
 					    <!-- 페이지네이션 버튼 중앙에 배치 -->
@@ -453,6 +456,41 @@
 					    </div>
 					</div>
 					
+					<!-- Vet 등록 창 (토글) -->
+					<div v-if="isCreating" class="edit-form d-flex flex-column p-3 mt-3 border rounded">
+					    <div class="d-flex gap-3">
+					        <div class="col">
+					            <label for="vetId" class="form-label">Vet ID:</label>
+					            <input type="text" id="vetId" v-model="newVet.vetId" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="vetName" class="form-label">이름:</label>
+					            <input type="text" id="vetName" v-model="newVet.name" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="vetEmail" class="form-label">이메일:</label>
+					            <input type="email" id="vetEmail" v-model="newVet.email" class="form-control">
+					        </div>
+					    </div>
+					
+					    <div class="d-flex gap-3 mt-3">
+					        <div class="col">
+					            <label for="vetPhone" class="form-label">전화번호:</label>
+					            <input type="text" id="vetPhone" v-model="newVet.phone" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="vetHospital" class="form-label">병원이름:</label>
+					            <input type="text" id="vetHospital" v-model="newVet.hospital" class="form-control">
+					        </div>
+					    </div>
+					
+					    <!-- 저장 및 취소 버튼 -->
+					    <div class="d-flex justify-content-end mt-3">
+					        <button class="btn btn-primary me-2 custom-btn" @click="fnCreate">저장</button>
+					        <button class="btn btn-secondary custom-btn" @click="isCreating = false">취소</button>
+					    </div>
+					</div>
+						
 	            </div>
 
 
@@ -483,6 +521,14 @@
 	                    page: 1,
 	                    pageSize: 5,
 	                    keyword: '',
+	                    isCreating: false, // Vet 등록 창 표시 여부
+	                    newVet: {
+	                        vetId: '',
+	                        name: '',
+	                        email: '',
+	                        phone: '',
+	                        hospital: ''
+	                    }
 
                      };
                  },
@@ -515,28 +561,27 @@
                                     self.index = 1;
                                     console.warn("count 정보 없음!", data);
                                 }	
-                                
-                                
-								nparmap = {
-		                    	};
-		                    	$.ajax({
-		                    		url: "/admin/memberList.dox",
-		                    		dataType: "json",
-		                    		type: "POST",
-		                    		data: nparmap,
-		                    		success: function (data) {
-		                    			console.log("main1",data);
-										self.users = data.User;
-		                                
-		                    		}
-		                    	});
 		                    	
                     		}
                     	});
                     },
                     fnEdit(userId) {
                     	var self = this;
-
+						
+                    	nparmap = {
+                    	};
+                    	$.ajax({
+                    		url: "/admin/notVetList.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("main1",data);
+								self.users = data.User;
+                                
+                    		}
+                    	});
+                    	
                     	console.log("1",userId);
                         if (self.selectedMemberId === userId) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
@@ -546,19 +591,19 @@
                             const member = self.members.find(m => m.vetNumber === userId);
                             self.editData = { ...member };  // 수정할 데이터 채우기
                             self.selectedMemberId = userId;
-                        	console.log("3",userId);
+                        	console.log("3",self.editData);
 
                         }
                     },
                     fnSave () {
                     	var self = this;
                     	var nparmap = {
-                    			userId : self.selectedMemberId,
-    				            userName : self.editData.userName ,
-    				            DeleteYn : self.editData.DeleteYn,
+                    			vetNumber : self.selectedMemberId,
+    				            userName : self.editData.name ,
+    				            userId : self.editData.userId,
                     	};
                     	$.ajax({
-                    		url: "/admin/updateUser.dox",
+                    		url: "/admin/updateVet.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
@@ -596,8 +641,11 @@
                         self.page = pageCnt;
                         self.fnMainList();
                     },
-                    fnCreate(){
-                    	
+                    fnCreate() {
+                    	let self = this;
+                        console.log("저장할 Vet 데이터:", this.newVet);
+                        // 여기에 AJAX로 서버에 저장하는 로직 추가
+                        this.isCreating = false; // 저장 후 폼 닫기
                     }
                     
                     
