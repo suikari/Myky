@@ -145,6 +145,9 @@ public class CartServiceImpl implements CartService {
 					if (existingProduct != null) {
 						cartMapper.updateQuantity(map);
 						// 기존 장바구니에 해당 상품이 있는 경우 > 전달받은 quantity 값으로 변경
+						cartMapper.updateCartCheckYn(map);
+						// 바로구매 상품 장바구니에 넣기 전 N값으로 변경되어있음.
+						// 수량 변경 및 Y값으로 변경
 					} else {
 						cartMapper.insertCartProduct(map);
 					}
