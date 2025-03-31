@@ -13,16 +13,17 @@
     .order-history { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); }
     .order-history__title { text-align: center; margin-bottom: 20px; }
     .order-history__filter { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; }
-    .order-history__label { font-weight: bold; }
-    .order-history__select { padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
     .order-history__button { padding: 8px 15px; border: none; background-color: #007bff; color: white; cursor: pointer; border-radius: 4px; }
     .order-history__button:hover { background-color: #0056b3; }
+    .order-history__input { padding: 5px; border: 1px solid #ccc; border-radius: 4px; width: 150px; }
     .order-history__table { width: 100%; border-collapse: collapse; }
     .order-history__th, .order-history__td { border: 1px solid #ddd; padding: 10px; text-align: center; }
     .order-history__th { background-color: #007bff; color: white; }
     .order-history__track-button { background-color: #28a745; border: none; padding: 5px 10px; color: white; cursor: pointer; border-radius: 4px; }
     .order-history__track-button:hover { background-color: #218838; }
-
+    .order-history__details { margin-top: 10px; background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
+    .order-history__details p { margin: 5px 0; }
+    .order-history__toggle { cursor: pointer; color: #007bff; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -36,19 +37,18 @@
             <h2 class="order-history__title">주문 내역 조회</h2>
     
             <div class="order-history__filter">
-                <label class="order-history__label">조회 기간:</label>
-                <select v-model="selectedPeriod" @change="setDateRange" class="order-history__select">
-                    <option value="1">최근 1개월</option>
-                    <option value="3">최근 3개월</option>
-                    <option value="6">최근 6개월</option>
-                    <option value="12">최근 12개월</option>
-                    <option :value="lastYear">{{ lastYear }}년</option>
-                    <option :value="twoYearsAgo">{{ twoYearsAgo }}년</option>
-                </select>
+                <button @click="setDateRange(1)" class="order-history__button">최근 1개월</button>
+                <button @click="setDateRange(3)" class="order-history__button">최근 3개월</button>
+                <button @click="setDateRange(6)" class="order-history__button">최근 6개월</button>
+                
+                <input type="date" v-model="startDate" class="order-history__input">
+                <span>~</span>
+                <input type="date" v-model="endDate" class="order-history__input">
+                
                 <button @click="fnOrderInfo" class="order-history__button">조회</button>
             </div>
     
-            <div v-for="(orders, orderDate) in groupedOrders" :key="orderDate" class="order-group">
+            <div v-for="(orders, orderDate) in groupedOrders" :key="order" class="order-group">
                 <h3 class="order-group__date">{{ orderDate }}</h3>
     
                 <table class="order-history__table">
@@ -62,24 +62,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="order in orders" :key="order.orderDetailId">
-                            <td class="order-history__td">
-                                <img :src="order.imageUrl" width="50" class="order-history__img">
+                        <tr v-for="order in orderList" :key="order.orderId">
+                            <td class="order-history__td" v-if="order.filepath != null">
+                                <img :src="order.filepath" width="50" class="order-history__img">
+                            </td>
+                            <td class="order-history__td" v-else>
+                                <img src="/img/product/product update.png" width="50">
                             </td>
                             <td class="order-history__td">{{ order.productName }}</td>
                             <td class="order-history__td">{{ order.totalPrice }} 원</td>
-                            <td class="order-history__td">{{ order.status }}</td>
+                            <td class="order-history__td">{{ order.orderStatus }}</td>
                             <td class="order-history__td">
                                 <!-- '주문 접수' 상태일 때만 취소 & 수정 가능 -->
                                 <button 
-                                    v-if="order.status === '주문접수'" 
+                                    v-if="order.orderStatus === '주문접수'" 
                                     @click="cancelOrder(order.orderId)" 
                                     class="order-history__button cancel"
                                 >
                                     주문 취소
                                 </button>
                                 <button 
-                                    v-if="order.status === '주문접수'" 
+                                    v-if="order.orderStatus === '주문접수'" 
                                     @click="editShipping(order.orderId)" 
                                     class="order-history__button edit"
                                 >
@@ -88,14 +91,14 @@
     
                                 <!-- '배송준비중' 이후에는 반품 & 교환 가능 -->
                                 <button 
-                                    v-if="order.status === '배송중' || order.status === '배송완료'" 
+                                    v-if="order.orderStatus === '배송중' || order.orderStatus === '배송완료'" 
                                     @click="requestReturn(order.orderId)" 
                                     class="order-history__button return"
                                 >
                                     반품 신청
                                 </button>
                                 <button 
-                                    v-if="order.status === '배송중' || order.status === '배송완료'" 
+                                    v-if="order.orderStatus === '배송중' || order.orderStatus === '배송완료'" 
                                     @click="requestExchange(order.orderId)" 
                                     class="order-history__button exchange"
                                 >
@@ -115,12 +118,15 @@
                 </table>
     
                 <!-- 배송정보 토글 영역 -->
-                <div v-if="orderList[orders[0].orderId]" class="order-history__details">
-                    <p><strong>수령인:</strong> {{ orders[0].receiverName }}</p>
-                    <p><strong>연락처:</strong> {{ orders[0].receiverPhone }}</p>
-                    <p><strong>배송지:</strong> {{ orders[0].receiverAddress }}</p>
-                    <p><strong>배송메시지:</strong> {{ orders[0].deliveryMessage || '없음' }}</p>
+                <div v-if="orderList[orders[0].order_id]" class="order-history__details">
+                    <p><strong>수령인:</strong> {{ orders[0].receiver_name }}</p>
+                    <p><strong>연락처:</strong> {{ orders[0].receiver_phone }}</p>
+                    <p><strong>배송지:</strong> {{ orders[0].receiver_addr }}</p>
+                    <p><strong>배송메시지:</strong> {{ orders[0].delivery_message || '없음' }}</p>
                 </div>
+                <button @click="toggleDetails(orders[0].order_id)" class="order-history__toggle">
+                    배송정보 {{ orderList[orders[0].order_id].showDetails ? '숨기기' : '보기' }}
+                </button>
             </div>
         </div>
 
@@ -139,12 +145,14 @@
         const app = Vue.createApp({
             data() {
                 return {
+                    sessionId:"${sessionId}",
                     orderId:"${map.orderId}",
                     selectedPeriod: "1",
-                    orderInfo: [],
                     orderList: [],
                     userInfo : {},
-                    currentYear: new Date().getFullYear()
+                    currentYear: new Date().getFullYear(),
+                    startDate: "",
+                    endDate: ""
                 };
             },
             computed: {
@@ -155,28 +163,29 @@
                     return this.currentYear - 2;
                 },
                 groupedOrders() {
-                    return this.orderInfo.reduce((acc, order) => {
-                        (acc[order.orderDate] = acc[order.orderDate] || []).push(order);
+                    return this.orderList.reduce((acc, order) => {
+                        const orderDate = order.orderedAt.split(' ')[0];
+                        if (!acc[orderDate]) acc[orderDate] = [];
+                        acc[orderDate].push(order);
                         return acc;
                     }, {});
                 }
             },
             methods: {
-                setDateRange() {
+                setDateRange(period) {
                     let today = new Date();
                     let startDate = new Date();
 
-                    if (this.selectedPeriod == this.lastYear) {
-                        this.startDate = this.lastYear + "-01-01";
-                        this.endDate = this.lastYear + "-12-31";
-                    } else if (this.selectedPeriod == this.twoYearsAgo) {
-                        this.startDate = this.twoYearsAgo + "-01-01";
-                        this.endDate = this.twoYearsAgo + "-12-31";
-                    } else {
-                        startDate.setMonth(today.getMonth() - parseInt(this.selectedPeriod));
-                        this.startDate = this.formatDate(startDate);
-                        this.endDate = this.formatDate(today);
+                    if (period === 1) {
+                        startDate.setMonth(today.getMonth() - 1);
+                    } else if (period === 3) {
+                        startDate.setMonth(today.getMonth() - 3);
+                    } else if (period === 6) {
+                        startDate.setMonth(today.getMonth() - 6);
                     }
+
+                    this.startDate = this.formatDate(startDate);
+                    this.endDate = this.formatDate(today);
                 },
                 fnUserInfo() {
                     let self = this;
@@ -188,28 +197,17 @@
                         data: params,
                         success: function (data) {
                             self.userInfo = data.user;
-                        }
-                    });
-                },
-                fnOrderInfo() {
-                    let self = this;
-                    let params = { userId: self.userInfo.userId };
-
-                    $.ajax({
-                        url: "/order/AllInfo.dox",
-                        dataType: "json",
-                        type: "POST",
-                        data: params,
-                        success: function (data) {
-                            console.log("주문 목록 >>> ",data.result);
-                            self.orderInfo = data.orderInfo;
                             self.fnOrderList();
                         }
                     });
                 },
                 fnOrderList:function(){
                     let self = this;
-                    let params = { userId: self.userInfo.userId };
+                    let params = {
+                        userId: self.userInfo.userId, 
+                        startDate : self.startDate,
+                        endDate : self.endDate
+                    };
                     $.ajax({
                         url: "/order/AllList.dox",
                         dataType: "json",
@@ -218,14 +216,18 @@
                         success: function (data) {
                             console.log("주문 상세 목록 >>> ",data.result);
                             self.orderList = data.orderList;
+                            self.orderList = data.orderList.map(order => ({
+                                ...order,
+                                showDetails: false
+                            }));
                         }
                     });
                 },
 
                 formatDate(date) {
                     let year = date.getFullYear();
-                    let month = String(date.getMonth() + 1).padStart(2, '0');
-                    let day = String(date.getDate()).padStart(2, '0');
+                    let month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    let day = ('0' + date.getDate()).slice(-2);
                     return year + "-" + month + "-" + day;
                 },
 
@@ -246,13 +248,15 @@
                 },
 
                 toggleDetails(orderId) {
-                    this.$set(this.orderList, orderId, !this.orderList[orderId]);
-                }
+                    const order = this.orderList.find(o => orderId === orderId);
+                    if (order) {
+                        order.showDetails = !order.showDetails;
+                    }
+                },
             },
             mounted() {
                 this.fnUserInfo();
-                this.fnOrderInfo();
-                
+                this.setDateRange();
             }
         });
 
