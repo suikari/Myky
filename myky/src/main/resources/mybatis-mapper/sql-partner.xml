@@ -18,7 +18,7 @@
 	<select id="getPartnerGuList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		SELECT DISTINCT GU ,NX, NY 
         FROM AREA 
-        WHERE SI = #{selectsi} AND GU IS NOT NULL
+        WHERE SI = #{selectsi} AND GU IS NOT NULL AND DONG is null
         ORDER BY GU ASC
 	</select>
 	
