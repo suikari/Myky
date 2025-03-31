@@ -437,6 +437,32 @@
                         location.href="/board/vetBoardList.do";
                         
                     },
+                    fnEdit : function (){
+                        var self = this;
+                        location.href="/board/vetBoardEdit.do?vetBoardId=" + self.vetBoardId
+                    },
+                    fnRemove : function () {
+                        var self = this;
+                        var nparmap = {
+                            vetBoardId: self.vetBoardId,
+                        };
+
+                        if (!confirm("정말 삭제하시겠습니까?")) {
+                           alert("취소되었습니다.");
+                           return;
+                        } 
+                        
+                        $.ajax({
+                            url: "/board/vetBoardRemove.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                location.href = "/board/vetBoardList.do";
+                                alert("삭제되었습니다!");
+                            }
+                        });
                 },
                 mounted() {
                     let self = this;
@@ -444,8 +470,6 @@
                 	self.vetBoardId = params.get("vetBoardId") || "";
 
                     self.fnView();
-
-                    self.fnPointSearch();
                 }
             });
 
