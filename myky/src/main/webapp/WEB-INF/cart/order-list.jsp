@@ -45,7 +45,7 @@
                     <option :value="lastYear">{{ lastYear }}년</option>
                     <option :value="twoYearsAgo">{{ twoYearsAgo }}년</option>
                 </select>
-                <button @click="fetchOrderHistory" class="order-history__button">조회</button>
+                <button @click="fnOrderInfo" class="order-history__button">조회</button>
             </div>
     
             <div v-for="(orders, orderDate) in groupedOrders" :key="orderDate" class="order-group">
@@ -107,7 +107,7 @@
                                     @click="toggleDetails(order.orderId)" 
                                     class="order-history__button toggle"
                                 >
-                                    배송정보 {{ showDetails[order.orderId] ? '숨기기' : '보기' }}
+                                    배송정보 {{ orderList[order.orderId] ? '숨기기' : '보기' }}
                                 </button>
                             </td>
                         </tr>
@@ -115,7 +115,7 @@
                 </table>
     
                 <!-- 배송정보 토글 영역 -->
-                <div v-if="showDetails[orders[0].orderId]" class="order-history__details">
+                <div v-if="orderList[orders[0].orderId]" class="order-history__details">
                     <p><strong>수령인:</strong> {{ orders[0].receiverName }}</p>
                     <p><strong>연락처:</strong> {{ orders[0].receiverPhone }}</p>
                     <p><strong>배송지:</strong> {{ orders[0].receiverAddress }}</p>
@@ -139,9 +139,11 @@
         const app = Vue.createApp({
             data() {
                 return {
+                    orderId:"${map.orderId}",
                     selectedPeriod: "1",
-                    orders: [],
-                    showDetails: {},
+                    orderInfo: [],
+                    orderList: [],
+                    userInfo : {},
                     currentYear: new Date().getFullYear()
                 };
             },
@@ -153,7 +155,7 @@
                     return this.currentYear - 2;
                 },
                 groupedOrders() {
-                    return this.orders.reduce((acc, order) => {
+                    return this.orderInfo.reduce((acc, order) => {
                         (acc[order.orderDate] = acc[order.orderDate] || []).push(order);
                         return acc;
                     }, {});
@@ -176,21 +178,46 @@
                         this.endDate = this.formatDate(today);
                     }
                 },
-
-                fetchOrderHistory() {
+                fnUserInfo() {
                     let self = this;
-                    let params = { startDate: self.startDate, endDate: self.endDate, userId: self.$store.state.userId };
+                    let params = { userId: self.sessionId };
+                    $.ajax({
+                        url: "/user/info.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            self.userInfo = data.user;
+                        }
+                    });
+                },
+                fnOrderInfo() {
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
 
                     $.ajax({
-                        url: "/order/list.dox",
+                        url: "/order/AllInfo.dox",
                         dataType: "json",
-                        type: "GET",
+                        type: "POST",
                         data: params,
-                        success: function (response) {
-                            self.orders = response.orders;
-                        },
-                        error: function () {
-                            alert("주문 내역을 불러오는 데 실패했습니다.");
+                        success: function (data) {
+                            console.log("주문 목록 >>> ",data.result);
+                            self.orderInfo = data.orderInfo;
+                            self.fnOrderList();
+                        }
+                    });
+                },
+                fnOrderList:function(){
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/order/AllList.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            console.log("주문 상세 목록 >>> ",data.result);
+                            self.orderList = data.orderList;
                         }
                     });
                 },
@@ -219,11 +246,12 @@
                 },
 
                 toggleDetails(orderId) {
-                    this.$set(this.showDetails, orderId, !this.showDetails[orderId]);
+                    this.$set(this.orderList, orderId, !this.orderList[orderId]);
                 }
             },
             mounted() {
-                this.fetchOrderHistory();
+                this.fnUserInfo();
+                this.fnOrderInfo();
                 
             }
         });
