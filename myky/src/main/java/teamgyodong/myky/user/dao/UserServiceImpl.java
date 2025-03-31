@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	    if (user != null && "Y".equals(user.getDeleteYn())) {
 	        System.out.println("실패");
 	        resultMap.put("reason", "삭제된 아이디 접속 시도");
-	        resultMap.put("result", "fail");
+	        resultMap.put("result", "suspended");
 	        return resultMap;
 	    }
 
