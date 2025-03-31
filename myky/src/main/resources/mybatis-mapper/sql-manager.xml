@@ -307,10 +307,10 @@
 	</select>
 	
 
-	
+
 	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
 		INSERT INTO veterinarian(vet_number,vet_id, name, email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
-		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{name}, email, phoneNumber, affiliatedHospital, null, SYSDATE, null, '')
+		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{name}, #{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')
 	</insert>
 	
 	<update id="updateVet" parameterType="hashmap" >

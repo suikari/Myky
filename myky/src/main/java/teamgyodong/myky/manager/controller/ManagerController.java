@@ -185,6 +185,16 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
 		
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/insertVet.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String insertVet(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.insertVet(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 	
 }
