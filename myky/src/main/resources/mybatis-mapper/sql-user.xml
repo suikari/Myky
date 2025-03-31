@@ -86,8 +86,15 @@
         INNER JOIN FREE_BOARD B ON C.BOARD_ID = B.BOARD_ID
         WHERE C.USER_ID = #{userId}
         ORDER BY C.CREATED_AT DESC
+        OFFSET #{page2} ROWS FETCH NEXT #{pageSize2} ROWS ONLY
+        
 	</select>
 	
-	
+	<select id="selectCommentCnt" parameterType="hashmap" resultType="int">
+	       SELECT COUNT(*)
+        FROM FREE_BOARD_COMMENT
+        WHERE USER_ID = #{userId}
+        AND IS_DELETED= 'N'
+	</select>
 	
 </mapper>

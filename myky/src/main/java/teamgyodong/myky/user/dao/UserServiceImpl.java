@@ -174,7 +174,9 @@ public class UserServiceImpl implements UserService {
 		public HashMap<String, Object> userComment(HashMap<String, Object> map) {
 			HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			List<comment> comment = userMapper.selectComm(map);
+			int count2 = userMapper.selectCommentCnt(map);
 			resultMap.put("comment", comment);
+			resultMap.put("count2", count2);
 			resultMap.put("result", "success"); // 결과 값
 
 			return resultMap;
