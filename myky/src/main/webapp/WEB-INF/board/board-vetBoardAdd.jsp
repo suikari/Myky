@@ -182,7 +182,7 @@
                         현재 point 
                         {{currentPoint.currentPoint}}개
                     </div>
-                    <input v-model="usedPoint">개 사용
+                    <input v-model="usedPoint" @input="fnCheck">개 사용
                 </div>
             </div>
             <div class="title-label">CONTENT</div>
@@ -200,7 +200,7 @@
 </body>
 </html>
 <script>    
-    
+        
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
                 data() {
@@ -224,8 +224,11 @@
                         let self = this;
                         let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
-                        console.log("사용 포인트 >> ", usedPoint);
-
+                        
+                        if(!usedPoint){
+                            alert("숫자만 입력해주세요");
+                            return;
+                        }
                         let nparmap = {
                             title : self.title,
                             content : self.content,
@@ -279,6 +282,11 @@
                                 } 
                             },
 				        });                        
+                    },
+                    fnCheck : function (){
+                        let self = this;
+                        self.usedPoint = self.usedPoint.replace(/[^0-9]/g,'');
+
                     },
                     getPoints : function(){
                         let self = this;
