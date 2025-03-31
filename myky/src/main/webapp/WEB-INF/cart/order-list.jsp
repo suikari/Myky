@@ -34,99 +34,61 @@
     <div id="app" class="container">
 
         <div class="order-history">
-            <h2 class="order-history__title">주문 내역 조회</h2>
-    
+            <!-- 주문 조회 필터 -->
             <div class="order-history__filter">
                 <button @click="setDateRange(1)" class="order-history__button">최근 1개월</button>
                 <button @click="setDateRange(3)" class="order-history__button">최근 3개월</button>
                 <button @click="setDateRange(6)" class="order-history__button">최근 6개월</button>
-                
                 <input type="date" v-model="startDate" class="order-history__input">
                 <span>~</span>
                 <input type="date" v-model="endDate" class="order-history__input">
-                
-                <button @click="fnOrderInfo" class="order-history__button">조회</button>
+                <button @click="fnOrderList" class="order-history__button">조회</button>
+            </div>
+            
+            <!-- 주문 상태 필터 -->
+            <div class="order-history__filter">
+                <select v-model="orderStatus" @change="fnOrderList" class="order-history__select">
+                    <option value="all">전체</option>
+                    <option value="paid">결제완료</option>
+                    <option value="shipped">배송중</option>
+                    <option value="delivered">배송완료</option>
+                </select>
             </div>
     
-            <div v-for="(orders, orderDate) in groupedOrders" :key="order" class="order-group">
-                <h3 class="order-group__date">{{ orderDate }}</h3>
+            <!-- 주문 내역 테이블 -->
+            <table class="order-history__table">
+                <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>수령인</th>
+                        <th>상품</th>
+                        <th>금액</th>
+                        <th>상태</th>
+                        <th>상세보기</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in orders" :key="order.order_id">
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.receiver_name }}</td>
+                        <td>{{ order.product_name }}</td>
+                        <td>{{ order.total_price }} 원</td>
+                        <td>{{ order.status }}</td>
+                        <td>
+                            <button @click="toggleDetails(order.order_id)">
+                                {{ order.showDetails ? '숨기기' : '보기' }}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
     
-                <table class="order-history__table">
-                    <thead>
-                        <tr>
-                            <th class="order-history__th">상품 이미지</th>
-                            <th class="order-history__th">상품명</th>
-                            <th class="order-history__th">총 금액</th>
-                            <th class="order-history__th">주문 상태</th>
-                            <th class="order-history__th">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="order in orderList" :key="order.orderId">
-                            <td class="order-history__td" v-if="order.filepath != null">
-                                <img :src="order.filepath" width="50" class="order-history__img">
-                            </td>
-                            <td class="order-history__td" v-else>
-                                <img src="/img/product/product update.png" width="50">
-                            </td>
-                            <td class="order-history__td">{{ order.productName }}</td>
-                            <td class="order-history__td">{{ order.totalPrice }} 원</td>
-                            <td class="order-history__td">{{ order.orderStatus }}</td>
-                            <td class="order-history__td">
-                                <!-- '주문 접수' 상태일 때만 취소 & 수정 가능 -->
-                                <button 
-                                    v-if="order.orderStatus === '주문접수'" 
-                                    @click="cancelOrder(order.orderId)" 
-                                    class="order-history__button cancel"
-                                >
-                                    주문 취소
-                                </button>
-                                <button 
-                                    v-if="order.orderStatus === '주문접수'" 
-                                    @click="editShipping(order.orderId)" 
-                                    class="order-history__button edit"
-                                >
-                                    배송정보 수정
-                                </button>
-    
-                                <!-- '배송준비중' 이후에는 반품 & 교환 가능 -->
-                                <button 
-                                    v-if="order.orderStatus === '배송중' || order.orderStatus === '배송완료'" 
-                                    @click="requestReturn(order.orderId)" 
-                                    class="order-history__button return"
-                                >
-                                    반품 신청
-                                </button>
-                                <button 
-                                    v-if="order.orderStatus === '배송중' || order.orderStatus === '배송완료'" 
-                                    @click="requestExchange(order.orderId)" 
-                                    class="order-history__button exchange"
-                                >
-                                    교환 신청
-                                </button>
-    
-                                <!-- 배송정보 토글 버튼 -->
-                                <button 
-                                    @click="toggleDetails(order.orderId)" 
-                                    class="order-history__button toggle"
-                                >
-                                    배송정보 {{ orderList[order.orderId] ? '숨기기' : '보기' }}
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-    
-                <!-- 배송정보 토글 영역 -->
-                <div v-if="orderList[orders[0].order_id]" class="order-history__details">
-                    <p><strong>수령인:</strong> {{ orders[0].receiver_name }}</p>
-                    <p><strong>연락처:</strong> {{ orders[0].receiver_phone }}</p>
-                    <p><strong>배송지:</strong> {{ orders[0].receiver_addr }}</p>
-                    <p><strong>배송메시지:</strong> {{ orders[0].delivery_message || '없음' }}</p>
-                </div>
-                <button @click="toggleDetails(orders[0].order_id)" class="order-history__toggle">
-                    배송정보 {{ orderList[orders[0].order_id].showDetails ? '숨기기' : '보기' }}
-                </button>
+            <!-- 주문 상세 정보 토글 -->
+            <div v-if="selectedOrder && selectedOrder.showDetails" class="order-history__details">
+                <p><strong>수령인:</strong> {{ selectedOrder.receiver_name }}</p>
+                <p><strong>연락처:</strong> {{ selectedOrder.receiver_phone }}</p>
+                <p><strong>배송지:</strong> {{ selectedOrder.receiver_addr }}</p>
+                <p><strong>배송메시지:</strong> {{ selectedOrder.delivery_message || '없음' }}</p>
             </div>
         </div>
 
@@ -147,45 +109,35 @@
                 return {
                     sessionId:"${sessionId}",
                     orderId:"${map.orderId}",
-                    selectedPeriod: "1",
-                    orderList: [],
-                    userInfo : {},
-                    currentYear: new Date().getFullYear(),
+                    orders: [],
                     startDate: "",
-                    endDate: ""
+                    endDate: "",
+                    orderStatus: "all",
+                    selectedOrder: null,
                 };
             },
             computed: {
-                lastYear() {
-                    return this.currentYear - 1;
-                },
-                twoYearsAgo() {
-                    return this.currentYear - 2;
-                },
-                groupedOrders() {
-                    return this.orderList.reduce((acc, order) => {
-                        const orderDate = order.orderedAt.split(' ')[0];
-                        if (!acc[orderDate]) acc[orderDate] = [];
-                        acc[orderDate].push(order);
-                        return acc;
-                    }, {});
-                }
+                
             },
             methods: {
                 setDateRange(period) {
                     let today = new Date();
                     let startDate = new Date();
 
-                    if (period === 1) {
+                    if (period == 1) {
                         startDate.setMonth(today.getMonth() - 1);
-                    } else if (period === 3) {
+                    } else if (period == 3) {
                         startDate.setMonth(today.getMonth() - 3);
-                    } else if (period === 6) {
+                    } else if (period == 6) {
                         startDate.setMonth(today.getMonth() - 6);
                     }
 
                     this.startDate = this.formatDate(startDate);
                     this.endDate = this.formatDate(today);
+
+                    console.log(this.startDate,this.endDate);
+
+                    this.fnOrderList();
                 },
                 fnUserInfo() {
                     let self = this;
@@ -197,7 +149,7 @@
                         data: params,
                         success: function (data) {
                             self.userInfo = data.user;
-                            self.fnOrderList();
+                            self.setDateRange(1);
                         }
                     });
                 },
@@ -246,17 +198,15 @@
                 requestExchange(orderId) {
                     alert("교환 신청이 완료되었습니다. 주문번호: " + orderId);
                 },
-
-                toggleDetails(orderId) {
-                    const order = this.orderList.find(o => orderId === orderId);
-                    if (order) {
-                        order.showDetails = !order.showDetails;
-                    }
+                toggleDetails(index) {
+                    // 해당 주문에 대해 배송정보를 토글
+                    this.orders[index].showDetails = !this.orders[index].showDetails;
                 },
+                
             },
             mounted() {
                 this.fnUserInfo();
-                this.setDateRange();
+                
             }
         });
 
