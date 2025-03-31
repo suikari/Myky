@@ -54,6 +54,18 @@ public interface ProductMapper {
 
 	Qna selectQna(HashMap<String, Object> map);
 
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
 
 
 }

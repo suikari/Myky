@@ -778,13 +778,14 @@
                     <h1>{{info.productName}}</h1>
                     <!-- 정상가 (할인 전 가격) -->
                     <div class="detail-product-info">
-                        <p class="original-price" v-if="info.discount > 0">
+                        <p class="original-price"  v-if="info.discount > 0">
                             정상가: {{ info.price }}원
                         </p>
                         <!-- 멤버십 할인가 -->
                         <p class="discount-price">
                             멤버십 할인가:
                             <strong>{{ discountedPrice}}원</strong>
+                            <span v-if="userInfo.membershipFlg !== 'Y'" ></span>
                         </p>
                     </div>
                     <p>제조사 : {{ info.manufacturer }}</p>
@@ -1069,7 +1070,9 @@
                     return {
                         productId: "",
                         sessionId: "${sessionId}",
-                        userInfo: {}, //사용자 정보 가져오기
+                        userInfo: {
+                            "membershipFlg": "Y"
+                        }, //사용자 정보 가져오기
                         info: {},
                         imgList: [],
                         mainImage: '',
@@ -1198,7 +1201,7 @@
                                     alert("리뷰가 도움이 되었다고 표시되었습니다!");
                                     self.fnReviewList();
                                     self.alreadyClicked[reviewId] = true;
-                                } else {
+                                } else if (data.result === "fail"){
                                     alert(data.message || "이미 추천한 리뷰입니다.");
                                 }
                             }
@@ -1279,11 +1282,15 @@
                     //장바구니
                     fnAddCart() {
                         const self = this;
+                        const priceToAdd = self.userInfo.membershipFlg === 'Y'? self.discountedPrice : self.info.price;
+
                         const nparmap = {
                             productId: self.productId,
                             sessionId: self.sessionId,
                             userId: self.userInfo.userId,
                             quantity: self.quantity,
+                            price: priceToAdd,
+                            option : "",
                             checkYn: "N"
                         };
                         $.ajax({
@@ -1318,11 +1325,14 @@
                     //선택한 상품을 즉시 구매페이지로
                     fnAddBuy() {
                         const self = this;
+                        const priceToAdd = self.userInfo.membershipFlg === 'Y'? self.discountedPrice : self.info.price;
                         const nparmap = {
                             productId: self.productId,
                             sessionId: self.sessionId,
                             userId: self.userInfo.userId,
                             quantity: self.quantity,
+                            price: priceToAdd,
+                            option : "instant",
                             checkYn: "Y"
                         };
                         $.ajax({
