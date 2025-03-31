@@ -10,7 +10,6 @@
             <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
             <!-- 카카오 인증용 임포트 -->
              
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <title>search password page</title>
         <!-- 비밀번호를 찾을 아이디 입력 받기
  비밀번호 찾기 버튼 클릭 시 인증 페이지 호출

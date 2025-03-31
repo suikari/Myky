@@ -1,9 +1,12 @@
 package teamgyodong.myky.user.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import teamgyodong.myky.board.model.board;
+import teamgyodong.myky.board.model.comment;
 import teamgyodong.myky.user.model.User;
 
 @Mapper
@@ -26,6 +29,8 @@ public interface UserMapper {
 	int updateWithdraw(HashMap<String, Object> map);
 
 	void insertProfileImg(HashMap<String, Object> map);
+
+	List<comment> selectComm(HashMap<String, Object> map);
 
 
 
