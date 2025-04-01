@@ -742,7 +742,7 @@
                         orderId: orderId,
                         productId: item.productId,
                         quantity: item.quantity,
-                        price: item.quantity * item.price
+                        price: self.getTotalPrice(item)
                     }))
 
                     self.orderData = {
