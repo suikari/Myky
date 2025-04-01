@@ -48,27 +48,39 @@
 
 	
 
-	<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-		SELECT DISTINCT PARTNER_DETAIL_ID, NAME,PHONE_NUMBER, ADDRESS, NX, NY,RESERVATION_URL, OPENING_HOURS,REGULAR_HOLIDAY 
-		FROM PARTNER_DETAIL
-	</select>
+	
 
 	<select id="getfavoriteList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		
 		SELECT A.* ,F.*
 		FROM FAVORITES F
 		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+        LEFT JOIN PARTNER_DETAIL P ON P.PARTNER_DETAIL_ID = F.PARTNER_DETAIL_ID
 		WHERE F.USER_ID = #{userId}
 	</select>
 
-	<insert id="addfavorites" parameterType="hashmap"  useGeneratedKeys="true" keyColumn="HOSPITAL_NO" keyProperty="hospitalNo">
-		INSERT INTO FAVORITES (FAVORITE_ID,HOSPITAL_NO,USER_ID)
-		VALUES (FAVORITES_SEQ.NEXTVAL,#{hospitalNo},#{userId})
-	</insert>
+	<insert id="addfavoritesHospital" parameterType="hashmap">
+    INSERT INTO FAVORITES (FAVORITE_ID, HOSPITAL_NO, USER_ID)
+    VALUES (FAVORITES_SEQ.NEXTVAL, #{hospitalNo}, #{userId})
+</insert>
 
-	<delete id="favoritesDelete" parameterType="hashmap">
-		DELETE FROM FAVORITES
-		WHERE HOSPITAL_NO = #{hospitalNo}
-	</delete>
+<!-- 제휴사에 대한 즐겨찾기 추가
+<insert id="addfavoritesPartner" parameterType="hashmap">
+    INSERT INTO FAVORITES (FAVORITE_ID, PARTNER_DETAIL_ID, USER_ID)
+    VALUES (FAVORITES_SEQ.NEXTVAL, #{partnerId}, #{userId})
+</insert> -->
+
+	<!-- 병원 번호로 즐겨찾기 삭제 -->
+<delete id="favoritesHospitalDelete" parameterType="hashmap">
+    DELETE FROM FAVORITES
+    WHERE HOSPITAL_NO = #{hospitalNo}
+</delete>
+
+<!-- 파트너 ID로 즐겨찾기 삭제 
+<delete id="favoritesPartnerDelete" parameterType="hashmap">
+    DELETE FROM FAVORITES
+    WHERE PARTNER_DETAIL_ID = #{partnerId}
+</delete>-->
 
 
 	<select id="favorList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
@@ -76,6 +88,24 @@
 		FROM FAVORITES F
 		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
 		WHERE F.USER_ID = #{userId}
+	</select>
+	
+	<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		  SELECT DISTINCT *
+    FROM PARTNER_DETAIL
+	WHERE 1=1
+
+   
+	</select>
+	
+	<select id="getcategoryCode" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		  SELECT DISTINCT *
+    FROM PARTNER_DETAIL
+	WHERE 1=1
+        <if test="categoryCode != null">
+            AND CATEGORY_CODE = #{categoryCode}
+        </if>
+   
 	</select>
 </mapper>
 

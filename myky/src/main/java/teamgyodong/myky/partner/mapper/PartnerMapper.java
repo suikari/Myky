@@ -23,11 +23,17 @@ public interface PartnerMapper {
 
 	List<partnerdetail> getfavoriteList(HashMap<String, Object> map);
 
-	void addfavorites(HashMap<String, Object> map);
-
-	void favoritesDelete(HashMap<String, Object> map);
-
 	List<partnerdetail> favorList(HashMap<String, Object> map);
+
+	List<partnerdetail> getcategoryCode(HashMap<String, Object> map);
+
+	void addfavoritesHospital(HashMap<String, Object> map);
+
+	//void addfavoritesPartner(HashMap<String, Object> map);
+
+	void favoritesHospitalDelete(HashMap<String, Object> map);
+
+	//void favoritesPartnerDelete(HashMap<String, Object> map);
 
 
 
