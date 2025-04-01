@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.board.model.comment;
+import teamgyodong.myky.donation.model.donation;
+import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.user.mapper.UserMapper;
 import teamgyodong.myky.user.model.User;
 
@@ -179,6 +181,28 @@ public class UserServiceImpl implements UserService {
 			resultMap.put("count2", count2);
 			resultMap.put("result", "success"); // 결과 값
 
+			return resultMap;
+		}
+		
+		public HashMap<String, Object> userDonation(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			List<donation> donation = userMapper.selectDonaInfo(map);
+			donation sum = userMapper.sumDona(map);
+			
+			resultMap.put("sum", sum);
+			resultMap.put("donation", donation);
+			resultMap.put("result", "success"); // 결과 값
+
+			return resultMap;
+		}
+		
+		public HashMap<String, Object> vetInfo(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			Vet vet = userMapper.selectVet(map);
+			User user = userMapper.selectUser(map);
+			
+			resultMap.put("vet", vet);
+			resultMap.put("user", user);
 			return resultMap;
 		}
 	

@@ -321,5 +321,24 @@ public class UserController {
 		return new Gson().toJson(resultMap);
 	}
 	
+	//유저 후원내역 출력
+	@RequestMapping(value = "/user/donaInfo.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String donation(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.userDonation(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//유저 후원내역 출력
+	@RequestMapping(value = "/user/vetInfo.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String info(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.vetInfo(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
 
 }
