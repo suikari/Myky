@@ -330,7 +330,7 @@ public class UserController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	//유저 후원내역 출력
+	//수의사 정보출력(타부서 요청)
 	@RequestMapping(value = "/user/vetInfo.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String info(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -339,6 +339,14 @@ public class UserController {
 		return new Gson().toJson(resultMap);
 	}
 	
+	//
+	@RequestMapping(value = "/user/point.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String point(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.getPoint(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 
 }

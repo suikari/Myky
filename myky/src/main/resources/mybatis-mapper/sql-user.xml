@@ -113,7 +113,7 @@
 	</select>
 	
 	<select id="sumDona" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
-        SELECT TO_CHAR(SUM(AMOUNT),'fm999,999,999,999') AS AMOUNT
+        SELECT NVL(TO_CHAR(SUM(AMOUNT),'fm999,999,999,999'),0) AS amount
         FROM DONATION_HISTORY
         WHERE USER_ID = #{userId}
 	</select>
@@ -123,7 +123,20 @@
         FROM USERS U
         INNER JOIN VETERINARIAN V ON U.USER_ID = V.USER_ID
         WHERE U.USER_ID = #{userId}
-
+	</select>
+	
+	<select id="selectPoint" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
+        SELECT *
+        FROM POINT
+        WHERE USER_ID = #{userId}
+        ORDER BY USAGE_DATE DESC
+        OFFSET #{page3} ROWS FETCH NEXT #{pageSize3} ROWS ONLY
+	</select>
+	
+		<select id="selectPointCnt" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*)
+        FROM POINT
+        WHERE USER_ID = #{userId}
 	</select>
 	
 </mapper>

@@ -205,5 +205,15 @@ public class UserServiceImpl implements UserService {
 			resultMap.put("user", user);
 			return resultMap;
 		}
+		
+		public HashMap<String, Object> getPoint(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			List<User> point = userMapper.selectPoint(map);
+			int pointCount = userMapper.selectPointCnt(map);
+			
+			resultMap.put("pointCount", pointCount);
+			resultMap.put("point", point);
+			return resultMap;
+		}
 	
 }
