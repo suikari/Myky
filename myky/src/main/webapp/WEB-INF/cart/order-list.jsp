@@ -22,10 +22,14 @@
     .order-history__table th {background-color: #FF8C42;color: white;font-weight: bold;}
     .order-history__table td {background-color: #f9f9f9;}
     .order-history__table tr:hover {background-color: #f1f1f1;}
-    .order-history__details-button {background-color: #4CAF50;color: white;border: none;padding: 8px 16px;border-radius: 5px;cursor: pointer;transition: background 0.3s;font-size: 14px;}
-    .order-history__details-button:hover {background-color: #45a049;}
+    .order-history__details-button {background-color: #ffbc93;color: white;border: none;padding: 8px 16px;border-radius: 5px;cursor: pointer;transition: background 0.3s;font-size: 14px;}
+    .order-history__details-button:hover {background-color: #f1a373;}
     .order-history__details {background-color: #f1f1f1;padding: 20px;border-radius: 8px;margin-top: 10px;text-align: left;font-size: 14px;}
     .order-history__details hr {margin: 15px 0;}
+    .order-history__details-table {width: 100%;border-collapse: collapse;margin-top: 10px;}
+    .order-history__details-table th, .order-history__details-table td {border: 1px solid #ddd;padding: 8px 12px;text-align: left;}
+    .order-history__details-table th {background-color: #f1f1f1;font-weight: normal;color: #333;}
+    .order-history__details-table td {background-color: #fff;}
     .order-date {font-size: 18px;font-weight: bold;background: #e9ecef;padding: 10px;margin-top: 20px;border-radius: 8px;color: #333;display: inline-block;}
     .order-id {font-weight: bold;font-size: 16px;margin-top: 10px;}
     </style>
@@ -87,7 +91,7 @@
                                 <td v-else-if="orders[0].orderStatus == 'delivered'">배송완료</td>
                                 <td>
                                     <button class="order-history__details-button" @click="toggleDetails(orderId)">
-                                        {{ ordersByDate[date][orderId][0].showDetails ? '숨기기' : '보기' }}
+                                        {{ ordersByDate[date][orderId][0].showDetails ? '숨기기' : '배송정보' }}
                                     </button>
                                 </td>
                             </tr>
@@ -99,12 +103,22 @@
                                         <p><strong>배송지:</strong> {{ orders[0].receiverAddr }}</p>
                                         <p><strong>배송메시지:</strong> {{ orders[0].deliveryMessage || '없음' }}</p>
                                         <hr>
-                                        <div v-for="product in orders" :key="product.orderId">
-                                            <p><strong>상품명:</strong> {{ product.productName }}</p>
-                                            <p><strong>가격:</strong> {{ product.price }} 원</p>
-                                            <p><strong>수량:</strong> {{ product.quantity }}</p>
-                                            <hr>
-                                        </div>
+                                        <table class="order-history__details-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>상품명</th>
+                                                    <th>수량</th>
+                                                    <th>가격</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="product in orders" :key="product.orderId">
+                                                    <td>{{ product.productName }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                    <td>{{ product.price }} 원</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </td>
                             </tr>
@@ -166,8 +180,23 @@
                             return groups;
                         }, {});
 
-                        // console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:", groupedByDate);
-                    return groupedByDate;
+                    const sortedGroupedByDate = Object.keys(groupedByDate)
+                        .sort((a, b) => new Date(b) - new Date(a)) // 날짜 내림차순
+                        .reduce((sortedGroups, date) => {
+                            const sortedOrderIds = Object.keys(groupedByDate[date])
+                            .sort((x, y) => Number(y) - Number(x)); // 주문번호 내림차순 정렬
+                            console.log(sortedOrderIds);
+
+                            // 정렬된 주문번호를 바탕으로 새로운 객체 구성
+                            sortedGroups[date] = sortedOrderIds.reduce((acc, orderId) => {
+                                acc[orderId] = groupedByDate[date][orderId];
+                                return acc;
+                            }, {});
+
+                            return sortedGroups;
+                        }, {});
+                        console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:",sortedGroupedByDate);
+                    return sortedGroupedByDate;
                 }
             },
             watch: {
