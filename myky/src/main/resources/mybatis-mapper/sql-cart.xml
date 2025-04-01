@@ -186,8 +186,11 @@
 		    from product p  
 		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
 		) p on od.product_id = p.product_id
-	    where o.user_id = #{userId} and o.ordered_at between #{startDate} and #{endDate} and o.order_status = #{orderStatus}
-	    order by o.ordered_at desc;
+	    where o.user_id = #{userId} and o.ordered_at between #{startDate} and TO_DATE('' || #{endDate} || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+	    <if test="orderStatus != null and orderStatus != 'all'">
+		    and o.order_status = #{orderStatus}
+	    </if>
+	    order by o.ordered_at desc
 	
 	</select>
 	

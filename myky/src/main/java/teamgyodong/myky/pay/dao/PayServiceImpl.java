@@ -73,7 +73,6 @@ public class PayServiceImpl implements PayService {
 			
 			payMapper.insertUsedPoint(map);
 			
-			resultMap.put("currentPoint", map.get("currentPoint"));
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

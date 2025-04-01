@@ -9,21 +9,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	
     <style>
-    
-    .order-history { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); }
-    .order-history__title { text-align: center; margin-bottom: 20px; }
-    .order-history__filter { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; }
-    .order-history__button { padding: 8px 15px; border: none; background-color: #007bff; color: white; cursor: pointer; border-radius: 4px; }
-    .order-history__button:hover { background-color: #0056b3; }
-    .order-history__input { padding: 5px; border: 1px solid #ccc; border-radius: 4px; width: 150px; }
-    .order-history__table { width: 100%; border-collapse: collapse; }
-    .order-history__th, .order-history__td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-    .order-history__th { background-color: #007bff; color: white; }
-    .order-history__track-button { background-color: #28a745; border: none; padding: 5px 10px; color: white; cursor: pointer; border-radius: 4px; }
-    .order-history__track-button:hover { background-color: #218838; }
-    .order-history__details { margin-top: 10px; background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd; }
-    .order-history__details p { margin: 5px 0; }
-    .order-history__toggle { cursor: pointer; color: #007bff; text-decoration: underline; }
+    .order-container {max-width: 1200px;margin: 0 auto;padding: 20px;font-family: 'Arial', sans-serif;background-color: #f4f7fc;}
+    .order-history {background: #ffffff;padding: 30px;border-radius: 10px;box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);}
+    .order-history__filter {display: flex;align-items: center;gap: 15px;margin-bottom: 20px;flex-wrap: wrap;}
+    .order-history__button {background: #FF8C42;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;transition: background 0.3s, transform 0.2s;font-size: 14px;}
+    .order-history__button:hover {background: #e07b3e;transform: scale(1.05);}
+    .order-history__button:active {transform: scale(1);}
+    .order-history__input, .order-history__select {padding: 8px 12px;border: 1px solid #ccc;border-radius: 5px;font-size: 14px;transition: border-color 0.3s;}
+    .order-history__input:focus, .order-history__select:focus {border-color: #FF8C42;outline: none;}
+    .order-history__table {width: 100%;border-collapse: collapse;margin-top: 20px;background-color: #ffffff;border-radius: 8px;overflow: hidden;}
+    .order-history__table th, .order-history__table td {border: 1px solid #ddd;padding: 12px;text-align: center;}
+    .order-history__table th {background-color: #FF8C42;color: white;font-weight: bold;}
+    .order-history__table td {background-color: #f9f9f9;}
+    .order-history__table tr:hover {background-color: #f1f1f1;}
+    .order-history__details-button {background-color: #4CAF50;color: white;border: none;padding: 8px 16px;border-radius: 5px;cursor: pointer;transition: background 0.3s;font-size: 14px;}
+    .order-history__details-button:hover {background-color: #45a049;}
+    .order-history__details {background-color: #f1f1f1;padding: 20px;border-radius: 8px;margin-top: 10px;text-align: left;font-size: 14px;}
+    .order-history__details hr {margin: 15px 0;}
+    .order-date {font-size: 18px;font-weight: bold;background: #e9ecef;padding: 10px;margin-top: 20px;border-radius: 8px;color: #333;display: inline-block;}
+    .order-id {font-weight: bold;font-size: 16px;margin-top: 10px;}
     </style>
 </head>
 <body>
@@ -31,7 +35,7 @@
  
 
 
-    <div id="app" class="container">
+    <div id="app" class="ordercontainer">
 
         <div class="order-history">
             <!-- 주문 조회 필터 -->
@@ -49,46 +53,64 @@
             <div class="order-history__filter">
                 <select v-model="orderStatus" @change="fnOrderList" class="order-history__select">
                     <option value="all">전체</option>
-                    <option value="paid">결제완료</option>
+                    <option value="paid">주문접수</option>
                     <option value="shipped">배송중</option>
                     <option value="delivered">배송완료</option>
                 </select>
             </div>
     
             <!-- 주문 내역 테이블 -->
-            <table class="order-history__table">
-                <thead>
-                    <tr>
-                        <th>주문번호</th>
-                        <th>수령인</th>
-                        <th>상품</th>
-                        <th>금액</th>
-                        <th>상태</th>
-                        <th>상세보기</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="order in orders" :key="order.order_id">
-                        <td>{{ order.order_id }}</td>
-                        <td>{{ order.receiver_name }}</td>
-                        <td>{{ order.product_name }}</td>
-                        <td>{{ order.total_price }} 원</td>
-                        <td>{{ order.status }}</td>
-                        <td>
-                            <button @click="toggleDetails(order.order_id)">
-                                {{ order.showDetails ? '숨기기' : '보기' }}
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-    
-            <!-- 주문 상세 정보 토글 -->
-            <div v-if="selectedOrder && selectedOrder.showDetails" class="order-history__details">
-                <p><strong>수령인:</strong> {{ selectedOrder.receiver_name }}</p>
-                <p><strong>연락처:</strong> {{ selectedOrder.receiver_phone }}</p>
-                <p><strong>배송지:</strong> {{ selectedOrder.receiver_addr }}</p>
-                <p><strong>배송메시지:</strong> {{ selectedOrder.delivery_message || '없음' }}</p>
+            <div v-for="(ordersByOrderId, date) in groupedOrders" :key="date">
+                <div class="order-date">{{ date }}</div>
+                <div v-for="(orders, orderId) in ordersByOrderId" :key="orderId">
+                    <div class="order-id">주문번호: {{ orderId }}</div>
+                    <table class="order-history__table">
+                        <thead>
+                            <tr>
+                                <th>수령인</th>
+                                <th>상품</th>
+                                <th>금액</th>
+                                <th>상태</th>
+                                <th>상세보기</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ orders[0].receiverName }}</td>
+                                <td>
+                                    {{ orders[0].productName }} 
+                                    <span v-if="orders.length > 1"> 외 {{ orders.length - 1 }}개</span>
+                                </td>
+                                <td>{{ orders[0].totalPrice }} 원</td>
+                                <td v-if="orders[0].orderStatus == 'paid'">주문접수</td>
+                                <td v-else-if="orders[0].orderStatus == 'shipped'">배송중</td>
+                                <td v-else-if="orders[0].orderStatus == 'delivered'">배송완료</td>
+                                <td>
+                                    <button class="order-history__details-button" @click="toggleDetails(orderId)">
+                                        {{ ordersByDate[date][orderId][0].showDetails ? '숨기기' : '보기' }}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr v-if="ordersByDate[date][orderId][0].showDetails">
+                                <td colspan="5">
+                                    <div class="order-history__details">
+                                        <p><strong>수령인:</strong> {{ orders[0].receiverName }}</p>
+                                        <p><strong>연락처:</strong> {{ orders[0].receiverPhone }}</p>
+                                        <p><strong>배송지:</strong> {{ orders[0].receiverAddr }}</p>
+                                        <p><strong>배송메시지:</strong> {{ orders[0].deliveryMessage || '없음' }}</p>
+                                        <hr>
+                                        <div v-for="product in orders" :key="product.orderId">
+                                            <p><strong>상품명:</strong> {{ product.productName }}</p>
+                                            <p><strong>가격:</strong> {{ product.price }} 원</p>
+                                            <p><strong>수량:</strong> {{ product.quantity }}</p>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -109,28 +131,60 @@
                 return {
                     sessionId:"${sessionId}",
                     orderId:"${map.orderId}",
-                    orders: [],
+                    orderList: [],
                     startDate: "",
                     endDate: "",
                     orderStatus: "all",
-                    selectedOrder: null,
+                    ordersByDate:{}
                 };
             },
             computed: {
-                
+                groupedOrders() {
+                    const groupedByDate = this.orderList
+                        .map(order => {
+                            let orderDate = new Date(order.orderedAt).toLocaleDateString('ko-KR', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit' 
+                            }).replace(/\. /g, '-').replace('.', '');
+                            // console.log("주문 날짜 변환: ",order.orderedAt, "→", orderDate);
+
+                            return { ...order, formattedDate: orderDate };
+                        })
+                        .filter(order => {
+                            // console.log("필터링: ",order.formattedDate, ">=", this.startDate, "&&", order.formattedDate, "<=", this.endDate);
+                            return order.formattedDate >= this.startDate && order.formattedDate <= this.endDate;
+                        })
+                        .reduce((groups, order) => {
+                            if (!groups[order.formattedDate]) {
+                                groups[order.formattedDate] = {};
+                            }
+                            if (!groups[order.formattedDate][order.orderId]) {
+                                groups[order.formattedDate][order.orderId] = [];
+                            }
+                            groups[order.formattedDate][order.orderId].push(order);
+                            return groups;
+                        }, {});
+
+                        // console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:", groupedByDate);
+                    return groupedByDate;
+                }
+            },
+            watch: {
+                groupedOrders: {
+                    handler(newVal) {
+                        this.ordersByDate = newVal ? JSON.parse(JSON.stringify(newVal)) : {};  // data 속성으로 반영
+                    },
+                    deep: true,
+                    immediate: true
+                }
             },
             methods: {
                 setDateRange(period) {
                     let today = new Date();
                     let startDate = new Date();
-
-                    if (period == 1) {
-                        startDate.setMonth(today.getMonth() - 1);
-                    } else if (period == 3) {
-                        startDate.setMonth(today.getMonth() - 3);
-                    } else if (period == 6) {
-                        startDate.setMonth(today.getMonth() - 6);
-                    }
+                    
+                    startDate.setMonth(today.getMonth() - period);
 
                     this.startDate = this.formatDate(startDate);
                     this.endDate = this.formatDate(today);
@@ -158,7 +212,8 @@
                     let params = {
                         userId: self.userInfo.userId, 
                         startDate : self.startDate,
-                        endDate : self.endDate
+                        endDate : self.endDate,
+                        orderStatus : self.orderStatus
                     };
                     $.ajax({
                         url: "/order/AllList.dox",
@@ -166,8 +221,7 @@
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            console.log("주문 상세 목록 >>> ",data.result);
-                            self.orderList = data.orderList;
+                            console.log("주문 상세 목록 >>> ",data.orderList);
                             self.orderList = data.orderList.map(order => ({
                                 ...order,
                                 showDetails: false
@@ -175,7 +229,6 @@
                         }
                     });
                 },
-
                 formatDate(date) {
                     let year = date.getFullYear();
                     let month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -183,24 +236,36 @@
                     return year + "-" + month + "-" + day;
                 },
 
-                cancelOrder(orderId) {
-                    alert("주문이 취소되었습니다. 주문번호: " + orderId);
-                },
+                // cancelOrder(orderId) {
+                //     alert("주문이 취소되었습니다. 주문번호: " + orderId);
+                // },
 
-                editShipping(orderId) {
-                    alert("배송정보 수정 페이지로 이동합니다. 주문번호: " + orderId);
-                },
+                // editShipping(orderId) {
+                //     alert("배송정보 수정 페이지로 이동합니다. 주문번호: " + orderId);
+                // },
 
-                requestReturn(orderId) {
-                    alert("반품 신청이 완료되었습니다. 주문번호: " + orderId);
-                },
+                // requestReturn(orderId) {
+                //     alert("반품 신청이 완료되었습니다. 주문번호: " + orderId);
+                // },
 
-                requestExchange(orderId) {
-                    alert("교환 신청이 완료되었습니다. 주문번호: " + orderId);
-                },
-                toggleDetails(index) {
-                    // 해당 주문에 대해 배송정보를 토글
-                    this.orders[index].showDetails = !this.orders[index].showDetails;
+                // requestExchange(orderId) {
+                //     alert("교환 신청이 완료되었습니다. 주문번호: " + orderId);
+                // },
+                toggleDetails(orderIdToToggle) {
+                    for (let date in this.ordersByDate) {
+                        for (let orderId in this.ordersByDate[date]) {
+                            this.ordersByDate[date][orderId].forEach(order => {
+                                // 각 주문에 대해서만 showDetails를 토글
+                                if (order.orderId === orderIdToToggle) {
+                                    order.showDetails = !order.showDetails;
+                                    console.log("주문번호: ",orderIdToToggle,"의 showDetails: ",order.showDetails);
+                                } else {
+                                    order.showDetails = false;  // 다른 주문의 showDetails는 false로 설정
+                                }
+                            });
+                        }
+                    }
+                    console.log(this.ordersByDate);
                 },
                 
             },

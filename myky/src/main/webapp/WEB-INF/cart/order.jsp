@@ -329,7 +329,7 @@
                     discountAmount: 0,
                     cartId: "",
                     paid_amount:0,
-                    isMembership:false
+                    isMembership:false,
                 };
             },
             computed: {
@@ -371,7 +371,7 @@
                     } else {
                         finalPrice = this.totalPrice;
                     }
-                    return Math.floor(finalPrice * 0.05);
+                    return +Math.floor(finalPrice * 0.05);
                 },
                 formattedRewardPoints() {
                     return this.rewardPoint.toLocaleString();
@@ -439,6 +439,26 @@
                                 self.isMembership = true;
 
                             }
+                        }
+                    });
+                },
+                fnRewardPoint:function(){
+                    let self = this;
+                    console.log("적립할 포인트 >>> ",self.rewardPoint);
+
+                    var nparmap = {
+                        usedPoint: self.rewardPoint,
+                        remarks: "결제 적립 포인트",
+                        userId: self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/point/used.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("포인트 적립 내역 저장 >>> ", data.result);
+
                         }
                     });
                 },
@@ -633,7 +653,7 @@
                         
                         let paymentData = {
                             merchant_uid: merchantUid,
-                            name: "장바구니 - 포인트 결제",
+                            name: "상품 구매 포인트 결제",
                             paid_amount: self.paid_amount,
                             pay_method: "point_only",
                             status: "paid",
@@ -660,7 +680,7 @@
                         pg: "html5_inicis",
                         pay_method: "card",
                         merchant_uid: "merchant_" + new Date().getTime(),
-                        name: "장바구니 상품 결제",
+                        name: "상품 구매 결제",
                         amount: finaPrice,
                         buyer_tel: self.userInfo.phoneNumber,
                     }, function (rsp) {
@@ -701,7 +721,8 @@
                         isCanceled: "N",
                         cancelDate: null,
                         donationId: null,
-                        userId: self.userInfo.userId
+                        userId: self.userInfo.userId,
+                        usedPoint: self.usedPoint
                     };
                     $.ajax({
                         url: "/payment.dox",
@@ -750,6 +771,7 @@
                             if (data.result === "success") {
                                 console.log("주문 상세 정보도 저장 완료");
                                 alert("주문이 완료되었습니다.");
+                                self.fnRewardPoint();
                                 pageChange("/order/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
                             }
                         }
@@ -780,7 +802,7 @@
 
                     var nparmap = {
                         usedPoint: usedPoint,
-                        remarks: "장바구니_결제",
+                        remarks: "상품 구매 시 포인트 사용",
                         userId: self.userInfo.userId
                     };
                     $.ajax({
