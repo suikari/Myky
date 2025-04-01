@@ -398,7 +398,7 @@
             </nav>
             
             <div class="icons">
-                <span class="icon">💎</span>
+                <span @click="myMembership" class="icon">💎</span>
 		    	<span @click="toggleSearch" class="search-icon">🔍</span>
                 <span @click="myPage" class="icon">👤</span>
                 <span @click="myCart" class="icon">🛒</span>
@@ -529,6 +529,11 @@
                     myCart: function(){
                     	console.log("cart");
                     	location.href = "/cart/list.do";
+
+                    },
+                    myMembership: function(){
+                    	console.log("membership");
+                    	location.href = "/membership/main.do";
 
                     },
                     

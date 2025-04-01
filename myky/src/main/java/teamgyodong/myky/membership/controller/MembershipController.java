@@ -20,6 +20,13 @@ public class MembershipController {
 	@Autowired
 	MembershipService membershipService;
 	
+	@RequestMapping("/membership/main.do") 
+    public String map(Model model) throws Exception{
+		
+
+        return "membership/index"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
+    }
+	
 	// 멤버십 정보 조회
 	@RequestMapping(value = "/membership/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
