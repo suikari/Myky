@@ -22,29 +22,42 @@
 
             .product-container {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                column-gap: 20px;
-                row-gap: 40px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
                 flex-wrap: wrap;
                 gap: 24px;
+                padding: 0 10px;
                 justify-content: flex-start;
+                box-sizing: border-box;
+                cursor: pointer;
+            }
+
+            .product-info {
+                width: 250px;
+                /* 이미지랑 너비 맞춤 */
+                text-align: left;
+                /* 왼쪽 정렬 */
             }
 
             .product-item {
-                width: 260px;
-                height: 100%;
-                background: #fff;
-                padding: 12px;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-                border-radius: 6px;
                 display: flex;
                 flex-direction: column;
-                transition: all 0.3s ease-in-out;
-                background-color: transparent;
-                box-shadow: none;
-                border: none;
-                text-align: left
+                align-items: center;
+                /* 이미지 정중앙 */
+                /* border: 0.5px solid #ddd;
+    border-radius: 4px; */
+                padding: 4px;
+                background: #fff;
             }
+
+            .product-image {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+                margin: 0;
+            }
+
             .product-image img {
                 width: 250px;
                 height: 250px;
@@ -52,7 +65,10 @@
                 border-radius: 5px;
                 margin-bottom: 10px;
                 cursor: pointer;
+                justify-content: center;
+                align-items: center;
             }
+
             .product-name {
                 font-size: 14px;
                 font-weight: bold;
@@ -60,14 +76,15 @@
                 margin-bottom: 8px;
                 line-height: 1.4;
                 min-height: 38px;
-                /* 두 줄 보장 */
             }
+
             .original-price {
                 font-size: 13px;
                 text-decoration: line-through;
                 color: #888;
                 margin-bottom: 4px;
             }
+
             .discount-price {
                 font-size: 16px;
                 color: #d32f2f;
@@ -80,9 +97,7 @@
                 color: #666;
                 margin-top: auto;
             }
-            .product-item:hover {
-                transform: translateY(-5px);
-            }
+
             .product-item h3 {
                 text-align: left;
                 width: 100%;
@@ -109,8 +124,6 @@
                 font-size: 15px;
                 font-weight: bold;
             }
-
-
 
             .discount-price strong {
                 text-align: left;
@@ -212,6 +225,40 @@
                 color: #000;
             }
 
+
+            .breadcrumb-container {
+                width: 100%;
+                text-align: right;
+                margin-bottom: 10px;
+                position: relative;
+                top: -40px;
+            }
+
+            .breadcrumb {
+                display: inline-block;
+                font-size: 14px;
+                justify-content: flex-start;
+                padding-left: 20px;
+                padding-right: 20px;
+                gap: 6px;
+                color: #666;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .breadcrumb a {
+                color: #444;
+                text-decoration: none;
+                font-weight: 450;
+                cursor: pointer;
+                display: inline-block;
+                transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+            }
+            .breadcrumb a:hover {
+                text-decoration: none;
+                transform: scale(1.15);
+                color: #ff6600;
+            }
+
             @media (max-width: 768px) {
                 .top-bar {
                     flex-direction: column;
@@ -227,11 +274,18 @@
 
         <div id="app" class="container">
             <main>
-                <!-- <select v-model="searchOption" id="selectBox">
-                <option value="all">:: 전체 상품 ::</option>
-                <option value="dog">강아지 상품</option>
-                <option value="cat">고양이 상품</option>
-            </select> -->
+                <div class="breadcrumb-container">
+                    <div class="breadcrumb">
+                        <a href="/">홈</a>
+                        / <a href="/product/list.do">  전체상품 </a>
+                        <template v-if="largeCategory">
+                            /<a href="javascript:;" @click="goToCategory">{{ largeCategory }}</a>
+                        </template>
+                        <template v-if="subcategory">
+                            / <a href="javascript:;" @click="goToSubCategory">{{ subcategory }}</a>
+                        </template>
+                    </div>
+                </div>
                 <div class="product-header">
                     <div class="total-count">
                         총 <strong>{{ totalCount }}</strong>개의 상품이 있습니다.
@@ -239,10 +293,11 @@
                     <div class="sort-box">
                         <select v-model="sortOption" @change="fnChangeSort" class="sort-select">
                             <option value="">:: 정렬방식 ::</option>
-                            <option value="high">높은 가격순</option>
-                            <option value="low">낮은 가격순</option>
-                            <option value="name">상품명 순</option>
-                            <option value="rating">평점 높은 순</option>
+                            <option value="high">높은 가격</option>
+                            <option value="low">낮은 가격</option>
+                            <option value="name">상품명</option>
+                            <option value="count">사용후기</option>
+                            <option value="registration">신상품</option>
                         </select>
                     </div>
                 </div>
@@ -251,7 +306,7 @@
                     <div v-for="item in list" class="product-item" :key="item.productId">
                         <div class="product-image" @click="fnView(item.productId)">
                             <img :src="item.filePath || '../../img/product/product update.png'"
-                                :alt="item.fileName || '이미지 없음'">
+                                :alt="item.fileName || '이미지 없음'" @click.stop="fnView(item.productId)">
                         </div>
 
                         <div class="product-info">
@@ -283,8 +338,6 @@
                             </a>
                             <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
                 </div>
-                <!-- <button @click="fnChange">강아지</button>
-            <button @click="fnChange2">장난감</button> -->
             </main>
         </div>
 
@@ -302,17 +355,33 @@
                         searchOption: '${map.searchOption}',
                         list: [],
                         index: 0,
-                        pageSize: 8,
+                        pageSize: 9,
                         page: 1,
                         isMember: true,
                         membershipDiscountRate: 0.9,
                         sessionRole: "${sessionRole}",
                         sortOption: "",
                         totalCount: 0,
-                        sort : "",
-                        productList : []
+                        sort: "",
+                        productList: [],
+                        category: "",
+                        // subcategory: "",
                     };
                 },
+                computed: {
+                    largeCategory() {
+                        switch (this.searchOption) {
+                            case 'dog': return '강아지';
+                            case 'cat': return '고양이';
+                            case 'pet': return '영양제';
+                            default: return '';
+                        }
+                    },
+                    subcategory() {
+                        return this.keyword || '';
+                    }
+                },
+
                 methods: {
                     fnProductList() {
                         var self = this;
@@ -321,7 +390,7 @@
                             searchOption: self.searchOption,
                             pageSize: self.pageSize,
                             page: (self.page - 1) * self.pageSize,
-                            sortOption: self.sortOption 
+                            sortOption: self.sortOption
                         };
                         $.ajax({
                             url: "/product/list.dox",
@@ -337,6 +406,10 @@
                         });
                     },
                     fnView: function (productId) {
+                        let self = this;
+                        localStorage.setItem("sortOption", self.sortOption);
+                        localStorage.setItem("page", self.page);
+
                         location.href = "/product/view.do?productId=" + productId;
                     },
                     fnPage: function (num) {
@@ -355,7 +428,9 @@
                     },
                     fnChangeSort() {
                         let self = this;
-                        self.page = 1; 
+                        self.page = 1;
+                        //사용자가 선택한 정렬 옵션을 브라우저에 저장!
+
                         self.fnProductList();
                     },
                     formatPrice(value) {
@@ -365,16 +440,65 @@
                     getDiscountedPrice(item) {
                         if (!item.discount || item.discount === 0) return item.price;
                         return Math.floor(item.price * (1 - item.discount / 100));
-                    }
+                    },
+                    goToCategory: function () {
+                        let self = this;
+                        let searchOption = "";
+
+                        if (self.largeCategory === "강아지") {
+                            searchOption = "dog";
+                        } else if (self.largeCategory === "고양이") {
+                            searchOption = "cat";
+                        } else if (self.largeCategory === "영양제") {
+                            searchOption = "pet";
+                        }
+
+                        if (searchOption !== "") {
+                            location.href = "/product/list.do?searchOption=" + searchOption;
+                        } else {
+                            alert("잘못된 카테고리입니다.");
+                        }
+                    },
+
+                    goToSubCategory: function () {
+                        let self = this;
+                        let searchOption = "";
+                        let subcategory = self.subcategory;
+
+                        if (self.largeCategory === "강아지") {
+                            searchOption = "dog";
+                        } else if (self.largeCategory === "고양이") {
+                            searchOption = "cat";
+                        } else if (self.largeCategory === "영양제") {
+                            searchOption = "pet";
+                        }
+
+                        if (searchOption !== "" && subcategory !== "") {
+                            location.href = "/product/list.do?searchOption=" + searchOption + "&keyword=" + subcategory;
+                        } else {
+                            alert("카테고리 정보가 부족합니다.");
+                        }
+                    },
+
                 },
                 setup() {
                     const params = new URLSearchParams(window.location.search);
                     const keyword = params.get("keyword") || "";
                     const searchOption = params.get("searchOption") || "";
-                    const sortOption = params.get("sortOption") || "";
-                    const page = Number(params.get("page")) || 1;
 
-                    return { keyword, searchOption, sortOption, page };
+                    //카테고리 분류
+                    const category = params.get("category") || "";
+                    const subcategory = params.get("subcategory") || "";
+
+                    //localStorage에서 sortOption 가져오기(정렬 기준)
+                    const savedSort = localStorage.getItem("sortOption");  //저장된 값을 꺼내기
+                    const sortOption = savedSort || params.get("sortOption") || ""; //없으면 기본값
+                    localStorage.removeItem("sortOption");
+                    //localStorage에서 sortOption 가져오기(페이지 기준)
+                    const page = Number(localStorage.getItem("page")) || 1;
+                    localStorage.removeItem("page");
+
+                    return { keyword, searchOption, sortOption, page, category, subcategory };
 
                 },
                 mounted() {

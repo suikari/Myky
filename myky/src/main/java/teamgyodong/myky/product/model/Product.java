@@ -8,6 +8,7 @@ public class Product {
 	private String productId;
 	private String productName;
 	private String categoryId;
+	private String categoryName;
 	private int price ;
 	private String quantity;
 	private String registrationDate;
