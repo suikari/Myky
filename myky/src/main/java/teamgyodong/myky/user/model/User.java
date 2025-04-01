@@ -22,6 +22,13 @@ public class User {
 	private String gender;
 	private String deleteYn;
 
+	
+	// point
+	private String pointId;
+	private String usageDate;
+	private String usePoint;
+	private String currentPoint;
+	private String remarks;
 
 
 }

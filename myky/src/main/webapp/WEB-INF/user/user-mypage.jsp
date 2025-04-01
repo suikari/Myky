@@ -453,6 +453,67 @@
                     font-size: 22px;
                 }
             }
+
+            /* 전체 포인트 페이지 스타일 */
+            .cpoint-page {
+                font-family: 'Arial', sans-serif;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            /* 미니 타이틀 스타일 */
+            .cpoint-title {
+                font-size: 20px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 10px;
+                border-bottom: 2px solid #0078d4;
+                padding-bottom: 5px;
+            }
+
+            /* 현재 포인트 스타일 */
+            .current-cpoint {
+                font-size: 25px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+
+            /* 테이블 스타일 */
+            .cpoint-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+
+            /* 테이블 헤더 스타일 */
+            .cpoint-header {
+                background-color: #0078d4;
+                color: white;
+                padding: 10px;
+                text-align: left;
+                font-size: 16px;
+            }
+
+            /* 테이블 행 스타일 */
+            .cpoint-row {
+                background-color: #fff;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .cpoint-row td {
+                padding: 12px 15px;
+                text-align: left;
+                font-size: 14px;
+            }
+
+            /* 테이블 행 호버 효과 */
+            .cpoint-row:hover {
+                background-color: #f1f1f1;
+            }
         </style>
     </head>
 
@@ -470,7 +531,7 @@
                         </div>
                     </div>
                     <div class="summary">
-                        <div class="summary-item">현재 포인트<br>{{point.currentPoint}}P</div>
+                        <div class="summary-item">현재 포인트 <br>{{point.currentPoint}}P</div>
                         <div class="summary-item">1개<br>쿠폰</div>
                         <div class="summary-item">0건(0회)<br>총 주문</div>
                     </div>
@@ -524,6 +585,43 @@
                                     <p>주문 내역이 없습니다.</p>
                                 </div>
                             </span>
+
+                            <div v-if="activeTab === 'point'" class="cpoint-page">
+                                <div class="cpoint-title">포인트 사용 내역</div>
+                                <br>
+                                <div class="current-cpoint">현재 포인트 <span
+                                        style="color: red;">{{point.currentPoint}}</span>P</div>
+                                <table class="cpoint-table">
+                                    <tr>
+                                        <th class="cpoint-header">적립(차감)된 포인트</th>
+                                        <th class="cpoint-header">변경 후 포인트</th>
+                                        <th class="cpoint-header">사용 용도</th>
+                                        <th class="cpoint-header">갱신된 날짜</th>
+                                    </tr>
+                                    <tr v-for="item in pointList" class="cpoint-row">
+                                        <td style="text-align: center;">{{item.usePoint}}</td>
+                                        <td style="text-align: center;">{{item.currentPoint}}</td>
+                                        <td>{{item.remarks}}</td>
+                                        <td>{{item.usageDate}}</td>
+                                    </tr>
+                                    <tr v-if="pointList.length == 0">
+                                        <td colspan="4" style="text-align: center; padding-top : 20px;"> 포인트 사용 내역이
+                                            없습니다.</td>
+                                    </tr>
+                                </table>
+                                <br>
+
+                                <a v-if="page3 != 1" id="pointIndex" href="javascript:;" class="bgColer2"
+                                    @click="fnPageMove3('pvev')">
+                                    < </a>
+                                <a v-if="page3 != pointIndex" id="pointIndex" href="javascript:;"
+                                    class="bgColer2" @click="fnPageMove3('next')">
+                                    > </a>
+
+                            </div>
+
+
+
                             <div v-if="activeTab === 'board'" class="comment-page">
                                 <h3>작성한 게시글 수 : 총 <span style="color: red;">{{boardCnt.cnt}} </span>개</h3>
                                 <div>
@@ -659,7 +757,8 @@
                                         <span style="font-size: 20px;">{{user.userName}}</span>님이 후원하신 금액은
                                     </div>
                                     <div class="donation-amount">
-                                        총 <span>{{sum.amount}}</span>원 입니다.
+                                        총
+                                        <span>{{sum.amount}}</span>원 입니다.
                                     </div>
                                     <div class="thank-you-message">언제나 따뜻한 후원 감사합니다.<div>
                                             <br>
@@ -674,23 +773,23 @@
                                                     <th>후원 날짜</th>
                                                 </tr>
                                                 <tr v-for="item in donaList">
-                                                    <td class="center-name">{{item.centerName}}</td>
-                                                    <td class="message">{{item.message}}</td>
+                                                    <td class="center-name">{{ item.centerName }}</td>
+                                                    <td class="message">{{ item.message }}</td>
                                                     <td>{{ formattedAmount(item.amount) }}</td>
                                                     <td>
-                                                        <span v-if="item.anonymousYn=='Y'" class="anonymous">익명
+                                                        <span v-if="item.anonymousYn == 'Y'" class="anonymous">익명
                                                             기부</span>
                                                         <span v-else class="real-name">실명 기부</span>
                                                     </td>
-                                                    <td class="donation-date">{{item.donationDate}}</td>
+                                                    <td class="donation-date">{{ item.donationDate }}</td>
                                                 </tr>
+
+                                                <tr v-if="donaList.length == 0">
+                                                    <td colspan="5">후원 내역이 없습니다.</td>
+                                                </tr>
+
                                             </table>
                                         </div>
-
-
-
-
-
                                     </div>
 
 
@@ -759,7 +858,13 @@
                         commCnt: 0,
                         commKeyword: "",
                         donaList: [],
-                        sum: ""
+                        sum: "",
+                        pointList: [],
+                        pointIndex: 0,
+                        pointCnt: 0,
+                        pageSize3: 10,
+                        page3: 1
+
 
                     };
                 },
@@ -961,26 +1066,57 @@
                             }
                         });
                     },
-
-                    fnVetInfo() {
+                    fnPoint2() {
                         var self = this;
                         var nparmap = {
-                            userId: self.userId
+                            userId: self.userId,
+                            pageSize3: self.pageSize3,
+                            page3: (self.page3 - 1) * self.pageSize3,
                         };
                         $.ajax({
-                            url: "/user/vetInfo.dox",
+                            url: "/user/point.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
-                                self.user = data.user;
-                                self.vet = data.vet;
-                                console.log(self.vet);
-
+                                self.pointList = data.point;
+                                self.pointCnt = data.pointCount;
+                                self.pointIndex = Math.ceil(data.pointCount / self.pageSize3);
                             }
                         });
+                    },
+
+                    fnPageMove3: function (direction) {
+                        let self = this;
+                        if (direction == "next") {
+                            self.page3++;
+                        } else {
+                            self.page3--;
+                        }
+                        self.fnPoint2();
                     }
+
+
+                    // //수의사 정보 공유
+                    // fnVetInfo() {
+                    //     var self = this;
+                    //     var nparmap = {
+                    //         userId: self.userId
+                    //     };
+                    //     $.ajax({
+                    //         url: "/user/vetInfo.dox",
+                    //         dataType: "json",
+                    //         type: "POST",
+                    //         data: nparmap,
+                    //         success: function (data) {
+                    //             console.log(data);
+                    //             self.user = data.user;
+                    //             self.vet = data.vet;
+                    //             console.log(self.vet);
+
+                    //         }
+                    //     });
+                    // }
 
                 },
 
@@ -995,7 +1131,8 @@
                     self.fnMyBoardList();
                     self.fnSeachComm();
                     self.fnDonaInfo();
-                    self.fnVetInfo();
+                    self.fnPoint2();
+                    // self.fnVetInfo();
                     window.vueObj = this;
 
                 }

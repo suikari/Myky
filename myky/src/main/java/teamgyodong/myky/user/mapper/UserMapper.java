@@ -42,6 +42,10 @@ public interface UserMapper {
 
 	Vet selectVet(HashMap<String, Object> map);
 
+	List<User> selectPoint(HashMap<String, Object> map);
+
+	int selectPointCnt(HashMap<String, Object> map);
+
 
 
 
