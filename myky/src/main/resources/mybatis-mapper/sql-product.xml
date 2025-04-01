@@ -59,6 +59,9 @@
 	        <when test="sortOption == 'count'">    
 	            ORDER BY COUNT(R.RATING) DESC
 	        </when>
+	         <when test="sortOption == 'registration'">
+			    ORDER BY REGISTRATION_DATE DESC  
+			 </when>
 	        <otherwise>
 	            ORDER BY P.CATEGORY_ID ASC , P.REGISTRATION_DATE DESC
 	        </otherwise>
