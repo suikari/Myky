@@ -17,11 +17,13 @@
 		    P.PRODUCT_CODE,
 		    P.REGISTRATION_DATE,
 		    F.FILEPATH,
-		    NVL(AVG(R.RATING), 0) AS AVG_RATING
+		    ROUND(NVL(AVG(R.RATING), 0), 1) AS AVG_RATING,
+    		COUNT(R.RATING) AS REVIEW_COUNT
 		FROM PRODUCT P
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'
 		LEFT JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
-		WHERE 1=1
+		WHERE 1=1		
+		 <!-- 기존 검색 옵션 유지 -->
 		<if test="searchOption != null and searchOption == 'all'">
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%' 
 		</if>
@@ -40,12 +42,10 @@
 		    AND P.CATEGORY_ID LIKE '%' || '영양제' || '%'
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%'
 		</if>
-	
 		GROUP BY 
 			P.PRODUCT_ID, P.PRODUCT_NAME, P.PRICE, P.CATEGORY_ID, P.MANUFACTURER,
 	        P.SHIPPING_FEE, P.SHIPPING_FREE_MINIMUM, P.DISCOUNT,
 	        P.PRODUCT_CODE, P.REGISTRATION_DATE, F.FILEPATH
-	
 		<choose>
 	        <when test="sortOption == 'high'">
 	            ORDER BY P.PRICE DESC
@@ -56,14 +56,13 @@
 	        <when test="sortOption == 'name'">
 	            ORDER BY P.PRODUCT_NAME ASC
 	        </when>
-	        <when test="sortOption == 'rating'">    
-	            ORDER BY AVG_RATING DESC
+	        <when test="sortOption == 'count'">    
+	            ORDER BY COUNT(R.RATING) DESC
 	        </when>
 	        <otherwise>
 	            ORDER BY P.CATEGORY_ID ASC , P.REGISTRATION_DATE DESC
 	        </otherwise>
 	    </choose>
-	
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 
