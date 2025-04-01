@@ -22,7 +22,11 @@ public interface ManagerService {
 	
 	HashMap<String, Object> selectAllUserList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllVetList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllMembershipList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map);
 
+	
+	
 	
 	HashMap<String, Object> updateUser(HashMap<String, Object> map);
 	

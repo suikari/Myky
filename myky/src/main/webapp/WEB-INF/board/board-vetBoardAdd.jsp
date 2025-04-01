@@ -56,8 +56,7 @@
             font-size: 20px;
             font-weight: bold;
             color: #202060;
-            margin-top: 70px;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
             width: 1000px;
             max-width: 100%;
         }
@@ -75,9 +74,7 @@
         }
         .title-input {
             max-width: 1000px;
-            width: 100%;
-            margin-bottom: -50px;
-            
+            width: 100%;            
         }
        .title-inputImg{
             width: 1000px;
@@ -166,24 +163,19 @@
             </div>
             <hr class="custom-hr">
 
-            <div>
-                <div class="title-label">TITLE</div>
-                <div class="title-input">
-                    <input v-model="title">
-                </div>
-                <div class="title-inputImg">
-                    <input type="file" id="file1" name="file1"  multiple>
-                </div>
+            <div class="title-label">
+                <div>TITLE</div>
+            <div class="title-input">
+                <input v-model="title">
             </div>
-            <div>
-                <div class="title-label">
-                    POINT
-                    <div>
-                        현재 point 
-                        {{currentPoint.currentPoint}}개
-                    </div>
-                    <input v-model="usedPoint" @input="fnCheck">개 사용
+            </div>
+            <div class="title-label">
+                POINT
+                <div>
+                    현재 point 
+                    {{currentPoint.currentPoint}}개
                 </div>
+                <input v-model="usedPoint" @input="fnCheck">개 사용
             </div>
             <div class="title-label">CONTENT</div>
             <div>
@@ -224,7 +216,6 @@
                         let self = this;
                         let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
-                        
                         if(!usedPoint){
                             alert("숫자만 입력해주세요");
                             return;
@@ -307,7 +298,7 @@
                     fnBack : function (info) {
                         let self = this;
                         location.href="/board/vetBoardList.do";
-                        
+                    
                     },
                 },
                 mounted() {

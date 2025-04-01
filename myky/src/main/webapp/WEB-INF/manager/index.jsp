@@ -63,6 +63,7 @@
              <% } else if ("2".equals(submenu)) { %>
                  <jsp:include page="/WEB-INF/manager/stats/userlist.jsp"/>
              <% } else if ("3".equals(submenu)) { %>
+                 <jsp:include page="/WEB-INF/manager/stats/product.jsp"/>
              <% } else if ("4".equals(submenu)) { %>
              <% } %>
              
@@ -72,12 +73,14 @@
                  <jsp:include page="/WEB-INF/manager/board/main.jsp"/>
              <% } else if ("2".equals(submenu)) { %>
                  <jsp:include page="/WEB-INF/manager/board/comment.jsp"/>
-             <% } else if ("3".equals(submenu)) { %>
+             <% } else if ("3".equals(submenu)) { %>            
+             
              <% } else if ("4".equals(submenu)) { %>
              <% } %>
              
-        <% } else if ("reports".equals(menu)) { %>
+        <% } else if ("product".equals(menu)) { %>
 			<% if ("1".equals(submenu)) { %>
+			      <jsp:include page="/WEB-INF/manager/product/main.jsp"/>
 			<% } else if ("2".equals(submenu)) { %>
 			<% } else if ("3".equals(submenu)) { %>
 			<% } else if ("4".equals(submenu)) { %>
@@ -87,6 +90,7 @@
 			<% if ("1".equals(submenu)) { %>
 			    <jsp:include page="/WEB-INF/manager/member/main.jsp"/>
 			<% } else if ("2".equals(submenu)) { %>
+				<jsp:include page="/WEB-INF/manager/member/membership.jsp"/>
 			<% } else if ("3".equals(submenu)) { %>
 				<jsp:include page="/WEB-INF/manager/member/vet.jsp"/>
 			<% } else if ("4".equals(submenu)) { %>

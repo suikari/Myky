@@ -20,8 +20,10 @@ import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.manager.mapper.ManagerMapper;
 import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.manager.model.Visit;
+import teamgyodong.myky.manager.model.mBoard;
 import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
+import teamgyodong.myky.manager.model.mMembership;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
 import teamgyodong.myky.manager.model.mUser;
@@ -78,11 +80,20 @@ public class ManagerServiceImpl implements ManagerService {
 			resultMap.put("Pay", mPay);
 			resultMap.put("User", mUser);
 			resultMap.put("Donation", mDonation);
+			
+	        if (!mProduct.isEmpty()) {
+	            resultMap.put("productcnt", mProduct.get(0).getProductTotalCnt());
+	        }
+	        if (!mPay.isEmpty()) {
+	            resultMap.put("paycnt", mPay.get(0).getPaymentTotalCnt());
+	        }
+	        if (!mUser.isEmpty()) {
+	            resultMap.put("userCnt", mUser.get(0).getUserTotalCnt());
+	        }
+	        if (!mDonation.isEmpty()) {
+	            resultMap.put("donationCnt", mDonation.get(0).getDonationTotalCnt());
+	        }
 
-			resultMap.put("productcnt", mProduct.get(0).getProductTotalCnt());
-			resultMap.put("paycnt", mPay.get(0).getPaymentTotalCnt());
-			resultMap.put("userCnt", mUser.get(0).getUserTotalCnt());
-			resultMap.put("donationCnt", mDonation.get(0).getDonationTotalCnt());
 
 			
 			
@@ -251,6 +262,57 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> selectAllMembershipList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mMembership> mMembership = managerMapper.selectAllMembershipList(map);
+			int count = managerMapper.selectAllMembershipCnt(map);
+			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+
+			resultMap.put("count", countMap);
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Membership", mMembership);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mBoard> mBoard = managerMapper.selectAllBoardList(map);
+			int count = managerMapper.selectAllBoardCnt(map);
+			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+
+			resultMap.put("count", countMap);
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Board", mBoard);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 	
 	@Override
 	public HashMap<String, Object> selectAllnotVetList(HashMap<String, Object> map) {

@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.manager.model.Visit;
+import teamgyodong.myky.manager.model.mBoard;
 import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
+import teamgyodong.myky.manager.model.mMembership;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
 import teamgyodong.myky.manager.model.mUser;
@@ -33,7 +36,11 @@ public interface ManagerMapper {
 	List<mUser> selectAllUserList(HashMap<String, Object> map);
 	List<Vet> selectAllVetList(HashMap<String, Object> map);
 	List<mUser> selectAllnotVetList(HashMap<String, Object> map);
+	List<mMembership> selectAllMembershipList(HashMap<String, Object> map);
+	List<mBoard> selectAllBoardList(HashMap<String, Object> map);
 
+	
+	
 	
 	mPay selectLogFristJoinBuy(HashMap<String, Object> map);
 
@@ -42,7 +49,11 @@ public interface ManagerMapper {
 	int selectAllCmtCnt(HashMap<String, Object> map);
 	int selectAllUserCnt(HashMap<String, Object> map);
 	int selectAllVetCnt(HashMap<String, Object> map);
+	int selectAllMembershipCnt(HashMap<String, Object> map);
+	int selectAllBoardCnt(HashMap<String, Object> map);
 
+	
+	
 	
 	
 	

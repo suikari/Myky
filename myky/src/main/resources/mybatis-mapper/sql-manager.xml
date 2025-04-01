@@ -74,21 +74,64 @@
 		    users u
 		LEFT JOIN 
 		    PAYMENT p ON u.USER_ID = p.USER_ID
-
+		WHERE 1=1
+		<if test="year != null and year != '' ">
+	        AND  EXTRACT(YEAR FROM u.CREATED_AT) =  #{year} 
+	    </if>
+	    <if test="month != null and month != '' ">
+	        AND  EXTRACT(MONTH FROM u.CREATED_AT) =  #{month} 
+	    </if>
+	    <if test="hour != null and hour != '' ">
+	        AND  EXTRACT(HOUR FROM u.CREATED_AT) =  #{hour} 
+	    </if>	
 	</select>
 
 	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mProduct">
 			select P.*  , 
-			(SELECT COUNT(*)
-		    FROM Product P ) AS productTotalCnt
+			(
+				SELECT COUNT(*)
+			    FROM Product P 
+			    WHERE 1=1
+				<if test="year != null and year != '' ">
+			        AND  EXTRACT(YEAR FROM P.REGISTRATION_DATE) =  #{year} 
+			    </if>
+			    <if test="month != null and month != '' ">
+			        AND  EXTRACT(MONTH FROM P.REGISTRATION_DATE) =  #{month} 
+			    </if>
+			    <if test="hour != null and hour != '' ">
+			        AND  EXTRACT(HOUR FROM P.REGISTRATION_DATE) =  #{hour} 
+			    </if>	
+		    ) AS productTotalCnt
 			FROM Product P
+			WHERE 1=1
+			<if test="year != null and year != '' ">
+		        AND  EXTRACT(YEAR FROM P.REGISTRATION_DATE) =  #{year} 
+		    </if>
+		    <if test="month != null and month != '' ">
+		        AND  EXTRACT(MONTH FROM P.REGISTRATION_DATE) =  #{month} 
+		    </if>
+		    <if test="hour != null and hour != '' ">
+		        AND  EXTRACT(HOUR FROM P.REGISTRATION_DATE) =  #{hour} 
+		    </if>	
 	</select>
 	
 	
 	<select id="selectPaymentList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mPay">
 			select P.*  , 
-			(SELECT COUNT(*)
-		    FROM payment P where nvl(P.subscription_period,0) = 0 ) AS paymentTotalCnt
+			(
+				SELECT COUNT(*)
+		        FROM payment P 
+		        where nvl(P.subscription_period,0) = 0
+			    <if test="year != null and year != '' ">
+			        AND  EXTRACT(YEAR FROM PAYMENT_DATE) =  #{year} 
+			    </if>
+			    <if test="month != null and month != '' ">
+			        AND  EXTRACT(MONTH FROM PAYMENT_DATE) =  #{month} 
+			    </if>
+			    <if test="hour != null and hour != '' ">
+			        AND  EXTRACT(HOUR FROM PAYMENT_DATE) =  #{hour} 
+			    </if>
+		     ) AS paymentTotalCnt
 			FROM payment P
 			WHERE 1=1
 		    <if test="year != null and year != '' ">
@@ -105,8 +148,20 @@
 	
 	<select id="selectUserList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mUser">
 			select U.*  , 
-			(SELECT COUNT(*)
-		    FROM USERS ) AS userTotalCnt
+			(
+				SELECT COUNT(*)
+		        FROM USERS
+		        WHERE 1=1
+			    <if test="year != null and year != '' ">
+			        AND  EXTRACT(YEAR FROM CREATED_AT) =  #{year} 
+			    </if>
+			    <if test="month != null and month != '' ">
+			        AND  EXTRACT(MONTH FROM CREATED_AT) =  #{month} 
+			    </if>
+			    <if test="hour != null and hour != '' ">
+			        AND  EXTRACT(HOUR FROM CREATED_AT) =  #{hour} 
+			    </if>		
+		     ) AS userTotalCnt
 			FROM USERS U
 			WHERE 1=1
 		    <if test="year != null and year != '' ">
@@ -123,8 +178,20 @@
 	
 	<select id="selectDonationList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mDonation">
 			select D.*  , 
-			(SELECT COUNT(*)
-		    FROM donation_history ) AS donationTotalCnt
+			(
+				SELECT COUNT(*)
+		    	FROM donation_history
+		    	WHERE 1=1
+			    <if test="year != null and year != '' ">
+			        AND  EXTRACT(YEAR FROM DONATION_DATE) =  #{year} 
+			    </if>
+			    <if test="month != null and month != '' ">
+			        AND  EXTRACT(MONTH FROM DONATION_DATE) =  #{month} 
+			    </if>
+			    <if test="hour != null and hour != '' ">
+			        AND  EXTRACT(HOUR FROM DONATION_DATE) =  #{hour} 
+			    </if>	
+		     ) AS donationTotalCnt
 			FROM donation_history D
 			WHERE 1=1
 		    <if test="year != null and year != '' ">
@@ -143,11 +210,19 @@
 	<select id="selectSearchRanking" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.manager">
 	    SELECT SEARCH_TERM, COUNT(*) AS SEARCH_COUNT
 	    FROM search_history
-	    <where>
+	    where 1=1
 	        <if test="userId != null and userId != ''">
 	            USER_ID = #{userId}
 	        </if>
-	    </where>
+	        <if test="year != null and year != '' ">
+		        AND  EXTRACT(YEAR FROM SEARCHED_AT) =  #{year} 
+		    </if>
+		    <if test="month != null and month != '' ">
+		        AND  EXTRACT(MONTH FROM SEARCHED_AT) =  #{month} 
+		    </if>
+		    <if test="hour != null and hour != '' ">
+		        AND  EXTRACT(HOUR FROM SEARCHED_AT) =  #{hour} 
+		    </if>	
 	    GROUP BY SEARCH_TERM
 	    ORDER BY SEARCH_COUNT DESC
 	    OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
@@ -175,6 +250,73 @@
 		</foreach>
 	</delete>
 	
+	
+		<select id="selectAllBoardList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mBoard">
+		SELECT 
+		    F.*,  U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime ,
+		    (SELECT COUNT(*)
+		    FROM FREE_BOARD_COMMENT C
+		    WHERE C.BOARD_ID = F.BOARD_ID) AS COMMENT_COUNT
+		FROM 
+		    FREE_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE 
+		    1=1
+		    <if test="searchOption != null and searchOption == 'all'">
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
+		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		    </if>
+		    <if test="searchOption != null and searchOption == 'title'">
+		        AND F.TITLE LIKE '%' || #{keyword} || '%'
+		    </if>
+		 	<if test="searchOption != null and searchOption == 'userId'">
+			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
+			</if>
+			<if test="searchOption != null and searchOption == 'userId2'">
+                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+                AND F.TITLE LIKE '%' || #{keyword2} || '%')
+            </if>
+		    AND CATEGORY= #{category}
+		ORDER BY 
+		    F.BOARD_ID DESC
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	
+	<select id="selectAllBoardCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM FREE_BOARD F
+		LEFT JOIN (
+			SELECT *
+			FROM USERS
+		) U ON F.USER_ID = U.USER_ID
+		WHERE 1=1
+			<if test="searchOption != null and searchOption == 'all'">
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
+		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
+		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
+		    </if>
+		    <if test="searchOption != null and searchOption == 'title'">
+		        AND F.TITLE LIKE '%' || #{keyword} || '%'
+		    </if>
+		 	<if test="searchOption != null and searchOption == 'userId'">
+			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
+			</if>
+			<if test="searchOption != null and searchOption == 'userId2'">
+                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+                AND F.TITLE LIKE '%' || #{keyword2} || '%')
+            </if>
+			AND CATEGORY= #{category}
+	</select>
+	
+	
 
 	<select id="selectAllCmtList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mComment">
 		
@@ -196,7 +338,6 @@
 	    <if test="searchOption != null and searchOption == 'userId'">
 	        AND F.USER_ID LIKE '%' || #{keyword} || '%'
 	    </if>
-		AND F.IS_DELETED = 'N'
 		ORDER BY F.UPDATED_AT DESC
 		
 		<if test="page != null and pageSize != null" >
@@ -217,7 +358,6 @@
 		) U ON F.USER_ID = U.USER_ID
 		LEFT JOIN FREE_BOARD B ON F.BOARD_ID = B.BOARD_ID
 		WHERE 1=1 
-		
 		<if test="searchOption != null and searchOption == 'all'">
 	        AND (F.CONTENT LIKE '%' || #{keyword} || '%' OR F.USER_ID LIKE '%' || #{keyword} || '%')
 	    </if>
@@ -227,7 +367,6 @@
 	    <if test="searchOption != null and searchOption == 'userId'">
 	        AND F.USER_ID LIKE '%' || #{keyword} || '%'
 	    </if>
-	    AND F.IS_DELETED = 'N'
 
 	</select>
 	
@@ -307,6 +446,34 @@
 	</select>
 	
 
+
+	<select id="selectAllMembershipList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mMembership">
+	
+		SELECT *
+		FROM membership
+		Where 1=1
+	 	<if test="searchOption != null and searchOption == 'userId'">
+	        AND NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	    </if>   
+	     ORDER BY renewal_date DESC
+		<if test="page != null and pageSize != null" >
+		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		</if>
+		
+	</select>
+	
+	
+	<select id="selectAllMembershipCnt" parameterType="hashmap" resultType="int">
+	
+		SELECT COUNT(*)
+        from membership 
+        Where 1=1
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND  NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	    </if>
+	    
+	</select>
+	
 
 	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
 		INSERT INTO veterinarian(vet_number,vet_id, name, email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)

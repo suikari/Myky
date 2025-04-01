@@ -25,28 +25,30 @@
                 box-shadow: none;
                 display: block;
                 flex-wrap: wrap;
+                position: relative;
             }
             .product-detail {
                 display: flex;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 justify-content: space-between;
                 width: 100%;
                 align-items: flex-start;
             }
 
             .product-image-container {
-                flex: 1;
-                max-width: 70%;
+                flex: 1 1 40%;
+                max-width: 60%;
                 text-align: left;
-                margin-top: 25px;
+                margin-right: 40px;
+                margin-top: 30px;
             }
 
             .product-image-container img {
-                width: 420px;
-                height: 420px;
+                width: 450px;
+                height: 460px;
                 object-fit: cover;
-                border: 2px solid #000;
-                border-radius: 20px;
+                border: 1px solid #000;
+                border-radius: 5px;
                 box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
             }
 
@@ -57,13 +59,13 @@
             }
 
             .product-image-thumbNails img {
-                width: 60px;
-                height: 60px;
+                width: 100px;
+                height: 100px;
                 object-fit: cover;
                 margin: 5px;
                 cursor: pointer;
                 border-radius: 5px;
-                border: 2px solid transparent;
+                border: 1px solid transparent;
                 transition: all 0.3s;
             }
 
@@ -72,8 +74,8 @@
             }
 
             .product-info {
-                flex: 1;
-                max-width: 48%;
+                flex: 1 1 60%;
+                max-width: 60%;
                 padding: 20px;
             }
 
@@ -263,11 +265,8 @@
             .notice-section {
                 max-width: 1000px;
                 margin: 50px auto;
-                /* auto로 수평 가운데 정렬 */
                 padding: 20px;
                 background-color: transparent;
-                /* border: 1px solid #ddd;
-                border-radius: 12px; */
                 text-align: center;
                 font-size: 16px;
                 line-height: 1.8;
@@ -277,12 +276,9 @@
             .notice-section2 {
                 max-width: 1000px;
                 margin: 50px auto;
-                /* auto로 수평 가운데 정렬 */
                 margin-top: 10px;
                 padding: 20px;
                 background-color: transparent;
-                /* border: 1px solid #ddd;
-                border-radius: 12px; */
                 text-align: center;
                 font-size: 16px;
                 line-height: 1.8;
@@ -469,16 +465,6 @@
                 width: 50%;
                 overflow: hidden;
             }
-
-            /* .star-rating {
-                font-size: 18px;
-                color: #ddd;
-            }
-
-            .star-rating .star.filled {
-                color: #FFD700;
-            } */
-
             .review-card-header,
             .review-card-body,
             .review-card-footer {
@@ -746,7 +732,6 @@
                 gap: 8px;
                 margin-top: 30px;
             }
-
             .pagination a {
                 text-decoration: none;
                 color: #333;
@@ -757,11 +742,40 @@
                 background: none;
                 font-size: 15px;
             }
-
             .pagination a.active {
                 color: #000;
                 font-weight: 900;
                 text-decoration: none;
+            }
+            .breadcrumb-container {
+                width: 100%;
+                text-align: right;
+                margin-bottom: 10px;
+                position: relative;
+                top: -10px;
+            }
+            .breadcrumb {
+                display: inline-block;
+                font-size: 14px;
+                justify-content: flex-start; /* 왼쪽 정렬 */
+                padding-left: 20px;
+                padding-right: 20px;
+                gap: 6px;
+                color: #666;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .breadcrumb a {
+                color: #444;
+                text-decoration: none;
+                font-weight: 500;
+                cursor: pointer;
+                transition: transform 0.3s ease, color 0.3s ease;
+            }
+            .breadcrumb a:hover {
+                text-decoration: none;
+                transform: scale(1.15); 
+                color: #ff6600;
             }
 
             @media (max-width: 768px) {
@@ -790,6 +804,18 @@
     <body>
         <jsp:include page="../common/header.jsp" />
         <div id="app" class="container">
+            <div class="breadcrumb-container">
+                <div class="breadcrumb" v-if="info.categoryId">
+                  <!-- <a href="/">홈</a> / -->
+                  <a href="/product/list.do">전체상품</a> /
+                  <a href="javascript:;" @click="goToCategory(largeCategory)">{{ largeCategory }}</a> /
+                  <a href="javascript:;" @click="goToSubCategory(info.categoryId)">
+                    {{ largeCategory + ' ' + subCategory }}
+                  </a> /
+                  <a>{{ info.productName }}</a>
+                </div>
+              </div>
+              
             <!-- 상품 상세 정보 -->
             <section class="product-detail">
                 <div class="product-image-container">
@@ -828,11 +854,14 @@
                         <span v-else>별점 없음</span>
                     </p>
                     <p>제조사 : {{ info.manufacturer }}</p>
+                    <p>상품코드 : {{ info.productCode }}</p>
                     <p>배송비 : {{ info.shippingFee }}원</p>
                     <div v-if="info.shippingFreeMinimum" class="shipping-note">
                         ({{ info.shippingFreeMinimum }}원 이상 주문 시 무료배송)
                     </div>
-                    <p>상품코드 : {{ info.productCode }}</p>
+                    <p>(최소 주문수량 1개 이상)</p>
+                    <p>배송 지역 : 전국 배송 가능</p>
+                    <p>배송 기간 : 결제 완료 후 2~3일 이내 출고 (주말/공휴일 제외)</p>
                     <hr>
 
                     <div class="purchase-section">
@@ -859,12 +888,10 @@
                                     <button @click="increaseQty" class="qty-btn">+</button>
                                 </div>
                             </div>
-
                             <div class="price-display">
                                 <strong>총 결제 금액 : {{ formattedPrice }}원</strong>
                             </div>
                         </div>
-
                         <div class="action-buttons">
                             <button class="cart-btn" @click="fnAddCart()">장바구니</button>
                             <button class="buy-btn" @click="fnBuy()">구매하기</button>
@@ -928,7 +955,6 @@
                         <div v-if="reviewList.length === 0" class="review-empty">
                             현재 게시물이 없습니다
                         </div>
-                        
                             <div class="review-card" v-for="review in reviewList" :key="review.reviewId">
                             <!-- 삭제된 리뷰일 경우 -->
                             <div v-if="review.deleteYn === 'Y'" class="review-deleted-content">
@@ -1006,7 +1032,6 @@
                                     <div class="qna-label">
                                         질문 <span class="qna-user-id">[{{ qna.userId }}]</span>
                                     </div>
-                                    <!-- <h5 class="qna-title" v-if="qna.title">{{ qna.title }}</h5> -->
                                     <div class="qna-text" v-html="qna.questionText"></div>
                                     <div class="qna-info">
                                         <span class="qna-date">{{ qna.createdAt }}</span>
@@ -1121,7 +1146,6 @@
                         alreadyClicked: {},
                         averageRating: 0,
                         
-
                         //탭 관련
                         tabs: [
                             { id: 'detail', label: '상세정보', cmtcount: "" },
@@ -1174,6 +1198,35 @@
                     },
                     discountedPrice() {
                         return Math.floor(this.info.price * (1 - this.info.discount / 100));
+                    },
+
+                    categoryParts() {
+                        if (!this.info.categoryId) return [];
+                        return this.info.categoryId.split(',');
+                    },
+                    largeCategory() {
+                        return this.categoryParts[0] || '';
+                    },
+                    subCategory() {
+                        return this.categoryParts[1] || '';
+                    },
+                    breadcrumbState() {
+                        if (!this.info || !this.info.categoryId) {
+                            return "all";  // 전체상품용
+                        }
+                        return "categorized";  // 카테고리 있음
+                    },
+                    searchOptionFromCategory() {
+                        switch (this.largeCategory) {
+                        case '강아지':
+                            return 'dog';
+                        case '고양이':
+                            return 'cat';
+                        case '영양제':
+                            return 'pet';
+                        default:
+                            return 'all';
+                        }
                     }
                 },
                 methods: {
@@ -1202,6 +1255,24 @@
                             },
                         });
                     },
+                    goToCategory() {
+                        let self = this;
+                        localStorage.removeItem("page");
+                        location.href = "/product/list.do?searchOption="+self.searchOptionFromCategory;
+                    },
+                    goToSubCategory() {
+                        let self = this;
+                        var category = this.largeCategory;
+                        var subcategory = self.subCategory;
+                        localStorage.removeItem("page");
+                        if (category && subcategory) {
+                            location.href = "/product/list.do?searchOption=" + this.searchOptionFromCategory + "&keyword=" + subcategory;
+                        } else {
+                            alert("카테고리 정보가 부족합니다.");
+                        }
+                    },
+
+
                     // 클릭된 이미지로 메인 이미지 변경
                     changeImage(filePath) {
                         document.getElementById('mainImage').src = filePath;

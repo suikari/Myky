@@ -13,5 +13,6 @@ public class vetAnswer {
 	private String comments;
 	private String createdAt;
 	private String vetNickName;
+	private String updatedTime;
 	
 }
