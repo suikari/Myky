@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.comment;
+import teamgyodong.myky.donation.model.donation;
+import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.user.model.User;
 
 @Mapper
@@ -33,6 +35,15 @@ public interface UserMapper {
 	List<comment> selectComm(HashMap<String, Object> map);
 
 	int selectCommentCnt(HashMap<String, Object> map);
+
+	List<donation> selectDonaInfo(HashMap<String, Object> map);
+
+	donation sumDona(HashMap<String, Object> map);
+
+	Vet selectVet(HashMap<String, Object> map);
+
+
+
 
 
 

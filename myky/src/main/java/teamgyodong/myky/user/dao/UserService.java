@@ -26,5 +26,9 @@ public interface UserService {
 
 	HashMap<String, Object> userComment(HashMap<String, Object> map);
 
+	HashMap<String, Object> userDonation(HashMap<String, Object> map);
+
+	HashMap<String, Object> vetInfo(HashMap<String, Object> map);
+
 	
 }
