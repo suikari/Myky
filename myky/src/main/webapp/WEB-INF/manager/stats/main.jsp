@@ -40,6 +40,7 @@
 		
 		/* 차트 높이 조절 */
 		.chart-container {
+			margin-top:20px;
 		    padding: 0 20px 20px;
 		}
 		
@@ -261,7 +262,7 @@
 				      <div class="stat-icon bg-green">
 				        <i class="bi bi-cash-stack"></i>
 				      </div>
-				      <div class="stat-number mt-2">₩ {{ saletot }}</div>
+				      <div class="stat-number mt-2">₩ {{ formattedSel }}</div>
 				      <div class="stat-label">이달의 판매 금액</div>
 				    </div>
 				  </div>
@@ -270,7 +271,7 @@
 				      <div class="stat-icon bg-orange">
 				        <i class="bi bi-hand-thumbs-up-fill"></i>
 				      </div>
-				      <div class="stat-number mt-2">₩ {{ donationtot }}</div>
+				      <div class="stat-number mt-2">₩ {{ formattedDonation }}</div>
 				      <div class="stat-label">이달의 후원 금액</div>
 				    </div>
 				  </div>
@@ -287,12 +288,17 @@
 		                            <span class="search-rank-keyword">{{ word.SearchTerm }}</span>
 		                            <span class="search-rank-count">{{ word.SearchCount }}회</span>
 		                        </li>
+		                        
+		                        <li v-if="searchChk">
+		                         	<span class="search-rank-number">검색 기록이 없습니다.</span>
+		                        </li>
 		                    </ul>
 		                </div>
 		            </div>
 		            <div class="col-md-6">
-		                <div class="card-body chart-container">
-		                    <div id="chart"></div>
+		                <div class="card chart-container">
+		               		<div class="card-header" v-if="options.series.length === 0">검색 결과가 없습니다.</div>
+							<div id="chart" v-show="options.series.length > 0"></div>
 		                </div>
 		            </div>
 		        </div>
@@ -312,7 +318,7 @@
                      return {
                     	 stats: [
                              { icon: 'bi bi-heart-fill', number: "..", label: '이달의 후원 수', bg: 'bg-blue' },
-                             { icon: 'bi bi-box-fill', number: "..", label: '등록 상품 수', bg: 'bg-yellow' },
+                             { icon: 'bi bi-box-fill', number: "..", label: '이달의 상품 등록수', bg: 'bg-yellow' },
                              { icon: 'bi bi-bag-fill', number: "..", label: '이달의 상품 판매량', bg: 'bg-red' },
                              { icon: 'bi bi-briefcase-fill', number: "..", label: '이달의 등록자 현황', bg: 'bg-purple' }
                          ],
@@ -334,16 +340,28 @@
                                },
                                labels: ['신규회원 구매율'],
                         },
-                        
+                        year : new Date().getFullYear(),
+                        month : new Date().getMonth() + 1,
+                        searchChk : false
                      };
                  },
                 computed: {
-
+                        formattedSel() {
+                            return this.saletot.toLocaleString('ko-KR') + " 원";
+                        },
+                        formattedDonation() {
+                            return this.donationtot.toLocaleString('ko-KR') + " 원";
+                        },
+                        
+                        
                 },
                 methods: {
                 	fnMainList : function() {
                     	var self = this;
                     	var nparmap = {
+                    			year : self.year,
+                    			month : self.month,
+                                
                     	};
                     	$.ajax({
                     		url: "/admin/mainList.dox",
@@ -353,10 +371,30 @@
                     		success: function (data) {
                     			console.log("main",data);
                     			
-                    			self.stats[0].number = data.donationCnt;
-                    			self.stats[1].number = data.productcnt;
-                    			self.stats[2].number = data.paycnt;
-                    			self.stats[3].number = data.userCnt;
+                    			
+                    			if (data.donationCnt) {
+                        			self.stats[0].number = data.donationCnt;
+                    			} else {
+                    				self.stats[0].number = 0;
+                    			}
+                    			
+                    			if (data.productcnt) {
+                        			self.stats[1].number = data.productcnt;
+                    			} else {
+                    				self.stats[1].number = 0;
+                    			}
+                    			
+                    			if (data.paycnt) {
+                        			self.stats[2].number = data.paycnt;
+                    			} else {
+                    				self.stats[2].number = 0;
+                    			}
+                    			
+                    			if (data.userCnt) {
+                        			self.stats[3].number = data.userCnt;
+                    			} else {
+                    				self.stats[3].number = 0;
+                    			}
 							
                     			for (var i= 0 ; i < data.Pay.length ; i++ ){
                         			self.saletot += parseInt(data.Pay[i].amount);
@@ -376,8 +414,13 @@
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("12",data);
-                    			self.searchRanks = data.Search;
-
+                    			
+                    			if (Array.isArray(data.Search) && data.Search.length > 0){
+                        			self.searchRanks = data.Search;
+                    			} else {
+                        			self.searchRanks = "";
+                    				searchChk = true;
+                    			}                    			               			
                     		}
                     	
                     	});
@@ -389,12 +432,16 @@
 							data: nparmap,
 							success: function (data) {
 								console.log("123",data);
+								
+								
+                    			if (Array.isArray(data.Pay) && data.Pay.length > 0) {
+
 								var per =  (parseInt(data.Pay.purchasedMembers) / (parseInt(data.Pay.purchasedMembers) + parseInt(data.Pay.nonPurchasedMembers))) * 100;
 								self.options.series.push(per.toFixed(0));
 
 								var chart = new ApexCharts(document.querySelector("#chart"), self.options);
 								chart.render();
-								
+                    			}
 							}
 
 						});
