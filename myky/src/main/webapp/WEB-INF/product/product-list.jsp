@@ -68,7 +68,6 @@
                 justify-content: center;
                 align-items: center;
             }
-
             .product-name {
                 font-size: 14px;
                 font-weight: bold;
@@ -293,8 +292,8 @@
                     <div class="sort-box">
                         <select v-model="sortOption" @change="fnChangeSort" class="sort-select">
                             <option value="">:: 정렬방식 ::</option>
-                            <option value="high">높은 가격</option>
-                            <option value="low">낮은 가격</option>
+                            <option value="high">높은가격</option>
+                            <option value="low">낮은가격</option>
                             <option value="name">상품명</option>
                             <option value="count">사용후기</option>
                             <option value="registration">신상품</option>
@@ -307,6 +306,8 @@
                         <div class="product-image" @click="fnView(item.productId)">
                             <img :src="item.filePath || '../../img/product/product update.png'"
                                 :alt="item.fileName || '이미지 없음'" @click.stop="fnView(item.productId)">
+                                <!-- <img class="auth-stamp" src="../../img/product/Official Product.jpg" alt="정품 인증"> -->
+                            <!-- <img src="../../img/product/Official Product.jpg" class="common-stamp" alt="정품 인증"> -->
                         </div>
 
                         <div class="product-info">
@@ -365,7 +366,6 @@
                         sort: "",
                         productList: [],
                         category: "",
-                        // subcategory: "",
                     };
                 },
                 computed: {
@@ -381,7 +381,6 @@
                         return this.keyword || '';
                     }
                 },
-
                 methods: {
                     fnProductList() {
                         var self = this;
@@ -429,7 +428,6 @@
                     fnChangeSort() {
                         let self = this;
                         self.page = 1;
-                        //사용자가 선택한 정렬 옵션을 브라우저에 저장!
 
                         self.fnProductList();
                     },
@@ -479,7 +477,6 @@
                             alert("카테고리 정보가 부족합니다.");
                         }
                     },
-
                 },
                 setup() {
                     const params = new URLSearchParams(window.location.search);
