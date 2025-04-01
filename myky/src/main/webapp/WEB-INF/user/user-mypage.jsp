@@ -316,6 +316,143 @@
                 background-color: #007bff;
                 color: white;
             }
+
+
+            /* 전체 페이지 배경 */
+            .page-container {
+                background-color: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            /* 페이지 제목 스타일 */
+            .page-title {
+                font-size: 28px;
+                font-weight: bold;
+                color: #333;
+                text-align: center;
+                margin-top: 30px;
+                margin-bottom: 20px;
+                font-family: 'Arial', sans-serif;
+                background: linear-gradient(to right, #ff6600, #ff9966);
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                padding: 10px 0;
+            }
+
+            /* 페이지 제목 아래 작은 선 추가 */
+            .page-title::after {
+                content: '';
+                display: block;
+                width: 50px;
+                height: 3px;
+                background-color: #ff6600;
+                margin: 10px auto;
+            }
+
+            /* 감사 메시지 스타일 */
+            .thank-you-message {
+                font-size: 18px;
+                color: #555;
+                text-align: center;
+                margin-bottom: 30px;
+                font-family: 'Arial', sans-serif;
+            }
+
+            .thank-you-message h3 {
+                color: #ff6600;
+                font-size: 22px;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+
+            /* 후원 금액 스타일 */
+            .donation-amount {
+                font-size: 20px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .donation-amount span {
+                font-size: 25px;
+                color: #007bff;
+                font-weight: bold;
+            }
+
+            /* 테이블 스타일 */
+            .donation-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 40px;
+            }
+
+            .donation-table th,
+            .donation-table td {
+                padding: 12px;
+                text-align: center;
+                border: 1px solid #ddd;
+            }
+
+            .donation-table th {
+                background-color: #f1f1f1;
+                font-size: 16px;
+                color: #333;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .donation-table td {
+                font-size: 14px;
+                color: #555;
+            }
+
+            /* 후원 단체와 메시지 스타일 */
+            .donation-table .center-name {
+                font-weight: bold;
+                color: #007bff;
+            }
+
+            .donation-table .message {
+                font-style: italic;
+                color: #888;
+            }
+
+            /* 익명 여부 스타일 */
+            .donation-table .anonymous {
+                color: red;
+                font-weight: bold;
+            }
+
+            .donation-table .real-name {
+                color: green;
+                font-weight: bold;
+            }
+
+            /* 후원 날짜 스타일 */
+            .donation-table .donation-date {
+                color: #666;
+            }
+
+            /* 모바일 대응 */
+            @media (max-width: 768px) {
+
+                .donation-table th,
+                .donation-table td {
+                    font-size: 12px;
+                    padding: 8px;
+                }
+
+                .thank-you-message h3 {
+                    font-size: 20px;
+                }
+
+                .donation-amount span {
+                    font-size: 22px;
+                }
+            }
         </style>
     </head>
 
@@ -389,23 +526,22 @@
                             </span>
                             <div v-if="activeTab === 'board'" class="comment-page">
                                 <h3>작성한 게시글 수 : 총 <span style="color: red;">{{boardCnt.cnt}} </span>개</h3>
-                                <template v-if="boardCnt.cnt!=0">
-                                    <div>
-                                        <select v-model="pageSize" @change="fnMyBoardList">
-                                            <option value="5">5개</option>
-                                            <option value="10">10개</option>
-                                        </select>
-                                        <input v-model="keyword2" placeholder="검색어" @keyup.enter="fnMyBoardList()">
-                                        <button @click="fnMyBoardList()">검색</button>
+                                <div>
+                                    <select v-model="pageSize" @change="fnMyBoardList">
+                                        <option value="5">5개</option>
+                                        <option value="10">10개</option>
+                                    </select>
+                                    <input v-model="keyword2" placeholder="검색어" @input="fnMyBoardList()">
 
-                                    </div>
-                                    <table class="board-table">
-                                        <tr>
-                                            <th>번호</th>
-                                            <th>제목</th>
-                                            <th>작성일</th>
-                                            <th>조회수</th>
-                                        </tr>
+                                </div>
+                                <table class="board-table">
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>작성일</th>
+                                        <th>조회수</th>
+                                    </tr>
+                                    <template v-if="boardCnt.cnt!=0">
                                         <tr v-for="item in board">
                                             <template v-if="item.isDeleted == 'N'">
                                                 <td>{{item.boardId}}</td>
@@ -417,46 +553,55 @@
                                                 <td>{{item.cnt}}</td>
                                             </template>
                                         </tr>
-                                    </table>
-                                    <div>
-                                        <br>
-                                        <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
-                                            @click="fnPageMove('pvev')">
-                                            < </a>
-                                                <a id="index" href="javascript:;" v-for="num in index"
-                                                    @click="fnPage(num)">
-                                                    <span v-if="page == num" class="bgColer">{{num}}</span>
-                                                    <span v-else class="bgColer2">{{num}}</span>
-                                                </a>
-                                                <a v-if="page != index" id="index" href="javascript:;" class="bgColer2"
-                                                    @click="fnPageMove('next')">
-                                                    >
-                                                </a>
-                                    </div>
-                                </template>
-                                
-                                <template v-else >
-                                    <h2>작성된 댓글이 없습니다.</h2>
-                                    <button @click=fnBoardList()>게시글 작성하기</button>
-                                </template>
+                                    </template>
+                                    <template v-if="boardCnt.cnt == 0  && keyword2 === '' ">
+                                        <tr>
+                                            <td colspan="4">
+                                                <h2>작성된 게시글이 없습니다. </h2>
+                                                <button @click=fnBoardList()>게시글 작성하기</button>
+                                            </td>
+                                        </tr>
+                                    </template>
 
+                                    <template v-else-if="boardCnt.cnt == 0 ">
+                                        <tr>
+                                            <td colspan="4">
+                                                <h2> 검색된 게시글이 없습니다.</h2>
+                                            </td>
+                                        </tr>
+                                    </template>
+
+                                </table>
+                                <div>
+                                    <br>
+                                    <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
+                                        @click="fnPageMove('pvev')">
+                                        < </a>
+                                            <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
+                                                <span v-if="page == num" class="bgColer">{{num}}</span>
+                                                <span v-else class="bgColer2">{{num}}</span>
+                                            </a>
+                                            <a v-if="index > 1 && page != index" id="index" href="javascript:;"
+                                                class="bgColer2" @click="fnPageMove('next')">
+                                                >
+                                            </a>
+                                </div>
                             </div>
 
                             <div v-if="activeTab === 'comment'" class="comment-page">
 
                                 <h3>작성한 댓글 수 : 총 <span style="color: red;">{{commCnt}} </span>개</h3>
-                                    <template v-if="commCnt!=0">
-                                    <input v-model="commKeyword" placeholder="검색어" @keyup.enter="fnSeachComm()">
-                                    <button @click="fnSeachComm()">검색</button>
-                                    <table class="comment-table" v-if="commCnt!=null">
-                                        <thead>
-                                            <tr class="comment-table-header">
-                                                <th class="comment-table-column">게시글</th>
-                                                <th class="comment-table-column">댓글내용</th>
-                                                <th class="comment-table-column">작성일</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                <input v-model="commKeyword" placeholder="검색어" @input="fnSeachComm()">
+                                <table class="comment-table" v-if="commCnt!=null">
+                                    <thead>
+                                        <tr class="comment-table-header">
+                                            <th class="comment-table-column">게시글</th>
+                                            <th class="comment-table-column">댓글내용</th>
+                                            <th class="comment-table-column">작성일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-if="commCnt!=0">
                                             <tr v-for="item in commentList" :key="item.commentId"
                                                 class="comment-table-row">
                                                 <template v-if="item.isDeleted === 'N'">
@@ -471,30 +616,95 @@
                                                     <td class="comment-date">{{ item.updatedAt }}</td>
                                                 </template>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                    <br>
-                                    <a v-if="page2 != 1" id="index2" href="javascript:;" class="bgColer2"
-                                        @click="fnPageMove2('pvev')">
-                                        < </a>
-                                            <a id="index2" href="javascript:;" v-for="num2 in index2"
-                                                @click="fnCommPage(num2)">
-                                                <span v-if="page2 == num2" class="bgColer">{{num2}}</span>
-                                                <span v-else class="bgColer2">{{num2}}</span>
-                                            </a>
-                                            <a v-if="page2 != index2" id="index2" href="javascript:;" class="bgColer2"
-                                                @click="fnPageMove2('next')">
-                                                >
-                                            </a>
-                                </template>
-                                <template v-else>
-                                    <h2>작성된 댓글이 없습니다.</h2>
-                                    <button @click=fnBoardList()>댓글 작성하기</button>
-                                </template>
+                                        </template>
+                                        <template v-if="commCnt == 0  && commKeyword === '' ">
+                                            <tr>
+                                                <td colspan="4">
+                                                    <h2>작성된 댓글이 없습니다. </h2>
+                                                    <button @click=fnBoardList()>댓글 작성하기</button>
+                                                </td>
+                                            </tr>
+                                        </template>
+
+                                        <template v-if="commCnt == 0 && commKeyword != ''">
+                                            <tr>
+                                                <td colspan="4">
+                                                    <h2>검색된 댓글이 없습니다. </h2>
+                                                </td>
+                                            </tr>
+                                        </template>
+
+                                    </tbody>
+                                </table>
+                                <br>
+                                <a v-if="page2 != 1" id="index2" href="javascript:;" class="bgColer2"
+                                    @click="fnPageMove2('pvev')">
+                                    < </a>
+                                        <a id="index2" href="javascript:;" v-for="num2 in index2"
+                                            @click="fnCommPage(num2)">
+                                            <span v-if="page2 == num2" class="bgColer">{{num2}}</span>
+                                            <span v-else class="bgColer2">{{num2}}</span>
+                                        </a>
+                                        <a v-if="index2 > 1 && page2 != index2" id="index2" href="javascript:;"
+                                            class="bgColer2" @click="fnPageMove2('next')">
+                                            >
+                                        </a>
+
+
                             </div>
+                            <div v-if="activeTab === 'donation'" class="comment-page">
+                                <div class="page-container">
+                                    <div class="page-title"> 후원 내역 페이지</div>
+                                    <div class="thank-you-message">
+                                        <span style="font-size: 20px;">{{user.userName}}</span>님이 후원하신 금액은
+                                    </div>
+                                    <div class="donation-amount">
+                                        총 <span>{{sum.amount}}</span>원 입니다.
+                                    </div>
+                                    <div class="thank-you-message">언제나 따뜻한 후원 감사합니다.<div>
+                                            <br>
+                                            <hr>
+                                            <br>
+                                            <table class="donation-table">
+                                                <tr>
+                                                    <th>후원 단체</th>
+                                                    <th>후원 메시지</th>
+                                                    <th>후원 금액</th>
+                                                    <th>익명 여부</th>
+                                                    <th>후원 날짜</th>
+                                                </tr>
+                                                <tr v-for="item in donaList">
+                                                    <td class="center-name">{{item.centerName}}</td>
+                                                    <td class="message">{{item.message}}</td>
+                                                    <td>{{ formattedAmount(item.amount) }}</td>
+                                                    <td>
+                                                        <span v-if="item.anonymousYn=='Y'" class="anonymous">익명
+                                                            기부</span>
+                                                        <span v-else class="real-name">실명 기부</span>
+                                                    </td>
+                                                    <td class="donation-date">{{item.donationDate}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+
+
+
                         </section>
                     </div>
                 </div>
+
+
+
+
+
+
             </template>
 
 
@@ -536,7 +746,7 @@
                         board: [],
                         searchOption: "",
                         keyword: "",
-                        keyword2:"",
+                        keyword2: "",
                         category: "F",
                         pageSize: 5,
                         page: 1,
@@ -547,12 +757,20 @@
                         index2: 0,
                         commentList: [],
                         commCnt: 0,
-                        commKeyword:""
+                        commKeyword: "",
+                        donaList: [],
+                        sum: ""
 
                     };
                 },
                 computed: {
-
+                    formattedAmount() {
+                        return (item) => {
+                            console.log(item);
+                            // item.amount가 숫자가 아니면 숫자로 변환, 변환할 수 없으면 0 처리
+                            return Number(item).toLocaleString('ko-KR'); // 숫자 포맷으로 반환
+                        };
+                    }
                 },
                 methods: {
                     fnInfo2() {
@@ -639,9 +857,10 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
+                                console.log("board", data);
                                 self.board = data.board;
                                 self.boardCnt = data.count;
+                                console.log('test', self.boardCnt.cnt);
                                 if (data.count && data.count.cnt !== undefined) { // 율 코드 문의하기
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                 } else {
@@ -721,7 +940,48 @@
 
                     fnBoardList() {
                         location.href = "/board/list.do"
+                    },
+
+                    fnDonaInfo() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId
+                        };
+                        $.ajax({
+                            url: "/user/donaInfo.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.donaList = data.donation;
+                                self.sum = data.sum;
+                                console.log(self.sum);
+
+                            }
+                        });
+                    },
+
+                    fnVetInfo() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId
+                        };
+                        $.ajax({
+                            url: "/user/vetInfo.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.user = data.user;
+                                self.vet = data.vet;
+                                console.log(self.vet);
+
+                            }
+                        });
                     }
+
                 },
 
                 mounted() {
@@ -734,6 +994,8 @@
                     self.fnPoint();
                     self.fnMyBoardList();
                     self.fnSeachComm();
+                    self.fnDonaInfo();
+                    self.fnVetInfo();
                     window.vueObj = this;
 
                 }
