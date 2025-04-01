@@ -206,7 +206,7 @@
                                 console.log("주문 목록 >>> ",data.orderInfo);
                                 self.orderInfo = data.orderInfo;
                                 self.fnOrderList();
-                                self.fnGetPoint();
+                                self.fnGetCurrentPoint();
                                 self.splitPhoneNumber();
                                 self.fnGetMembership();
                             }
@@ -226,24 +226,17 @@
                             }
                         });
                     },
-                    fnGetPoint:function(){
+                    fnGetCurrentPoint: function () {
                         let self = this;
-                        console.log("적립할 포인트 >>> ",self.rewardPoint);
-
-                        var nparmap = {
-                            usedPoint: self.rewardPoint,
-                            remarks: "결제 적립금",
-                            userId: self.userId
-                        };
+                        let params = { userId: self.userId };
                         $.ajax({
-                            url: "/point/used.dox",
+                            url: "/point/current.dox",
                             dataType: "json",
                             type: "POST",
-                            data: nparmap,
+                            data: params,
                             success: function (data) {
-                                console.log("포인트 적립 내역 저장 >>> ", data.result);
-                                self.currentPoint = data.currentPoint.toLocaleString();
-
+                                self.currentPoint = parseInt(data.point.currentPoint).toLocaleString();
+                                console.log("보유포인트>>> ",self.currentPoint);
                             }
                         });
                     },
