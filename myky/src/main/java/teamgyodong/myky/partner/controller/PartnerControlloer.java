@@ -47,8 +47,8 @@ public class PartnerControlloer {
 		
 		System.out.println(map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = partnerService.favoritesInsert(map);
-		
+		resultMap = partnerService.favoritesHospitalInsert(map);
+		//resultMap = partnerService.favoritesPartnerInsert(map);
 		
 		return new Gson().toJson(resultMap);
 	}
@@ -59,7 +59,8 @@ public class PartnerControlloer {
 		
 		System.out.println(map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = partnerService.favoritesRemove(map);
+		resultMap = partnerService.favoritesHospitalRemove(map);
+		//resultMap = partnerService.favoritesPartnerRemove(map);
 		
 		
 		return new Gson().toJson(resultMap);

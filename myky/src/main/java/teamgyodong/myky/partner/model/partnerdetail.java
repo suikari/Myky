@@ -19,10 +19,11 @@ public class partnerdetail {
 	
 	//제휴사
 	private int partnerId;
+	private int categoryCode;
 	private String name;
 	private String phoneNumber;
 	private String address;
-	private String WEBSITEURL;
+	private String websiteUrl;
 	private String reservationUrl;
 	private String openingHours;
 	private String LUNCHBREAK;
