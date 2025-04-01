@@ -49,6 +49,12 @@ public interface BoardService {
 
 	HashMap<String, Object> vetBoardRemove(HashMap<String, Object> map);
 
+	HashMap<String, Object> vetBoardAnReply(HashMap<String, Object> map);
+
+	HashMap<String, Object> vetBoardAnEdit(HashMap<String, Object> map);
+
+	HashMap<String, Object> vetBoardAnSelect(HashMap<String, Object> map);
+
 
 
 

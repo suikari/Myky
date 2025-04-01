@@ -98,8 +98,9 @@ public class BoardServiceImpl implements BoardService {
 	//게시글 이미지 출력
 	public void addBoardFile(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
-		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.insertBoardFile(map);
+
 	}
 	//게시글 추가
 	public HashMap<String, Object> boardAdd(HashMap<String, Object> map) {
@@ -125,7 +126,7 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int num = boardMapper.updateRemoveBoard(map);
-		return null;
+		return resultMap;
 	}
 	//댓글 작성
 	public HashMap<String, Object> CommentAdd(HashMap<String, Object> map) {
@@ -134,7 +135,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.insertComment(map);
 
 		resultMap.put("result", "success");
-		return null;
+		return resultMap;
 	}
 	//댓글 수정 저장
 	public HashMap<String, Object> commentUpdate(HashMap<String, Object> map) {
@@ -143,19 +144,21 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.commentUpdate(map);
 
 		resultMap.put("result", "success");
-		return null;
+		return resultMap;
 	}
 	//댓글 삭제
 	public HashMap<String, Object> CommentRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.deleteComment(map);
-		return null;
+		return resultMap;
 	}
 	//댓글 수정
 	public HashMap<String, Object> CommentEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.updateComment(map);
-		return null;
+		return resultMap;
 	}
 	//댓글 갯수
 	public HashMap<String, Object> CommentCount(HashMap<String, Object> map) {
@@ -172,7 +175,7 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int num = boardMapper.deleteFile(map);
-		return null;
+		return resultMap;
 	}
 	//대댓글 구현
 	public void insertReply(Map<String, Object> map) {
@@ -275,13 +278,14 @@ public class BoardServiceImpl implements BoardService {
 		    }
 		    
 		}
+
 		
 		try {
 			vetBoard vetboard = boardMapper.selectVetBoard(map);
-			List<vetAnswer> answers = boardMapper.selectVetAnList(map);
+			List<vetAnswer> answerList = boardMapper.selectVetAnList(map);
 			
 			resultMap.put("info", vetboard);
-			resultMap.put("answerList", answers);
+			resultMap.put("answerList", answerList);
 			resultMap.put("result", "success");
 		}catch (Exception e){
 			 e.printStackTrace();
@@ -316,7 +320,32 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int num = boardMapper.updateRemoveVetBoard(map);
-		return null;
+		return resultMap;
+	}
+	//수의사 답변 작성
+	public HashMap<String, Object> vetBoardAnReply(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.insertVetAnReply(map);
+
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//수의사 게시판 답변 수정
+	public HashMap<String, Object> vetBoardAnEdit(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.updateAnEdit(map);
+		return resultMap;
+	}
+	//수의사 답변 채택
+	public HashMap<String, Object> vetBoardAnSelect(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.updateVetAnSelect(map);
+
+		resultMap.put("result", "success");
+		return resultMap;
 	}
 }
 	

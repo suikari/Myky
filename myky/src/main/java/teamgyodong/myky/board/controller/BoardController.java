@@ -387,4 +387,34 @@ public class BoardController {
 			
 		return new Gson().toJson(resultMap); 
 	}
+	//수의사 게시판 답글 작성
+	@RequestMapping(value = "/board/vetBoardAnReply.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardAnReply(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.vetBoardAnReply(map);
+		return new Gson().toJson(resultMap);
+	}
+	//수의사 게시판 답글 수정
+	@RequestMapping(value = "/board/vetBoardAnEdit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardAnEdit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			
+		resultMap = boardService.vetBoardAnEdit(map);
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
+	//수의사 게시판 채택
+	@RequestMapping(value = "/board/vetBoardAnSelect.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardAnSelect(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.vetBoardAnSelect(map);
+		return new Gson().toJson(resultMap);
+	}
 }

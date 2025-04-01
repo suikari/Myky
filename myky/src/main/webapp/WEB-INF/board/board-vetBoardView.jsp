@@ -7,7 +7,10 @@
     <title>Vue3 레이아웃 예제</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	
+    <!-- Quill CDN -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <style>
         #viewPage {
             max-width: 1000px;
@@ -129,136 +132,51 @@
             width: fit-content;
         }
         .cmtButton {
-            padding : 5px 10px;
-            font-size : 14px;
+            padding: 6px 14px;
+            font-size: 14px;
             font-weight: bold;
             background-color: #202060;
             color: #fca311;
+            border: none;
             border-radius: 6px;
             cursor: pointer;
-            width: fit-content;
-            margin-inline-end:auto;
-            border : none;
+            transition: all 0.2s ease;
         }
         .cmtButtonBox{
             border-radius: 6px;
             max-width: 1000px;
             margin-top: 20px;
             margin-bottom: 5px;
-            /* border : none; */
             border: 1px solid #202060;
         }
         .cmtButton2 {
-            padding : 5px 10px;
-            font-size : 14px;
+            padding: 6px 10px;
+            font-size: 13px;
             font-weight: bold;
             background-color: #c0c0c0;
             color: #353535;
             border-radius: 6px;
-            cursor: pointer;
-            width: fit-content;
-            margin-inline-end:auto;
-            border : none;
-            margin: 1px;
-        }
-        .cmtInput{
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding : 8px;
-        }
-        .cmtTextBox{
-            border-radius: 6px;
-            border: 1px solid #f7f7f8;
-            background-color: #f5f5f5;
-            max-width: 1000px;
-            width: 100%;
-            margin: 5px;
-            padding: 5px;
-            margin-bottom: 5px;
-        }
-        .Button:hover  {
-            background-color: #fca311;
-            color: #202060;
-        }
-        .FileDownload{
-            color: #202060;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .FileDownload:hover{
-            color : #fca311; 
-        }
-        .buttonMargin {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-
-        .link-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .preview-image {
-            display: none;
-            position: absolute;
-            top: -19px;
-            left:  250px;
-            width: 150px;
-            height: auto;
-            border: 1px solid #ededed;
-            background-color: white;
-            padding: 5px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-        }
-
-        .link-container:hover .preview-image {
-            display: block;
-        }
-        .view-boxContent img {
-            max-width: 70%;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-            border-radius: 6px;
-        }
-        .cmt2button{
-            margin-right: 10px;
-            color: #888;
-            font-size: 15px;
-            cursor: pointer;
-        }
-        .likeButton2{
-            width: 40px;
-            height: 40px;
-        }
-        .likeButton{
-            background-color: white;
             border: none;
-            color: #202060;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .like-button-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            gap: 20px;
+        .cmtButton:hover {
+            background-color: #202060;
+            color: #fca311;
         }
-        .answer-box {
-            background-color: #f6f8fa;
-            border: 1px solid #d1d5da;
+        .cmtButton2:hover {
+            background-color: #a8a8a8;
+        }
+        .editor-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
             border-radius: 10px;
             padding: 16px;
-            margin: 20px 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            position: relative;
-            height: 300px;
-            width: 100%;
             max-width: 1000px;
+            width: 100%;
+            box-sizing: border-box;
         }
+
 
         .answer-header {
             display: flex;
@@ -286,11 +204,12 @@
         }
 
         .answer-actions {
+            margin-top: 20px;
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            font-size: 13px;
-            margin-top: 5px;
         }
+
 
         .answer-actions button,
         .answer-actions a {
@@ -308,6 +227,58 @@
         .deleted-answer {
             color: #999;
             font-style: italic;
+        }
+        .editor-wrapper {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 6px;
+            border: 1px solid #ffffff;
+            max-width: 1000px;
+            width: 100%;
+            height: 700px;
+        }
+        .quill-editor {
+            height: 200px;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        .reply-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .answerButton{
+            width: 7%;
+            text-align: center;
+        }
+        .answer-box {
+            background-color: #f6f8fa;
+            border: 1px solid #d1d5da;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            width: 100%;
+            position: relative;
+            max-width: 1000px;
+            flex-direction: column;
+        }
+        .choice-button {
+            margin-top: 10px;
+            align-self: flex-end; /* 오른쪽으로 정렬 */
+            background-color: #202060;
+            color: #fca311;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .choice-button:hover {
+            background-color: #fca311;
+            color: #202060;
         }
     </style>
 </head>
@@ -335,53 +306,71 @@
                     <!-- 날짜 표시 여기 넣기 -->
                     <div style="color: #fca311;">작성자: {{info.nickName}}</div>
                     <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
+                        ( 포인트 {{info.points}} )
                         작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
                     </div>
                 </div>
                 <div>
-                    포인트 {{data.currentPoint}}
                 </div>
                 <div class="view-label">CONTENT</div>
                 <div class="view-boxContent" v-html="info.content"></div>
 
                 <!-- ✅ 지식인 스타일 답변 박스 -->
                 <div v-for="answer in answerList" class="answer-box">
-                    <template v-if="answer.isDeleted === 'Y'">
-                        <div class="deleted-answer">삭제된 댓글입니다.</div>
-                    </template>
-                    <template v-else>
                     <div class="answer-header">
                         <div class="answer-nickname">{{ answer.vetNickName }}</div>
                         <div class="answer-meta">{{ answer.createdAt }}</div>
                     </div>
-                    <div class="answer-nickname">{{ answer.reviewText }}</div>
-                    <div class="answer-content" v-html="answer.content"></div>
-                
-                    <div class="answer-actions">
-                        <a @click="fnReply(item.reviewText)">답글 달기</a>
-                        <div class="review-id">{{ info.nickName }}</div>
-                
-                        <template v-if="sessionId === answer.userId || sessionRole === 'ADMIN'">
-                        <button @click="fnCommentEdit(answer)">수정</button>
-                        <button @click="fnCommentRemove(answer.commentId)">❌ 삭제</button>
-                        </template>
-                    </div>
+                    <div v-html="answer.reviewText"></div>
+                    <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
+                    <template v-if="showChoice == answer.reviewId">
+                        <input v-model="comments" placeholder="후기를 작성해주세요">
                     </template>
-                </div>
-                
-              
+                    <template v-if="sessionId === info.userId || sessionRole === 'ADMIN'">
+                    <template v-if="showEdit != answer.reviewId">  
+                       <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
+                    </template>
+                    <template v-else>
+                        <div class="editor-box">
+                            <!-- 🖋 Quill 에디터 [수정]-->
+                            <div >
+                                <div id="editorEdit" class="quill-editor"></div>
+                            </div>
+                            <div class="reply-buttons">
+                              <button class="cmtButton" @click="fnAnEdit()">등록</button>
+                            </div>
+                          </div>
+                        <button class="cmtButton" @click="fnCancle">취소</button>
+                    </template>
+                      <button class="cmtButton" @click="fnAnRemove(answer.commentId)">❌ 삭제</button>
+                    </template>
                 </div>
 
-                <div class="buttonMargin" style="display: flex; gap: 5px;">
+                <div class="answer-actions">
+                    <div @click="showEditor">
+                         <div class="cmtButton answerButton">답글 달기</div>
+                    </div>
+                    <div v-show="showAnsw" class="editor-box">
+                      <!--  Quill 에디터 -->
+                      <div id="editor" class="quill-editor"></div>
+                  
+                      <!--  등록 버튼 영역 -->
+                      <div class="reply-buttons">
+                        <button class="cmtButton" @click="fnSaveReply">등록</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cmtButton" style="display: flex; gap: 5px;">
                     <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
-                        <button class="button" @click="fnEdit()">수정</button>
-                        <button class="button" @click="fnRemove()">삭제</button>
+                        <button class="cmtButton" @click="fnEdit()">수정</button>
+                        <button class="cmtButton" @click="fnRemove()">삭제</button>
                     </template>
-                    <button class="button" @click="fnBack(info)">뒤로가기</button>
+                    <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
                 </div>
             </div>        
         </div>
-    </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
     
@@ -394,19 +383,29 @@
             const app = Vue.createApp({
                 data() {
                     return {
-                       vetBoardId : "${map.vetBoardId}",
+                        vetBoardId : "${map.vetBoardId}",
                         info : {},
                         page: "${param.page}",
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
-                        nickName : "",
+                        vetNickName : "",
+                        nickName:"",
                         content : "",
                         updatedTime : "",
                         createdTime : "",
-                        status : "",
-                        answerList:[],
+                        answerList:{},
                         data : {},
-            
+                        comments : "",
+                        vetId : "",
+                        rating: "",
+                        vetName : "${map.nickName}",
+                        showEdit : '0',
+                        reviewText : "",
+                        showAnsw : false,
+                        vetList : {},
+                        choiceBtn : false,
+                        showChoice : '0',
+                        
                     };
                 },
                 computed: {
@@ -426,7 +425,6 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-				        		console.log("dpgpdgpd",data.info);
                                 self.info = data.info;
                                 self.answerList = data.answerList;
                                 self.getCurrent();
@@ -444,7 +442,6 @@
                             type : "POST", 
                             data : nparmap,
                             success : function(data) {
-                                console.log("ㅁㅇㄴㄹ", self.info.userId)
                                 self.data = data.point;
                             }
                         });
@@ -477,17 +474,157 @@
                             success: function (data) {
                                 console.log(data);
                                 location.href = "/board/vetBoardList.do";
-                                alert("삭제되었습니다!");
+                                alert("삭제되었습니다");
                             }
                         });
-                    }
+                    },
+                    fnVetInfo : function () {
+                        var self = this;
+                        var nparmap = {
+                            userId : self.sessionId
+                        };
+                        
+                        $.ajax({
+                            url: "/user/vetInfo.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.vetList = data.vet;
+                            }
+                        });
+                    },
+                    fnSaveReply : function(){
+                        let self = this;
+                        var nparmap = {
+                            vetBoardId: self.info.vetBoardId,
+                            reviewText : self.reviewText,
+                            vetId : self.vetId,
+                            vetName : self.vetName,
+                            vetNickName : self.vetNickName,
+                        };
+                        $.ajax({
+                            url: "/board/vetBoardAnReply.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("멍멍",self.reviewText);
+                                self.fnView();
+                                self.showEditor();
+                                self.showEdit();
+                                self.showChoice();
+
+                                alert("저장되었습니다");
+                            }
+                        });
+                    },
+                    showEditor : function() {
+                        let self = this;
+                        self.showAnsw = !self.showAnsw;
+                    },
+                    fnShowChoice : function(choiceId){
+                        let self =  this;
+                        self.showChoice = choiceId;
+                    },
+                    fnAnSelect : function(){
+                        let self = this;
+                        var nparmap = {
+                            vetId : self.vetId,
+                            userId : sessionId,
+                            rating : self.rating,
+                            comments : self.comments,
+                        };
+
+                        $.ajax({
+                            url: "/board/vetBoardAnSelect.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("멍멍",self.reviewText);
+                                if(confirm="정말 채택하시겠습니까?"){
+
+                                }
+                            }
+                        });
+                    },
+                    fnAnEdit : function(){
+                        let self = this;
+                        var nparmap = {
+                            vetId : self.vetId,
+                            userId : sessionId,
+                            reviewText : self.reviewText,
+                        };
+
+                        $.ajax({
+                            url: "/board/vetBoardAnEdit.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("답글 수정", data);
+
+                            }
+                        });
+                    },
+                    fnAnEditCha : function (contents, answerId){
+                        let self = this;
+                        self.showEdit = answerId;
+                            // 2초 후에 editorEdit() 함수 실행
+                            setTimeout(function() {
+                                self.editorEdit(contents);
+                            }, 200);  // 2000ms = 2초
+                    },
+                    fnCancle : function(){
+                        let self = this;
+                        alert("취소되었습니다.")
+                        return;
+                    },
+                    editorEdit : function(contents) {
+                        let self = this;
+                        var quillEdit = new Quill('#editorEdit', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                    ['bold', 'italic', 'underline'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    ['link', 'image'],
+                                    ['clean'],
+                                    [{ 'color': [] }, { 'background': [] }]
+                                ]
+                            }
+                        });
+                        quillEdit.root.innerHTML = contents;
+                        // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
+                        quillEdit.on('text-change', function () {
+                            self.reviewText = quillEdit.root.innerHTML;
+                        });
+                    },
                 },
                 mounted() {
                     let self = this;
                     const params = new URLSearchParams(window.location.search);
-                	self.vetBoardId = params.get("vetBoardId") || "";
-
                     self.fnView();
+                    self.fnVetInfo();
+                    var quill = new Quill('#editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link', 'image'],
+                            ['clean'],
+                            [{ 'color': [] }, { 'background': [] }],  
+                        ]
+                    }
+                });
+                    quill.on('text-change', function() {
+                                self.reviewText = quill.root.innerHTML;
+                    });
                 }
             });
 

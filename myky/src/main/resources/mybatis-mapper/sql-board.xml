@@ -258,19 +258,13 @@
 			</if>
 		    AND F.IS_DELETED = 'N'
 	</select>
+	
 	<select id="selectVetAnList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetAnswer">
-		SELECT F.*, U.*, V.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
-		FROM VET_BOARD F
-		LEFT JOIN (
-			SELECT *
-			FROM USERS
-		) U ON F.USER_ID = U.USER_ID
-		LEFT JOIN(
-			SELECT *
-			FROM VET_ANSWER
-		) V ON F.VET_ID = V.VET_ID
-		WHERE F.VET_BOARD_ID = #{vetBoardId}
+		SELECT V.*, TO_CHAR(V.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
+		FROM VET_ANSWER V 
+		WHERE V.VET_BOARD_ID = #{vetBoardId}
 	</select>
+	
 	<select id="selectVetBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetBoard">
 		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM VET_BOARD F
@@ -280,6 +274,7 @@
 		) U ON F.USER_ID = U.USER_ID
 		WHERE F.VET_BOARD_ID = #{vetBoardId}
 	</select>
+	
 	<update id="updateVetBoardCnt" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
@@ -288,9 +283,10 @@
 	</update>
 	
 	<insert id="insertVetBoard" parameterType="hashmap">
-		INSERT INTO VET_BOARD(VET_BOARD_ID, TITLE, CONTENT, POINTS,  USER_ID, CREATED_AT, UPDATED_AT, IS_DELETED, CNT)
+		INSERT INTO VET_BOARD(VET_BOARD_ID, TITLE, CONTENT, POINTS, USER_ID, CREATED_AT, UPDATED_AT, IS_DELETED, CNT)
 		VALUES(VET_BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{points}, #{userId}, SYSDATE, SYSDATE, 'N', 0)
 	</insert>
+	
 	<update id="updateVetBoard" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
@@ -299,12 +295,34 @@
 			CREATED_AT = SYSDATE
 		WHERE VET_BOARD_ID = #{vetBoardId}
 	</update>
+	
 	<update id="updateRemoveVetBoard" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
-		IS_DELETED = 'Y',
-		UPDATED_AT = SYSDATE
+			IS_DELETED = 'Y',
+			UPDATED_AT = SYSDATE
 		WHERE VET_BOARD_ID = #{vetBoardId}
+	</update>
+	
+	<insert id="insertVetAnReply" parameterType="hashmap">
+		INSERT INTO VET_ANSWER(REVIEW_ID, VET_BOARD_ID, RATING, REVIEW_TEXT, CREATED_AT, VET_ID, COMMENTS, VET_NAME, VET_NICKNAME )
+		VALUES(VET_REVIEW_SEQ.NEXTVAL, #{vetBoardId}, 0, #{reviewText}, SYSDATE, #{vetId}, '', #{vetName}, #{vetNickName})
+	</insert>
+	
+	<update id="updateAnEdit" parameterType="hashmap">
+		UPDATE VET_ANSWER
+    	SET
+	        REVIEW_TEXT = #{reviewText}
+		WHERE VET_ID = #{vetId}
+	</update>
+	
+	<!-- 수의사 답변 채택-->
+	<update id="updateVetAnSelect" parameterType="hashmap">
+		UPDATE VET_ANSWER
+		SET
+			RATING = #{rating},
+			COMMENTS = #{comments}
+		WHERE VET_ID = #{vetId}
 	</update>
 </mapper>
 
