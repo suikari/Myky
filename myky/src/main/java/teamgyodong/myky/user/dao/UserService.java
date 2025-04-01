@@ -30,5 +30,7 @@ public interface UserService {
 
 	HashMap<String, Object> vetInfo(HashMap<String, Object> map);
 
+	HashMap<String, Object> getPoint(HashMap<String, Object> map);
+
 	
 }
