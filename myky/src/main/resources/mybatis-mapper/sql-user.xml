@@ -110,6 +110,14 @@
         LEFT JOIN DONATION_CENTER C ON D.CENTER_ID = C.CENTER_ID
         JOIN USERS U ON D.USER_ID = U.USER_ID
         WHERE D.USER_ID =#{userId}
+        ORDER BY DONATION_DATE DESC
+        OFFSET #{page4} ROWS FETCH NEXT #{pageSize4} ROWS ONLY
+	</select>
+	
+	<select id="selectDonaCnt" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*)
+        FROM DONATION_HISTORY
+        WHERE USER_ID = #{userId}
 	</select>
 	
 	<select id="sumDona" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
@@ -133,9 +141,15 @@
         OFFSET #{page3} ROWS FETCH NEXT #{pageSize3} ROWS ONLY
 	</select>
 	
-		<select id="selectPointCnt" parameterType="hashmap" resultType="int">
+	<select id="selectPointCnt" parameterType="hashmap" resultType="int">
         SELECT COUNT(*)
         FROM POINT
+        WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="selectCoupon" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
+        SELECT *
+        FROM COUPON
         WHERE USER_ID = #{userId}
 	</select>
 	
