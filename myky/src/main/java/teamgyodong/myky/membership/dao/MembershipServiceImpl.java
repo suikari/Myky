@@ -60,4 +60,36 @@ public class MembershipServiceImpl implements MembershipService {
 		}
 		return resultMap;
 	}
+	
+	//멤버십 멤버 인원 수
+	public HashMap<String, Object> getMemberCnt(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int memberCnt = membershipMapper.selectMemberCnt(map);
+			
+			resultMap.put("memberCnt", memberCnt);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	//멤버십 멤버 구독 개월 수
+	public HashMap<String, Object> getTotalDonation(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int donationSum = membershipMapper.getTotalAmount(map);
+			
+			resultMap.put("donationSum", donationSum);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
 }
