@@ -28,4 +28,6 @@ public interface CartService {
 
 	HashMap<String, Object> getAllOrderList(HashMap<String, Object> map);
 
+	HashMap<String, Object> editOrderStatus(HashMap<String, Object> map);
+
 }
