@@ -28,11 +28,13 @@
 	 
 	<select id="selectCurrentPoint" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
 	 	
-	 	select current_point
-	    from point
-	    where user_id = #{userId}
-	    order by usage_date desc
-	    fetch first 1 rows only
+	 	select coalesce(
+		    (select current_point
+		     from point
+		     where user_id = #{userId}
+		     order by usage_date desc
+		     fetch first 1 rows only), 0) as current_point
+		from dual
 
 	</select>
 	 

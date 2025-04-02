@@ -675,8 +675,6 @@
                         return;
                     }
 
-                    finalPrice = 100;
-
                     IMP.request_pay({
                         channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
                         pg: "html5_inicis",
@@ -774,7 +772,7 @@
                                 console.log("주문 상세 정보도 저장 완료");
                                 alert("주문이 완료되었습니다.");
                                 self.fnRewardPoint();
-                                pageChange("/order/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
+                                // pageChange("/order/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
                             }
                         }
                     });
@@ -801,6 +799,9 @@
                     let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
                     console.log("사용 포인트 >> ", usedPoint);
+                    if(usedPoint == 0){
+                        return;
+                    }
 
                     var nparmap = {
                         usedPoint: usedPoint,
