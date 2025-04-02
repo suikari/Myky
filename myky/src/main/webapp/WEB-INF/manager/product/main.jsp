@@ -421,7 +421,7 @@
 							            <div class="d-flex flex-wrap gap-3 align-items-center">
 							                <div class="col-auto">
 							                    <label class="form-label">카테고리1:</label>
-							                    <select v-model="editData.category1" class="form-select">
+							                    <select v-model="category1" class="form-select">
 							                        <option value="강아지">강아지</option>
 							                        <option value="고양이">고양이</option>
 							                        <option value="기타">기타</option>
@@ -429,16 +429,14 @@
 							                </div>
 							                <div class="col-auto">
 							                    <label class="form-label">카테고리2:</label>
-							                    <select v-model="editData.category2" class="form-select">
+							                    <select v-model="category2" class="form-select">
 							                        <option value="장난감">장난감</option>
 							                        <option value="용품">용품</option>
 							                        <option value="사료">사료</option>
 							                        <option value="간식">간식</option>
 							                        <option value="영양제">영양제</option>
 							                    </select>
-							                </div>
-							                <input v-model="editData.category">
-							                
+							                </div>						                
 							                <div class="col-auto d-flex align-items-center">
 							                    <label class="form-label me-2">판매 상태:</label>
 							                    <div class="form-check form-switch">
@@ -460,7 +458,7 @@
 					<div class="d-flex justify-content-between align-items-center mt-3">
 				    <!-- 생성 버튼 왼쪽에 배치 -->
 				    <div>
-					        <button class="btn btn-success" @click="isCreating = !isCreating">상품 등록</button>
+					        <button class="btn btn-success" @click="fnAdd">상품 등록</button>
 					    </div>
 					
 					    <!-- 페이지네이션 버튼 중앙에 배치 -->
@@ -526,26 +524,17 @@
 						members : {},
 						selectedMemberId : null,
 				        editData: {
-				        	category1 : '',
-				        	category2 : '',
+
 				        },
 	                    searchOption: 'userId',
 	                    page: 1,
 	                    pageSize: 10,
 	                    keyword: '',
-
+			        	category1 : '',
+			        	category2 : '',
                      };
                  },
                 computed: {
-                    
-                },
-                watch: {
-                    editData: {
-                        deep: true,
-                        handler(newVal) {
-                            this.editData.category = `${newVal.category1},${newVal.category2}`.replace(/^,|,$/g, '');
-                        }
-                    }
                 },
                 methods: {
                 	fnMainList : function() {
@@ -637,7 +626,10 @@
                         self.page = pageCnt;
                         self.fnMainList();
                     },
-                	
+                    fnAdd (){
+                        location.href="/manager/main.do?menu="+ this.menu + "&submenu=4";
+                    }
+                    
                 },
                 mounted() {
                 	let self = this;
