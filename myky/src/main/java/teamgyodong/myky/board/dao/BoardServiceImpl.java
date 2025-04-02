@@ -326,6 +326,14 @@ public class BoardServiceImpl implements BoardService {
 	public HashMap<String, Object> vetBoardAnReply(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+	    int count = boardMapper.checkDuplicateVetAnswer(map);
+
+	    if (count > 0) {
+	    	resultMap.put("status", "fail");
+	    	resultMap.put("message", "이미 답변을 작성했습니다.");
+	        return resultMap;
+	    }
 		boardMapper.insertVetAnReply(map);
 
 		resultMap.put("result", "success");
@@ -338,12 +346,21 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.updateAnEdit(map);
 		return resultMap;
 	}
+	//수의사 답변 삭제
+	public HashMap<String, Object> vetBoardAnRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int num = boardMapper.deleteVetBoardAn(map);
+
+		return resultMap;
+		
+	}
 	//수의사 답변 채택
 	public HashMap<String, Object> vetBoardAnSelect(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.updateVetAnSelect(map);
-
+		boardMapper.updateVetBoardStats(map);
 		resultMap.put("result", "success");
 		return resultMap;
 	}
