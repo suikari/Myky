@@ -370,6 +370,7 @@
 	                        <tr>
 	                            <th>번호</th>
 	                            <th>이름</th>
+	                            <th>닉네임</th>
 								<th>소속병원</th>
 	                            <th>이메일</th>
 	                            <th>가입일</th>
@@ -381,7 +382,8 @@
 	                    	<template v-for="(member, index) in members" >
 	                        <tr >
 	                            <td>{{ index + 1 }}</td>
-	                            <td>{{ member.name }}</td>
+	                            <td>{{ member.vetName }}</td>
+	                            <td>{{ member.vetNickname }}</td>
 								<td>{{ member.affiliatedHospital }}</td>								
 	                            <td>{{ member.email }}</td>
 	                            <td>{{ member.createdAt }}</td>
@@ -403,9 +405,13 @@
 							            <!-- 이름 입력 필드 -->
 							            <div class="col">
 							                <label for="userName" class="form-label">이름:</label>
-							                <input type="text" id="userName" v-model="editData.name" class="form-control">
+							                <input type="text" id="userName" v-model="editData.vetName" class="form-control">
 							            </div>
-							
+							            <!-- 이름 입력 필드 -->
+							            <div class="col">
+							                <label for="userNickName" class="form-label">닉네임:</label>
+							                <input type="text" id="userNickName" v-model="editData.vetNickname" class="form-control">
+							            </div>							
 							            <!-- 사용자 ID 셀렉트 박스 및 연동해제 버튼 -->
 							            <div class="col-auto d-flex align-items-center">
 							                <label for="userId" class="form-label me-2">사용자 ID:</label>

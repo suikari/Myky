@@ -353,7 +353,7 @@
 				</section>
 				
 			    <div class="board-container">
-                       <div class="board-title">게시판1</div>
+                       <div class="board-title">공지사항</div>
                        <div class="board-div">
 	                       <div v-for="post in freeposts"  @click="fnView(post.boardId)" class="post-item">
 	                           <div>{{ post.title }}</div>
@@ -382,7 +382,7 @@
                      <div class="best-product-container">
                         <div class="best-product-title">베스트 상품</div>
                         <div class="product-list">
-                            <div v-for="product in displayedProducts" :key="product.id" class="product-card">
+                            <div v-for="product in getDisplayedProducts(products, currentPageBest)" class="product-card">
                                 <div class="product-image">
                                     <template v-if="product.filePath">
 				                        <img class="product_img" :src="product.filePath" :alt="product.fileName" @click="fnPView(product.productId)">
@@ -396,11 +396,36 @@
                             </div>
                         </div>
                         <div class="navigation">
-                            <button class="nav-button" @click="prevPage" :disabled="currentPage === 0">이전</button>
-                            <button class="nav-button" @click="nextPage" :disabled="currentPage >= maxPage">다음</button>
+				            <button class="nav-button" @click="prevPage('best')" :disabled="currentPageBest === 0">이전</button>
+				            <button class="nav-button" @click="nextPage('best')" :disabled="currentPageBest >= maxPage(products)">다음</button>
                         </div>
                     </div>
             </section>
+            
+            <section class="best-products">
+                     <div class="best-product-container">
+                        <div class="best-product-title">신규 상품</div>
+                        <div class="product-list">
+                            <div v-for="product in  getDisplayedProducts(productsN, currentPageNew)"  class="product-card">
+                                <div class="product-image">
+                                    <template v-if="product.filePath">
+				                        <img class="product_img" :src="product.filePath" :alt="product.fileName" @click="fnPView(product.productId)">
+				                    </template>
+				                    <template v-else>
+				                        <img class="product_img" src="../../img/product/product update.png" alt="이미지 없음" @click="fnPView(product.productId)">
+				                    </template>
+                                </div> 
+                                <div class="product-name">{{ product.productName }}</div>
+                                <div class="product-price">{{ product.price }}원</div>
+                            </div>
+                        </div>
+                        <div class="navigation">
+				            <button class="nav-button" @click="prevPage('new')" :disabled="currentPageNew === 0">이전</button>
+				            <button class="nav-button" @click="nextPage('new')" :disabled="currentPageNew >= maxPage(productsN)">다음</button>
+                        </div>
+                    </div>
+            </section>
+            
         </main>
 
     </div>
@@ -427,8 +452,10 @@
                         freeposts : [],
                         donations : [],
                         products: [],
-                        currentPage: 0,
-                        itemsPerPage: 5,
+                        productsN : [],
+                        currentPageBest: 0, // 베스트 상품 현재 페이지
+                        currentPageNew: 0,  // 신규 상품 현재 페이지
+                        itemsPerPage: 5,   // 한 페이지당 상품 개수
                         code : ""
                         
                     
@@ -436,26 +463,36 @@
                 },
                 computed: {
                     maxPage() {
-                        return Math.ceil(this.products.length / this.itemsPerPage) - 1;
+                        return (list) => Math.ceil(list.length / this.itemsPerPage) - 1;
                     },
-                    displayedProducts() {
-                        const start = this.currentPage * this.itemsPerPage;
-                        return this.products.slice(start, start + this.itemsPerPage);
-                    }
                 },
                 methods: {
-                	prevPage() {
-                        if (this.currentPage > 0) this.currentPage--;
+                	getDisplayedProducts(list, page) {
+                        const start = page * this.itemsPerPage;
+                        return list.slice(start, start + this.itemsPerPage);
                     },
-                    nextPage() {
-                        if (this.currentPage < this.maxPage) this.currentPage++;
+                    // 이전 페이지 버튼
+                    prevPage(type) {
+                        if (type === 'best' && this.currentPageBest > 0) {
+                            this.currentPageBest--;
+                        } else if (type === 'new' && this.currentPageNew > 0) {
+                            this.currentPageNew--;
+                        }
+                    },
+                    // 다음 페이지 버튼
+                    nextPage(type) {
+                        if (type === 'best' && this.currentPageBest < this.maxPage(this.products)) {
+                            this.currentPageBest++;
+                        } else if (type === 'new' && this.currentPageNew < this.maxPage(this.productsN)) {
+                            this.currentPageNew++;
+                        }
                     },
                     fnboardList : function() {
                     	var self = this;
                     	var nparmap = {
                     			page : 0,
                     			pageSize : 3,
-                    			category : "F"
+                    			category : "A"
                     	};
                     	$.ajax({
                     		url: "board/list.dox",
@@ -473,7 +510,8 @@
                     	var self = this;
                     	var nparmap = {
                     			page : 0,
-                    			pageSize : 10
+                    			pageSize : 10,
+                    			sortOption : "count"
                     	};
                     	$.ajax({
                     		url: "/product/list.dox",
@@ -483,6 +521,25 @@
                     		success: function (data) {
                     			//console.log(data);
 								self.products = data.list;
+
+                    		}
+                    	});
+                    },
+                    fnNewProductList : function() {
+                    	var self = this;
+                    	var nparmap = {
+                    			page : 0,
+                    			pageSize : 10,
+                    			sortOption : "registration"
+                    	};
+                    	$.ajax({
+                    		url: "/product/list.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("2",data);
+								self.productsN = data.list;
 
                     		}
                     	});
@@ -576,7 +633,7 @@
                 	self.fnProductList();
                 	self.fnDonationList();
                 	self.autoScroll();
-
+                	self.fnNewProductList();
                 	if (self.alertMessage != "") {
                 		alert(self.alertMessage);
                 		

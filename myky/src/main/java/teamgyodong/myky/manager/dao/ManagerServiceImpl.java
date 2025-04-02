@@ -334,6 +334,30 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	
+	@Override
+	public HashMap<String, Object> selectAllProductList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mProduct> mProduct = managerMapper.selectAllProductList(map);
+			int count = managerMapper.selectAllProductCnt(map);
+			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+			resultMap.put("count", countMap);
+			resultMap.put("result", "success");			
+			resultMap.put("Product", mProduct);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+		
 	@Override
 	public HashMap<String, Object> updateUser(HashMap<String, Object> map) {
 		
