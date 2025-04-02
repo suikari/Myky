@@ -355,8 +355,7 @@
 		UPDATE VET_BOARD
 		SET
 			IS_ACCEPTED = 'Y'
-		WHERE VET_BOARD_ID = #{vetBoardId}
-		
+		WHERE VET_BOARD_ID = #{vetBoardId}		
 	</update>
 	
 	<!-- 이미 작성한 댓글 있는지 확인 -->
