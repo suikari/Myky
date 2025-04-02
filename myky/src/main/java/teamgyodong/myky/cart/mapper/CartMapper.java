@@ -49,4 +49,6 @@ public interface CartMapper {
 
 	List<cart> selectAllOrderList(HashMap<String, Object> map);
 
+	void updateOrderStatus(HashMap<String, Object> map);
+
 }

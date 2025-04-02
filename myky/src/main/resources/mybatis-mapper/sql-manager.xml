@@ -497,6 +497,43 @@
 	</select>
 	
 
+	<insert id="insertProduct" parameterType="hashmap" useGeneratedKeys="true" keyColumn="product_id" keyProperty="productId">
+		INSERT INTO product 
+		(
+			    product_id,
+			    product_name,
+			    price,
+			    quantity,
+			    registration_date,
+			    manufacturer,
+			    product_type,
+			    description,
+			    product_code,
+			    category_id,
+			    discount,
+			    shipping_fee,
+			    shipping_free_minimum,
+			    delete_yn
+		)
+		VALUES
+		(
+			product_seq.nextval,
+			#{productName},
+		    #{price},
+		    #{quantity},
+		    sysdate,
+		    #{manufacturer},
+		    #{productType},
+		    #{description},
+		    #{productCode},
+		    #{categoryId},
+		    #{discount},
+		    #{shippingFee},
+		    #{shippingFreeMinimum},
+		    #{deleteYn}			
+		)
+	</insert>
+
 	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
 		INSERT INTO veterinarian(vet_number,vet_id, vet_name , vet_nickname , email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
 		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{vetName}, #{vetNickname},#{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')

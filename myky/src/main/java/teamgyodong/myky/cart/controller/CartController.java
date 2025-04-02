@@ -184,4 +184,14 @@ public class CartController {
 		resultMap = cartService.getAllOrderList(map);
 		return new Gson().toJson(resultMap);
 	}
+
+	// 주문 상태 변경 (orderId, userId, orderStatus)
+	@RequestMapping(value = "/order/status.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String orderStatus(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.editOrderStatus(map);
+		return new Gson().toJson(resultMap);
+	}
 }

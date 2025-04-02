@@ -60,7 +60,24 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
-
+	//게시글 추가
+	@Override
+	public HashMap<String, Object> insertProduct(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			managerMapper.insertProduct(map);
+			resultMap.put("productId", map.get("productId"));
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
 	
 	@Override
 	public HashMap<String, Object> selectMainList(HashMap<String, Object> map) {
