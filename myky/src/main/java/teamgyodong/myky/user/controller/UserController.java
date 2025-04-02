@@ -339,12 +339,21 @@ public class UserController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	//
+	// 유저 포인트 정보 출력
 	@RequestMapping(value = "/user/point.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String point(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = userService.getPoint(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//유저 쿠폰내역 출력
+	@RequestMapping(value = "/user/coupon.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String coupon(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.userCoupon(map);
 		return new Gson().toJson(resultMap);
 	}
 	

@@ -531,7 +531,7 @@
                         </div>
                     </div>
                     <div class="summary">
-                        <div class="summary-item">현재 포인트 <br>{{point.currentPoint}}P</div>
+                        <div class="summary-item">현재 포인트 <br>{{formattedAmount(point.currentPoint)}}P</div>
                         <div class="summary-item">1개<br>쿠폰</div>
                         <div class="summary-item">0건(0회)<br>총 주문</div>
                     </div>
@@ -590,7 +590,7 @@
                                 <div class="cpoint-title">포인트 사용 내역</div>
                                 <br>
                                 <div class="current-cpoint">현재 포인트 <span
-                                        style="color: red;">{{point.currentPoint}}</span>P</div>
+                                        style="color: red;">{{formattedAmount(point.currentPoint)}}</span>p</div>
                                 <table class="cpoint-table">
                                     <tr>
                                         <th class="cpoint-header">적립(차감)된 포인트</th>
@@ -599,8 +599,8 @@
                                         <th class="cpoint-header">갱신된 날짜</th>
                                     </tr>
                                     <tr v-for="item in pointList" class="cpoint-row">
-                                        <td style="text-align: center;">{{item.usePoint}}</td>
-                                        <td style="text-align: center;">{{item.currentPoint}}</td>
+                                        <td style="text-align: center;">{{formattedAmount(item.usePoint)}}p</td>
+                                        <td style="text-align: center;">{{formattedAmount(item.currentPoint)}}p</td>
                                         <td>{{item.remarks}}</td>
                                         <td>{{item.usageDate}}</td>
                                     </tr>
@@ -609,14 +609,33 @@
                                             없습니다.</td>
                                     </tr>
                                 </table>
+                                <table class="cpoint-table">
+
+
+                                </table>
+
                                 <br>
 
                                 <a v-if="page3 != 1" id="pointIndex" href="javascript:;" class="bgColer2"
                                     @click="fnPageMove3('pvev')">
                                     < </a>
-                                <a v-if="page3 != pointIndex" id="pointIndex" href="javascript:;"
-                                    class="bgColer2" @click="fnPageMove3('next')">
-                                    > </a>
+                                        <a v-if="pointIndex > 1 && page3 != pointIndex" id="pointIndex"
+                                            href="javascript:;" class="bgColer2" @click="fnPageMove3('next')">
+                                            > </a>
+
+                            </div>
+
+                            <div v-if="activeTab === 'coupon'">
+                                <div v-for="item in couponList">
+                                    <ul>
+                                        <li>{{item.couponName}} 쿠폰</li>
+                                        <li>-{{item.discountRate}}% 할인</li>
+                                        <li>{{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능</li>
+                                        <li> 최대 {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인</li>
+                                        <li>발급 일 : {{item.createdAt}}</li>
+                                        <li>유효 기간: {{item.expirationDate}} 까지</li>
+                                    </ul>
+                                </div>
 
                             </div>
 
@@ -625,11 +644,11 @@
                             <div v-if="activeTab === 'board'" class="comment-page">
                                 <h3>작성한 게시글 수 : 총 <span style="color: red;">{{boardCnt.cnt}} </span>개</h3>
                                 <div>
-                                    <select v-model="pageSize" @change="fnMyBoardList">
+                                    <select v-model="pageSize" @change="fnMyBoardList('')">
                                         <option value="5">5개</option>
                                         <option value="10">10개</option>
                                     </select>
-                                    <input v-model="keyword2" placeholder="검색어" @input="fnMyBoardList()">
+                                    <input v-model="keyword2" placeholder="검색어" @input="fnMyBoardList('')">
 
                                 </div>
                                 <table class="board-table">
@@ -689,7 +708,7 @@
                             <div v-if="activeTab === 'comment'" class="comment-page">
 
                                 <h3>작성한 댓글 수 : 총 <span style="color: red;">{{commCnt}} </span>개</h3>
-                                <input v-model="commKeyword" placeholder="검색어" @input="fnSeachComm()">
+                                <input v-model="commKeyword" placeholder="검색어" @input="fnSeachComm('')">
                                 <table class="comment-table" v-if="commCnt!=null">
                                     <thead>
                                         <tr class="comment-table-header">
@@ -787,8 +806,15 @@
                                                 <tr v-if="donaList.length == 0">
                                                     <td colspan="5">후원 내역이 없습니다.</td>
                                                 </tr>
-
                                             </table>
+
+                                            <a v-if="page4 != 1" id="donaIndex" href="javascript:;" class="bgColer2"
+                                                @click="fnPageMove4('pvev')">
+                                                < </a>
+                                                    <a v-if="donaIndex > 1 && page4 != donaIndex" id="pointIndex"
+                                                        href="javascript:;" class="bgColer2"
+                                                        @click="fnPageMove4('next')">
+                                                        > </a>
                                         </div>
                                     </div>
 
@@ -858,12 +884,17 @@
                         commCnt: 0,
                         commKeyword: "",
                         donaList: [],
+                        donaIndex: 0,
+                        donaCnt: 0,
                         sum: "",
                         pointList: [],
                         pointIndex: 0,
                         pointCnt: 0,
                         pageSize3: 10,
-                        page3: 1
+                        page3: 1,
+                        pageSize4: 10,
+                        page4: 1,
+                        couponList: []
 
 
                     };
@@ -871,7 +902,6 @@
                 computed: {
                     formattedAmount() {
                         return (item) => {
-                            console.log(item);
                             // item.amount가 숫자가 아니면 숫자로 변환, 변환할 수 없으면 0 처리
                             return Number(item).toLocaleString('ko-KR'); // 숫자 포맷으로 반환
                         };
@@ -931,6 +961,23 @@
 
                     changeTab(tabId) {
                         let self = this;
+
+                        if (tabId == 'board') {
+                            self.fnMyBoardList('C');
+                        }
+
+                        if (tabId == 'comment') {
+                            self.fnSeachComm('C');
+                        }
+
+                        if (tabId == 'point') {
+                            self.fnPoint2('C');
+                        }
+
+                        if (tabId == 'donation') {
+                            self.fnDonaInfo('C');
+                        }
+
                         self.activeTab = tabId;
                     },
                     // 재원코딩 원본
@@ -944,9 +991,14 @@
                     //     }
                     // }
                     // 재원코딩 원본
-
-                    fnMyBoardList() {
+                    fnMyBoardList(commend) {
                         var self = this;
+
+                        if (commend == 'C') {
+                            self.keyword2 = '';
+                            self.page = 1;
+                        }
+
                         var nparmap = {
                             searchOption: "userId2",
                             keyword: self.userId,
@@ -980,7 +1032,7 @@
                     fnPage: function (num) {
                         let self = this;
                         self.page = num;
-                        self.fnMyBoardList();
+                        self.fnMyBoardList('');
                     },
 
                     fnPageMove: function (direction) {
@@ -991,7 +1043,7 @@
                             self.page--;
 
                         }
-                        self.fnMyBoardList();
+                        self.fnMyBoardList('');
                     },
 
                     fnView(boardId, commentId) {
@@ -1003,8 +1055,14 @@
                         location.href = "/board/view.do?boardId=" + boardId + "&category=" + self.category;
                     },
 
-                    fnSeachComm() {
+                    fnSeachComm(commend) {
                         var self = this;
+
+                        if (commend == 'C') {
+                            self.commKeyword = '';
+                            self.page2 = 1;
+                        }
+
                         var nparmap = {
                             userId: self.userId,
                             pageSize2: self.pageSize2,
@@ -1030,7 +1088,7 @@
                     fnCommPage: function (num2) {
                         let self = this;
                         self.page2 = num2;
-                        self.fnSeachComm();
+                        self.fnSeachComm('');
                     },
 
                     fnPageMove2: function (direction) {
@@ -1040,17 +1098,23 @@
                         } else {
                             self.page2--;
                         }
-                        self.fnSeachComm();
+                        self.fnSeachComm('');
                     },
 
                     fnBoardList() {
                         location.href = "/board/list.do"
                     },
 
-                    fnDonaInfo() {
+                    fnDonaInfo(commend) {
                         var self = this;
+                        if (commend == 'C') {
+                            self.page4 = 1;
+                        }
+
                         var nparmap = {
-                            userId: self.userId
+                            userId: self.userId,
+                            pageSize4: self.pageSize4,
+                            page4: (self.page4 - 1) * self.pageSize4,
                         };
                         $.ajax({
                             url: "/user/donaInfo.dox",
@@ -1061,13 +1125,29 @@
                                 console.log(data);
                                 self.donaList = data.donation;
                                 self.sum = data.sum;
-                                console.log(self.sum);
+                                self.donaCnt = data.donaCount;
+                                self.donaIndex = Math.ceil(data.donaCount / self.pageSize4);
 
                             }
                         });
                     },
-                    fnPoint2() {
+
+                    fnPageMove4: function (direction) {
+                        let self = this;
+                        if (direction == "next") {
+                            self.page4++;
+                        } else {
+                            self.page4--;
+                        }
+                        self.fnDonaInfo('');
+                    },
+
+                    fnPoint2(commend) {
                         var self = this;
+
+                        if (commend == 'C') {
+                            self.page3 = 1;
+                        }
                         var nparmap = {
                             userId: self.userId,
                             pageSize3: self.pageSize3,
@@ -1093,8 +1173,28 @@
                         } else {
                             self.page3--;
                         }
-                        self.fnPoint2();
+                        self.fnPoint2('');
+                    },
+
+                    fnCoupon() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId,
+                        };
+                        $.ajax({
+                            url: "/user/coupon.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                self.couponList = data.coupon;
+                                console.log(self.couponList);
+
+                            }
+                        });
                     }
+
 
 
                     // //수의사 정보 공유
@@ -1128,10 +1228,7 @@
                     }
                     self.fnInfo2();
                     self.fnPoint();
-                    self.fnMyBoardList();
-                    self.fnSeachComm();
-                    self.fnDonaInfo();
-                    self.fnPoint2();
+                    self.fnCoupon();
                     // self.fnVetInfo();
                     window.vueObj = this;
 

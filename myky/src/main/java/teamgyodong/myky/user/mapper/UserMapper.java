@@ -46,6 +46,10 @@ public interface UserMapper {
 
 	int selectPointCnt(HashMap<String, Object> map);
 
+	int selectDonaCnt(HashMap<String, Object> map);
+
+	List<User> selectCoupon(HashMap<String, Object> map);
+
 
 
 
