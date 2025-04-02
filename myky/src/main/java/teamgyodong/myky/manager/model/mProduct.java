@@ -16,6 +16,7 @@ public class mProduct {
 	private String description;
 	private String productCode;
 	private int productTotalCnt;
+	private String DeleteYn;
 
 
 	private String fileId;

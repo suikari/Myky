@@ -330,7 +330,7 @@
        
          <!-- Main Content1 -->
          <div class=" main-content">
-                <h2>회원 관리</h2>
+                <h2>상품 관리</h2>
 
 
 				<div class="card p-3">
@@ -338,10 +338,9 @@
 						    <!-- N개씩 보기 -->
 						    <div class="col-auto">
 						        <select v-model="pageSize" class="form-select board-select" @change="fnMainList">
-						            <option value="5">5개씩</option>
 						            <option value="10">10개씩</option>
-						            <option value="15">15개씩</option>
-						            <option value="20">20개씩</option>
+   						            <option value="50">50개씩</option>
+   						            <option value="100">100개씩</option>
 						        </select>
 						    </div>
 						
@@ -369,12 +368,12 @@
 	                    <thead>
 	                        <tr>
 	                            <th>번호</th>
-	                            <th>이름</th>
-								<th>닉네임</th>
-	                            <th>이메일</th>
-	                            <th>가입일</th>
+	                            <th>카테고리</th>
+	                            <th>상품코드</th>
+								<th>가격</th>
+	                            <th>상품명</th>
+	                            <th>등록일</th>
 	                            <th>상태</th>
-								<th>멤버쉽</th>
 	                            <th>관리</th>
 	                        </tr>
 	                    </thead>
@@ -382,59 +381,90 @@
 	                    	<template v-for="(member, index) in members" >
 	                        <tr >
 	                            <td>{{ index + 1 }}</td>
-	                            <td>{{ member.userName }}</td>
-								<td>{{ member.nickName }}</td>								
-	                            <td>{{ member.email }}</td>
-	                            <td>{{ member.createdAt }}</td>
+	                            <td>{{ member.categoryId }}</td>
+	                            <td>{{ member.productCode }}</td>	
+								<td>{{ member.price }}</td>								
+	                            <td>{{ member.productName }}</td>
+	                            <td>{{ member.registrationDate }}</td>
 	                            <td>
 	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
-	                                    {{ member.DeleteYn === 'N' ? '회원' : '탈퇴회원' }}
+	                                    {{ member.DeleteYn === 'N' ? '판매중' : '판매중지' }}
 	                                </span>
 	                            </td>
-								<td>
-								    <span :class="member.membershipType ? 'status-active' : 'status-inactive'">
-								        {{ member.membershipType ? '멤버쉽' : '일반회원' }}
-								    </span>
-								</td>
 	                            <td>
-           							<button class="btn-edit me-2" @click="fnEdit(member.userId)">수정</button>
+           							<button class="btn-edit me-2" @click="fnEdit(member.productId)">수정</button>
 	                                <!-- <button class="btn-delete">삭제</button> -->
 	                            </td>
 	                        </tr>
 	                        
                             <!-- 토글되는 수정 입력란 -->
-							<tr v-if="selectedMemberId === member.userId">
-								<td colspan="8">
-								    <div class="edit-form d-flex align-items-center p-3 border rounded">
-								        <!-- 이름 입력 필드 -->
-								        <div class="col">
-								            <label for="userName" class="form-label">이름:</label>
-								            <input type="text" id="userName" v-model="editData.userName" class="form-control">
-								        </div>
-										<!-- 탈퇴 여부 토글 스위치 -->
-								        <div class="col-auto d-flex align-items-center">
-								            <label for="deleteYn" class="form-label me-2">회원 상태:</label>
-								            <div class="form-check form-switch">
-								                <input class="form-check-input" type="checkbox" id="deleteYn" v-model="editData.DeleteYn" 
-								                    true-value="N" false-value="Y">
-								            </div>
-								        </div>
-								
-								        <!-- 저장 및 취소 버튼 -->
-								        <div class="col-auto d-flex justify-content-end">
-								            <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
-								            <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
-								        </div>
-								    </div>
-								</td>
-						    </tr> 
+							<tr v-if="selectedMemberId === member.productId">
+							    <td colspan="8">
+							        <div class="edit-form d-flex flex-column gap-3 p-3 border rounded">
+							            <!-- 첫 번째 줄: 상품명, 상품코드, 가격 -->
+							            <div class="d-flex flex-wrap gap-3">
+							                <div class="col-auto">
+							                    <label class="form-label">상품명:</label>
+							                    <input type="text" v-model="editData.productName" class="form-control">
+							                </div>
+							                <div class="col-auto">
+							                    <label class="form-label">상품코드:</label>
+							                    <input type="text" v-model="editData.productCode" class="form-control">
+							                </div>
+							                <div class="col-auto">
+							                    <label class="form-label">가격:</label>
+							                    <input type="text" v-model="editData.price" class="form-control">
+							                </div>
+							            </div>
+							
+							            <!-- 두 번째 줄: 카테고리1, 카테고리2, 판매 상태 & 버튼 -->
+							            <div class="d-flex flex-wrap gap-3 align-items-center">
+							                <div class="col-auto">
+							                    <label class="form-label">카테고리1:</label>
+							                    <select v-model="editData.category1" class="form-select">
+							                        <option value="강아지">강아지</option>
+							                        <option value="고양이">고양이</option>
+							                        <option value="기타">기타</option>
+							                    </select>
+							                </div>
+							                <div class="col-auto">
+							                    <label class="form-label">카테고리2:</label>
+							                    <select v-model="editData.category2" class="form-select">
+							                        <option value="장난감">장난감</option>
+							                        <option value="용품">용품</option>
+							                        <option value="사료">사료</option>
+							                        <option value="간식">간식</option>
+							                        <option value="영양제">영양제</option>
+							                    </select>
+							                </div>
+							                <input v-model="editData.category">
+							                
+							                <div class="col-auto d-flex align-items-center">
+							                    <label class="form-label me-2">판매 상태:</label>
+							                    <div class="form-check form-switch">
+							                        <input class="form-check-input" type="checkbox" v-model="editData.DeleteYn" true-value="N" false-value="Y">
+							                    </div>
+							                </div>
+							                <div class="col-auto d-flex">
+							                    <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
+							                    <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
+							                </div>
+							            </div>
+							        </div>
+							    </td>
+							</tr>
     						</template>
 	                    </tbody>
 	                </table>
 	                
-					<div class="d-flex justify-content-center align-items-center mt-3">
-					    <!-- 페이지네이션 버튼 -->
-					    <div>
+					<div class="d-flex justify-content-between align-items-center mt-3">
+				    <!-- 생성 버튼 왼쪽에 배치 -->
+				    <div>
+					        <button class="btn btn-success" @click="isCreating = !isCreating">상품 등록</button>
+					    </div>
+					
+					    <!-- 페이지네이션 버튼 중앙에 배치 -->
+					    <div class="d-flex justify-content-center">
 					        <!-- 이전 페이지 버튼 -->
 					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
 					            <i class="bi bi-chevron-left"></i>
@@ -493,21 +523,29 @@
  	                    index: 0,
 						menu : '',
 						submenu : '',  
-						members : [],
+						members : {},
 						selectedMemberId : null,
 				        editData: {
-				            userName : '',
-				            DeleteYn : '',
+				        	category1 : '',
+				        	category2 : '',
 				        },
 	                    searchOption: 'userId',
 	                    page: 1,
-	                    pageSize: 5,
+	                    pageSize: 10,
 	                    keyword: '',
 
                      };
                  },
                 computed: {
-
+                    
+                },
+                watch: {
+                    editData: {
+                        deep: true,
+                        handler(newVal) {
+                            this.editData.category = `${newVal.category1},${newVal.category2}`.replace(/^,|,$/g, '');
+                        }
+                    }
                 },
                 methods: {
                 	fnMainList : function() {
@@ -519,13 +557,13 @@
                                 keyword: self.keyword,
                     	};
                     	$.ajax({
-                    		url: "/admin/memberList.dox",
+                    		url: "/admin/productList.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("main",data);
-								self.members = data.User;
+								self.members = data.Product;
                                 if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                     console.log("1!", self.index);
@@ -537,19 +575,19 @@
                     		}
                     	});
                     },
-                    fnEdit(userId) {
+                    fnEdit(productId) {
                     	var self = this;
 
-                    	console.log("1",userId);
-                        if (self.selectedMemberId === userId) {
+                    	console.log("1",productId);
+                        if (self.selectedMemberId === productId) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",userId);
+                        	console.log("2",productId);
 
                         } else {
-                            const member = self.members.find(m => m.userId === userId);
+                            const member = self.members.find(m => m.productId === productId);
                             self.editData = { ...member };  // 수정할 데이터 채우기
-                            self.selectedMemberId = userId;
-                        	console.log("3",userId);
+                            self.selectedMemberId = productId;
+                        	console.log("3",self.editData);
 
                         }
                     },

@@ -38,7 +38,9 @@ public interface ManagerMapper {
 	List<mUser> selectAllnotVetList(HashMap<String, Object> map);
 	List<mMembership> selectAllMembershipList(HashMap<String, Object> map);
 	List<mBoard> selectAllBoardList(HashMap<String, Object> map);
+	List<mProduct> selectAllProductList(HashMap<String, Object> map);
 
+	
 	
 	
 	
@@ -51,6 +53,7 @@ public interface ManagerMapper {
 	int selectAllVetCnt(HashMap<String, Object> map);
 	int selectAllMembershipCnt(HashMap<String, Object> map);
 	int selectAllBoardCnt(HashMap<String, Object> map);
+	int selectAllProductCnt(HashMap<String, Object> map);
 
 	
 	
