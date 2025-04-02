@@ -18,7 +18,7 @@ public class partnerdetail {
 
 	
 	//제휴사
-	private int partnerId;
+	private int partnerdetailId;
 	private int categoryCode;
 	private String name;
 	private String phoneNumber;
