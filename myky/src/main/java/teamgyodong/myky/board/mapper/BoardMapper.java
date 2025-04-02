@@ -82,6 +82,12 @@ public interface BoardMapper {
 
 	void updateVetAnSelect(HashMap<String, Object> map);
 
+	int deleteVetBoardAn(HashMap<String, Object> map);
+
+	int checkDuplicateVetAnswer(HashMap<String, Object> map);
+
+	void updateVetBoardStats(HashMap<String, Object> map);
+
 	
 
 

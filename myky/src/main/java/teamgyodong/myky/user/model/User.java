@@ -42,11 +42,6 @@ public class User {
 	private String minimumSpend;
 	private String maxDiscountAmount;
 	
-	
-	//수의사 용
-	private String vetNickName;
-	private String vetName;
-	private String vetId;
-	
+
 
 }

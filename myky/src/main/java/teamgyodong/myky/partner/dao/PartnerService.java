@@ -15,13 +15,16 @@ public interface PartnerService {
 	HashMap<String, Object> favoritesHospitalInsert(HashMap<String, Object> map);
 
 
-	//HashMap<String, Object> favoritesPartnerInsert(HashMap<String, Object> map);
+	HashMap<String, Object> favoritesPartnerInsert(HashMap<String, Object> map);
 
 
 	HashMap<String, Object> favoritesHospitalRemove(HashMap<String, Object> map);
 
 
-	//HashMap<String, Object> favoritesPartnerRemove(HashMap<String, Object> map);
+	HashMap<String, Object> favoritesPartnerRemove(HashMap<String, Object> map);
+
+
+	
 
 
 

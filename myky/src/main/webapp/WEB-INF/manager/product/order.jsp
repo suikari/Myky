@@ -330,7 +330,7 @@
        
          <!-- Main Content1 -->
          <div class=" main-content">
-                <h2>회원 관리</h2>
+                <h2>상품 관리</h2>
 
 
 				<div class="card p-3">
@@ -338,10 +338,9 @@
 						    <!-- N개씩 보기 -->
 						    <div class="col-auto">
 						        <select v-model="pageSize" class="form-select board-select" @change="fnMainList">
-						            <option value="5">5개씩</option>
 						            <option value="10">10개씩</option>
-						            <option value="15">15개씩</option>
-						            <option value="20">20개씩</option>
+   						            <option value="50">50개씩</option>
+   						            <option value="100">100개씩</option>
 						        </select>
 						    </div>
 						
@@ -369,12 +368,12 @@
 	                    <thead>
 	                        <tr>
 	                            <th>번호</th>
-	                            <th>이름</th>
-	                            <th>닉네임</th>
-								<th>소속병원</th>
-	                            <th>이메일</th>
-	                            <th>가입일</th>
-	                            <th>회원연동</th>
+	                            <th>카테고리</th>
+	                            <th>상품코드</th>
+								<th>가격</th>
+	                            <th>상품명</th>
+	                            <th>등록일</th>
+	                            <th>상태</th>
 	                            <th>관리</th>
 	                        </tr>
 	                    </thead>
@@ -382,53 +381,72 @@
 	                    	<template v-for="(member, index) in members" >
 	                        <tr >
 	                            <td>{{ index + 1 }}</td>
-	                            <td>{{ member.vetName }}</td>
-	                            <td>{{ member.vetNickname }}</td>
-								<td>{{ member.affiliatedHospital }}</td>								
-	                            <td>{{ member.email }}</td>
-	                            <td>{{ member.createdAt }}</td>
+	                            <td>{{ member.categoryId }}</td>
+	                            <td>{{ member.productCode }}</td>	
+								<td>{{ member.price }}</td>								
+	                            <td>{{ member.productName }}</td>
+	                            <td>{{ member.registrationDate }}</td>
 	                            <td>
-	                                <span :class="member.userId ? 'status-active' : 'status-inactive'">
-	                                    {{ member.userId ?'활동 중' : '미연동' }}
+	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
+	                                    {{ member.DeleteYn === 'N' ? '판매중' : '판매중지' }}
 	                                </span>
 	                            </td>
 	                            <td>
-	                                <button class="btn-edit me-2"  @click="fnEdit(member.vetNumber)">수정</button>
-	                                <button class="btn-delete">삭제</button>
+           							<button class="btn-edit me-2" @click="fnEdit(member.productId)">수정</button>
+	                                <!-- <button class="btn-delete">삭제</button> -->
 	                            </td>
 	                        </tr>
 	                        
                             <!-- 토글되는 수정 입력란 -->
-							<tr v-if="selectedMemberId === member.vetNumber">
+							<tr v-if="selectedMemberId === member.productId">
 							    <td colspan="8">
-							        <div class="edit-form d-flex align-items-center p-3 border rounded">
-							            <!-- 이름 입력 필드 -->
-							            <div class="col">
-							                <label for="userName" class="form-label">이름:</label>
-							                <input type="text" id="userName" v-model="editData.vetName" class="form-control">
-							            </div>
-							            <!-- 이름 입력 필드 -->
-							            <div class="col">
-							                <label for="userNickName" class="form-label">닉네임:</label>
-							                <input type="text" id="userNickName" v-model="editData.vetNickname" class="form-control">
-							            </div>							
-							            <!-- 사용자 ID 셀렉트 박스 및 연동해제 버튼 -->
-							            <div class="col-auto d-flex align-items-center">
-							                <label for="userId" class="form-label me-2">사용자 ID:</label>
-							                <select v-model="editData.userId" id="userId" class="form-select">
-							                    <option v-for="user in users" :value="user.userId">
-							                        {{ user.userId }}
-							                    </option>
-							                </select>
-							                <button class="btn btn-danger ms-2 custom-btn" @click="editData.userId = ''">
-							                    연동해제
-							                </button>
+							        <div class="edit-form d-flex flex-column gap-3 p-3 border rounded">
+							            <!-- 첫 번째 줄: 상품명, 상품코드, 가격 -->
+							            <div class="d-flex flex-wrap gap-3">
+							                <div class="col-auto">
+							                    <label class="form-label">상품명:</label>
+							                    <input type="text" v-model="editData.productName" class="form-control">
+							                </div>
+							                <div class="col-auto">
+							                    <label class="form-label">상품코드:</label>
+							                    <input type="text" v-model="editData.productCode" class="form-control">
+							                </div>
+							                <div class="col-auto">
+							                    <label class="form-label">가격:</label>
+							                    <input type="text" v-model="editData.price" class="form-control">
+							                </div>
 							            </div>
 							
-							            <!-- 저장 및 취소 버튼 -->
-							            <div class="col-auto d-flex justify-content-end">
-							                <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
-							                <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
+							            <!-- 두 번째 줄: 카테고리1, 카테고리2, 판매 상태 & 버튼 -->
+							            <div class="d-flex flex-wrap gap-3 align-items-center">
+							                <div class="col-auto">
+							                    <label class="form-label">카테고리1:</label>
+							                    <select v-model="category1" class="form-select">
+							                        <option value="강아지">강아지</option>
+							                        <option value="고양이">고양이</option>
+							                        <option value="기타">기타</option>
+							                    </select>
+							                </div>
+							                <div class="col-auto">
+							                    <label class="form-label">카테고리2:</label>
+							                    <select v-model="category2" class="form-select">
+							                        <option value="장난감">장난감</option>
+							                        <option value="용품">용품</option>
+							                        <option value="사료">사료</option>
+							                        <option value="간식">간식</option>
+							                        <option value="영양제">영양제</option>
+							                    </select>
+							                </div>						                
+							                <div class="col-auto d-flex align-items-center">
+							                    <label class="form-label me-2">판매 상태:</label>
+							                    <div class="form-check form-switch">
+							                        <input class="form-check-input" type="checkbox" v-model="editData.DeleteYn" true-value="N" false-value="Y">
+							                    </div>
+							                </div>
+							                <div class="col-auto d-flex">
+							                    <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
+							                    <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
+							                </div>
 							            </div>
 							        </div>
 							    </td>
@@ -436,11 +454,11 @@
     						</template>
 	                    </tbody>
 	                </table>
-						                
+	                
 					<div class="d-flex justify-content-between align-items-center mt-3">
 				    <!-- 생성 버튼 왼쪽에 배치 -->
 				    <div>
-					        <button class="btn btn-success" @click="isCreating = !isCreating">생성</button>
+					        <button class="btn btn-success" @click="isCreating = !isCreating">상품 등록</button>
 					    </div>
 					
 					    <!-- 페이지네이션 버튼 중앙에 배치 -->
@@ -484,45 +502,6 @@
 					    </div>
 					</div>
 					
-					<!-- Vet 등록 창 (토글) -->
-					<div v-if="isCreating" class="edit-form d-flex flex-column p-3 mt-3 border rounded">
-					    <div class="d-flex gap-3">
-					        <div class="col">
-					            <label for="vetId" class="form-label">Vet ID:</label>
-					            <input type="text" id="vetId" v-model="newVet.vetId" class="form-control">
-					        </div>
-					        <div class="col">
-					            <label for="vetName" class="form-label">이름:</label>
-					            <input type="text" id="vetName" v-model="newVet.vetName" class="form-control">
-					        </div>
-					        <div class="col">
-					            <label for="vetNickname" class="form-label">닉네임:</label>
-					            <input type="text" id="vetNickname" v-model="newVet.vetNickname" class="form-control">
-					        </div>
-					    </div>
-					
-					    <div class="d-flex gap-3 mt-3">
-					        <div class="col">
-					            <label for="vetEmail" class="form-label">이메일:</label>
-					            <input type="email" id="vetEmail" v-model="newVet.email" class="form-control">
-					        </div>
-					        <div class="col">
-					            <label for="vetPhone" class="form-label">전화번호:</label>
-					            <input type="text" id="vetPhone" v-model="newVet.phone" class="form-control">
-					        </div>
-					        <div class="col">
-					            <label for="vetHospital" class="form-label">병원이름:</label>
-					            <input type="text" id="vetHospital" v-model="newVet.hospital" class="form-control">
-					        </div>
-					    </div>
-					
-					    <!-- 저장 및 취소 버튼 -->
-					    <div class="d-flex justify-content-end mt-3">
-					        <button class="btn btn-primary me-2 custom-btn" @click="fnCreate">저장</button>
-					        <button class="btn btn-secondary custom-btn" @click="isCreating = false">취소</button>
-					    </div>
-					</div>
-						
 	            </div>
 
 
@@ -542,30 +521,20 @@
  	                    index: 0,
 						menu : '',
 						submenu : '',  
-						members : [],
-						users : [],
+						members : {},
 						selectedMemberId : null,
 				        editData: {
-				        	name : '',
-				            userId : '',
+
 				        },
 	                    searchOption: 'userId',
 	                    page: 1,
-	                    pageSize: 5,
+	                    pageSize: 10,
 	                    keyword: '',
-	                    isCreating: false, // Vet 등록 창 표시 여부
-	                    newVet: {
-	                        vetId: '',
-	                        name: '',
-	                        email: '',
-	                        phone: '',
-	                        hospital: ''
-	                    }
-
+			        	category1 : '',
+			        	category2 : '',
                      };
                  },
                 computed: {
-
                 },
                 methods: {
                 	fnMainList : function() {
@@ -577,52 +546,36 @@
                                 keyword: self.keyword,
                     	};
                     	$.ajax({
-                    		url: "/admin/VetList.dox",
+                    		url: "/admin/productList.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("main",data);
-								self.members = data.Vet;    
-								
-								if (data.count && data.count.cnt !== undefined) {
+								self.members = data.Product;
+                                if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                     console.log("1!", self.index);
 
                                 } else {
-                                    self.index = 1;
+                                    self.index = 0;
                                     console.warn("count 정보 없음!", data);
-                                }	
-		                    	
+                                }		
                     		}
                     	});
                     },
-                    fnEdit(userId) {
+                    fnEdit(productId) {
                     	var self = this;
-						
-                    	nparmap = {
-                    	};
-                    	$.ajax({
-                    		url: "/admin/notVetList.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("main1",data);
-								self.users = data.User;
-                                
-                    		}
-                    	});
-                    	
-                    	console.log("1",userId);
-                        if (self.selectedMemberId === userId) {
+
+                    	console.log("1",productId);
+                        if (self.selectedMemberId === productId) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",userId);
+                        	console.log("2",productId);
 
                         } else {
-                            const member = self.members.find(m => m.vetNumber === userId);
+                            const member = self.members.find(m => m.productId === productId);
                             self.editData = { ...member };  // 수정할 데이터 채우기
-                            self.selectedMemberId = userId;
+                            self.selectedMemberId = productId;
                         	console.log("3",self.editData);
 
                         }
@@ -630,13 +583,12 @@
                     fnSave () {
                     	var self = this;
                     	var nparmap = {
-                    			vetNumber : self.selectedMemberId,
-                    			vetName : self.editData.vetName ,
-                    			vetNickname : self.editData.vetNickname,
-    				            userId : self.editData.userId,
+                    			userId : self.selectedMemberId,
+    				            userName : self.editData.userName ,
+    				            DeleteYn : self.editData.DeleteYn,
                     	};
                     	$.ajax({
-                    		url: "/admin/updateVet.dox",
+                    		url: "/admin/updateUser.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
@@ -674,29 +626,6 @@
                         self.page = pageCnt;
                         self.fnMainList();
                     },
-                    fnCreate() {
-                    	let self = this;
-                        console.log("저장할 Vet 데이터:", self.newVet);                        
-                        nparmap =  self.newVet;
-                    	$.ajax({
-                    		url: "/admin/insertVet.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("main1",data);
-                    			self.newVet = {};
-            					self.fnMainList();
-
-                                self.isCreating = false; // 저장 후 폼 닫기
-                    		}
-                    	});
-                    	
-                   		
-
-                    }
-                    
-                    
                 	
                 },
                 mounted() {
@@ -707,12 +636,10 @@
                     self.submenu = params.get("submenu") || "1";
 					self.fnMainList();
 
+                	
                 }
             });
             
             app.mount("#app");
             
     </script>
-
-
-

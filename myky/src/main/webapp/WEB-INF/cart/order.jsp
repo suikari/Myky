@@ -564,6 +564,7 @@
                 },
                 searchAddress() {
                     let self = this;
+                    self.deliveryType = "new";
 
                     new daum.Postcode({
                         oncomplete: function (data) {
@@ -675,8 +676,6 @@
                         return;
                     }
 
-                    finalPrice = 100;
-
                     IMP.request_pay({
                         channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
                         pg: "html5_inicis",
@@ -698,7 +697,7 @@
                         }
                     });
                 },
-                fnPaymentHistory: function (rsp, finaPrice, finalAddress, finalMessage) {
+                fnPaymentHistory: function (rsp, finalPrice, finalAddress, finalMessage) {
                     let self = this;
 
                     let paymentMethod = "";
@@ -733,12 +732,12 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("결제 정보 저장 여부 >>> ", data);
-                            self.fnOrderHistory(finaPrice, paymentMethod, finalAddress, finalMessage, data.orderId);
+                            self.fnOrderHistory(finalPrice, paymentMethod, finalAddress, finalMessage, data.orderId);
 
                         }
                     });
                 },
-                fnOrderHistory: function (finaPrice, paymentMethod, finalAddress, finalMessage, orderId) {
+                fnOrderHistory: function (finalPrice, paymentMethod, finalAddress, finalMessage, orderId) {
                     let self = this;
                     let payList = self.selectCartItems.map(item => ({
                         orderId: orderId,
@@ -749,7 +748,7 @@
 
                     self.orderData = {
                         orderId: orderId,
-                        totalPrice: finaPrice,
+                        totalPrice: finalPrice,
                         userId: self.userInfo.userId,
                         receiverName: self.orderInfo.receiver || self.userInfo.userName,
                         receiverPhone: self.orderInfo.phone || self.userInfo.phoneNumber,
@@ -801,6 +800,9 @@
                     let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
                     console.log("사용 포인트 >> ", usedPoint);
+                    if(usedPoint == 0){
+                        return;
+                    }
 
                     var nparmap = {
                         usedPoint: usedPoint,

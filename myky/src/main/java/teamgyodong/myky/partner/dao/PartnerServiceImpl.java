@@ -66,19 +66,19 @@ public class PartnerServiceImpl implements PartnerService {
 		return resultMap;
 	}
 	
-//	@Override
-//	public HashMap<String, Object> favoritesPartnerInsert(HashMap<String, Object> map) {
-//		// TODO Auto-generated method stub
-//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//
-//		partnerMapper.addfavoritesPartner(map);
-//
-//		System.out.println("key ==> " + map.get("partnerId"));
-//		resultMap.put("result", "success");
-//		resultMap.put("partnerId", map.get("partnerId"));
-//		System.out.println(map);
-//		return resultMap;
-//	}
+	@Override
+	public HashMap<String, Object> favoritesPartnerInsert(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		partnerMapper.addfavoritesPartner(map);
+
+		System.out.println("key ==> " + map.get("partnerdetailId"));
+		resultMap.put("result", "success");
+		resultMap.put("partnerdetailId", map.get("partnerdetailId"));
+		System.out.println(map);
+		return resultMap;
+	}
 
 	@Override
 	public HashMap<String, Object> favoritesHospitalRemove(HashMap<String, Object> map) {
@@ -90,15 +90,15 @@ public class PartnerServiceImpl implements PartnerService {
 		return resultMap;
 	}
 	
-//	@Override
-//	public HashMap<String, Object> favoritesPartnerRemove(HashMap<String, Object> map) {
-//		// TODO Auto-generated method stub
-//		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//
-//		partnerMapper.favoritesPartnerDelete(map);
-//		resultMap.put("result", "success");
-//		return resultMap;
-//	}
+	@Override
+	public HashMap<String, Object> favoritesPartnerRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		partnerMapper.favoritesPartnerDelete(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
 
 	
 	@Override

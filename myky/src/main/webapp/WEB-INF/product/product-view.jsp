@@ -16,6 +16,7 @@
                 box-sizing: border-box;
                 background-color: #ffffff;
             }
+
             .container {
                 max-width: 1100px;
                 margin: 20px auto;
@@ -27,6 +28,7 @@
                 flex-wrap: wrap;
                 position: relative;
             }
+
             .product-detail {
                 display: flex;
                 flex-wrap: nowrap;
@@ -113,6 +115,7 @@
             .purchase-section {
                 margin-top: 20px;
             }
+
             .qty-box {
                 display: flex;
                 align-items: center;
@@ -262,33 +265,31 @@
 
 
             /* 상세보기 */
-            .notice-section {
-                max-width: 1000px;
-                margin: 50px auto;
-                padding: 20px;
-                background-color: transparent;
-                text-align: center;
-                font-size: 16px;
-                line-height: 1.8;
-                color: #333;
-            }
-
-            .notice-section2 {
-                max-width: 1000px;
-                margin: 50px auto;
-                margin-top: 10px;
-                padding: 20px;
-                background-color: transparent;
-                text-align: center;
-                font-size: 16px;
-                line-height: 1.8;
-                color: #333;
-            }
-
             .notice-section h2 {
                 font-size: 24px;
-                font-weight: bold;
+                font-weight: 700;
+                color: #222;
                 margin-bottom: 10px;
+                display: inline-block;
+                position: relative;
+                padding-left: 10px;
+            }
+
+            .notice-section h2::before {
+                content: \"📘\";
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+
+            .notice-section .sub-title {
+                font-size: 15px;
+                font-style: italic;
+                color: #888;
+                padding-left: 12px;
+                margin-top: 6px;
+                margin-bottom: 24px;
+                border-left: 3px solid #d0d0d0;
             }
 
             .notice-badge {
@@ -302,11 +303,304 @@
                 margin-bottom: 20px;
             }
 
-            .notice-section .sub-text {
-                color: #999;
-                font-size: 14px;
-                margin-top: 8px;
+            .notice-card {
+                background-color: #f9f9f9;
+                padding: 20px 25px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
             }
+
+            .notice-img {
+                width: 100%;
+                max-width: 600px;
+                margin-top: 15px;
+                border-radius: 10px;
+            }
+
+            /* 멤버십 상세보기 */
+            .vip-membership-section {
+                background: linear-gradient(to right, #1e1e1e, #000);
+                color: #fff;
+                padding: 60px 20px;
+                text-align: center;
+                border-radius: 14px;
+                margin: 40px auto;
+                max-width: 1000px;
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+                cursor: pointer;
+            }
+
+            .vip-subtitle {
+                font-size: 13px;
+                color: #ffdd57;
+                font-weight: bold;
+                margin-bottom: 10px;
+                letter-spacing: 1px;
+            }
+
+            .vip-header h2 {
+                font-size: 26px;
+                font-weight: 700;
+                line-height: 1.5;
+                color: #ccc;
+            }
+
+            .vip-header h2 span {
+                color: #ffe600;
+                font-weight: 900;
+                font-size: 30px;
+            }
+
+            .vip-description {
+                margin-top: 15px;
+                font-size: 15px;
+                color: #ccc;
+            }
+
+            .vip-benefit-cards {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin-top: 40px;
+                flex-wrap: wrap;
+            }
+
+            .vip-card {
+                background: #111;
+                padding: 25px 20px;
+                border-radius: 12px;
+                width: 280px;
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.07);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                transition: transform 0.3s ease;
+            }
+
+            .vip-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .vip-card h4 {
+                font-size: 18px;
+                margin-bottom: 10px;
+                color: #ffd700;
+            }
+
+            .vip-card p {
+                font-size: 14px;
+                color: #ddd;
+            }
+
+            .join-btn {
+                margin-top: 40px;
+                background-color: #ffd700;
+                color: #000;
+                border: none;
+                padding: 12px 30px;
+                font-weight: bold;
+                border-radius: 6px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .join-btn:hover {
+                background-color: #e6c200;
+            }
+
+            /* 배송 관련 */
+            .shipping-warning-section {
+                background: #fff8e1;
+                padding: 50px 20px;
+                border-radius: 12px;
+                max-width: 1000px;
+                margin: 60px auto;
+                text-align: center;
+                color: #333;
+                box-shadow: 0 0 12px rgba(255, 204, 0, 0.2);
+                cursor: pointer;
+            }
+
+            .shipping-warning-section .vip-subtitle {
+                font-size: 14px;
+                color: #d08900;
+                font-weight: bold;
+                margin-bottom: 6px;
+            }
+
+            .shipping-warning-section .warning-title {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+            .warning-desc {
+                font-size: 15px;
+                color: #666;
+                margin-bottom: 30px;
+            }
+
+            .warning-cards {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                flex-wrap: wrap;
+            }
+
+            .warning-card {
+                background-color: #fff3cd;
+                border-left: 5px solid #ffcc00;
+                padding: 20px 25px;
+                border-radius: 10px;
+                width: 100%;
+                max-width: 450px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                text-align: left;
+            }
+
+            .warning-card h4 {
+                font-size: 18px;
+                color: #d08900;
+                margin-bottom: 10px;
+            }
+
+            .warning-card p {
+                font-size: 14px;
+                color: #444;
+                line-height: 1.6;
+            }
+
+            .warning-card .sub-text {
+                margin-top: 8px;
+                font-size: 13px;
+                color: #999;
+                font-style: italic;
+            }
+
+            /* 제품 관련 */
+            .product-info-section {
+                background-color: #f5f6fa;
+                padding: 60px 20px;
+                border-radius: 14px;
+                max-width: 1000px;
+                margin: 60px auto;
+                text-align: center;
+                color: #333;
+            }
+
+            .product-info-header .vip-subtitle {
+                font-size: 14px;
+                color: #007bff;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .product-info-header h2 {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+            .product-info-header .info-desc {
+                font-size: 15px;
+                color: #666;
+                margin-bottom: 30px;
+            }
+
+            .product-info-card {
+                background-color: #fff;
+                padding: 30px 25px;
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                text-align: left;
+                max-width: 800px;
+                margin: 0 auto 40px auto;
+            }
+
+            .product-info-card p {
+                font-size: 15px;
+                color: #444;
+                line-height: 1.8;
+                margin-bottom: 16px;
+            }
+
+            .product-info-card .sub-text {
+                color: #999;
+                font-size: 13px;
+                font-style: italic;
+            }
+
+            .product-event-img {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                display: block;
+                border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            }
+
+            /* ================================
+   🎁 이벤트 사은품 안내 Section
+================================== */
+            .event-gift-section {
+                background-color: #fffdf5;
+                padding: 60px 20px;
+                margin: 60px auto;
+                border-radius: 12px;
+                max-width: 1000px;
+                box-shadow: 0 4px 12px rgba(255, 204, 0, 0.1);
+            }
+
+            .event-gift-wrap {
+                display: flex;
+                align-items: center;
+                gap: 40px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .event-gift-img img {
+                width: 320px;
+                max-width: 100%;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            }
+
+            .event-gift-text {
+                flex: 1;
+                min-width: 280px;
+                max-width: 500px;
+                font-size: 14px;
+                color: #444;
+                text-align: left;
+            }
+
+            .event-gift-text h3 {
+                font-size: 20px;
+                color: #d08900;
+                margin-bottom: 10px;
+            }
+
+            .event-gift-text p {
+                font-size: 15px;
+                margin-bottom: 10px;
+                font-weight: 500;
+                color: #555;
+            }
+
+            .event-gift-text ul {
+                padding-left: 20px;
+                list-style: disc;
+                line-height: 1.8;
+            }
+
+            .event-gift-text ul li {
+                margin-bottom: 8px;
+            }
+
+
+
+
 
             /* 탭 부분 */
             .tab-wrapper {
@@ -465,6 +759,7 @@
                 width: 50%;
                 overflow: hidden;
             }
+
             .review-card-header,
             .review-card-body,
             .review-card-footer {
@@ -492,12 +787,14 @@
                 line-height: 1.6;
                 margin-bottom: 10px;
             }
+
             .review-title {
                 font-size: 17px;
                 font-weight: bold;
                 color: #333;
                 margin-bottom: 10px;
             }
+
             .review-image img {
                 width: 130px;
                 height: 130px;
@@ -505,6 +802,7 @@
                 border-radius: 8px;
                 border: 1px solid #eee;
             }
+
             .review-deleted-content {
                 padding: 20px 10px;
                 text-align: left;
@@ -516,6 +814,7 @@
                 font-style: italic;
                 margin: 0;
             }
+
             .review-card-footer {
                 display: flex;
                 justify-content: space-between;
@@ -556,7 +855,6 @@
                 background-color: #28a745;
                 color: #fff;
             }
-
 
             .review-actions button:hover {
                 text-decoration: underline;
@@ -626,6 +924,7 @@
                 border-radius: 8px;
                 margin-bottom: 10px;
             }
+
             .qna-block.answer {
                 background-color: #fff;
                 border-left: 4px solid #7b61ff;
@@ -659,6 +958,7 @@
                 color: #888;
                 margin-top: 6px;
             }
+
             .qna-label {
                 font-weight: bold;
                 color: #333;
@@ -686,7 +986,6 @@
                 color: #d32f2f;
                 text-decoration: none;
             }
-
 
             .qna-block.pending {
                 background-color: #fcfcfc;
@@ -732,6 +1031,7 @@
                 gap: 8px;
                 margin-top: 30px;
             }
+
             .pagination a {
                 text-decoration: none;
                 color: #333;
@@ -742,11 +1042,14 @@
                 background: none;
                 font-size: 15px;
             }
+
             .pagination a.active {
                 color: #000;
                 font-weight: 900;
                 text-decoration: none;
             }
+
+            /* 페이지 이동 뜨게 */
             .breadcrumb-container {
                 width: 100%;
                 text-align: right;
@@ -754,10 +1057,11 @@
                 position: relative;
                 top: -10px;
             }
+
             .breadcrumb {
                 display: inline-block;
                 font-size: 14px;
-                justify-content: flex-start; /* 왼쪽 정렬 */
+                justify-content: flex-start;
                 padding-left: 20px;
                 padding-right: 20px;
                 gap: 6px;
@@ -765,17 +1069,29 @@
                 cursor: pointer;
                 text-decoration: none;
             }
+
             .breadcrumb a {
                 color: #444;
                 text-decoration: none;
                 font-weight: 500;
                 cursor: pointer;
-                transition: transform 0.3s ease, color 0.3s ease;
             }
+
             .breadcrumb a:hover {
                 text-decoration: none;
-                transform: scale(1.15); 
                 color: #ff6600;
+            }
+
+
+            .product-image-thumbNails img.active {
+                border: 2px solid #000;
+                opacity: 1;
+            }
+
+            .product-image-thumbNails img {
+                opacity: 0.6;
+                cursor: pointer;
+                transition: opacity 0.3s;
             }
 
             @media (max-width: 768px) {
@@ -798,6 +1114,27 @@
                     width: 100%;
                 }
             }
+
+            @media (max-width: 768px) {
+                .event-gift-wrap {
+                    flex-direction: column;
+                    text-align: center;
+                }
+
+                .event-gift-text {
+                    text-align: center;
+                }
+
+                .event-gift-text ul {
+                    padding-left: 0;
+                    list-style: none;
+                }
+
+                .event-gift-text ul li::before {
+                    content: \"✔ \";
+                    color: #d08900;
+                }
+            }
         </style>
     </head>
 
@@ -806,28 +1143,29 @@
         <div id="app" class="container">
             <div class="breadcrumb-container">
                 <div class="breadcrumb" v-if="info.categoryId">
-                  <!-- <a href="/">홈</a> / -->
-                  <a href="/product/list.do">전체상품</a> /
-                  <a href="javascript:;" @click="goToCategory(largeCategory)">{{ largeCategory }}</a> /
-                  <a href="javascript:;" @click="goToSubCategory(info.categoryId)">
-                    {{ largeCategory + ' ' + subCategory }}
-                  </a> /
-                  <a>{{ info.productName }}</a>
+                    <!-- <a href="/">홈</a> / -->
+                    <a href="/product/list.do">전체상품</a> /
+                    <a href="javascript:;" @click="goToCategory(largeCategory)">{{ largeCategory }}</a> /
+                    <a href="javascript:;" @click="goToSubCategory(info.categoryId)">
+                        {{ largeCategory + ' ' + subCategory }}
+                    </a> /
+                    <a>{{ info.productName }}</a>
                 </div>
-              </div>
-              
+            </div>
+
             <!-- 상품 상세 정보 -->
             <section class="product-detail">
                 <div class="product-image-container">
-                    <template v-if="info && info.filePath">
-                        <img :src="info.filePath" alt="info.fileName" id="mainImage">
+                    <template v-if="imgList.length > 0">
+                        <img :src="currentImage" alt="대표 이미지" id="mainImage">
                     </template>
                     <template v-else>
                         <img src="../../img/product/product update.png" alt="이미지 없음">
                     </template>
+
                     <div class="product-image-thumbNails">
-                        <img v-for="(img, index) in imgList" :src="img.filePath" alt="상품 썸네일"
-                            @click="changeImage(img.filePath)">
+                        <img v-for="(img, index) in imgList" :key="index" :src="img.filePath" alt="상품 썸네일"
+                            @click="changeImage(img.filePath)" :class="{ active: index === currentImageIndex }">
                     </div>
                 </div>
                 <div class="product-info">
@@ -835,18 +1173,18 @@
                     <h1>{{info.productName}}</h1>
                     <!-- 정상가 (할인 전 가격) -->
                     <div class="detail-product-info">
-                        <p class="original-price"  v-if="info.discount > 0">
+                        <p class="original-price" v-if="info.discount > 0">
                             정상가: {{ info.price }}원
                         </p>
                         <!-- 멤버십 할인가 -->
                         <p class="discount-price">
                             멤버십 할인가:
                             <strong>{{ discountedPrice}}원</strong>
-                            <span v-if="userInfo.membershipFlg !== 'Y'" ></span>
+                            <span v-if="userInfo.membershipFlg !== 'Y'"></span>
                         </p>
                     </div>
                     <p>
-                        평균 별점 : 
+                        평균 별점 :
                         <span class="star-rating">
                             <span v-for="n in 5" :key="n" class="star" :class="getStarClass(n)"> ★ </span>
                         </span>
@@ -897,37 +1235,137 @@
                             <button class="buy-btn" @click="fnBuy()">구매하기</button>
                         </div>
             </section>
-
+            <hr style="margin-top: 70px;">
             <!-- 상세 설명 -->
             <section class="notice-section">
-                <h2>NOTICE</h2>
-                <div class="notice-badge">★ 배송 전 주문 취소 ★</div>
-                <p>
-                    평일 오후 4시 이후 주문건은 당일 출고에 해당되지 않아<br>
-                    다음날 배송 지연으로 인한 취소가 불가하며,<br>
-                    반품 신청 시 배송비가 부과됩니다.
-                </p>
-                <p class="sub-text">
-                    *금요일 오후 4시 이후 주문건은 월요일 발송됩니다.
-                </p>
-                <p>
-                    또한 운송장 번호가 확인되는 상태에서는<br>
-                    상품이 택배사에 전달된 상태로 취소/변경이 어려우니 양해 부탁드립니다.
-                </p>
-                <p class="sub-text">
-                    *택배사 전달 이후 요청 시 반품 비용으로 왕복 배송비가 발생됩니다.
-                </p>
-                <hr style="margin-bottom: 10px;">
-            </section>
-            <!-- 안내 -->
-            <section class="notice-section2">
-                <div class="notice-badge">★ [안내] ★</div>
-                <p>
-                    동일한 제품도 상황에 따라<br>
-                    사료 알갱이 및 습식 제품의 색상의 차이가 있을 수 있습니다.<br>
-                    해당 사유로 인한 교환 및 반품은 불가능합니다.
-                </p>
-                <img src="../../img/product/event.jpg" alt="사은품 증정">
+                <h2>📘 멍냥꽁냥 이용 가이드</h2>
+                <p class="sub-title">제품 특성, 배송 안내, 사은품 등 구매 전 알아두면 좋은 정보들을 안내드립니다.</p>
+                <!-- 멤버십 관련 -->
+                <section class="vip-membership-section">
+                    <div class="vip-header">
+                        <p class="vip-subtitle">🎁 멤버십 혜택 안내</p>
+                        <h2>
+                            반려인을 위한 프리미엄 혜택,<br>
+                            <span>멍냥꽁냥 멤버십</span>으로 누리세요
+                        </h2>
+                        <p class="vip-description">
+                            단순한 할인 그 이상! <strong>멤버십 할인 / 매월 자동 기부 / 포인트 지급</strong>까지<br>
+                            반려 생활에 필요한 모든 혜택을 한 번에 제공합니다.
+                        </p>
+                    </div>
+                    <div class="vip-benefit-cards">
+                        <div class="vip-card">
+                          <h4>💸 전상품 멤버십 할인가 적용</h4>
+                          <p>멤버십 회원은 항상 <strong>할인된 가격</strong>으로 구매 가능합니다</p>
+                        </div>
+                        <div class="vip-card">
+                          <h4>🌱 매월 자동 반려동물 후원</h4>
+                          <p>회원님의 이름으로 <strong>매달 일정 금액을 유기동물 보호소에 기부</strong>합니다</p>
+                        </div>
+                        <div class="vip-card">
+                          <h4>🎉 매월 5000포인트 지급</h4>
+                          <p><strong>포인트 5000P</strong>를 매달 자동으로 받아 쇼핑몰과 게시판,후원에서 바로 사용하세요</p>
+                        </div>
+                      </div>
+                    <button class="join-btn" @click="MembershipJoin">지금 멤버십 가입하기</button>
+                </section>
+                <hr style="margin-bottom: 70px;">
+
+                <!-- 배송 관련 -->
+                <section class="shipping-warning-section">
+                    <div class="vip-subtitle">🚛 배송 및 주문 관련 안내</div>
+                    <h2 class="warning-title">꼭 확인해주세요!</h2>
+                    <p class="warning-desc">정확한 배송과 원활한 쇼핑을 위해 아래 내용을 사전에 꼭 확인 부탁드립니다.</p>
+
+                    <div class="warning-cards">
+                        <div class="warning-card">
+                            <h4>⏰ 평일 오후 4시 이후 주문</h4>
+                            <p>
+                                오후 4시 이후 주문 건은 당일 출고가 어려우며,<br>
+                                다음 날 출고로 지연됩니다. 이로 인한 <strong>단순 변심 취소는 불가</strong>합니다.
+                            </p>
+                        </div>
+
+                        <div class="warning-card">
+                            <h4>📦 운송장 발급 후 취소 불가</h4>
+                            <p>
+                                운송장 발급 및 택배사 인계 후에는 <strong>취소 또는 변경이 불가</strong>합니다.<br>
+                                반품 시 <strong>왕복 배송비가 부과</strong>되오니, 신중한 구매 부탁드립니다.
+                            </p>
+                            <p class="sub-text">※ 금요일 오후 4시 이후 주문은 월요일부터 순차 출고됩니다.</p>
+                        </div>
+                    </div>
+                </section>
+                <hr style="margin-top: 40px;">
+
+
+                <!--제품 안내 -->
+                <section class="product-info-section">
+                    <div class="product-info-header">
+                        <p class="vip-subtitle">📢 제품 관련 안내</p>
+                        <h2>정확한 이해를 위한 제품 특성 및 주의사항 안내</h2>
+                        <p class="info-desc">
+                            멍냥꽁냥에서 판매하는 모든 제품은 고객님의 소중한 반려동물을 위한 상품으로,<br>
+                            아래 내용을 충분히 숙지하신 후 구매해주시기 바랍니다.
+                        </p>
+                    </div>
+                    <div class="product-info-card">
+                        <p>
+                            ✅ 본 제품은 제조 시기 및 생산 공정에 따라 <strong>알갱이의 색상, 크기, 모양</strong> 등에 약간의 차이가 발생할 수 있습니다.<br>
+                            이는 원재료 수급 및 공정 조건에 따른 <strong>정상적인 현상</strong>이며, 제품의 품질에는 영향을 미치지 않습니다.
+                        </p>
+
+                        <p>
+                            ✅ 일부 제품(특히 습식, 파우치 제품)의 경우, 내용물의 <strong>점도 및 색상</strong>이 계절 또는 보관 상태에 따라 달라질 수 있습니다.<br>
+                            해당 사항은 제품 이상이 아니며, 반품 또는 교환의 사유가 되지 않습니다.
+                        </p>
+
+                        <p>
+                            ✅ 제품에 포함된 주원료(예: 닭고기, 곡물, 유제품 등)에 따라 <strong>알러지 반응</strong>이 나타날 수 있습니다.<br>
+                            반려동물에게 특이체질 또는 과거 알러지 반응 이력이 있다면, 반드시 성분표 확인 후 급여해주세요.
+                        </p>
+
+                        <p>
+                            ✅ 급여 후 <strong>소화불량, 묽은 변, 식욕 저하</strong> 등의 이상 반응이 있을 경우 급여를 중단하고 수의사 상담을 권장드립니다.
+                        </p>
+
+                        <p>
+                            ✅ 개봉 후 제품은 밀봉하여 직사광선을 피하고 <strong>서늘하고 건조한 곳</strong>에 보관해주세요.<br>
+                            특히 습식 제품은 <strong>냉장 보관 후 빠른 시일 내에 사용</strong> 바랍니다.
+                        </p>
+
+                        <p>
+                            ✅ 제품 유통기한은 제조일로부터 충분한 여유가 있는 상품으로 출고되며,<br>
+                            이벤트나 할인 상품은 상대적으로 유통기한이 짧을 수 있습니다.
+                        </p>
+
+                        <p>
+                            ✅ 제품 이상이 의심되는 경우 수령 즉시 고객센터로 연락주시면 <strong>신속히 확인 및 대응</strong> 드리겠습니다.
+                        </p>
+
+                        <p class="sub-text">
+                            ※ 본 안내는 공통 적용되는 사항이며, 각 상품별 추가 상세 정보는 상품 페이지 하단 또는 고객센터를 통해 확인하실 수 있습니다.
+                        </p>
+                    </div>
+                </section>
+                <section class="event-gift-section">
+                    <div class="event-gift-wrap">
+                        <div class="event-gift-img">
+                            <img src="../../img/product/eventProduct1.png" alt="이벤트 사은품" />
+                        </div>
+                        <div class="event-gift-text">
+                            <h3>🎁 지금 구매 시 특별 사은품 증정!</h3>
+                            <p><strong>멍냥꽁냥 회원을 위한 한정 이벤트!</strong></p>
+                            <ul>
+                                <li>✔ 이벤트 대상 상품 구매 시 자동 증정</li>
+                                <li>✔ 수량 한정, 조기 소진 시 종료</li>
+                                <li>✔ 교환/반품 불가 · 종류 랜덤</li>
+                                <li>✔ 2025.04.01 ~ 소진 시까지</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <hr style="margin-top: 40px;">
             </section>
             <!-- 탭 UI -->
             <section id="tab-area" class="tab-wrapper">
@@ -955,7 +1393,7 @@
                         <div v-if="reviewList.length === 0" class="review-empty">
                             현재 게시물이 없습니다
                         </div>
-                            <div class="review-card" v-for="review in reviewList" :key="review.reviewId">
+                        <div class="review-card" v-for="review in reviewList" :key="review.reviewId">
                             <!-- 삭제된 리뷰일 경우 -->
                             <div v-if="review.deleteYn === 'Y'" class="review-deleted-content">
                                 <p class="review-text">삭제된 리뷰입니다.</p>
@@ -965,7 +1403,8 @@
                                 <div class="review-card-header">
                                     <div class="review-left">
                                         <div class="star-rating">
-                                          <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= review.rating }">★</span>
+                                            <span v-for="n in 5" :key="n" class="star"
+                                                :class="{ filled: n <= review.rating }">★</span>
                                         </div>
                                         <span class="review-user-id">[{{ review.userId }}]</span>
                                         <span class="rating-text">{{ review.rating ?? 0 }} / 5</span>
@@ -1035,11 +1474,13 @@
                                     <div class="qna-text" v-html="qna.questionText"></div>
                                     <div class="qna-info">
                                         <span class="qna-date">{{ qna.createdAt }}</span>
-                                        <button v-if="qna.userId === sessionId" @click="fnQnaEdit(qna.qnaId)" class="qna-delete-btn">수정</button>
-                                        <button v-if="qna.userId === sessionId" @click="fnQnaDelete(qna.qnaId)" class="qna-delete-btn">삭제</button>
+                                        <button v-if="qna.userId === sessionId" @click="fnQnaEdit(qna.qnaId)"
+                                            class="qna-delete-btn">수정</button>
+                                        <button v-if="qna.userId === sessionId" @click="fnQnaDelete(qna.qnaId)"
+                                            class="qna-delete-btn">삭제</button>
                                     </div>
                                 </div>
-                                
+
                                 <!-- 답변 있을 경우 -->
                                 <div class="qna-block answer" v-if="qna.answerText">
                                     <div class="qna-label answer-label"> ⤷ 답변 [멍냥꽁냥 관리자]</div>
@@ -1056,14 +1497,14 @@
                             </div>
                             <div class="pagination" style="margin-top: 30px;">
                                 <a href="javascript:;" v-if="qnaPage > 1" @click="fnQnaPageMove('prev')">&lt;</a>
-                                <a href="javascript:;" v-for="num in qnaPages" :key="num"
-                                   @click="fnQnaPage(num)" :class="{ active: qnaPage === num }">
-                                  <span v-if="qnaPage === num">{{ num }}</span>
-                                  <span v-else>{{ num }}</span>
-                                </a> 
+                                <a href="javascript:;" v-for="num in qnaPages" :key="num" @click="fnQnaPage(num)"
+                                    :class="{ active: qnaPage === num }">
+                                    <span v-if="qnaPage === num">{{ num }}</span>
+                                    <span v-else>{{ num }}</span>
+                                </a>
                                 <a href="javascript:;" v-if="qnaPage < qnaPages.length"
-                                   @click="fnQnaPageMove('next')">&gt;</a>
-                              </div>
+                                    @click="fnQnaPageMove('next')">&gt;</a>
+                            </div>
                         </div>
                     </div>
                     <!-- 배송, 교환, 환불 설명 -->
@@ -1145,7 +1586,9 @@
                         selectedReviewId: null,
                         alreadyClicked: {},
                         averageRating: 0,
-                        
+                        currentImageIndex: 0,
+                        autoSlideInterval: null,
+
                         //탭 관련
                         tabs: [
                             { id: 'detail', label: '상세정보', cmtcount: "" },
@@ -1218,16 +1661,19 @@
                     },
                     searchOptionFromCategory() {
                         switch (this.largeCategory) {
-                        case '강아지':
-                            return 'dog';
-                        case '고양이':
-                            return 'cat';
-                        case '영양제':
-                            return 'pet';
-                        default:
-                            return 'all';
+                            case '강아지':
+                                return 'dog';
+                            case '고양이':
+                                return 'cat';
+                            case '영양제':
+                                return 'pet';
+                            default:
+                                return 'all';
                         }
-                    }
+                    },
+                    currentImage() {
+                        return this.imgList.length > 0 ? this.imgList[this.currentImageIndex].filePath : '';
+                    },
                 },
                 methods: {
                     //상품 보여주기
@@ -1252,13 +1698,14 @@
                                 self.imgList = data.imgList;
                                 self.reviewList = data.reviewList || [];
                                 self.mainImage = self.info.filePath || '../../img/product/product update.png';
+                                self.imgList.push({ filePath: "../../img/product/Official Product.jpg" });
                             },
                         });
                     },
                     goToCategory() {
                         let self = this;
                         localStorage.removeItem("page");
-                        location.href = "/product/list.do?searchOption="+self.searchOptionFromCategory;
+                        location.href = "/product/list.do?searchOption=" + self.searchOptionFromCategory;
                     },
                     goToSubCategory() {
                         let self = this;
@@ -1271,12 +1718,28 @@
                             alert("카테고리 정보가 부족합니다.");
                         }
                     },
-
-
                     // 클릭된 이미지로 메인 이미지 변경
                     changeImage(filePath) {
-                        document.getElementById('mainImage').src = filePath;
+
+                        const index = this.imgList.findIndex(img => img.filePath === filePath);
+                        if (index !== -1) {
+                            this.currentImageIndex = index;
+                            this.stopAutoSlide(); // 클릭 시 자동 슬라이드 멈추고
+                            this.startAutoSlide(); // 다시 시작 (선택 사항)
+                        }
                     },
+                    startAutoSlide() {
+                        this.autoSlideInterval = setInterval(() => {
+                            this.currentImageIndex = (this.currentImageIndex + 1) % this.imgList.length;
+                        }, 1500); // 3초마다 이미지 변경
+                    },
+                    stopAutoSlide() {
+                        clearInterval(this.autoSlideInterval);
+                    },
+                    beforeDestroy() {
+                        this.stopAutoSlide();
+                    },
+
                     //리뷰 보여주기
                     fnReviewList() {
                         const self = this;
@@ -1331,7 +1794,7 @@
                                     alert("리뷰가 도움이 되었다고 표시되었습니다!");
                                     self.fnReviewList();
                                     self.alreadyClicked[reviewId] = true;
-                                } else if (data.result === "fail"){
+                                } else if (data.result === "fail") {
                                     alert(data.message || "이미 추천한 리뷰입니다.");
                                 }
                             }
@@ -1412,7 +1875,7 @@
                     //장바구니
                     fnAddCart() {
                         const self = this;
-                        const priceToAdd = self.userInfo.membershipFlg === 'Y'? self.discountedPrice : self.info.price;
+                        const priceToAdd = self.userInfo.membershipFlg === 'Y' ? self.discountedPrice : self.info.price;
 
                         const nparmap = {
                             productId: self.productId,
@@ -1420,7 +1883,7 @@
                             userId: self.userInfo.userId,
                             quantity: self.quantity,
                             price: priceToAdd,
-                            option : "",
+                            option: "",
                             checkYn: "N"
                         };
                         $.ajax({
@@ -1455,14 +1918,14 @@
                     //선택한 상품을 즉시 구매페이지로
                     fnAddBuy() {
                         const self = this;
-                        const priceToAdd = self.userInfo.membershipFlg === 'Y'? self.discountedPrice : self.info.price;
+                        const priceToAdd = self.userInfo.membershipFlg === 'Y' ? self.discountedPrice : self.info.price;
                         const nparmap = {
                             productId: self.productId,
                             sessionId: self.sessionId,
                             userId: self.userInfo.userId,
                             quantity: self.quantity,
                             price: priceToAdd,
-                            option : "instant",
+                            option: "instant",
                             checkYn: "Y"
                         };
                         $.ajax({
@@ -1562,13 +2025,13 @@
                             type: "POST",
                             data: {
                                 qnaId: qnaId,
-                                userId: self.sessionId 
+                                userId: self.sessionId
                             },
                             dataType: "json",
                             success: function (data) {
                                 if (data.result === "success") {
                                     alert("삭제되었습니다.");
-                                    self.fnQnaList(); 
+                                    self.fnQnaList();
                                 } else {
                                     alert(data.message || "삭제에 실패했습니다.");
                                 }
@@ -1579,7 +2042,12 @@
                     fnQnaEdit(qnaId) {
                         let self = this;
                         location.href = "/product/qnaEdit.do?qnaId=" + qnaId + "&productId=" + self.productId;
-                    }
+                    },
+                    //멤버십 이동
+                    MembershipJoin() {
+                        alert("멤버십 가입 페이지로 이동합니다!");
+                        location.href = "/membership/main.do"; 
+                    },  
                 },
                 mounted() {
                     const params = new URLSearchParams(window.location.search);
@@ -1595,6 +2063,7 @@
                     self.fnReviewList();
                     self.fnUserInfo();
                     self.fnQnaList();
+
                 }
             });
 

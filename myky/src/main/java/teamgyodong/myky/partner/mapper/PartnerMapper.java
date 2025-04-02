@@ -29,11 +29,13 @@ public interface PartnerMapper {
 
 	void addfavoritesHospital(HashMap<String, Object> map);
 
-	//void addfavoritesPartner(HashMap<String, Object> map);
+	void addfavoritesPartner(HashMap<String, Object> map);
 
 	void favoritesHospitalDelete(HashMap<String, Object> map);
 
-	//void favoritesPartnerDelete(HashMap<String, Object> map);
+	void favoritesPartnerDelete(HashMap<String, Object> map);
+
+
 
 
 

@@ -8,7 +8,6 @@
         <title>상품 목록 페이지</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <style>
-            /* 헤더, 푸터 간격 조정 */
             #app {
                 margin: 40px auto;
                 max-width: 1200px;
@@ -25,7 +24,7 @@
                 grid-template-columns: repeat(3, 1fr);
                 gap: 30px;
                 flex-wrap: wrap;
-                gap: 24px;
+                gap: 30px;
                 padding: 0 10px;
                 justify-content: flex-start;
                 box-sizing: border-box;
@@ -34,18 +33,14 @@
 
             .product-info {
                 width: 250px;
-                /* 이미지랑 너비 맞춤 */
                 text-align: left;
-                /* 왼쪽 정렬 */
             }
 
             .product-item {
+                width: 250px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                /* 이미지 정중앙 */
-                /* border: 0.5px solid #ddd;
-    border-radius: 4px; */
                 padding: 4px;
                 background: #fff;
             }
@@ -56,8 +51,25 @@
                 align-items: center;
                 padding: 0;
                 margin: 0;
+                width: 250px;
+                height: 250px;
+                overflow: hidden;
+                position: relative;
             }
 
+            .product-image-wrapper {
+                position: relative;
+                width: 250px;
+                height: 250px;
+                background-color: #fff;
+                border: 2px solid #e0e0e0;    
+                border-radius: 10px;    
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); 
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
             .product-image img {
                 width: 250px;
                 height: 250px;
@@ -68,6 +80,43 @@
                 justify-content: center;
                 align-items: center;
             }
+
+            /* hover 버튼 영역 */
+            .hover-buttons {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0;
+                display: flex;
+                gap: 10px;
+                transition: opacity 0.3s ease;
+                z-index: 2;
+            }
+
+            /* 마우스 올리면 등장 */
+            .product-image-wrapper:hover .hover-buttons {
+                opacity: 1;
+            }
+
+            /* 버튼 스타일 */
+            .hover-buttons button {
+                padding: 15px 25px;
+                background-color: rgba(255, 255, 255, 0.95);
+                color: #333;
+                border: 1px solid #ccc;
+                border-radius: 30px;
+                font-size: 15px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+            .hover-buttons button:hover {
+                background-color: #f08080;
+                color: white;
+            }
+
             .product-name {
                 font-size: 14px;
                 font-weight: bold;
@@ -244,17 +293,17 @@
                 cursor: pointer;
                 text-decoration: none;
             }
+
             .breadcrumb a {
                 color: #444;
                 text-decoration: none;
                 font-weight: 450;
                 cursor: pointer;
                 display: inline-block;
-                transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
             }
+
             .breadcrumb a:hover {
                 text-decoration: none;
-                transform: scale(1.15);
                 color: #ff6600;
             }
 
@@ -276,7 +325,7 @@
                 <div class="breadcrumb-container">
                     <div class="breadcrumb">
                         <a href="/">홈</a>
-                        / <a href="/product/list.do">  전체상품 </a>
+                        / <a href="/product/list.do"> 전체상품 </a>
                         <template v-if="largeCategory">
                             /<a href="javascript:;" @click="goToCategory">{{ largeCategory }}</a>
                         </template>
@@ -303,13 +352,15 @@
                 <hr>
                 <section class="product-container">
                     <div v-for="item in list" class="product-item" :key="item.productId">
-                        <div class="product-image" @click="fnView(item.productId)">
+                        <div class="product-image-wrapper">
                             <img :src="item.filePath || '../../img/product/product update.png'"
-                                :alt="item.fileName || '이미지 없음'" @click.stop="fnView(item.productId)">
-                                <!-- <img class="auth-stamp" src="../../img/product/Official Product.jpg" alt="정품 인증"> -->
-                            <!-- <img src="../../img/product/Official Product.jpg" class="common-stamp" alt="정품 인증"> -->
+                                :alt="item.fileName || '이미지 없음'" class="product-image"
+                                @click.stop="fnView(item.productId)" />
+                            <div class="hover-buttons">
+                                <button @click.stop="fnAddCart(item.productId)">Cart</button>
+                                <button @click.stop="fnAddBuy(item.productId)">ADD</button>
+                            </div>
                         </div>
-
                         <div class="product-info">
                             <div class="product-name">{{ item.productName }}</div>
 
@@ -318,7 +369,6 @@
                                 <div class="original-price">정상가: {{ formatPrice(item.price) }}</div>
                                 <div class="discount-price">멤버십 할인가: {{ formatPrice(getDiscountedPrice(item)) }}</div>
                             </template>
-
                             <!-- 할인 없는 경우 -->
                             <template v-else>
                                 <div class="discount-price">{{ formatPrice(item.price) }}</div>
@@ -359,13 +409,17 @@
                         pageSize: 9,
                         page: 1,
                         isMember: true,
-                        membershipDiscountRate: 0.9,
                         sessionRole: "${sessionRole}",
                         sortOption: "",
                         totalCount: 0,
                         sort: "",
                         productList: [],
                         category: "",
+                        userInfo: {
+                            membershipFlg: "${membershipFlg}",
+                            userId: "${userId}"
+                        },
+                        sessionId: "${sessionId}",
                     };
                 },
                 computed: {
@@ -457,7 +511,6 @@
                             alert("잘못된 카테고리입니다.");
                         }
                     },
-
                     goToSubCategory: function () {
                         let self = this;
                         let searchOption = "";
@@ -477,6 +530,111 @@
                             alert("카테고리 정보가 부족합니다.");
                         }
                     },
+                    //유저 아이디 정보 가져오기
+                    fnUserInfo() {
+                        var self = this;
+                        console.log("sessionId >>> ", self.sessionId);
+                        var nparmap = {
+                            userId: self.sessionId
+                        };
+                        $.ajax({
+                            url: "/user/info.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("userInfo >>> ", data.user);
+                                self.userInfo = data.user;
+                            }
+                        });
+                    },
+                    fnAddCart(productId) {
+                        const self = this;
+                        const item = self.list.find(p => p.productId === productId);
+                        if (!item) {
+                            alert("상품 정보를 불러올 수 없습니다.");
+                            return;
+                        }
+                        const priceToAdd = self.userInfo.membershipFlg === 'Y'
+                            ? Math.floor(item.price * (1 - item.discount / 100))
+                            : item.price;
+
+                        const nparmap = {
+                            productId: productId,
+                            sessionId: self.sessionId,
+                            userId: self.userInfo.userId,
+                            quantity: 1,
+                            price: priceToAdd,
+                            option: "",
+                            checkYn: "N"
+                        };
+                        console.log("🧾 장바구니 요청 파라미터:", nparmap);
+                        $.ajax({
+                            url: "/cart/addProduct.dox",
+                            type: "POST",
+                            data: nparmap,
+                            dataType: "json",
+                            success: function (data) {
+                                console.log("응답:", data);
+                                if (data.result === "success") {
+                                    alert("장바구니에 상품이 담겼습니다.");
+                                } else {
+                                    alert(data.message || "장바구니 담기에 실패했습니다.");
+                                }
+                            },
+                            error: function (xhr, status, err) {
+                                console.log("에러 발생:", err);
+                                alert("장바구니 요청 실패");
+                            }
+                        });
+                    }, fnAddBuy(productId) {
+                        const self = this;
+
+                        const item = self.list.find(p => p.productId === productId);
+                        if (!item) {
+                            alert("상품 정보를 불러올 수 없습니다.");
+                            return;
+                        }
+
+                        const priceToAdd = self.userInfo.membershipFlg === 'Y'
+                            ? Math.floor(item.price * (1 - item.discount / 100))
+                            : item.price;
+
+                        // 전체 checkYn 초기화
+                        $.ajax({
+                            url: "/cart/AllCheckYn.dox",
+                            type: "POST",
+                            data: {
+                                userId: self.userInfo.userId,
+                                checkYn: "N"
+                            },
+                            dataType: "json",
+                            success: function () {
+                                const nparmap = {
+                                    productId: productId,
+                                    sessionId: self.sessionId,
+                                    userId: self.userInfo.userId,
+                                    quantity: 1,
+                                    price: priceToAdd,
+                                    option: "instant",
+                                    checkYn: "Y"
+                                };
+
+                                $.ajax({
+                                    url: "/cart/addProduct.dox",
+                                    type: "POST",
+                                    data: nparmap,
+                                    dataType: "json",
+                                    success: function () {
+                                        location.href = "/cart/order.do";
+                                    },
+                                    error: function () {
+                                        alert("구매 처리에 실패했습니다.");
+                                    }
+                                });
+                            }
+                        });
+                    }
                 },
                 setup() {
                     const params = new URLSearchParams(window.location.search);
@@ -499,7 +657,18 @@
 
                 },
                 mounted() {
+                    this.fnUserInfo();
                     this.fnProductList();
+
+                    const action = new URLSearchParams(window.location.search).get("action");
+
+                    // 페이지 진입 시 바로 실행
+                    if (action === "cart") {
+                        this.fnAddCart(); // 장바구니 담기
+                    } else if (action === "buy") {
+                        this.fnBuy(); // 즉시 구매
+                    }
+
                 }
             });
 

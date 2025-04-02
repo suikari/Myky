@@ -208,8 +208,8 @@
             const app = Vue.createApp({
             	 data() {
                      return {
-						menu = '',
-						submenu = '',                 
+						menu : '',
+						submenu : '',                 
                      };
                  },
                 computed: {

@@ -514,6 +514,83 @@
             .cpoint-row:hover {
                 background-color: #f1f1f1;
             }
+
+            .coupon-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+            }
+
+            .coupon-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+            }
+
+            .coupon {
+                background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+                border-radius: 12px;
+                padding: 16px;
+                color: #ffffff;
+                font-family: 'Arial', sans-serif;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 300px;
+                flex: none;
+                margin: 10px;
+            }
+
+            .coupon-non {
+                background: linear-gradient(135deg, #f5e6e7, #f7f4f3);
+                border-radius: 12px;
+                padding: 16px;
+                color: #ffffff;
+                font-family: 'Arial', sans-serif;
+                width:800px;
+                height: 200px;
+                text-align: center;
+                line-height: 150px;
+                color: #35383dbd;
+                font-size: 20px;
+            }
+
+            .coupon-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .coupon-item {
+                padding: 6px 0;
+                font-size: 14px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            }
+
+            .coupon-name {
+                font-size: 24px;
+                color: #ffffff;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            }
+
+            .coupon-item:last-child {
+                border-bottom: none;
+            }
+
+            .coupon-discount {
+                font-style: italic;
+                font-size: 28px;
+                font-weight: bold;
+                color: #ffffff;
+                text-shadow: 3px 4px 5px #ed0606;
+                text-align: right;
+            }
+
+            .coupon-info {
+                font-size: 12px;
+                color: #ffffff;
+            }
+
         </style>
     </head>
 
@@ -532,7 +609,7 @@
                     </div>
                     <div class="summary">
                         <div class="summary-item">현재 포인트 <br>{{formattedAmount(point.currentPoint)}}P</div>
-                        <div class="summary-item">1개<br>쿠폰</div>
+                        <div class="summary-item">쿠폰<br>{{couponCnt}}개</div>
                         <div class="summary-item">0건(0회)<br>총 주문</div>
                     </div>
                     <div class="main-content">
@@ -625,18 +702,30 @@
 
                             </div>
 
-                            <div v-if="activeTab === 'coupon'">
-                                <div v-for="item in couponList">
-                                    <ul>
-                                        <li>{{item.couponName}} 쿠폰</li>
-                                        <li>-{{item.discountRate}}% 할인</li>
-                                        <li>{{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능</li>
-                                        <li> 최대 {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인</li>
-                                        <li>발급 일 : {{item.createdAt}}</li>
-                                        <li>유효 기간: {{item.expirationDate}} 까지</li>
-                                    </ul>
-                                </div>
 
+                            <div v-if="activeTab === 'coupon'">
+                                <div class="coupon-container">
+                                    <div v-for="item in couponList">
+                                        <div class="coupon">
+                                            <ul class="coupon-list">
+                                                <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
+                                                <li class="coupon-item coupon-discount">-{{item.discountRate}}% SALES</li>
+                                                <li class="coupon-item coupon-condition">
+                                                    {{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능</li>
+                                                <li class="coupon-item coupon-limit">최대
+                                                    {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인</li>
+                                                <li class="coupon-item coupon-info">발급 일 : {{item.createdAt}}</li>
+                                                <li class="coupon-item coupon-info">유효 기간: {{item.expirationDate}} 까지
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div v-if="couponList.length==0" class="coupon-non">
+                                        보유하신 쿠폰이 없습니다.
+                                    </div>
+
+
+                                </div>
                             </div>
 
 
@@ -894,7 +983,8 @@
                         page3: 1,
                         pageSize4: 10,
                         page4: 1,
-                        couponList: []
+                        couponList: [],
+                        couponCnt:0,
 
 
                     };
@@ -1189,7 +1279,8 @@
                             success: function (data) {
                                 console.log(data);
                                 self.couponList = data.coupon;
-                                console.log(self.couponList);
+                                self.couponCnt = data.count;
+                                console.log(self.couponCnt);
 
                             }
                         });

@@ -110,6 +110,33 @@
         #viewPage .file-link:hover {
             color: #fca311;
         }
+        .rating-label {
+            display: block;
+            font-weight: bold;
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 6px;
+        }
+
+        .star-rating .stars {
+            display: inline-block;
+        }
+        .star-rating .stars {
+                display: inline-block;
+        }
+
+        .star-rating .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #eee;
+            transition: color 0.2s;
+            user-select: none;
+
+        }
+
+        .star-rating .star.active {
+            color: #f5b301;
+        }
         .custom-hr {
             width: 1000px;
             max-width: 100%;
@@ -286,7 +313,6 @@
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
     <div id="app" class="container">
 
-        <div id="app" class="container">
             <div id="viewPage">
     
                 <div class="view-header" >
@@ -300,7 +326,7 @@
                 <div class="view-label">
                     TITLE
                 </div>
-
+                
                 <div class="view-box">
                 <a style="font-size:20px">{{info.title}}</a>
                     <!-- 날짜 표시 여기 넣기 -->
@@ -310,44 +336,11 @@
                         작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
                     </div>
                 </div>
-                <div>
-                </div>
                 <div class="view-label">CONTENT</div>
                 <div class="view-boxContent" v-html="info.content"></div>
 
-                <!-- ✅ 지식인 스타일 답변 박스 -->
-                <div v-for="answer in answerList" class="answer-box">
-                    <div class="answer-header">
-                        <div class="answer-nickname">{{ answer.vetNickName }}</div>
-                        <div class="answer-meta">{{ answer.createdAt }}</div>
-                    </div>
-                    <div v-html="answer.reviewText"></div>
-                    <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
-                    <template v-if="showChoice == answer.reviewId">
-                        <input v-model="comments" placeholder="후기를 작성해주세요">
-                    </template>
-                    <template v-if="sessionId === info.userId || sessionRole === 'ADMIN'">
-                    <template v-if="showEdit != answer.reviewId">  
-                       <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
-                    </template>
-                    <template v-else>
-                        <div class="editor-box">
-                            <!-- 🖋 Quill 에디터 [수정]-->
-                            <div >
-                                <div id="editorEdit" class="quill-editor"></div>
-                            </div>
-                            <div class="reply-buttons">
-                              <button class="cmtButton" @click="fnAnEdit()">등록</button>
-                            </div>
-                          </div>
-                        <button class="cmtButton" @click="fnCancle">취소</button>
-                    </template>
-                      <button class="cmtButton" @click="fnAnRemove(answer.commentId)">❌ 삭제</button>
-                    </template>
-                </div>
-
                 <div class="answer-actions">
-                    <div @click="showEditor">
+                    <div @click="showEditor" v-if="vetList.vetId">
                          <div class="cmtButton answerButton">답글 달기</div>
                     </div>
                     <div v-show="showAnsw" class="editor-box">
@@ -359,18 +352,76 @@
                         <button class="cmtButton" @click="fnSaveReply">등록</button>
                       </div>
                     </div>
-                  </div>
                 </div>
 
-                <div class="cmtButton" style="display: flex; gap: 5px;">
-                    <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
-                        <button class="cmtButton" @click="fnEdit()">수정</button>
-                        <button class="cmtButton" @click="fnRemove()">삭제</button>
+                <!-- 답변 박스 -->
+                <div v-for="answer in answerList" class="answer-box">
+                    <template v-if="answer.isDeleted == 'N'">
+                    <div class="answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
+                    <div class="answer-header">
+                        <div class="answer-meta">{{ answer.createdAt }}</div>
+                    </div>
+
+                    <div  v-html="answer.reviewText"></div>
+                    
+                    
+                    <!-- 댓글 내용 -->
+                    
+                    <template v-if="sessionId == info.userId">
+                        <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
                     </template>
-                    <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
+
+                    <template v-if="showChoice == answer.reviewId">
+                        <div>
+                            <div class="form-group star-rating">
+                                <label class="rating-label" for="rating">별점</label>
+                                <div class="stars">
+                                    <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }"
+                                        @click="rating = star">★</span>
+                                </div>
+                            </div>
+                            <input v-model="comments" placeholder="후기를 작성해주세요">
+                            <button @click="fnAnSelect(answer.userId)">등록</button>
+                        </div>
+                    </template>
+
+                    {{answer.rating}} {{answer.comments}}
+                
+                    <template v-if="vetList.vetId == answer.vetId">  
+                            <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
+                            
+                            
+                            <template v-if="showEdit == answer.reviewId">
+                                <div class="editor-box">
+                                    <!-- 🖋 Quill 에디터 [수정]-->
+                                    <div>
+                                        <div id="editorEdit" class="quill-editor"></div>
+                                    </div>
+                                    <div class="reply-buttons">
+                                        <button class="cmtButton" @click="fnAnEdit()">등록</button>
+                                    </div>
+                                </div>
+                                <button class="cmtButton" @click="fnCancle">취소</button>
+                            </template>
+                            <button class="cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
+                        </template>
+                    </template>
+                <template v-else>
+                    <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
+                </template>
                 </div>
-            </div>        
-        </div>
+
+                  
+                  <div class="cmtButton" style="display: flex; gap: 5px;">
+                      <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
+                          <button class="cmtButton" @click="fnEdit()">수정</button>
+                          <button class="cmtButton" @click="fnRemove()">삭제</button>
+                        </template>
+                        <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
+                    </div>
+                
+            </div>
+        </div>        
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
     
@@ -388,16 +439,15 @@
                         page: "${param.page}",
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
-                        vetNickName : "",
+                        vetNickname : "",
                         nickName:"",
                         content : "",
                         updatedTime : "",
                         createdTime : "",
-                        answerList:{},
+                        answerList :[],
                         data : {},
                         comments : "",
-                        vetId : "",
-                        rating: "",
+                        rating: '0',
                         vetName : "${map.nickName}",
                         showEdit : '0',
                         reviewText : "",
@@ -405,6 +455,8 @@
                         vetList : {},
                         choiceBtn : false,
                         showChoice : '0',
+                        reviewId : "",
+                        points : "",
                         
                     };
                 },
@@ -427,14 +479,14 @@
 				        	success : function(data) { 
                                 self.info = data.info;
                                 self.answerList = data.answerList;
-                                self.getCurrent();
+                                console.log("지우라고해서",data);
 				        	}
 				        });
                     },
                     getCurrent : function(){
                         let self = this;
                         let nparmap = {
-                            userId : self.info.userId,
+                            userId : self.sessionId,
                         }
                         $.ajax({
                             url:"/point/current.dox",
@@ -453,7 +505,7 @@
                     },
                     fnEdit : function (){
                         var self = this;
-                        location.href="/board/vetBoardEdit.do?vetBoardId=" + self.vetBoardId
+                        location.href="/board/vetBoardEdit.do?vetBoardId=" + self.vetBoardId;
                     },
                     fnRemove : function () {
                         var self = this;
@@ -482,6 +534,7 @@
                         var self = this;
                         var nparmap = {
                             userId : self.sessionId
+                        
                         };
                         
                         $.ajax({
@@ -490,32 +543,42 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
-                                self.vetList = data.vet;
+                                console.log("dd",data);
+
+                                if(data.vet) {
+                                    self.vetList = data.vet;
+                                    console.log("vetList.vetId 로딩 완료:", self.vetList.vetId);
+                                } else {
+
+                                }
+
                             }
                         });
                     },
                     fnSaveReply : function(){
                         let self = this;
+
                         var nparmap = {
                             vetBoardId: self.info.vetBoardId,
                             reviewText : self.reviewText,
-                            vetId : self.vetId,
-                            vetName : self.vetName,
-                            vetNickName : self.vetNickName,
+                            vetId : self.vetList.vetId,
+
                         };
+                        console.log("s",self.vetList.vetId);
                         $.ajax({
                             url: "/board/vetBoardAnReply.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("멍멍",self.reviewText);
+                                console.log("멍멍", data);
                                 self.fnView();
                                 self.showEditor();
-                                self.showEdit();
-                                self.showChoice();
-
+                                self.showEdit = 0;
+                                if(data.status == "fail"){
+                                    alert("이미 답변을 작성하셨습니다.");
+                                    retrun;
+                                }
                                 alert("저장되었습니다");
                             }
                         });
@@ -527,15 +590,31 @@
                     fnShowChoice : function(choiceId){
                         let self =  this;
                         self.showChoice = choiceId;
+                        self.reviewId = choiceId;
+                        console.log("✅ 채택 선택됨: ", choiceId); // 확인용
                     },
-                    fnAnSelect : function(){
+                    fnAnSelect : function(userId){
                         let self = this;
+                        let points = parseInt(self.points);
+                        console.log("✅ 채택 시도: ", self.reviewId, self.rating, self.comments);
+
+                        if(!confirm("정말 채택하시겠습니까?")){
+                            alert("취소 되었습니다.");
+                            return;
+                        }
+
                         var nparmap = {
-                            vetId : self.vetId,
-                            userId : sessionId,
+                            reviewId : self.reviewId,
                             rating : self.rating,
                             comments : self.comments,
+                            vetBoardId : self.vetBoardId
                         };
+                        console.log("userId",userId);
+                        let pointUsed = {
+                            userId : userId,
+                            points : points,
+                            remarks : self.remark,
+                        }
 
                         $.ajax({
                             url: "/board/vetBoardAnSelect.dox",
@@ -543,19 +622,39 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("멍멍",self.reviewText);
-                                if(confirm="정말 채택하시겠습니까?"){
-
-                                }
+                                console.log("채택",self.reviewText);
+                                alert("답변이 채택되었습니다.");
+                                self.fnView();
+                                $.ajax({
+                                        url:"/point/used.dox",
+                                        dataType:"json",	
+                                        type : "POST", 
+                                        data : pointUsed,
+                                        success : function(data) { 
+                                            console.log("11",data);
+                                            
+                                            location.href = "/board/vetBoardList.do"
+                                        }
+                                    });
+                            },
+                                
+                            error: function () {
+                                console.error("채택 실패");
                             }
                         });
                     },
                     fnAnEdit : function(){
                         let self = this;
+
+                        if (self.editorEditInstance) {
+                            self.reviewText = self.editorEditInstance.root.innerHTML;
+                        }
+
+
                         var nparmap = {
                             vetId : self.vetId,
-                            userId : sessionId,
                             reviewText : self.reviewText,
+                            reviewId : self.reviewId,
                         };
 
                         $.ajax({
@@ -565,17 +664,44 @@
                             data: nparmap,
                             success: function (data) {
                                 console.log("답글 수정", data);
+                                alert("수정되었습니다.")
+                                location.href="/board/vetBoardView.do?vetBoardId=" + self.vetBoardId;
+                            }
+                        });
+                    },
+                    fnAnRemove : function (reviewId){
+                        let self = this;
+                        var nparmap = {
+                            reviewId : reviewId,
+                        };
+                        console.log("보내는 리뷰 ID:", reviewId); // 👈
 
+                        $.ajax({
+                            url: "/board/vetBoardAnRemove.dox",
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("답글 삭제 성공", data);
+                                alert("삭제되었습니다.");
+                                self.fnView();
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("❌ 삭제 실패", status, error);
+                                console.error("응답 내용:", xhr.responseText);
+                                alert("삭제 중 오류 발생!");
                             }
                         });
                     },
                     fnAnEditCha : function (contents, answerId){
                         let self = this;
+                        self.reviewId = answerId;
                         self.showEdit = answerId;
                             // 2초 후에 editorEdit() 함수 실행
                             setTimeout(function() {
                                 self.editorEdit(contents);
-                            }, 200);  // 2000ms = 2초
+                            }, 200);  // 2000ms = 2초.
                     },
                     fnCancle : function(){
                         let self = this;
@@ -607,8 +733,9 @@
                 mounted() {
                     let self = this;
                     const params = new URLSearchParams(window.location.search);
-                    self.fnView();
                     self.fnVetInfo();
+                    self.fnView();
+                    self.getCurrent();
                     var quill = new Quill('#editor', {
                     theme: 'snow',
                     modules: {

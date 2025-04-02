@@ -50,6 +50,8 @@ public interface UserMapper {
 
 	List<User> selectCoupon(HashMap<String, Object> map);
 
+	int selectCouponCnt(HashMap<String, Object> map);
+
 
 
 

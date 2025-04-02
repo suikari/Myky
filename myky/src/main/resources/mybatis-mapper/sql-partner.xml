@@ -52,9 +52,9 @@
 
 	<select id="getfavoriteList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		
-		SELECT A.* ,F.*
+		SELECT A.* ,F.*, p.*
 		FROM FAVORITES F
-		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+		LEFT JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
         LEFT JOIN PARTNER_DETAIL P ON P.PARTNER_DETAIL_ID = F.PARTNER_DETAIL_ID
 		WHERE F.USER_ID = #{userId}
 	</select>
@@ -64,11 +64,11 @@
     VALUES (FAVORITES_SEQ.NEXTVAL, #{hospitalNo}, #{userId})
 </insert>
 
-<!-- 제휴사에 대한 즐겨찾기 추가
+<!-- 제휴사에 대한 즐겨찾기 추가-->
 <insert id="addfavoritesPartner" parameterType="hashmap">
     INSERT INTO FAVORITES (FAVORITE_ID, PARTNER_DETAIL_ID, USER_ID)
-    VALUES (FAVORITES_SEQ.NEXTVAL, #{partnerId}, #{userId})
-</insert> -->
+    VALUES (FAVORITES_SEQ.NEXTVAL, #{partnerdetailId}, #{userId})
+</insert> 
 
 	<!-- 병원 번호로 즐겨찾기 삭제 -->
 <delete id="favoritesHospitalDelete" parameterType="hashmap">
@@ -76,26 +76,24 @@
     WHERE HOSPITAL_NO = #{hospitalNo}
 </delete>
 
-<!-- 파트너 ID로 즐겨찾기 삭제 
+<!-- 파트너 ID로 즐겨찾기 삭제 -->
 <delete id="favoritesPartnerDelete" parameterType="hashmap">
     DELETE FROM FAVORITES
     WHERE PARTNER_DETAIL_ID = #{partnerId}
-</delete>-->
+</delete>
 
 
 	<select id="favorList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-		SELECT A.* ,F.*
+		SELECT A.* ,F.*,p.*
 		FROM FAVORITES F
-		INNER JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+		LEFT JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+        LEFT JOIN PARTNER_DETAIL P ON P.PARTNER_DETAIL_ID = F.PARTNER_DETAIL_ID
 		WHERE F.USER_ID = #{userId}
 	</select>
 	
 	<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-		  SELECT DISTINCT *
-    FROM PARTNER_DETAIL
-	WHERE 1=1
-
-   
+		  SELECT  *
+          FROM PARTNER_DETAIL
 	</select>
 	
 	<select id="getcategoryCode" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
