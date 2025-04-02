@@ -24,7 +24,7 @@ public class MembershipController {
     public String map(Model model) throws Exception{
 		
 
-        return "membership/index"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
+        return "membership/membership"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
     }
 	
 	// 멤버십 정보 조회
@@ -44,6 +44,28 @@ public class MembershipController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = membershipService.getMembershipActive(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//멤버십 총 인원수 확인
+	@RequestMapping(value = "/membership/memberCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String memberCnt(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = membershipService.getMemberCnt(map);
+
+		return new Gson().toJson(resultMap);
+	}
+	
+	//멤버십 멤버 개월수 확인
+	@RequestMapping(value = "/membership/getTotalDonation.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String TotalDonation(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = membershipService.getTotalDonation(map);
+
 		return new Gson().toJson(resultMap);
 	}
 }

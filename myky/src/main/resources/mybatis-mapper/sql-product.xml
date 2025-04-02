@@ -74,7 +74,7 @@
 	 	SELECT P.*, F.FILEPATH, F.FILENAME
 		FROM PRODUCT P
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'	
-		WHERE P.PRODUCT_ID = #{productId}
+		WHERE P.PRODUCT_ID = #{productId} AND P.DELETE_YN = 'N'
 	 </select>
 	 
 	 <select id="selectProductImg" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Product">

@@ -16,4 +16,10 @@ public interface MembershipMapper {
 
 	Membership selectValidMembership(HashMap<String, Object> map);
 
+	int selectMemberCnt(HashMap<String, Object> map);
+
+	int getTotalAmount(HashMap<String, Object> map);
+
+	
+
 }
