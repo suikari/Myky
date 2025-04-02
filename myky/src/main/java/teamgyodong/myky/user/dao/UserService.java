@@ -32,5 +32,7 @@ public interface UserService {
 
 	HashMap<String, Object> getPoint(HashMap<String, Object> map);
 
+	HashMap<String, Object> userCoupon(HashMap<String, Object> map);
+
 	
 }

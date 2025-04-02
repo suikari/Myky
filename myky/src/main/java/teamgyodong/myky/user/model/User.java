@@ -30,5 +30,23 @@ public class User {
 	private String currentPoint;
 	private String remarks;
 
+	
+	// coupon
+	private String couponId;
+	private String serialNumber;
+	private String couponName;
+	private String createdAt;
+	private String usedDate;
+	private String expirationDate;
+	private String discountRate;
+	private String minimumSpend;
+	private String maxDiscountAmount;
+	
+	
+	//수의사 용
+	private String vetNickName;
+	private String vetName;
+	private String vetId;
+	
 
 }

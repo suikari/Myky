@@ -188,13 +188,28 @@ public class UserServiceImpl implements UserService {
 			HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			List<donation> donation = userMapper.selectDonaInfo(map);
 			donation sum = userMapper.sumDona(map);
+			int donaCount = userMapper.selectDonaCnt(map);
 			
+			resultMap.put("donaCount", donaCount);
 			resultMap.put("sum", sum);
 			resultMap.put("donation", donation);
 			resultMap.put("result", "success"); // 결과 값
 
 			return resultMap;
 		}
+		
+		public HashMap<String, Object> userCoupon(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			List<User> coupon = userMapper.selectCoupon(map);
+			
+			resultMap.put("coupon", coupon);
+			resultMap.put("result", "success"); // 결과 값
+
+			return resultMap;
+		}
+		
+		
+		
 		
 		public HashMap<String, Object> vetInfo(HashMap<String, Object> map) {
 			HashMap<String, Object> resultMap = new HashMap<String, Object>();
