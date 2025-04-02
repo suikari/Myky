@@ -82,8 +82,10 @@
 			<% if ("1".equals(submenu)) { %>
 			      <jsp:include page="/WEB-INF/manager/product/main.jsp"/>
 			<% } else if ("2".equals(submenu)) { %>
+				  <jsp:include page="/WEB-INF/manager/product/order.jsp"/>
 			<% } else if ("3".equals(submenu)) { %>
 			<% } else if ("4".equals(submenu)) { %>
+				 <jsp:include page="/WEB-INF/manager/product/product-add.jsp"/>
 			<% } %>
 			
 		<% } else if ("member".equals(menu)) { %>
