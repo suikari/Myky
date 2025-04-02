@@ -135,7 +135,7 @@
         }
 
         .star-rating .star.active {
-            color: #f5b301;
+            color: #FFD700;
         }
         .custom-hr {
             width: 1000px;
@@ -340,7 +340,7 @@
                 <div class="view-boxContent" v-html="info.content"></div>
 
                 <div class="answer-actions">
-                    <div @click="showEditor" v-if="vetList.vetId">
+                    <div @click="showEditor" v-if="vetList.vetId && info.isAccepted === 'N'">
                          <div class="cmtButton answerButton">답글 달기</div>
                     </div>
                     <div v-show="showAnsw" class="editor-box">
@@ -365,33 +365,42 @@
                     <div  v-html="answer.reviewText"></div>
                     
                     
-                    <!-- 댓글 내용 -->
+                 <!-- 댓글 내용 -->
                     
-                    <template v-if="sessionId == info.userId">
-                        <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
-                    </template>
+                 <template v-if="sessionId == info.userId">                        
+                    <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
+                </template>
 
-                    <template v-if="showChoice == answer.reviewId">
-                        <div>
-                            <div class="form-group star-rating">
-                                <label class="rating-label" for="rating">별점</label>
-                                <div class="stars">
-                                    <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }"
-                                        @click="rating = star">★</span>
-                                </div>
-                            </div>
-                            <input v-model="comments" placeholder="후기를 작성해주세요">
-                            <button @click="fnAnSelect(answer.userId)">등록</button>
+                <template v-if="showChoice == answer.reviewId && info.isAccepted === 'Y'">
+                    <div class="accepted-answer-box" style="border: 2px solid #4CAF50; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
+                        <!-- 채택된 답변 강조 -->
+                        <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #4CAF50;">
+                          질문자 채택
                         </div>
+                        <!-- 별점 UI -->
+                        <div class="form-group star-rating" style="margin-top: 15px;">
+                            <label class="rating-label" for="rating" style="font-weight: bold;">별점</label>
+                            <div class="stars" style="font-size: 20px;">
+                            <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
+                            </div>
+                        </div>
+                        <!-- 후기 입력 -->
+                            <input v-if="info.isAccepted === 'N'" v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
+                            <div>{{answer.comments}}</div>
+                        <!-- 등록 버튼 -->
+
+                        <button v-if="info.isAccepted === 'N'" @click="fnAnSelect(answer.userId)" style="background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; margin-top: 10px;">
+                            등록
+                        </button>
+                    </div>
                     </template>
 
-                    {{answer.rating}} {{answer.comments}}
                 
-                    <template v-if="vetList.vetId == answer.vetId">  
+                    <template v-if="vetList.vetId == answer.vetId && info.isAccepted === 'N'">  
                             <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
                             
                             
-                            <template v-if="showEdit == answer.reviewId">
+                            <template v-if="showEdit == answer.reviewId && info.isAccepted === 'N'">
                                 <div class="editor-box">
                                     <!-- 🖋 Quill 에디터 [수정]-->
                                     <div>
@@ -413,7 +422,7 @@
 
                   
                   <div class="cmtButton" style="display: flex; gap: 5px;">
-                      <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
+                      <template v-if="sessionId == info.userId || sessionRole == 'ADMIN' && info.isAccepted === 'N'">
                           <button class="cmtButton" @click="fnEdit()">수정</button>
                           <button class="cmtButton" @click="fnRemove()">삭제</button>
                         </template>
@@ -457,7 +466,8 @@
                         showChoice : '0',
                         reviewId : "",
                         points : "",
-                        
+                        remark : "수의사 상담 point 적립",
+                        isSelected : false,
                     };
                 },
                 computed: {
@@ -562,7 +572,6 @@
                             vetBoardId: self.info.vetBoardId,
                             reviewText : self.reviewText,
                             vetId : self.vetList.vetId,
-
                         };
                         console.log("s",self.vetList.vetId);
                         $.ajax({
@@ -595,9 +604,12 @@
                     },
                     fnAnSelect : function(userId){
                         let self = this;
-                        let points = parseInt(self.points);
-                        console.log("✅ 채택 시도: ", self.reviewId, self.rating, self.comments);
+                        let points = parseInt(self.points); //보내는 포인트(작성자 포인트)
 
+                        if (self.isSelected) {
+                            alert("이미 채택된 답변입니다.");
+                            return;
+                        }
                         if(!confirm("정말 채택하시겠습니까?")){
                             alert("취소 되었습니다.");
                             return;
@@ -610,9 +622,9 @@
                             vetBoardId : self.vetBoardId
                         };
                         console.log("userId",userId);
-                        let pointUsed = {
-                            userId : userId,
-                            points : points,
+                        let pointAdd = {
+                            userId : userId, //받을 수의사 아이디
+                            usedPoint : self.info.points,
                             remarks : self.remark,
                         }
 
@@ -624,18 +636,20 @@
                             success: function (data) {
                                 console.log("채택",self.reviewText);
                                 alert("답변이 채택되었습니다.");
-                                self.fnView();
+                                self.isSelected = true;
+
                                 $.ajax({
-                                        url:"/point/used.dox",
-                                        dataType:"json",	
-                                        type : "POST", 
-                                        data : pointUsed,
-                                        success : function(data) { 
-                                            console.log("11",data);
-                                            
-                                            location.href = "/board/vetBoardList.do"
-                                        }
-                                    });
+                                    url:"/point/used.dox",
+                                    dataType:"json",	
+                                    type : "POST", 
+                                    data : pointAdd,
+                                    success : function(data) { 
+                                        console.log("받은포인트",data);
+                                        console.log("포인트 확인",self.info.points);
+                                        self.fnView();
+                                    },
+                                    
+                                });
                             },
                                 
                             error: function () {

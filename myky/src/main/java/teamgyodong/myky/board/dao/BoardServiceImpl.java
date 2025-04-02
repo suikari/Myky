@@ -359,6 +359,7 @@ public class BoardServiceImpl implements BoardService {
 	public HashMap<String, Object> vetBoardAnSelect(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
 		boardMapper.updateVetAnSelect(map);
 		boardMapper.updateVetBoardStats(map);
 		resultMap.put("result", "success");
