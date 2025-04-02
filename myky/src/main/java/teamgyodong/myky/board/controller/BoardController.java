@@ -170,7 +170,7 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			
 		resultMap = boardService.CommentRemove(map);
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+		return new Gson().toJson(resultMap); 
 	}
 	//댓글 수정
 	@RequestMapping(value = "/board/CommentEdit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -180,7 +180,7 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			
 		resultMap = boardService.CommentEdit(map);
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+		return new Gson().toJson(resultMap); 
 	}
 	//댓글 수정-저장
 	@RequestMapping(value = "/board/comment/update.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -190,7 +190,7 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			
 		resultMap = boardService.commentUpdate(map);
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+		return new Gson().toJson(resultMap); 
 	}
 	//댓글 갯수
 	@RequestMapping(value = "/board/CommentCount.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -320,7 +320,7 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap = boardService.addlikeCntBoard(map);
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+		return new Gson().toJson(resultMap);
 	}
 	//FAQ 게시글 목록 출력
 	@RequestMapping(value = "board/FAQView.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -329,7 +329,7 @@ public class BoardController {
 
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-//		resultMap = boardService.FAQList(map);
+
 		
 		return new Gson().toJson(resultMap);
 	}
@@ -405,7 +405,17 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			
 		resultMap = boardService.vetBoardAnEdit(map);
-		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+		return new Gson().toJson(resultMap); 
+	}
+	//수의사 게시판 답글 삭제
+	@RequestMapping(value = "/board/vetBoardAnRemove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String vetBoardAnRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+			
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			
+		resultMap = boardService.vetBoardAnRemove(map);
+		return new Gson().toJson(resultMap);
 	}
 	//수의사 게시판 채택
 	@RequestMapping(value = "/board/vetBoardAnSelect.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

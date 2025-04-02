@@ -238,6 +238,7 @@
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
+	<!--수의사 게시판 조회수 출력-->
 	<select id="selectVetBoardCnt" parameterType="hashmap" resultType="int">
 		SELECT COUNT(*)
 		FROM VET_BOARD F
@@ -259,12 +260,20 @@
 		    AND F.IS_DELETED = 'N'
 	</select>
 	
+	<!--수의사 게시글 답변 출력-->
 	<select id="selectVetAnList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetAnswer">
-		SELECT V.*, TO_CHAR(V.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
-		FROM VET_ANSWER V 
-		WHERE V.VET_BOARD_ID = #{vetBoardId}
+		SELECT *
+		FROM VET_ANSWER A
+		LEFT JOIN (
+			SELECT *
+			FROM VETERINARIAN
+		) V ON A.VET_ID = V.VET_ID
+		WHERE A.VET_BOARD_ID = #{vetBoardId}
+		ORDER BY 
+		   A.COMMENTS, A.REVIEW_ID DESC
 	</select>
 	
+	<!--수의사 게시글 출력-->
 	<select id="selectVetBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetBoard">
 		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM VET_BOARD F
@@ -275,6 +284,7 @@
 		WHERE F.VET_BOARD_ID = #{vetBoardId}
 	</select>
 	
+	<!--수의사 게시글 조회수-->
 	<update id="updateVetBoardCnt" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
@@ -282,11 +292,13 @@
 		WHERE VET_BOARD_ID = #{vetBoardId}
 	</update>
 	
+	<!--수의사 게시글 등록-->
 	<insert id="insertVetBoard" parameterType="hashmap">
 		INSERT INTO VET_BOARD(VET_BOARD_ID, TITLE, CONTENT, POINTS, USER_ID, CREATED_AT, UPDATED_AT, IS_DELETED, CNT)
 		VALUES(VET_BOARD_SEQ.NEXTVAL, #{title}, #{content}, #{points}, #{userId}, SYSDATE, SYSDATE, 'N', 0)
 	</insert>
 	
+	<!--수의사 게시글 수정-->
 	<update id="updateVetBoard" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
@@ -296,6 +308,7 @@
 		WHERE VET_BOARD_ID = #{vetBoardId}
 	</update>
 	
+	<!--수의사 게시글 삭제-->
 	<update id="updateRemoveVetBoard" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
@@ -304,26 +317,55 @@
 		WHERE VET_BOARD_ID = #{vetBoardId}
 	</update>
 	
+	<!--수의사 답변 등록-->
 	<insert id="insertVetAnReply" parameterType="hashmap">
-		INSERT INTO VET_ANSWER(REVIEW_ID, VET_BOARD_ID, RATING, REVIEW_TEXT, CREATED_AT, VET_ID, COMMENTS, VET_NAME, VET_NICKNAME )
-		VALUES(VET_REVIEW_SEQ.NEXTVAL, #{vetBoardId}, 0, #{reviewText}, SYSDATE, #{vetId}, '', #{vetName}, #{vetNickName})
+		INSERT INTO VET_ANSWER(REVIEW_ID, VET_BOARD_ID, RATING, REVIEW_TEXT, CREATED_AT, VET_ID, COMMENTS, IS_DELETED )
+		VALUES(VET_REVIEW_SEQ.NEXTVAL, #{vetBoardId}, 0, #{reviewText}, SYSDATE, #{vetId}, '', 'N')
 	</insert>
 	
+	<!--수의사 답변 수정-->
 	<update id="updateAnEdit" parameterType="hashmap">
 		UPDATE VET_ANSWER
     	SET
 	        REVIEW_TEXT = #{reviewText}
-		WHERE VET_ID = #{vetId}
+		WHERE REVIEW_ID = #{reviewId}
 	</update>
 	
-	<!-- 수의사 답변 채택-->
+	<!--수의사 답변 삭제-->
+	<update id="deleteVetBoardAn" parameterType="hashmap">
+		UPDATE VET_ANSWER
+		SET
+			IS_DELETED = 'Y'
+		WHERE REVIEW_ID = #{reviewId}
+	</update>
+	
+		<!-- 수의사 답변 채택-->
 	<update id="updateVetAnSelect" parameterType="hashmap">
 		UPDATE VET_ANSWER
 		SET
 			RATING = #{rating},
 			COMMENTS = #{comments}
-		WHERE VET_ID = #{vetId}
+		WHERE REVIEW_ID = #{reviewId}
+		
+		
 	</update>
+	
+	<!-- 수의사 답변 채택 게시판 상태 업데이트-->
+	<update id="updateVetBoardStats" parameterType="hashmap">
+		UPDATE VET_BOARD
+		SET
+			IS_ACCEPTED = 'Y'
+		WHERE VET_BOARD_ID = #{vetBoardId}
+		
+	</update>
+	
+	<!-- 이미 작성한 댓글 있는지 확인 -->
+	<select id="checkDuplicateVetAnswer" parameterType="hashmap" resultType="int">
+	    SELECT COUNT(*)
+	    FROM VET_ANSWER
+	    WHERE VET_ID = #{vetId}
+	      AND VET_BOARD_ID = #{vetBoardId}
+	</select>
 </mapper>
 
 

@@ -190,8 +190,18 @@
             color: #fca311;
         }
         .acceptButtonN {
-            color: white;
-            background-color: #333;
+            color: #fca311;
+            font-weight: bold;
+            background-color: #202060;
+            border-radius: 6px;
+            width: 100px;
+            height: 30px;
+            text-align: center;
+        }
+        .acceptButtonY {
+            color: #202060;
+            font-weight: bold;
+            background-color: #fca311;
             border-radius: 6px;
             width: 100px;
             height: 30px;
@@ -252,8 +262,12 @@
                         <td>{{item.cnt}}</td>
                         <td>{{item.points}}</td>
                         <td v-if="parseInt(item.commentCount) > 0" class="cmtCountColor">({{item.commentCount}})</td>
-                        <td><div class="acceptButtonN" v-if="item.isAccepted == 'N'">채택 전</div> </td>
+                        <td>
+                            <div class="acceptButtonN" v-if="item.isAccepted == 'N'">채택 전</div>
+                            <div class="acceptButtonY" v-if="item.isAccepted == 'Y'">채택완료</div>
+                        </td>
                     </template>
+                        
                 </tr>
             </table>
             <div v-if="index > 0">
@@ -346,7 +360,7 @@
                     fnView(vetBoardId) {
                         let self = this;
                         localStorage.setItem("page", self.page);
-                        location.href="/board/vetBoardView.do?vetBoardId=" + vetBoardId + "&category="+self.category;
+                        location.href="/board/vetBoardView.do?vetBoardId=" + vetBoardId;
                     },
                     fnPage(num) {
                         this.page = num;

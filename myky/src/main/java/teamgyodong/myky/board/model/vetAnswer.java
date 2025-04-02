@@ -11,8 +11,11 @@ public class vetAnswer {
 	private String rating;
 	private String reviewText;
 	private String comments;
+	private String vetNickname;
+	private String vetName;
 	private String createdAt;
-	private String vetNickName;
 	private String updatedTime;
+	private String isDeleted;
+	private String userId;
 	
 }

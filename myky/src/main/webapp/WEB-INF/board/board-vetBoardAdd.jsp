@@ -243,36 +243,38 @@
 				        	data : nparmap1,
 				        	success : function(data) { 
 				        		console.log("11",data);
-                                let currentPoint = data.point;
+                                let currentPoint = data.point.currentPoint;
 
                                 if(currentPoint < self.usedPoint){
                                     alert("포인트가 부족합니다.");
                                     return;
                                 }
+
+                                $.ajax({
+                                    url:"/board/vetBoardAdd.dox",
+                                    dataType:"json",	
+                                    type : "POST", 
+                                    data : nparmap,
+                                    success : function(data) {
+                                        if(confirm("정말 저장하시겠습니까? 저장 후, 사용한 포인트는 차감됩니다.")){
+                                            $.ajax({
+                                                url:"/point/used.dox",
+                                                dataType:"json",	
+                                                type : "POST", 
+                                                data : pointUsed,
+                                                success : function(data) { 
+                                                    console.log("11",data);
+                                                    location.href = "/board/vetBoardList.do"
+                                                }
+                                            });
+                                        } else {
+                                            alert("취소되었습니다.");
+                                        } 
+                                    },
+                                });    
 				        	}
 				        });
-                        $.ajax({
-				    	    url:"/board/vetBoardAdd.dox",
-				    	    dataType:"json",	
-				    	    type : "POST", 
-				    	    data : nparmap,
-				    	    success : function(data) {
-                                if(confirm("정말 저장하시겠습니까? 저장 후, 사용한 포인트는 차감됩니다.")){
-                                    $.ajax({
-                                        url:"/point/used.dox",
-                                        dataType:"json",	
-                                        type : "POST", 
-                                        data : pointUsed,
-                                        success : function(data) { 
-                                            console.log("11",data);
-                                            location.href = "/board/vetBoardList.do"
-                                        }
-                                    });
-                                } else {
-                                    alert("취소되었습니다.");
-                                } 
-                            },
-				        });                        
+                                            
                     },
                     fnCheck : function (){
                         let self = this;
