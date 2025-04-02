@@ -41,26 +41,51 @@ public class PartnerControlloer {
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value ="favorites/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value ="favorites/hospital/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String favoritesInsert(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String favoriteshosInsert(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		System.out.println(map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = partnerService.favoritesHospitalInsert(map);
-		//resultMap = partnerService.favoritesPartnerInsert(map);
+
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value ="favorites/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value ="favorites/partner/add.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String favoritesparInsert(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		System.out.println(map);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		resultMap = partnerService.favoritesPartnerInsert(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value ="favorites/hospital/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String favoritesRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		System.out.println(map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = partnerService.favoritesHospitalRemove(map);
-		//resultMap = partnerService.favoritesPartnerRemove(map);
+
+		
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value ="favorites/partner/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String favoritesPartnerRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		System.out.println(map);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		resultMap = partnerService.favoritesPartnerRemove(map);
 		
 		
 		return new Gson().toJson(resultMap);
