@@ -39,12 +39,16 @@
 	
 	<select id="getTotalAmount" parameterType="hashmap" resultType="int">
 		
-	  SELECT NVL(SUM(FLOOR(MONTHS_BETWEEN(SYSDATE, TO_DATE(RENEWAL_DATE, 'YYYY-MM-DD')) * 3000)), 0)
+	  SELECT NVL(SUM(
+	    CASE 
+	      WHEN MONTHS_BETWEEN(SYSDATE, TO_DATE(RENEWAL_DATE, 'YY/MM/DD')) &lt; 0 THEN 0
+	      ELSE FLOOR(MONTHS_BETWEEN(SYSDATE, TO_DATE(RENEWAL_DATE, 'YY/MM/DD'))) * 3000
+	    END
+	  ), 0)
 	  FROM MEMBERSHIP
 	  WHERE IS_CANCELED = 'N'
 
 	</select>
-	
 	
 </mapper>
 
