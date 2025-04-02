@@ -221,41 +221,26 @@ button#favoritesButton.not-favorite {
                         <hr>
                     </div>
                     
-                    <ul v-if="!isFavoritesVisible">
-                        <li v-for="(hospital, index) in hoslist" :key="hospital.hospitalNo" @click="moveToLocation(hospital)">
-                            <div>{{ hospital.hosName }}</div>
-                            <span>{{ hospital.hosAddress }}</span>
-                            <hr>
-                        </li>
-                        <li v-for="(partner, index) in partnerlist" :key="partner.partnerdetailId" @click="moveToLocation(partner)">
-                            <div>{{ partner.name }}</div>
-                            <span>{{ partner.address }}</span>
-                            <hr>
-                        </li>
-                    </ul>
-                    <ul id="search-results"></ul>
-                    <!-- <ul v-if="hoslist.length > 0 && !isFavoritesVisible">
-                        <li v-for="(hospital, index) in hoslist" :key="index">
-                            <div>{{ hospital.place_name }}</div>
-                            <span>{{ hospital.address_name }}</span>
-                            <hr>
-                        </li>
-                        </ul> -->
-                    <!-- 즐겨찾기 목록이 표시될 때 -->
                     <div v-if="isFavoritesVisible" class="favorites-list">
                         <h3>⭐ 내 즐겨찾기 목록</h3>
                         <ul>
-                            <li v-for="favorite in favoritesList" :key="favorite.hospitalNo" @click="moveToLocation(favorite)">
-                                <!-- 병원 정보 -->
+                            <!-- 병원 즐겨찾기 -->
+                            <li v-for="favorite in favoritesList" :key="favorite.hospitalNo"  @click="moveToLocation(favorite)">
                                 <div>
                                     <strong>{{ favorite.hosName }}</strong> - {{ favorite.hosAddress }}
                                 </div>
-                                <!-- 파트너 정보가 있을 경우 추가 -->
-                                <div v-if="favorite.partner">
-                                    <span><strong>파트너:</strong> {{ favorite.partner.name }} - {{ favorite.partner.address }}</span>
-                                </div>
-                                <!-- 삭제 버튼 -->
                                 <button @click="fnRemoveFavorite(favorite.hospitalNo, favorite.hosName, favorite.hosAddress, userId)">
+                                    ❌ 삭제
+                                </button>
+                                <hr>
+                            </li>
+                    
+                            <!-- 파트너 즐겨찾기 -->
+                            <li v-for="favorite in favoritesList" :key="favorite.partnerdetailId"  @click="moveToLocation(favorite)">
+                                <div>
+                                    <strong>{{ favorite.name }}</strong> - {{ favorite.address }}
+                                </div>
+                                <button @click="fnparRemoveFavorite(favorite.partnerdetailId, favorite.name, favorite.address, userId)">
                                     ❌ 삭제
                                 </button>
                                 <hr>
@@ -904,14 +889,28 @@ searchPlaces() {
 
 
 showInfoWindowForCategory(marker, partner, category) {
-    //console.log("⭐ showInfoWindowForCategory 호출됨", partner.partnerdetailId);
     let self = this;
 
-    let favoritesList = this.favoritesList;
-    let isFavorite = Array.isArray(favoritesList) && favoritesList.some(function(fav) {
-        return fav.partnerdetailId === partner.partnerdetailId;
-    });
+    // 🛠 원본 partner 데이터 복사
+    let currentPartner = { ...partner };
 
+    // 🔥 위도/경도 변환 (문자열 -> 숫자)
+    if (currentPartner.NY && currentPartner.NX) {
+        currentPartner.NY = parseFloat(currentPartner.NY);
+        currentPartner.NX = parseFloat(currentPartner.NX);
+    }
+
+    console.log("⭐ showInfoWindowForCategory 호출됨 - currentPartner:", currentPartner);
+    console.log("⭐ 현재 위도(NY):", currentPartner.NY);
+    console.log("⭐ 현재 경도(NX):", currentPartner.NX);
+
+    if (!currentPartner.NY || !currentPartner.NX) {
+        console.error("❌ 위도/경도가 존재하지 않습니다!", currentPartner);
+        return; // 에러 발생 시 함수 종료
+    }
+
+    let favoritesList = this.favoritesList;
+    let isFavorite = Array.isArray(favoritesList) && favoritesList.some(fav => fav.partnerdetailId === currentPartner.partnerdetailId);
     let starIcon = isFavorite ? "★" : "☆";
 
     if (this.infoWindow) {
@@ -920,11 +919,12 @@ showInfoWindowForCategory(marker, partner, category) {
     }
 
     let content = "<div class='placeinfo'>" +
-        "<a class='title' href='" + (partner.websiteUrl !== "#" ? partner.websiteUrl : "") + "' target='_blank' " +
-        "style='font-weight:bold; color:#007BFF;'>" + (partner.name ? partner.name : "이름 없음") + "</a><br>" +
-        "<span class='tel'>" + (partner.phoneNumber ? partner.phoneNumber : "전화번호 없음") + "</span><br>" +
+        "<a class='title' href='" + (currentPartner.websiteUrl !== "#" ? currentPartner.websiteUrl : "") + "' " +
+        "target='_blank' style='font-weight:bold; color:#007BFF;'>" + 
+        (currentPartner.name ? currentPartner.name : "이름 없음") + "</a><br>" +
+        "<span class='tel'>" + (currentPartner.phoneNumber ? currentPartner.phoneNumber : "전화번호 없음") + "</span><br>" +
         "<div style='display:flex; justify-content:space-between; margin-top:5px;'>" +
-            "<a href='https://map.kakao.com/link/to/" + partner.name + "," + partner.NY + "," + partner.NX + "' " +
+            "<a href='https://map.kakao.com/link/to/" + currentPartner.name + "," + currentPartner.NY + "," + currentPartner.NX + "' " +
             "target='_blank' class='btn btn-primary'>🗺 길찾기</a>" +
             "<button id='shareButton' class='btn btn-warning'>📢 공유</button>" +
             "<button id='favoritesButton' class='btn btn-light'>" +
@@ -937,43 +937,83 @@ showInfoWindowForCategory(marker, partner, category) {
         content: content,
         removable: true
     });
-    this.infoWindow.open(this.map, marker);
+
+    // ✅ 마커가 정상적인지 확인 후 실행
+    if (marker instanceof kakao.maps.Marker) {
+        this.infoWindow.open(this.map, marker);
+    } else {
+        console.error("❌ 마커가 올바르지 않습니다!", marker);
+    }
 
     this.$nextTick(function() {
-        document.getElementById("favoritesButton").addEventListener("click", function() {
-            console.log("⭐ 즐겨찾기 버튼 클릭됨!");
+        let favoritesButton = document.getElementById("favoritesButton");
+        let shareButton = document.getElementById("shareButton");
 
-            if (!self.userId) {
-                alert("로그인이 필요합니다! 😊");
-                return;
-            }
+        if (favoritesButton) {
+            favoritesButton.addEventListener("click", function() {
+                console.log("⭐ 즐겨찾기 버튼 클릭됨!");
 
-            // ⭐ UI 먼저 즉시 변경
-            isFavorite = !isFavorite;
-            document.getElementById("favoriteStar").innerText = isFavorite ? "★" : "☆";
+                if (!self.userId) {
+                    alert("로그인이 필요합니다! 😊");
+                    return;
+                }
 
-            // ⭐ DB 업데이트
-            if (isFavorite) {
-                self.fnparfavorites(partner.partnerdetailId, partner.name, partner.address, self.userId);
-            } else {
-                self.fnRemoveFavorite(partner.partnerdetailId, partner.name, partner.address, self.userId);
-            }
+                isFavorite = !isFavorite;
+                document.getElementById("favoriteStar").innerText = isFavorite ? "★" : "☆";
 
-            // ⭐ 즐겨찾기 리스트 갱신 후 인포윈도우 업데이트
-            setTimeout(function() {
-                self.favoritesList = self.fnfavorList();  // 리스트 다시 불러오기
-                console.log("🔄 즐겨찾기 리스트 갱신됨:", self.favoritesList);
-                
-                // ⭐ 리스트 갱신 이후 UI 업데이트
+                console.log("🔥 즐겨찾기 추가 시 currentPartner:", currentPartner);
+
+                if (isFavorite) {
+                    console.log("🟢 fnparfavorites 호출 - 전달할 데이터:", {
+                        partnerdetailId: currentPartner.partnerdetailId,
+                        name: currentPartner.name,
+                        address: currentPartner.address,
+                        userId: self.userId,
+                        NX: currentPartner.NX,
+                        NY: currentPartner.NY
+                    });
+
+                    self.fnparfavorites(
+                        currentPartner.partnerdetailId, 
+                        currentPartner.name, 
+                        currentPartner.address, 
+                        self.userId,
+                        currentPartner.NX,
+                        currentPartner.NY
+                    );
+                } else {
+                    console.log("🟠 fnRemoveFavorite 호출 - 전달할 데이터:", {
+                        partnerdetailId: currentPartner.partnerdetailId,
+                        name: currentPartner.name,
+                        address: currentPartner.address,
+                        userId: self.userId
+                    });
+
+                    self.fnRemoveFavorite(
+                        currentPartner.partnerdetailId, 
+                        currentPartner.name, 
+                        currentPartner.address, 
+                        self.userId
+                    );
+                }
+
                 setTimeout(function() {
-                    self.showInfoWindowForCategory(marker, partner);
-                }, 100);  // 약간의 지연 후 다시 UI 반영
-            }, 300);  // DB 반영 시간이 필요할 수 있으므로 약간 기다림
-        });
+                    self.favoritesList = self.fnfavorList();
+                    console.log("🔄 즐겨찾기 리스트 갱신됨:", self.favoritesList);
 
-        document.getElementById("shareButton").addEventListener("click", function() {
-            self.shareToKakao(partner.partnerdetailId, partner.name, partner.address, partner.phoneNumber);
-        });
+                    setTimeout(function() {
+                        console.log("⭐ 다시 showInfoWindowForCategory 실행!", currentPartner);
+                        self.showInfoWindowForCategory(marker, currentPartner, category);
+                    }, 100);
+                }, 300);
+            });
+        }
+
+        if (shareButton) {
+            shareButton.addEventListener("click", function() {
+                self.shareToKakao(currentPartner.partnerdetailId, currentPartner.name, currentPartner.address, currentPartner.phoneNumber);
+            });
+        }
     });
 }
 
@@ -1655,13 +1695,15 @@ toggleFavoritesList() {
             });
         },
 
-        fnparfavorites(partnerdetailId, name, address, userId, marker, partner) {
+        fnparfavorites(partnerdetailId, name, address, userId, marker, partner, NX, NY) {
     var self = this;
     var nparmap = {
         partnerdetailId: partnerdetailId,
         name: name,
         address: address,
         userId: userId,
+        NX,   // 경도 추가!
+        NY
     };
 
     $.ajax({
@@ -1861,6 +1903,7 @@ fnfavorList () {
         var self = this;
         var nparmap = {
                 userId : self.userId
+                
         };
         $.ajax({
             url: "/favorites/list.dox",
@@ -1870,7 +1913,7 @@ fnfavorList () {
             success: function (data) {
                 console.log("제발",data);
                 self.favoritesList = data.favorList;
-
+                console.log("🔄 fnfavorList 반환값:", self.favoritesList)
                 
             }
         });
