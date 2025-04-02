@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.board.model.comment;
 import teamgyodong.myky.donation.model.donation;
 import teamgyodong.myky.manager.model.Vet;
+import teamgyodong.myky.pay.mapper.PayMapper;
 import teamgyodong.myky.user.mapper.UserMapper;
 import teamgyodong.myky.user.model.User;
 
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserMapper userMapper;
+	
+	@Autowired
+	PayMapper payMapper;
 	
 	@Autowired // 세션용(중요! 유저 로그인 관련!)
 	HttpSession session;
@@ -119,6 +123,7 @@ public class UserServiceImpl implements UserService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>(); 
 		String hashPwd = passwordEncoder.encode((String)map.get("pwd")); // 비밀번호를 넣기전에 암호화 하기
 		map.put("pwd", hashPwd);
+		payMapper.insertPoint(map);
 		int num = userMapper.insertUser(map); //int형으로 받아내기
 		resultMap.put("result", "success");
 		// if num > 0 데이터 삽입 잘 된거
@@ -201,7 +206,8 @@ public class UserServiceImpl implements UserService {
 		public HashMap<String, Object> userCoupon(HashMap<String, Object> map) {
 			HashMap<String, Object> resultMap = new HashMap<String, Object>();
 			List<User> coupon = userMapper.selectCoupon(map);
-			
+			int count = userMapper.selectCouponCnt(map);
+			resultMap.put("count", count);
 			resultMap.put("coupon", coupon);
 			resultMap.put("result", "success"); // 결과 값
 

@@ -148,8 +148,14 @@
 	</select>
 	
 	<select id="selectCoupon" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
-        SELECT *
-        FROM COUPON
+        SELECT C.*, TO_CHAR(CREATED_AT,'YYYY-MM-DD') AS createdAt, TO_CHAR(EXPIRATION_DATE,'YYYY-MM-DD') AS expirationDate
+        FROM COUPON C
+        WHERE USER_ID = #{userId}
+	</select>
+		
+	<select id="selectCouponCnt" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*)
+        FROM COUPON C
         WHERE USER_ID = #{userId}
 	</select>
 	
