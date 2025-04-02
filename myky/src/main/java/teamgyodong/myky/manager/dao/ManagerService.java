@@ -34,6 +34,7 @@ public interface ManagerService {
 	HashMap<String, Object> updateVet(HashMap<String, Object> map);
 	
 	HashMap<String, Object> insertVet(HashMap<String, Object> map);
+	HashMap<String, Object> insertProduct(HashMap<String, Object> map);
 
 	
 	

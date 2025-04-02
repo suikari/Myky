@@ -72,6 +72,11 @@
         .submit-button:hover {
             background-color: #45a049;
         }
+        .editor-control {
+		    height: 200px;
+		    width: 100%;
+        }
+        
     </style>
     
 </head>
@@ -83,12 +88,27 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="name" class="form-label">상품명</label>
-                    <input v-model="product.name" id="name" type="text" class="form-control">
+                    <input v-model="product.productName" id="name" type="text" class="form-control">
                 </div>
-                <div class="col-md-6">
-                    <label for="category" class="form-label">카테고리</label>
-                    <input v-model="product.category" id="category" type="text" class="form-control">
-                </div>
+        		<div class="col-auto">
+                   <label class="form-label">카테고리1:</label>
+                   <select v-model="category1" class="form-select" @change="updateCategory">
+                       <option value="강아지">강아지</option>
+                       <option value="고양이">고양이</option>
+                       <option value="기타">기타</option>
+                   </select>
+               </div>
+               <div class="col-auto">
+                   <label class="form-label">카테고리2:</label>
+                   <select v-model="category2" class="form-select" @change="updateCategory">
+                       <option value="장난감">장난감</option>
+                       <option value="용품">용품</option>
+                       <option value="사료">사료</option>
+                       <option value="간식">간식</option>
+                       <option value="영양제">영양제</option>
+                   </select>
+               </div>		          
+                    <input type="hidden" v-model="product.categoryId" id="category" type="text" class="form-control">
                 <div class="col-md-6">
                     <label for="price" class="form-label">가격</label>
                     <input v-model="product.price" id="price" type="text" class="form-control">
@@ -103,23 +123,23 @@
                 </div>
                 <div class="col-12">
                     <label for="description" class="form-label">상품 설명</label>
-                    <textarea v-model="product.description" id="editor" class="form-control"></textarea>
+                    <textarea v-model="product.description" id="editor" class="editor-control"></textarea>
                 </div>
                 <div class="col-md-6">
                     <label for="code" class="form-label">상품 코드</label>
-                    <input v-model="product.code" id="code" type="text" class="form-control">
+                    <input v-model="product.productCode" id="code" type="text" class="form-control">
                 </div>
                 <div class="col-md-6">
                     <label for="discountRate" class="form-label">할인율</label>
-                    <input v-model="product.discountRate" id="discountRate" type="text" class="form-control">
+                    <input v-model="product.discount" id="discountRate" type="text" class="form-control">
                 </div>
                 <div class="col-md-6">
                     <label for="shippingFee" class="form-label">배송비</label>
                     <input v-model="product.shippingFee" id="shippingFee" type="text" class="form-control">
                 </div>
                 <div class="col-md-6">
-                    <label for="freeShippingThreshold" class="form-label">배송비 면제 가능 가격</label>
-                    <input v-model="product.freeShippingThreshold" id="freeShippingThreshold" type="text" class="form-control">
+                    <label for="freeShippingThreshold" class="form-label">배송비 면제 가격</label>
+                    <input v-model="product.shippingFreeMinimum" id="freeShippingThreshold" type="text" class="form-control">
                 </div>
                 <div class="col-md-6">
                     <label for="thumbnail" class="form-label">썸네일 이미지</label>
@@ -157,7 +177,7 @@
                      return {
 						isEdit: false,
 	                    product: {
-	                    	productId: null,
+	                    	productId : null,
 	                    	productName: '',
 	                    	productType : '',
 	                    	productCode : '',
@@ -176,8 +196,10 @@
 	                        extraImages: [],
 	                        extraImagesUrls: []
 	                    },
+						category1 : '',
+						category2 : '',
 						menu : '' , 
-						submenu : '' ,   
+						submenu : '' ,  
 						
                      };
                  },
@@ -187,10 +209,10 @@
                 methods: {
                 	fnMainList : function() {
                     	var self = this;
-                    	var nparmap = {
-                    	};
+                    	var nparmap = self.product;
+                    	
                     	$.ajax({
-                    		url: "/admin/mainList.dox",
+                    		url: "/admin/insertProduct.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
@@ -201,9 +223,11 @@
                     	});
                     },
                     fnAddProduct (){
-                    	
+                    	this.fnMainList();
                     },
-                    
+                    updateCategory() {
+                        this.product.categoryId = this.category1+ "," + this.category2;
+                    }
                 	
                 	
                 },

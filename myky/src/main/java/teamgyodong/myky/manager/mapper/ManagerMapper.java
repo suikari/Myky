@@ -65,7 +65,9 @@ public interface ManagerMapper {
 
 	
 	int insertVet(HashMap<String, Object> map);
+	int insertProduct(HashMap<String, Object> map);
 
+	
 	
 	
 	int updateVet(HashMap<String, Object> map);
