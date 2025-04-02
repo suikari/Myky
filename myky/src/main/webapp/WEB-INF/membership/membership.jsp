@@ -310,7 +310,7 @@
                 },
                 methods: {
                     subscribe() {
-                        alert("멤버십 가입을 처리합니다!");
+                        alert("멤버십 가입 페이지로 이동!");
                     },
                     fnMainList : function() {
                     	var self = this;
