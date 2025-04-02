@@ -24,6 +24,7 @@ public interface ManagerService {
 	HashMap<String, Object> selectAllVetList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllMembershipList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllProductList(HashMap<String, Object> map);
 
 	
 	

@@ -7,7 +7,8 @@ public class Vet {
 
 	private String vetNumber;
 	private String vetId;
-	private String name;
+	private String vetName;
+	private String vetNickname;
 	private String email;
 	private String phoneNumber;
 	private String affiliatedHospital;

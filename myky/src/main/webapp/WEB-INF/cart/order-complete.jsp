@@ -131,8 +131,7 @@
                         <td class="order-complete__td" v-else><img src="/img/product/product update.png" width="50"></td>
                         <td class="order-complete__td">{{ item.productName }}</td>
                         <td class="order-complete__td">{{ item.quantity }}</td>
-                        <td class="order-complete__td" v-if="isMembership">{{ getDiscountPrice(item.price) }} 원</td>
-                        <td class="order-complete__td" v-else>{{ item.price }} 원</td>
+                        <td class="order-complete__td">{{ item.price }} 원</td>
                     </tr>
                 </tbody>
             </table>
@@ -178,7 +177,6 @@
                         orderList: [],
                         receiverPhone:"",
                         currentPoint:0,
-                        isMembership:false
                     };
                 },
                 computed: {
@@ -208,7 +206,6 @@
                                 self.fnOrderList();
                                 self.fnGetCurrentPoint();
                                 self.splitPhoneNumber();
-                                self.fnGetMembership();
                             }
                         });
                     },
@@ -239,26 +236,6 @@
                                 console.log("보유포인트>>> ",self.currentPoint);
                             }
                         });
-                    },
-                    fnGetMembership: function () {
-                        let self = this;
-                        let params = { userId: self.userId };
-                        $.ajax({
-                            url: "/membership/active.dox",
-                            dataType: "json",
-                            type: "POST",
-                            data: params,
-                            success: function (data) {
-                                console.log("멤버십 활성 여부 >>> ",data.result);
-                                if(data.result === "success"){
-                                    self.isMembership = true;
-
-                                }
-                            }
-                        });
-                    },
-                    getDiscountPrice(price){
-                        return Math.round(price * 0.9);
                     },
                     goToMain() {
                         window.location.href = "/main.do";

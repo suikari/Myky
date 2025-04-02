@@ -18,6 +18,8 @@ public interface PayMapper {
 
 	void insertUsedPoint(HashMap<String, Object> map);
 
+	void insertPoint(HashMap<String, Object> map);
+
 	
 	
 }

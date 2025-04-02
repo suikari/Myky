@@ -117,6 +117,16 @@ public class ManagerController {
 		resultMap = managerService.selectAllBoardList(map);
 		return new Gson().toJson(resultMap);
 	}
+	// centerList
+	@RequestMapping(value = "/admin/productList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String productList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectAllProductList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
 	
 	// centerList
 	@RequestMapping(value = "/admin/LogList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

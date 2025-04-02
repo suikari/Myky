@@ -49,7 +49,7 @@
                     <td>{{ item.productName }}</td>
                     <td v-if="isMembership">
                         <div><del>{{ item.price }} 원</del></div>
-                        <div><strong>{{ getDiscountPrice(item.price) }} 원</strong></div>
+                        <div><strong>{{ getDiscountPrice(item) }} 원</strong></div>
                     </td>
                     <td v-else>{{ item.price }} 원</td>
                     <td>
@@ -57,7 +57,7 @@
                         {{ item.quantity }}
                         <button class="quantityBtn" @click="updateQuantity(index, 1)">+</button>
                     </td>
-                    <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
                     <td v-else>{{ (item.price * item.quantity) }} 원</td>
                     <td><button class="removeBtn" @click="removeItem(index)">삭제</button></td>
                 </tr>
@@ -80,24 +80,24 @@
                     <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
-                    <td v-if="isMembership">{{ getDiscountPrice(item.price) }} 원</td>
+                    <td v-if="isMembership">{{ getDiscountPrice(item) }} 원</td>
                     <td v-else>{{ item.price }} 원</td>
                     <td>{{ item.quantity }}</td>
-                    <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
                     <td v-else>{{ (item.price * item.quantity) }} 원</td>
                 </tr>
             </tbody>
         </table>
 
-        <h4 v-if="totalPrice < 30000">
-            <span>배송비 : 2,000 원 </span>
+        <h4 v-if="totalPrice < shippingFreeMinimum">
+            <span>배송비 : {{ formattedShippingFee }} 원 </span>
         </h4>
         <h4 v-else>
             <span>배송비 : 무료 ! </span>
         </h4>
-        <p>(30,000원 이상 무료배송)</p>
-        <h2 v-if="totalPrice < 30000">
-            <span>총 결제 금액: {{ formattedTotalShippingPrice }} 원</span>
+        <p>({{ shippingFreeMinimum.toLocaleString() }}원 이상 무료배송)</p>
+        <h2 v-if="totalPrice < shippingFreeMinimum">
+            <span>총 결제 금액: {{ formattedFinalPrice }} 원</span>
         </h2>
         <h2 v-else>
             <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
@@ -123,21 +123,26 @@
                     selectCartItems: [],
                     selectCheck:[],
                     checked:false,
-                    isMembership:false
+                    isMembership:false,
+                    shippingFee:2000,
+                    shippingFreeMinimum:30000
                 };
             },
             computed: {
                 totalPrice() {
                     return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0);
                 },
-                totalShippingPrice() {
-                    return (this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0))+2000;
+                finalPrice() {
+                    return this.totalPrice >= this.shippingFreeMinimum ? this.totalPrice : parseInt(this.totalPrice) + parseInt(this.shippingFee);
+                },
+                formattedShippingFee() {
+                    return this.totalPrice >= this.shippingFreeMinimum ? "0" : this.shippingFee.toLocaleString();
                 },
                 formattedTotalPrice() {
                     return this.totalPrice.toLocaleString();
                 },
-                formattedTotalShippingPrice() {
-                    return this.totalShippingPrice.toLocaleString();
+                formattedFinalPrice() {
+                    return this.finalPrice.toLocaleString();
                 }
             },
             methods: {
@@ -195,7 +200,10 @@
                         success : function(data) { 
                             console.log("cartCheckList >>> ", data.checkList);
                             self.selectCartItems = data.checkList;
-                            
+                            self.shippingFee = self.selectCartItems[0].shippingFee;
+                            console.log(self.shippingFee);
+                            self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
+                            console.log(self.shippingFreeMinimum);
                             
                         }
                     });
@@ -217,11 +225,12 @@
                         }
                     });
                 },
-                getDiscountPrice(price){
-                    return Math.round(price * 0.9);
+                getDiscountPrice(item) {
+                    if (!item.discount || item.discount === 0) return item.price;
+                    return Math.floor(item.price * (1 - item.discount / 100));
                 },
                 getTotalPrice(item) {
-                    return item.quantity * (this.isMembership ? this.getDiscountPrice(item.price) : item.price);
+                    return item.quantity * (this.isMembership ? this.getDiscountPrice(item) : item.price);
                 },
                 updateQuantity(index, change) {
                     let self = this;

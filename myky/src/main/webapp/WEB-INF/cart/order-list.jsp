@@ -7,19 +7,20 @@
     <title>Vue3 레이아웃 예제</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 	
     <style>
     .order-container {max-width: 1200px;margin: 0 auto;padding: 20px;font-family: 'Arial', sans-serif;background-color: #f4f7fc;}
     .order-history {background: #ffffff;padding: 30px;border-radius: 10px;box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);}
     .order-history__filter {display: flex;align-items: center;gap: 15px;margin-bottom: 20px;flex-wrap: wrap;}
-    .order-history__button {background: #FF8C42;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;transition: background 0.3s, transform 0.2s;font-size: 14px;}
-    .order-history__button:hover {background: #e07b3e;transform: scale(1.05);}
+    .order-history__button {background: #ffaf7d;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;transition: background 0.3s, transform 0.2s;font-size: 14px;}
+    .order-history__button:hover {background: #f1a373;transform: scale(1.05);}
     .order-history__button:active {transform: scale(1);}
     .order-history__input, .order-history__select {padding: 8px 12px;border: 1px solid #ccc;border-radius: 5px;font-size: 14px;transition: border-color 0.3s;}
     .order-history__input:focus, .order-history__select:focus {border-color: #FF8C42;outline: none;}
     .order-history__table {width: 100%;border-collapse: collapse;margin-top: 20px;background-color: #ffffff;border-radius: 8px;overflow: hidden;}
     .order-history__table th, .order-history__table td {border: 1px solid #ddd;padding: 12px;text-align: center;}
-    .order-history__table th {background-color: #FF8C42;color: white;font-weight: bold;}
+    .order-history__table th {background-color: #ffaf7d;color: white;font-weight: bold;}
     .order-history__table td {background-color: #f9f9f9;}
     .order-history__table tr:hover {background-color: #f1f1f1;}
     .order-history__details-button {background-color: #ffbc93;color: white;border: none;padding: 8px 16px;border-radius: 5px;cursor: pointer;transition: background 0.3s;font-size: 14px;}
@@ -28,7 +29,7 @@
     .order-history__details hr {margin: 15px 0;}
     .order-history__details-table {width: 100%;border-collapse: collapse;margin-top: 10px;}
     .order-history__details-table th, .order-history__details-table td {border: 1px solid #ddd;padding: 8px 12px;text-align: left;}
-    .order-history__details-table th {background-color: #f1f1f1;font-weight: normal;color: #333;}
+    .order-history__details-table th {background-color: #fff0e4;font-weight: normal;color: #333;}
     .order-history__details-table td {background-color: #fff;}
     .order-date {font-size: 18px;font-weight: bold;background: #e9ecef;padding: 10px;margin-top: 20px;border-radius: 8px;color: #333;display: inline-block;}
     .order-id {font-weight: bold;font-size: 16px;margin-top: 10px;}
@@ -51,10 +52,6 @@
                 <span>~</span>
                 <input type="date" v-model="endDate" class="order-history__input">
                 <button @click="fnOrderList" class="order-history__button">조회</button>
-            </div>
-            
-            <!-- 주문 상태 필터 -->
-            <div class="order-history__filter">
                 <select v-model="orderStatus" @change="fnOrderList" class="order-history__select">
                     <option value="all">전체</option>
                     <option value="paid">주문접수</option>
@@ -62,7 +59,7 @@
                     <option value="delivered">배송완료</option>
                 </select>
             </div>
-    
+            
             <!-- 주문 내역 테이블 -->
             <div v-for="(ordersByOrderId, date) in groupedOrders" :key="date">
                 <div class="order-date">{{ date }}</div>
@@ -85,7 +82,7 @@
                                     {{ orders[0].productName }} 
                                     <span v-if="orders.length > 1"> 외 {{ orders.length - 1 }}개</span>
                                 </td>
-                                <td>{{ orders[0].totalPrice }} 원</td>
+                                <td>{{ formatPrice(Number(orders[0].totalPrice)) }} 원</td>
                                 <td v-if="orders[0].orderStatus == 'paid'">주문접수</td>
                                 <td v-else-if="orders[0].orderStatus == 'shipped'">배송중</td>
                                 <td v-else-if="orders[0].orderStatus == 'delivered'">배송완료</td>
@@ -109,16 +106,30 @@
                                                     <th>상품명</th>
                                                     <th>수량</th>
                                                     <th>가격</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="product in orders" :key="product.orderId">
                                                     <td>{{ product.productName }}</td>
                                                     <td>{{ product.quantity }}</td>
-                                                    <td>{{ product.price }} 원</td>
+                                                    <td>{{ formatPrice(Number(product.price)) }} 원</td>
+                                                    <td>
+                                                        <button @click="fnAddCart(product.productId)"><span class="material-symbols-outlined">add_shopping_cart</span></button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div v-if="orders[0].orderStatus == 'paid'">
+                                            <button @click="cancelOrder(orderId)">주문취소</button>
+                                            <button @click="editShipping(orderId)">배송정보수정</button>
+                                        </div>
+                                        <div v-else-if="orders[0].orderStatus == 'delivered'">
+                                            <button @click="requestReturnExchange(orderId)">교환/반품신청</button>
+                                        </div>
+                                        <div>
+                                            <p>※해당 주문건이 [주문접수] 상태일 때만 주문취소, 배송정보수정이 가능합니다.</p>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -197,7 +208,7 @@
                         }, {});
                         console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:",sortedGroupedByDate);
                     return sortedGroupedByDate;
-                }
+                },
             },
             watch: {
                 groupedOrders: {
@@ -258,6 +269,10 @@
                         }
                     });
                 },
+                formatPrice(value) {
+                    if (isNaN(value) || value === null) return "0";
+                    return value.toLocaleString("ko-KR");
+                },
                 formatDate(date) {
                     let year = date.getFullYear();
                     let month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -265,21 +280,17 @@
                     return year + "-" + month + "-" + day;
                 },
 
-                // cancelOrder(orderId) {
-                //     alert("주문이 취소되었습니다. 주문번호: " + orderId);
-                // },
+                cancelOrder(orderId) {
+                    alert("주문이 취소되었습니다. 주문번호: " + orderId);
+                },
 
-                // editShipping(orderId) {
-                //     alert("배송정보 수정 페이지로 이동합니다. 주문번호: " + orderId);
-                // },
+                editShipping(orderId) {
+                    alert("배송정보 수정 페이지로 이동합니다. 주문번호: " + orderId);
+                },
 
-                // requestReturn(orderId) {
-                //     alert("반품 신청이 완료되었습니다. 주문번호: " + orderId);
-                // },
-
-                // requestExchange(orderId) {
-                //     alert("교환 신청이 완료되었습니다. 주문번호: " + orderId);
-                // },
+                requestReturnExchange(orderId) {
+                    alert("교환/반품 신청이 완료되었습니다. 주문번호: " + orderId);
+                },
                 toggleDetails(orderIdToToggle) {
                     for (let date in this.ordersByDate) {
                         for (let orderId in this.ordersByDate[date]) {
@@ -296,6 +307,26 @@
                     }
                     console.log(this.ordersByDate);
                 },
+                fnAddCart:function(){
+                    let self = this;
+                    let params = {
+                        userId: self.userInfo.userId, 
+                        
+                    };
+                    $.ajax({
+                        url: "/order/AllList.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            console.log("주문 상세 목록 >>> ",data.orderList);
+                            self.orderList = data.orderList.map(order => ({
+                                ...order,
+                                showDetails: false
+                            }));
+                        }
+                    });
+                }
                 
             },
             mounted() {

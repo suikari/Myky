@@ -22,6 +22,7 @@ public class cart {
 	private String totalPrice;
 	private String filepath;
 	private String thumbnail;
+	private int discount;
 	
 	private String orderId;
 	private String orderStatus;
@@ -33,5 +34,6 @@ public class cart {
 	private String updatedAt;
 	private String refundRequestDate;
 	private String deliveryMessage;
+	private String trackingNumber;
 		
 }

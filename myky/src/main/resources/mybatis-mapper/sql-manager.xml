@@ -474,10 +474,32 @@
 	    
 	</select>
 	
+		<select id="selectAllProductList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProduct">
+	
+		SELECT *
+		FROM Product
+		Where 1=1
+	    ORDER BY REGISTRATION_DATE DESC
+		<if test="page != null and pageSize != null" >
+		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		</if>
+		
+	</select>
+	
+	
+	<select id="selectAllProductCnt" parameterType="hashmap" resultType="int">
+	
+		SELECT COUNT(*)
+        from Product 
+        Where 1=1
+
+	    
+	</select>
+	
 
 	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
-		INSERT INTO veterinarian(vet_number,vet_id, name, email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
-		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{name}, #{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')
+		INSERT INTO veterinarian(vet_number,vet_id, vet_name , vet_nickname , email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
+		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{vetName}, #{vetNickname},#{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')
 	</insert>
 	
 	<update id="updateVet" parameterType="hashmap" >
@@ -486,8 +508,11 @@
 		<if test="vetId != null and vetId != ''">
 			vet_id = #{vetId},
 	    </if>
-	    <if test="name != null and name != ''">
-			name = #{name},
+	    <if test="vetName != null and vetName != ''">
+			vet_name = #{vetName},
+	    </if>
+	    <if test="vetNickname != null and vetNickname != ''">
+			vet_nickname = #{vetNickname},
 	    </if>
 	    <if test="email != null and email != ''">
 			email = #{email},
