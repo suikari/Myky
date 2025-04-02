@@ -17,28 +17,26 @@
 	</insert>
 
 
-	 <select id="selectPayment" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
+	<select id="selectPayment" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
 	 	
 	 	SELECT *
 		FROM PAYMENT P
 		LEFT JOIN PRODUCT PD ON P.PRODUCT_ID = PD.PRODUCT_ID	
 		LEFT JOIN USERS U ON P.USER_ID = U.USER_ID	
 
-	 </select>
+	</select>
 	 
-	 <select id="selectCurrentPoint" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
+	<select id="selectCurrentPoint" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
 	 	
-	 	select coalesce(
-		    (select current_point
-		     from point
-		     where user_id = #{userId}
-		     order by usage_date desc
-		     fetch first 1 rows only), 0) as current_point
-		from dual
+	 	select current_point
+	    from point
+	    where user_id = #{userId}
+	    order by usage_date desc
+	    fetch first 1 rows only
 
-	 </select>
+	</select>
 	 
-	 <insert id="insertUsedPoint" parameterType="hashmap">
+	<insert id="insertUsedPoint" parameterType="hashmap">
 	 
 	 	insert into point
 	 	values (
@@ -53,6 +51,20 @@
 				fetch first 1 rows only
 			), 
 			#{remarks}, 
+			#{userId}
+		)
+	 
+	</insert>
+
+	<insert id="insertPoint" parameterType="hashmap">
+	 
+	 	insert into point
+	 	values (
+			point_seq.nextval, 
+			sysdate, 
+			0, 
+			0, 
+			'유저 포인트 정보 생성', 
 			#{userId}
 		)
 	 

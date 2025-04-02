@@ -179,11 +179,11 @@
                     <td>{{ item.productName }}</td>
                     <td v-if="isMembership">
                         <div><del>{{ item.price }} 원</del></div>
-                        <div><strong>{{ getDiscountPrice(item.price) }} 원</strong></div>
+                        <div><strong>{{ getDiscountPrice(item) }} 원</strong></div>
                     </td>
                     <td v-else>{{ item.price }} 원</td>
                     <td>{{ item.quantity }}</td>
-                    <td v-if="isMembership">{{ (getDiscountPrice(item.price) * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
                     <td v-else>{{ (item.price * item.quantity) }} 원</td>
                 </tr>
             </tbody>
@@ -330,6 +330,8 @@
                     cartId: "",
                     paid_amount:0,
                     isMembership:false,
+                    shippingFee:2000,
+                    shippingFreeMinimum:30000
                 };
             },
             computed: {
@@ -337,11 +339,11 @@
                     return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0);
                 },
                 totalShippingPrice() {
-                    return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0) + 2000;
+                    return this.selectCartItems.reduce((sum, item) => sum + this.getTotalPrice(item), 0) + parseInt(this.shippingFee);
                 },
                 finalPrice() {
                     let finalPrice = 0;
-                    if (this.totalPrice < 30000) {
+                    if (this.totalPrice < this.shippingFreeMinimum) {
                         finalPrice = this.totalShippingPrice;
                         this.paid_amount = this.totalShippingPrice;
                     } else {
@@ -366,12 +368,7 @@
                     return this.finalPrice.toLocaleString();
                 },
                 rewardPoint(){
-                    if (this.totalPrice < 30000) {
-                        finalPrice = this.totalShippingPrice;
-                    } else {
-                        finalPrice = this.totalPrice;
-                    }
-                    return +Math.floor(finalPrice * 0.05);
+                    return +Math.floor(this.totalPrice * 0.05);
                 },
                 formattedRewardPoints() {
                     return this.rewardPoint.toLocaleString();
@@ -408,6 +405,8 @@
                             self.selectCartItems = data.checkList;
                             self.cartId = data.checkList[0].cartId;
                             console.log("cartId >>> ",self.cartId);
+                            self.shippingFee = self.selectCartItems[0].shippingFee;
+                            self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
                         }
                     });
                 },
@@ -421,7 +420,7 @@
                         data: params,
                         success: function (data) {
                             self.userPoint = parseInt(data.point.currentPoint);
-                            console.log(self.userPoint);
+                            console.log("보유포인트 >>> ",data.result);
                         }
                     });
                 },
@@ -462,11 +461,12 @@
                         }
                     });
                 },
-                getDiscountPrice(price){
-                    return Math.round(price * 0.9);
+                getDiscountPrice(item) {
+                    if (!item.discount || item.discount === 0) return item.price;
+                    return Math.floor(item.price * (1 - item.discount / 100));
                 },
                 getTotalPrice(item) {
-                    return item.quantity * (this.isMembership ? this.getDiscountPrice(item.price) : item.price);
+                    return item.quantity * (this.isMembership ? this.getDiscountPrice(item) : item.price);
                 },
                 applyPoints() {
                     let self = this;
@@ -667,7 +667,7 @@
                         self.fnPayment(self.finalPrice, finalAddress, finalMessage);
                     }
                 },
-                fnPayment: function (finaPrice, finalAddress, finalMessage) {
+                fnPayment: function (finalPrice, finalAddress, finalMessage) {
                     var self = this;
 
                     if (typeof IMP === 'undefined') {
@@ -675,13 +675,15 @@
                         return;
                     }
 
+                    finalPrice = 100;
+
                     IMP.request_pay({
                         channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
                         pg: "html5_inicis",
                         pay_method: "card",
                         merchant_uid: "merchant_" + new Date().getTime(),
                         name: "상품 구매 결제",
-                        amount: finaPrice,
+                        amount: finalPrice,
                         buyer_tel: self.userInfo.phoneNumber,
                     }, function (rsp) {
                         if (rsp.success) {
