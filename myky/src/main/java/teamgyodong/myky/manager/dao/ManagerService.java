@@ -6,14 +6,19 @@ public interface ManagerService {
 	
 	HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map);
 	HashMap<String, Object> selectLogFristJoinBuy(HashMap<String, Object> map);
+	HashMap<String, Object> selectMembershipVal(HashMap<String, Object> map);
 
+	
+	
 	HashMap<String, Object> selectMainList(HashMap<String, Object> map);
 	
 	HashMap<String, Object> deleteBoardList(HashMap<String, Object> map);
 	HashMap<String, Object> deleteBoardCmtList(HashMap<String, Object> map);
-	HashMap<String, Object> selectAllnotVetList(HashMap<String, Object> map);
+	HashMap<String, Object> deleteProductImg(HashMap<String, Object> map);
 
 	
+	
+	HashMap<String, Object> selectAllnotVetList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map);
 	
 	HashMap<String, Object> selectSearchRanking(HashMap<String, Object> map);
@@ -26,16 +31,22 @@ public interface ManagerService {
 	HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllProductList(HashMap<String, Object> map);
 
-	
+	HashMap<String, Object> selectProduct(HashMap<String, Object> map);
+
 	
 	
 	HashMap<String, Object> updateUser(HashMap<String, Object> map);
-	
 	HashMap<String, Object> updateVet(HashMap<String, Object> map);
+	HashMap<String, Object> updateProduct(HashMap<String, Object> map);
+
+	
+	
 	
 	HashMap<String, Object> insertVet(HashMap<String, Object> map);
 	HashMap<String, Object> insertProduct(HashMap<String, Object> map);
+	HashMap<String, Object> insertProductFile(HashMap<String, Object> map);
 
+	
 	
 	
 }

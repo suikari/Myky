@@ -85,6 +85,19 @@
 	        AND  EXTRACT(HOUR FROM u.CREATED_AT) =  #{hour} 
 	    </if>	
 	</select>
+	
+	<select id="selectMembershipVal" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mMembership">
+		SELECT 
+		    SUM(CASE WHEN m.MEMBERSHIP_ID IS NOT NULL THEN 1 ELSE 0 END) AS MEMBERSHIP_USER_COUNT,
+		    SUM(CASE WHEN m.MEMBERSHIP_ID IS NULL THEN 1 ELSE 0 END) AS NON_MEMBERSHIP_USER_COUNT
+		FROM users u
+		LEFT JOIN membership m 
+		    ON u.USER_ID = m.USER_ID 
+		    AND m.IS_CANCELED = 'N' 
+		    AND m.EXPIRATION_DATE >= SYSDATE 
+		WHERE u.DELETE_YN = 'N'
+	</select>
+
 
 	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mProduct">
 			select P.*  , 
@@ -474,7 +487,7 @@
 	    
 	</select>
 	
-		<select id="selectAllProductList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProduct">
+	<select id="selectAllProductList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProduct">
 	
 		SELECT *
 		FROM Product
@@ -492,11 +505,42 @@
 		SELECT COUNT(*)
         from Product 
         Where 1=1
-
 	    
 	</select>
 	
+	<select id="selectProduct" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProduct">
+	
+		SELECT *
+		FROM Product
+		Where Product_id = #{productId}
+		
+	</select>	
+	
+	<select id="selectProductThumImg" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProductImg">
+	
+		SELECT * 
+		FROM product_file 
+		WHERE THUMBNAIL = 'Y' 
+		    and PRODUCT_ID = #{productId}
+		ORDER BY FILE_ID DESC 
+		FETCH FIRST 1 ROWS ONLY
 
+	</select>	
+	
+	<select id="selectProductImg" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProductImg">
+	
+		SELECT *
+		FROM Product_file
+		Where Product_id = #{productId}
+			  and thumbnail = 'N'
+		
+	</select>	
+	
+	<delete id="deleteProductImg" parameterType="hashmap">
+		DELETE Product_file
+		WHERE file_id  = #{fileId}
+	</delete>
+	
 	<insert id="insertProduct" parameterType="hashmap" useGeneratedKeys="true" keyColumn="product_id" keyProperty="productId">
 		INSERT INTO product 
 		(
@@ -534,10 +578,84 @@
 		)
 	</insert>
 
+
+
+	 <!-- 리뷰 파일 업로드 -->
+	 <select id="selectProductThumbChk" parameterType="hashmap" resultType="int">
+		select count(*) 
+		from product_file
+		where thumbnail = 'Y'
+		and   product_id = #{productId}
+	</select>
+
+	 <!-- 리뷰 파일 업로드 -->
+	 <insert id="insertProductFile" parameterType="hashmap">
+		INSERT INTO product_file 
+		(
+		    file_id,
+		    product_id,
+		    filepath,
+		    filename,
+		    file_size,
+		    file_type,
+		    thumbnail
+		)
+		VALUES
+		(
+			product_file_seq.nextval, #{productId}, #{filePath},#{fileOrgname},#{fileSize}, #{fileEtc},#{thumbYn}
+		)
+	</insert>
+	
+
 	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
 		INSERT INTO veterinarian(vet_number,vet_id, vet_name , vet_nickname , email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
 		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{vetName}, #{vetNickname},#{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')
 	</insert>
+
+
+
+
+	<update id="updateProduct" parameterType="hashmap" >
+		UPDATE product
+		SET     		
+		<if test="productName != null and productName != ''">
+			product_name = #{productName},
+	    </if>
+	    <if test="price != null and price != ''">
+			price = #{price},
+	    </if>
+	    <if test="quantity != null and quantity != ''">
+			quantity = #{quantity},
+	    </if>
+	    <if test="manufacturer != null and manufacturer != ''">
+			manufacturer = #{manufacturer},
+	    </if>
+	    <if test="productType != null and productType != ''">
+			product_type = #{productType},
+	    </if>
+	    <if test="description != null and description != '' ">
+			description = #{description},
+	    </if>
+	    <if test="productCode != null and productCode != ''">
+			 product_code = #{productCode},
+	    </if>
+	    <if test="categoryId != null and categoryId != ''">
+			 category_Id = #{categoryId},
+	    </if>
+	    <if test="discount != null and discount != ''">
+			discount = #{discount},
+	    </if>
+	    <if test="shippingFee != null and shippingFee != ''">
+			shipping_fee = #{shippingFee},
+	    </if>
+	    <if test="shippingFreeMinimum != null and shippingFreeMinimum != ''">
+			shipping_free_minimum =  #{shippingFreeMinimum},
+	    </if>
+	    <if test="DeleteYn != null and DeleteYn != ''">
+			delete_yn = #{DeleteYn}	
+	    </if>
+		WHERE product_id = #{productId}
+	</update>
 	
 	<update id="updateVet" parameterType="hashmap" >
 		UPDATE veterinarian

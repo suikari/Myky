@@ -17,7 +17,12 @@ public class mProduct {
 	private String productCode;
 	private int productTotalCnt;
 	private String DeleteYn;
+	private String discount;
+	private String shippingFee;
+	private String shippingFreeMinimum;
+	private String deleteYn;
 
+    
 
 	private String fileId;
 	private String filePath ;

@@ -567,7 +567,7 @@
                     fnEdit(productId) {
                     	var self = this;
 
-                    	console.log("1",productId);
+/*                     	console.log("1",productId);
                         if (self.selectedMemberId === productId) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
                         	console.log("2",productId);
@@ -577,8 +577,10 @@
                             self.editData = { ...member };  // 수정할 데이터 채우기
                             self.selectedMemberId = productId;
                         	console.log("3",self.editData);
+                        } */
+                        
+                        location.href="/manager/main.do?menu="+ this.menu + "&submenu=4&productId=" +  productId;
 
-                        }
                     },
                     fnSave () {
                     	var self = this;

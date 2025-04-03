@@ -65,7 +65,7 @@
             <!-- 네비게이션 메뉴 -->
             <nav class="menu">
                 <div class="dropdown" v-for="menu in categories" >
-                    <a :href="menu.menuUrl">{{ menu.categoryName }}</a>
+                    <a v-if="menu.del == 'N'" :href="menu.menuUrl">{{ menu.categoryName }}</a>
                     <div v-if="menu.children && menu.children.length" class="dropdown-menu">
                         <ul>
                             <li v-for="subMenu in menu.children" >
