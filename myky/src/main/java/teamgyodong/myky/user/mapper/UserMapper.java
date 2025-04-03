@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.comment;
+import teamgyodong.myky.cart.model.cart;
 import teamgyodong.myky.donation.model.donation;
 import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.user.model.User;
@@ -51,6 +52,10 @@ public interface UserMapper {
 	List<User> selectCoupon(HashMap<String, Object> map);
 
 	int selectCouponCnt(HashMap<String, Object> map);
+
+	List<cart> selectUserOrderList(HashMap<String, Object> map);
+
+	List<User> selectOrderCnt(HashMap<String, Object> map);
 
 
 
