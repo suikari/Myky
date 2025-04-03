@@ -57,6 +57,7 @@ public class PartnerControlloer {
 	@ResponseBody
 	public String favoritesparInsert(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
+		
 		System.out.println(map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
