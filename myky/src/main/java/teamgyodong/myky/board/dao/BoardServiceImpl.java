@@ -247,7 +247,13 @@ public class BoardServiceImpl implements BoardService {
 			countMap.put("cnt", count);
 
 			resultMap.put("count", countMap);
-			resultMap.put("result", "success");			
+			if(vetBoard != null) {
+				
+				resultMap.put("result", "success");			
+			}else {
+				resultMap.put("result", "fail");
+			}
+			
 			resultMap.put("vetBoard", vetBoard);
 			
 		} catch (Exception e) {
@@ -256,7 +262,7 @@ public class BoardServiceImpl implements BoardService {
 			resultMap.put("result", "fail");			
 
 		}
-
+		
 		return resultMap;
 	}
 	//수의사 게시글 상세보기
@@ -284,9 +290,15 @@ public class BoardServiceImpl implements BoardService {
 			vetBoard vetboard = boardMapper.selectVetBoard(map);
 			List<vetAnswer> answerList = boardMapper.selectVetAnList(map);
 			
+			if(vetboard != null) {
+				resultMap.put("result", "success");			
+			}else {
+				resultMap.put("result", "fail");
+			}
 			resultMap.put("info", vetboard);
 			resultMap.put("answerList", answerList);
-			resultMap.put("result", "success");
+
+			
 		}catch (Exception e){
 			 e.printStackTrace();
 			 resultMap.put("result", "fail");
@@ -362,6 +374,16 @@ public class BoardServiceImpl implements BoardService {
 
 		boardMapper.updateVetAnSelect(map);
 		boardMapper.updateVetBoardStats(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	//FQA 게시글 보기
+	public HashMap<String, Object> FAQView(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<board> menu = boardMapper.selectBoardList(map);
+		
+		resultMap.put("menu", menu);
 		resultMap.put("result", "success");
 		return resultMap;
 	}

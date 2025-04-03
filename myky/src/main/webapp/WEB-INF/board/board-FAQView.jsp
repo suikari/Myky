@@ -189,12 +189,40 @@
         .cmtCountColor {
             color: #fca311;
         }
+        .dropdown-content {
+            display: none;  /* 기본적으로 숨김 처리 */
+            padding: 10px;
+            background-color: #f9f9f9;  /* 배경색 */
+            border: 1px solid #ddd;  /* 테두리 */
+            border-radius: 5px;  /* 모서리 둥글게 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* 그림자 효과 */
+            margin-top: 5px;  /* 위쪽 여백 */
+            font-size: 14px;  /* 폰트 크기 */
+            line-height: 1.6;  /* 줄 간격 */
+            max-height: 300px;  /* 최대 높이 */
+            overflow-y: auto;  /* 내용이 넘칠 경우 스크롤 */
+        }
+
+            /* 드롭다운 메뉴가 열릴 때 표시되도록 */
+        tr.dropdown-content {
+            display: table-row;  /* 드롭다운이 보이도록 설정 */
+        }
+        .dropdown-content:nth-child(odd) {
+            background-color: #ffffff;  /* 홀수번째 항목은 흰색 */
+        }
+        .dropdown-content:nth-child(even) {
+            background-color: #f1f1f1;  /* 짝수번째 항목은 회색 */  
+        }
+            /* 드롭다운 컨텐츠에 마우스를 올렸을 때 */
+        .dropdown-content:hover {
+            background-color: #525252;  /* 호버시 배경색 */
+        }
     </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
- 
     <div id="app" class="container">
+
 
         <div class="section-header">
             FAQ
@@ -206,43 +234,42 @@
         <hr class="custom-hr">
 
         <div>
-            <button class="button">이용방법</button>
-            <button class="button">교환/반품</button>
-            <button class="button">계정</button>
-            <button class="button">상품관련</button>
-            <button class="button">배송</button>
-            <button class="button">결제관리</button>
+            <button class="button" @click="fnFAQView('이용방법')">이용방법</button>
+            <button class="button" @click="fnFAQView('교환/반품')">교환/반품</button>
+            <button class="button" @click="fnFAQView('계정')">계정</button>
+            <button class="button" @click="fnFAQView('상품관련')">상품관련</button>
+            <button class="button" @click="fnFAQView('배송')">배송</button>
+            <button class="button" @click="fnFAQView('결제관리')">결제관리</button>
         </div>
 
         <table class="table-wrapper">
             <tr>
                 <th>번호</th>
-                <th>제목</th>
-                <!-- <th>작성자</th> -->
-                <th>작성일</th> 
-                <!-- <th>조회수</th> -->
+                <th>카테고리</th>
+                <th>제목</th> 
             </tr>
-            <tr v-for="(item, index) in list">
-                <template v-if="item.isDeleted == 'N'">
-                    <td>{{item.boardId}}</td>
-                    <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}
-                        <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="cmtCountColor">({{item.commentCount}})</span>
-                        </a></td>
-                        <td>{{item.createdAt}}</td>
-                    <!-- <td>{{item.nickName}}</td>
-                    <td>{{item.cnt}}</td> -->
-                </template>
-                <!-- <table>
-                    <tr>
-                        <th></th>
-                    </tr>
-                </table> -->
+
+            <!-- 게시글 목록 -->
+
+            <template v-for="item in menu">
+            <tr>
+                <td>{{item.boardId}}</td>
+                <td>{{item.menu}}</td>
+                <td>
+                    <button class="button" @click="fnFAQDrop(item.boardId)">{{item.title}}</button>
+                    <div v-if="selectedBoardId == item.boardId" ></div>
+                </td>
             </tr>
+
+            <tr v-show="selectedBoardId == item.boardId" class="dropdown-content">
+                <td colspan="3">
+                    <div v-html="item.content"></div>
+                </td>
+            </tr>
+            </template>
         </table>
 
     </div>
-
-
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
     
@@ -255,18 +282,58 @@
             const app = Vue.createApp({
                 data() {
                     return {
-                       
-                    
+                        list : [],
+                        menu : [],
+                        category: "FAQ",
+                        boardId : "",
+                        content : "",
+                        selectedBoardId : null,
                     };
                 },
                 computed: {
 
                 },
                 methods: {
+                    fnFAQView(menuName) {
+                        let self = this;
+                    
+                        let nparmap = {
+                            menu : menuName,
+                            category: self.category,
+                        }
+                        $.ajax({
+				    	    url:"/board/FAQView.dox",
+				    	    dataType:"json",	
+				    	    type : "POST", 
+				    	    data : nparmap,
+				    	    success : function(data) {
+                                console.log("FAQ",data);
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/FAQView.do";
+                                }
+                                self.menu = data.menu;
+                            }
+				        });       
+                    },
+                    fnFAQDrop : function (boardId){
+                        let self = this;
 
+                        console.log("1", boardId);
+
+                        if (self.selectedBoardId === boardId) {
+                        	self.selectedBoardId = null;  // 같은 걸 누르면 닫힘
+                        	console.log("2",boardId);
+
+                        } else {
+                            self.selectedBoardId = boardId;
+                        	console.log("3",boardId);
+                        }
+                    }
                 },
                 mounted() {
-                	
+                	let self = this;
+                    self.fnFAQView();
                 	
                 }
             });

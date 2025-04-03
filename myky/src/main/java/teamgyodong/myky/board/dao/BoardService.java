@@ -57,6 +57,8 @@ public interface BoardService {
 
 	HashMap<String, Object> vetBoardAnRemove(HashMap<String, Object> map);
 
+	HashMap<String, Object> FAQView(HashMap<String, Object> map);
+
 
 
 
