@@ -159,4 +159,37 @@
         WHERE USER_ID = #{userId}
 	</select>
 	
+	<select id="selectUserOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
+	   
+	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.product_id, od.quantity, od.price, od.tracking_number 
+	    from orders o
+	    join order_details od on o.order_id = od.order_id
+	    join (
+			select p.*, f.filepath
+		    from product p  
+		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
+		) p on od.product_id = p.product_id
+	    where 1=1
+	    AND o.user_id = #{userId} 
+	    order by o.ordered_at desc
+	
+	</select>
+	
+	<select id="selectOrderCnt" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
+		WITH STATUS_LIST AS (
+    		SELECT 'paid' AS ORDER_STATUS FROM DUAL UNION ALL
+    		SELECT 'shipped' FROM DUAL UNION ALL
+    		SELECT 'delivered' FROM DUAL UNION ALL
+    		SELECT 'cancel' FROM DUAL
+		)
+		SELECT S.ORDER_STATUS, 
+		       COUNT(O.ORDER_ID) AS orderCount  
+		FROM STATUS_LIST S
+		LEFT JOIN ORDERS O 
+		    ON LOWER(S.ORDER_STATUS) = LOWER(O.ORDER_STATUS)  
+		    AND O.USER_ID = #{userId}
+		GROUP BY S.ORDER_STATUS
+		ORDER BY S.ORDER_STATUS
+	</select>
+	
 </mapper>

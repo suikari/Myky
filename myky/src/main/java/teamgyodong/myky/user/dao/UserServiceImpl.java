@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.board.model.comment;
+import teamgyodong.myky.cart.mapper.CartMapper;
+import teamgyodong.myky.cart.model.cart;
 import teamgyodong.myky.donation.model.donation;
 import teamgyodong.myky.manager.model.Vet;
 import teamgyodong.myky.pay.mapper.PayMapper;
@@ -234,6 +236,25 @@ public class UserServiceImpl implements UserService {
 			
 			resultMap.put("pointCount", pointCount);
 			resultMap.put("point", point);
+			return resultMap;
+		}
+		
+		@Override
+		public HashMap<String, Object> UserOrderList(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>();
+			
+			try {
+				List<cart> orderList = userMapper.selectUserOrderList(map);
+				List <User>orderCount = userMapper.selectOrderCnt(map);
+				
+
+				resultMap.put("orderList", orderList);
+				resultMap.put("orderCount", orderCount);
+				resultMap.put("result", "success");
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+				resultMap.put("result", "fail");			
+			}
 			return resultMap;
 		}
 	

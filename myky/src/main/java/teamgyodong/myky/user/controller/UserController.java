@@ -3,6 +3,7 @@ package teamgyodong.myky.user.controller;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +36,8 @@ import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.user.dao.UserService;
 
 
+
+
 @Controller
 public class UserController {
 	
@@ -43,12 +48,21 @@ public class UserController {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+//	private GoogleAuthExample googleAuthExample;
+
+	
 	//Kakao
 	@Value("${client_id}")
 	private String client_id;
 
     @Value("${redirect_uri}")
     private String redirect_uri;
+    
+
+    
+    
+    
 	
     //유저 로그인 주소
     @RequestMapping("/user/login.do") 
@@ -357,5 +371,80 @@ public class UserController {
 		return new Gson().toJson(resultMap);
 	}
 	
-
+	//유저 주문 내역 출력
+	@RequestMapping(value = "/user/orderList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String orderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.UserOrderList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+//	@PostMapping("/user/EmailAuth.dox")
+//	@ResponseBody
+//	public Map<String, Object> emailAuth(@RequestParam String email) {
+//	    Map<String, Object> response = new HashMap<>();
+//	    
+//	    // 랜덤 인증 코드 생성
+//	    String authCode = String.valueOf((int) ((Math.random() * 900000) + 100000));
+//
+//	    // 이메일 전송
+//	    boolean emailSent = googleAuthExample.sendEmail(email, authCode);
+//
+//	    if (emailSent) {
+//	        response.put("success", true);
+//	    } else {
+//	        response.put("success", false);
+//	    }
+//
+//	    return response;
+//	}
+	
+	
+	
+//    // 인증 코드 전송
+//    @PostMapping("/user/EmailAuth.dox")
+//    @ResponseBody
+//    public Map<String, Object> sendEmailAuth(@RequestParam("email") String email, HttpSession session) {
+//        Map<String, Object> response = new HashMap<>();
+//        
+//        // 랜덤한 6자리 인증 코드 생성
+//        String authCode = String.format("%06d", new Random().nextInt(1000000));
+//        
+//        // Google API를 사용하여 이메일 전송 (구현 필요)
+//        boolean emailSent = googleAuthExample.sendEmail(email, authCode);
+//        
+//        if (emailSent) {
+//            // 세션에 인증 코드 저장
+//            session.setAttribute("authCode", authCode);
+//            response.put("success", true);
+//        } else {
+//            response.put("success", false);
+//        }
+//        
+//        return response;
+//    }
+//
+//    // 인증 코드 검증
+//    @PostMapping("/user/VerifyEmailAuth.dox")
+//    @ResponseBody
+//    public Map<String, Object> verifyEmailAuth(@RequestParam("email") String email,
+//                                               @RequestParam("authCode") String authCode,
+//                                               HttpSession session) {
+//        Map<String, Object> response = new HashMap<>();
+//        
+//        // 세션에서 저장된 인증 코드 가져오기
+//        String storedCode = (String) session.getAttribute("authCode");
+//        
+//        if (storedCode != null && storedCode.equals(authCode)) {
+//            response.put("success", true);
+//        } else {
+//            response.put("success", false);
+//        }
+//        
+//        return response;
+//    }
+//	
+//	
 }

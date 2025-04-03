@@ -34,5 +34,7 @@ public interface UserService {
 
 	HashMap<String, Object> userCoupon(HashMap<String, Object> map);
 
+	HashMap<String, Object> UserOrderList(HashMap<String, Object> map);
+
 	
 }
