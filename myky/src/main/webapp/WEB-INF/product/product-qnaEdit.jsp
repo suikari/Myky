@@ -104,7 +104,6 @@
                                     alert("수정 완료.");
                                     location.href = "/product/view.do?productId=" +  self.productId;
                                 }
-
                             }
                         });
                     },

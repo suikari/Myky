@@ -12,4 +12,11 @@ public class Membership {
 	private String isCanceled;
 	private String userId;
 	private String donationYn;
+	
+	//DONATION
+	private String donationId;
+	private String amount;
+	private String donationDate;
+	private String message;
+	private String anonymousYn;
 }

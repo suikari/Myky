@@ -2,6 +2,9 @@ package teamgyodong.myky.product.dao;
 
 import java.util.HashMap;
 
+import teamgyodong.myky.product.model.Qna;
+import teamgyodong.myky.product.model.Review;
+
 public interface ProductService {
   HashMap<String, Object> getProductList(HashMap<String, Object> map);
 
@@ -30,5 +33,9 @@ public interface ProductService {
   HashMap<String, Object> qnaEdit(HashMap<String, Object> map);
 
   HashMap<String, Object> getQna(HashMap<String, Object> map);
+
+  Review getReviewById(HashMap<String, Object> param);
+
+  Qna getQnaById(HashMap<String, Object> param);
 
 }

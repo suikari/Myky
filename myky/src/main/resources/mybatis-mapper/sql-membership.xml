@@ -27,7 +27,7 @@
 		where user_id = #{userId}
 	
 	</update>
-
+	<!--멤버십 총 회원수-->
 	<select id="selectMemberCnt" parameterType="hashmap" resultType="int">
 		
 		SELECT COUNT(*)
@@ -37,19 +37,44 @@
 		
 	</select>
 	
-	<select id="getTotalAmount" parameterType="hashmap" resultType="int">
+	<!--멤버십 회원 총 기부금 + 달마다 3000원 일정 금액 추가 기부금-->
+	<select id="getMembershipTotalAmount" parameterType="hashmap" resultType="int">
 		
-	  SELECT NVL(SUM(
-	    CASE 
-	      WHEN MONTHS_BETWEEN(SYSDATE, TO_DATE(RENEWAL_DATE, 'YY/MM/DD')) &lt; 0 THEN 0
-	      ELSE FLOOR(MONTHS_BETWEEN(SYSDATE, TO_DATE(RENEWAL_DATE, 'YY/MM/DD'))) * 3000
-	    END
-	  ), 0)
-	  FROM MEMBERSHIP
-	  WHERE IS_CANCELED = 'N'
+	   SELECT NVL(SUM(D.AMOUNT), 0) + NVL(SUM(FLOOR(MONTHS_BETWEEN(LEAST(SYSDATE, TO_DATE(M.EXPIRATION_DATE, 'YY/MM/DD')), 
+            TO_DATE(M.RENEWAL_DATE, 'YY/MM/DD'))) * 3000), 0) AS 총기부금
+	   FROM MEMBERSHIP M
+	   LEFT JOIN DONATION_HISTORY D ON M.USER_ID = D.USER_ID
+	   WHERE M.IS_CANCELED = 'N'
 
 	</select>
 	
+	<!--유저 전체 회원 기부금-->
+	<select id="getUserTotalAmount" parameterType="hashmap" resultType="int">
+		SELECT 
+		    ((SELECT 
+		            NVL(SUM(D.AMOUNT), 0) + NVL(SUM(FLOOR(MONTHS_BETWEEN(LEAST(SYSDATE, TO_DATE(M.EXPIRATION_DATE, 'YY/MM/DD')),
+		                TO_DATE(M.RENEWAL_DATE, 'YY/MM/DD'))) * 3000), 0)
+		         FROM MEMBERSHIP M
+		         LEFT JOIN DONATION_HISTORY D ON M.USER_ID = D.USER_ID
+		         WHERE M.IS_CANCELED = 'N')
+		        +
+		        (SELECT NVL(SUM(AMOUNT), 0)
+		         FROM DONATION_HISTORY
+		         WHERE USER_ID NOT IN (
+		                SELECT USER_ID 
+		                FROM MEMBERSHIP 
+		                WHERE IS_CANCELED = 'N'
+		         ))) AS 총기부금
+		FROM DUAL
+	</select>
+	
+	<!--회원 총 회원수-->
+	<select id="selectTotalUserCnt" parameterType="hashmap" resultType="int">
+		
+		SELECT COUNT(*)
+	    FROM USERS 
+		
+	</select>
 </mapper>
 
 

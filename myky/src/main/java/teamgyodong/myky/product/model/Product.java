@@ -20,6 +20,7 @@ public class Product {
 	private int shippingFreeMinimum;
 	private int discount;
 	private String deleteYn;
+	private String thumbNail;
 	
 	private String fileNo;
 	private String reviewId;

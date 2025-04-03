@@ -241,7 +241,11 @@
 				        	dataType:"json",	
 				        	type : "POST", 
 				        	data : nparmap1,
-				        	success : function(data) { 
+				        	success : function(data) {
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/vetBoardList.do";
+                                }
 				        		console.log("11",data);
                                 let currentPoint = data.point.currentPoint;
 

@@ -261,7 +261,11 @@
                         <td>{{item.createdAt}}</td>
                         <td>{{item.cnt}}</td>
                         <td>{{item.points}}</td>
-                        <td v-if="parseInt(item.commentCount) > 0" class="cmtCountColor">({{item.commentCount}})</td>
+                        <td class="cmtCountColor">
+                            <template v-if="parseInt(item.commentCount) > 0">
+                              ({{ item.commentCount }})
+                            </template>
+                          </td>
                         <td>
                             <div class="acceptButtonN" v-if="item.isAccepted == 'N'">채택 전</div>
                             <div class="acceptButtonY" v-if="item.isAccepted == 'Y'">채택완료</div>
@@ -337,9 +341,14 @@
                             url: "/board/vetBoardList.dox",
                             dataType: "json",
                             type: "POST",
-                            data: nparmap,
+                            data: nparmap, 
                             success: function (data) {
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/vetBoardList.do";
+                                }
                                 self.list = data.vetBoard;
+                                result
                                 console.log("self.nickName", data.nickName);
                                 console.log("vetBoard list:", data.vetBoard);
 
@@ -359,6 +368,7 @@
                     },
                     fnView(vetBoardId) {
                         let self = this;
+                        
                         localStorage.setItem("page", self.page);
                         location.href="/board/vetBoardView.do?vetBoardId=" + vetBoardId;
                     },

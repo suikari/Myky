@@ -77,14 +77,14 @@ public class MembershipServiceImpl implements MembershipService {
 		return resultMap;
 	}
 	
-	//멤버십 멤버 구독 개월 수
-	public HashMap<String, Object> getTotalDonation(HashMap<String, Object> map) {
+	//멤버십 멤버 구독 개월 수 총 기부금 
+	public HashMap<String, Object> getMembershipTotalDonation(HashMap<String, Object> map) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			int donationSum = membershipMapper.getTotalAmount(map);
+			int membershipDonationSum = membershipMapper.getMembershipTotalAmount(map);
 			
-			resultMap.put("donationSum", donationSum);
+			resultMap.put("membershipDonationSum", membershipDonationSum);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -92,4 +92,49 @@ public class MembershipServiceImpl implements MembershipService {
 		}
 		return resultMap;
 	}
+	//유저 회원수
+	public HashMap<String, Object> getTotalUserCnt(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int totalUserCnt = membershipMapper.selectTotalUserCnt(map);
+			
+			resultMap.put("totalUserCnt", totalUserCnt);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	//회원 전체 기부금 
+	public HashMap<String, Object> getUserTotalDonation(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int userDonationSum = membershipMapper.getUserTotalAmount(map);
+			
+			resultMap.put("userDonationSum", userDonationSum);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	//멤버십 가입
+	public HashMap<String, Object> getJoinMember(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			membershipMapper.getJoinMEmber(map);
+			
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
 }

@@ -71,7 +71,7 @@
 
 	 
 	 <select id="selectProduct" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Product">
-	 	SELECT P.*, F.FILEPATH, F.FILENAME
+	 	SELECT P.*, F.FILEPATH, F.FILENAME, F.THUMBNAIL
 		FROM PRODUCT P
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'	
 		WHERE P.PRODUCT_ID = #{productId} AND P.DELETE_YN = 'N'

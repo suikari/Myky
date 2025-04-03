@@ -18,7 +18,13 @@ public interface MembershipMapper {
 
 	int selectMemberCnt(HashMap<String, Object> map);
 
-	int getTotalAmount(HashMap<String, Object> map);
+	int getMembershipTotalAmount(HashMap<String, Object> map);
+
+	int getUserTotalAmount(HashMap<String, Object> map);
+
+	int selectTotalUserCnt(HashMap<String, Object> map);
+
+	void getJoinMEmber(HashMap<String, Object> map);
 
 	
 

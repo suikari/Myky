@@ -322,17 +322,6 @@ public class BoardController {
 		resultMap = boardService.addlikeCntBoard(map);
 		return new Gson().toJson(resultMap);
 	}
-	//FAQ 게시글 목록 출력
-	@RequestMapping(value = "board/FAQView.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String FAQList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-
-		
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-
-		
-		return new Gson().toJson(resultMap);
-	}
 	//수의사 게시판 목록 출력
 	@RequestMapping(value = "board/vetBoardList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -349,7 +338,7 @@ public class BoardController {
 	@ResponseBody
 	public String vetBoardView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 
-		
+
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = boardService.vetBoardView(map);
 		
@@ -425,6 +414,16 @@ public class BoardController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap = boardService.vetBoardAnSelect(map);
+		return new Gson().toJson(resultMap);
+	}
+	//FAQ 게시글 목록 출력
+	@RequestMapping(value = "board/FAQView.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String FAQList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.FAQView(map);
+
 		return new Gson().toJson(resultMap);
 	}
 }

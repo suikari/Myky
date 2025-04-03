@@ -34,11 +34,16 @@ public class ProductServiceImpl implements ProductService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Product info = productMapper.selectProduct(map);
-		List<Product> imgList = productMapper.selectProductImg(map);
 		
-		resultMap.put("info", info);
-		resultMap.put("imgList", imgList);
-		resultMap.put("result", "success");
+		if (info != null) {
+			List<Product> imgList = productMapper.selectProductImg(map);
+			
+			resultMap.put("info", info);
+			resultMap.put("imgList", imgList);
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
 		return resultMap;
 	}
 
@@ -89,6 +94,11 @@ public class ProductServiceImpl implements ProductService {
 		productMapper.UpdateReview(map);
 		resultMap.put("result", "success");
 		return resultMap;
+	}
+	
+	@Override
+	public Review getReviewById(HashMap<String, Object> map) {
+	    return productMapper.selectReview(map);
 	}
 	
 	//리뷰 가져오기
@@ -161,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
-	//리뷰 수정
+	//qna 수정
 	public HashMap<String, Object> qnaEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -170,6 +180,12 @@ public class ProductServiceImpl implements ProductService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	@Override
+	public Qna getQnaById(HashMap<String, Object> map) {
+	    return productMapper.selectQna(map);
+	}
+	
+	
 	//QnA 하나만 가져오기
 	public HashMap<String, Object> getQna(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub

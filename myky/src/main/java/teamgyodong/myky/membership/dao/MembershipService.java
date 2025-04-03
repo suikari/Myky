@@ -10,6 +10,12 @@ public interface MembershipService {
 
 	HashMap<String, Object> getMemberCnt(HashMap<String, Object> map);
 
-	HashMap<String, Object> getTotalDonation(HashMap<String, Object> map);
+	HashMap<String, Object> getMembershipTotalDonation(HashMap<String, Object> map);
+
+	HashMap<String, Object> getUserTotalDonation(HashMap<String, Object> map);
+
+	HashMap<String, Object> getTotalUserCnt(HashMap<String, Object> map);
+
+	HashMap<String, Object> getJoinMember(HashMap<String, Object> map);
 
 }

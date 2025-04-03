@@ -88,6 +88,7 @@ public interface BoardMapper {
 
 	void updateVetBoardStats(HashMap<String, Object> map);
 
+
 	
 
 

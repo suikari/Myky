@@ -4,7 +4,7 @@
 
 <mapper namespace="teamgyodong.myky.board.mapper.BoardMapper">
 	
-	
+	<!--자유게시판 게시판 리스트 출력-->
 	<select id="selectBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 		SELECT 
 		    F.*,  U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime ,
@@ -36,13 +36,19 @@
                 AND (F.USER_ID LIKE '%' || #{keyword} || '%'
                 AND F.TITLE LIKE '%' || #{keyword2} || '%')
             </if>
+            <if test="menu != null and menu != ''">
+            	AND MENU = #{menu}
+            </if>
 		    AND CATEGORY= #{category}
 		    AND IS_DELETED = 'N'
 		ORDER BY 
 		    F.BOARD_ID DESC
-		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		    <if test="page != null and pageSize != ''">
+				OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+            </if>
 	</select>
 	
+	<!--자유게시판 카운트 출력-->
 	<select id="selectBoardCnt" parameterType="hashmap" resultType="int">
 		SELECT COUNT(*)
 		FROM FREE_BOARD F
@@ -72,6 +78,7 @@
 		    AND IS_DELETED = 'N'
 	</select>
 	
+	<!--자유게시판 상세보기-->
 	<select id="selectBoard" parameterType="hashmap" resultType="teamgyodong.myky.board.model.board">
 		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD F
@@ -83,6 +90,7 @@
 		AND F.CATEGORY= #{category}
 	</select>
 	
+	<!--자유게시판 댓글보기-->
 	<select id="selectCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
 		SELECT F.*, U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD_COMMENT F
@@ -93,6 +101,7 @@
 		WHERE F.BOARD_ID = #{boardId} AND NVL(F.PARENT_COMMENT_ID,0) = 0 ORDER BY F.comment_id ASC
 	</select>
 	
+	<!--자유게시판 대댓글보기-->
 	<select id="selectParentCmtList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.comment">
 		SELECT F.*, U.*, TO_CHAR(F.UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime
 		FROM FREE_BOARD_COMMENT F
@@ -103,6 +112,7 @@
 		WHERE F.BOARD_ID = #{boardId} AND F.parent_comment_id = #{parentId} ORDER BY F.comment_id ASC
 	</select>
 	
+	<!--자유게시판 게시글 조회수-->
 	<update id="updateCnt" parameterType="hashmap">
 		UPDATE FREE_BOARD
 		SET
@@ -110,12 +120,13 @@
 		WHERE BOARD_ID = #{boardId}
 	</update>
 
-	
+	<!--자유게시판 게시글 작성-->
 	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
 		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, LIKES, DISLIKES, CATEGORY, CNT)
 		VALUES(FREE_BOARD_SEQ.NEXTVAL, #{title}, #{content}, SYSDATE, SYSDATE, #{userId}, 0, 0, #{category}, 0)
 	</insert>
 	
+	<!--자유게시판 게시글 수정-->
 	<update id="updateBoard" parameterType="hashmap">
 		UPDATE FREE_BOARD
     	SET
@@ -125,6 +136,7 @@
 		WHERE BOARD_ID = #{boardId}
 	</update>
 	
+	<!--자유게시판 게시글 삭제-->
 	<update id="updateRemoveBoard" parameterType="hashmap">
 		UPDATE FREE_BOARD
 		SET
@@ -133,11 +145,13 @@
 		WHERE BOARD_ID = #{boardId}
 	</update>
 	
+	<!--자유게시판 댓글 작성-->
 	<insert id="insertComment" parameterType="hashmap">
 		INSERT INTO FREE_BOARD_COMMENT (COMMENT_ID, BOARD_ID, USER_ID, CONTENT, CREATED_AT, UPDATED_AT, IS_DELETED)
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{content}, SYSDATE, SYSDATE, 'N')
 	</insert>
 		
+	<!--자유게시판 댓글 수정-->
 	<update id="commentUpdate" parameterType="hashmap">
 		UPDATE FREE_BOARD_COMMENT
     	SET
@@ -170,6 +184,7 @@
 		WHERE FILE_ID = #{fileId}
 	</delete>
 
+	<!--자유게시판 대댓글 작성-->
 	<insert id="insertReply" parameterType="hashmap">
 		INSERT INTO FREE_BOARD_COMMENT
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{parentCommentId}, #{content}, SYSDATE, SYSDATE, 'N')
@@ -183,16 +198,19 @@
 		  AND BOARD_ID = #{boardId}
 	</select>
 	
+	<!-- Like Button Log 기록-->
 	<insert id="insertLikelog" parameterType="hashmap" >
 		INSERT INTO FREE_BOARD_LIKE_LOG(BOARD_ID, USER_ID, STATUS)
 		VALUES(#{boardId}, #{userId}, #{status})
 	</insert>
 	
+	<!-- Like Button 로그 삭제(좋아요 취소)-->
 	<delete id="deleteStatus" parameterType="hashmap">
 		DELETE FROM FREE_BOARD_LIKE_LOG
 		WHERE USER_ID = #{userId} AND BOARD_ID = #{boardId}
 	</delete>
 	
+	<!-- Like Button버튼 카운트-->
 	<update id="updatelikeCntBoard" parameterType="hashmap">
 		UPDATE FREE_BOARD
 		SET
@@ -210,15 +228,15 @@
 	<select id="selectVetBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetBoard" >
 		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime,
 			(SELECT COUNT(*)
-			FROM VET_BOARD C
-		    WHERE C.VET_BOARD_ID = F.VET_BOARD_ID) AS COMMENT_COUNT
+            FROM VET_ANSWER R
+            WHERE R.VET_BOARD_ID = F.VET_BOARD_ID) AS commentCount
+            
 		FROM VET_BOARD F
 		LEFT JOIN (
 			SELECT *
 			FROM USERS
 		) U ON F.USER_ID = U.USER_ID
-		WHERE 
-		    1=1
+		WHERE 1=1
 		    <if test="searchOption != null and searchOption == 'all'">
 		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
 		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
@@ -233,6 +251,7 @@
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
 			</if>
 		    AND IS_DELETED = 'N'
+		    
 		ORDER BY 
 		    F.VET_BOARD_ID DESC
 		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -344,10 +363,9 @@
 		UPDATE VET_ANSWER
 		SET
 			RATING = #{rating},
-			COMMENTS = #{comments}
+			COMMENTS = #{comments},
+			CREATED_AT = SYSDATE
 		WHERE REVIEW_ID = #{reviewId}
-		
-		
 	</update>
 	
 	<!-- 수의사 답변 채택 게시판 상태 업데이트-->
@@ -365,6 +383,8 @@
 	    WHERE VET_ID = #{vetId}
 	      AND VET_BOARD_ID = #{vetBoardId}
 	</select>
+	
+
 </mapper>
 
 
