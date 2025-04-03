@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
 import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.HttpServletRequest;
 import teamgyodong.myky.membership.dao.MembershipService;
 
 @Controller
@@ -21,11 +22,23 @@ public class MembershipController {
 	MembershipService membershipService;
 	
 	@RequestMapping("/membership/main.do") 
-    public String map(Model model) throws Exception{
-		
+    public String main(HttpServletRequest request, Model model) throws Exception{
+		 String sessionId = (String) request.getSession().getAttribute("sessionId");
+
+	    if (sessionId == null || sessionId.isEmpty()) {
+	        // 로그인 안 되어 있으면 로그인 페이지로 이동
+	        return "redirect:/user/login.do";
+	    }
 
         return "membership/membership"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
     }
+	//멤버십 가입
+	@RequestMapping("/membership/join.do") 
+    public String join(HttpServletRequest request, Model model) throws Exception{
+
+        return "membership/membership-join"; 
+    }
+	
 	
 	// 멤버십 정보 조회
 	@RequestMapping(value = "/membership/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -58,13 +71,44 @@ public class MembershipController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	//멤버십 멤버 개월수 확인
-	@RequestMapping(value = "/membership/getTotalDonation.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	//멤버십 멤버 기부금 확인
+	@RequestMapping(value = "/membership/getMembershipDonation.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String TotalDonation(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String MembershipTotalDonation(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = membershipService.getTotalDonation(map);
+		resultMap = membershipService.getMembershipTotalDonation(map);
+
+		return new Gson().toJson(resultMap);
+	}
+	//전체 회원 수
+	@RequestMapping(value = "/membership/getTotalUserCnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String TotalUserCnt(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = membershipService.getTotalUserCnt(map);
+
+		return new Gson().toJson(resultMap);
+	}
+	
+	//유저 총 기부금 확인
+	@RequestMapping(value = "/membership/getUserTotalDonation.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String uTotalDonation(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = membershipService.getUserTotalDonation(map);
+
+		return new Gson().toJson(resultMap);
+	}
+	//멤버십 가입
+	@RequestMapping(value = "/membership/join.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getJoin(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = membershipService.getJoinMember(map);
 
 		return new Gson().toJson(resultMap);
 	}

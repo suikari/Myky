@@ -196,6 +196,15 @@ main {
 	font-weight: bold;
 	color: #ff6600;
 }
+/*.board-page-btn.active {
+	background-color: transparent;   배경 없음 
+	color: #ff6600;                  원하는 포인트 컬러 
+	font-weight: bold;               강조 효과 
+}*/
+.board-page-btn:hover {
+    background-color: #ff6600;
+    color: #fff;
+}
 
 .sort-box {
 	display: flex;

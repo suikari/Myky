@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>멍냥꽁냥 멤버십</title>
+        <title>멍냥꽁냥 멤버십 소개</title>
         <script src="https://unpkg.com/vue@3"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
@@ -196,6 +196,62 @@
                 line-height: 1.6;
             }
 
+            .tips-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0 6px;
+                margin-top: 50px;
+                cursor: pointer;
+            }
+
+            .tips-title {
+                font-weight: bold;
+                color: black;
+                font-size: 1rem;
+            }
+
+            .tips-toggle-btn {
+                background: none;
+                border: none;
+                color: #333;
+                font-size: 1.3rem;
+                cursor: pointer;
+                transition: color 0.2s ease;
+            }
+
+            .tips-toggle-btn:hover {
+                color: #ff7b54;
+            }
+
+            .tips-divider {
+                border: none;
+                height: 1px;
+                background-color: #ccc;
+                margin: 0 0 20px;
+            }
+
+            .tips-box {
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 20px 25px;
+                color: #444;
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 40px;
+            }
+
+            .tips-box ul {
+                list-style: disc;
+                padding-left: 20px;
+                margin: 0;
+            }
+
+            .tips-box li {
+                margin-bottom: 8px;
+            }
+
             @media (max-width: 768px) {
                 .vip-benefit-cards {
                     flex-direction: column;
@@ -236,8 +292,14 @@
 
                 <!-- 🔽 통계 삽입 -->
                 <div class="membership-stats">
-                    <p><strong class="highlight">{{ membershipUser }}</strong>명의 반려인들이 이미 멍냥꽁냥 멤버십을 이용 중이에요 🐾</p>
-                    <p>지금까지 함께한 기부 금액  <strong class="highlight">₩{{ donationTotal.toLocaleString() }}</strong></p>
+                    <p>현재 총 <strong class="highlight">{{ totalUserCnt }}</strong>명의 회원이 함께하고 있어요!</p>
+                    <p>💖 멍냥꽁냥 전체 유저들의 누적 기부 금액은
+                        <strong class="highlight">{{ uDonationTotal.toLocaleString() }}원</strong>입니다!
+                    </p>
+                    <p><strong class="highlight">{{ membershipUser }}</strong>명의 멤버십 반려인들이 이미 멍냥꽁냥 멤버십을 이용 중이에요 🐾</p>
+                    <p>🙌 멤버십 회원님들과 함께한 기부 금액
+                        <strong class="highlight">{{ mDonationTotal.toLocaleString() }}원</strong>입니다!
+                    </p>
                 </div>
 
                 <!-- 3. 회원 vs 비회원 비교 표 -->
@@ -268,10 +330,24 @@
                         </tr>
                     </tbody>
                 </table>
+                <!-- Tips 안내사항 영역 -->
+                <div class="tips-header" @click="showTips = !showTips">
+                    <span class="tips-title">💡 Tips</span>
+                    <span class="tips-toggle-btn"> {{ showTips ? '－' : '＋' }} </span>
+                </div>
+                <hr class="tips-divider">
+                <div v-if="showTips" class="tips-box">
+                    <ul>
+                        <li>구독 신청과 동시에 1회차 결제가 이뤄집니다. 구독 중에 상품이나 옵션 변경은 불가하며, 수량 변경은 가능합니다.</li>
+                        <li>첫 구독 가입 포인트 지급은 아이당 1회 제공됩니다.</li>
+                        <li>구독상품은 결제 시 적립금이나 쿠폰 사용이 불가합니다.</li>
+                    </ul>
+                </div>
+
                 <!-- 멤버십 가입 버튼 -->
                 <div class="price-section">
                     <h3>💎 월 <span class="highlight">12,900원</span></h3>
-                    <button class="join-btn" @click="subscribe">지금 멤버십 가입하기</button>
+                    <button class="join-btn" @click="subscribe">멤버십 가입하기</button>
                 </div>
             </section>
         </div>
@@ -301,42 +377,74 @@
             const app = Vue.createApp({
                 data() {
                     return {
-                        membershipUser : 0,
-                        donationTotal: 0
+                        membershipUser: 0, //멤버십 유지 중인 유저 회원수
+                        mDonationTotal: 0,  //멤버십 유저가 기부한 금액
+                        totalUserCnt: 0,   //전체 회원 수
+                        uDonationTotal: 0, //유저 전체 기부금
+                        showTips: false,   //안내사항 토글
                     };
                 },
                 computed: {
 
                 },
                 methods: {
+                    //멤버십
                     subscribe() {
                         alert("멤버십 가입 페이지로 이동!");
+                        location.href = "/membership/join.do";
                     },
-                    fnMainList : function() {
-                    	var self = this;
-                    	var nparmap = {};
-                    	$.ajax({
-                    		url: "/membership/memberCnt.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("멤버십 가입자 수",data);
-                                self.membershipUser = data.memberCnt;
-
+                    //전제 회원 수 
+                    fnTotalUserCnt() {
+                        let self = this;
+                        $.ajax({
+                            url: "/membership/getTotalUserCnt.dox",
+                            type: "POST",
+                            dataType: "json",
+                            success: function (data) {
+                                console.log("전체 유저 수", data);
+                                self.totalUserCnt = data.totalUserCnt;
                             }
                         });
                     },
+                    //유저 전체 기부금
+                    fnTotalDonation() {
+                        let self = this;
+                        $.ajax({
+                            url: "/membership/getUserTotalDonation.dox",
+                            type: "POST",
+                            dataType: "json",
+                            success: function (data) {
+                                console.log("전체 유저 기부 총액", data);
+                                self.uDonationTotal = data.userDonationSum;
+                            }
+                        });
+                    },
+                    //멤버십 가입 유저수 
+                    fnMainList: function () {
+                        var self = this;
+                        var nparmap = {};
+                        $.ajax({
+                            url: "/membership/memberCnt.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("멤버십 가입자 수", data);
+                                self.membershipUser = data.memberCnt;
+                            }
+                        });
+                    },
+                    //멤버십 회원 기부금
                     fnDonation() {
                         let self = this;
                         var nparmap = {};
                         $.ajax({
-                            url: "/membership/getTotalDonation.dox",
+                            url: "/membership/getMembershipDonation.dox",
                             type: "POST",
                             dataType: "json",
                             success: function (data) {
-                                console.log("기부 총액", data);
-                                self.donationTotal = data.donationSum; 
+                                console.log("멤버십 회원 기부 총액", data);
+                                self.mDonationTotal = data.membershipDonationSum;
                             }
                         });
                     }
@@ -345,7 +453,8 @@
                     let self = this;
                     self.fnMainList();
                     self.fnDonation();
-
+                    self.fnTotalDonation();
+                    self.fnTotalUserCnt();
                 }
             });
 
