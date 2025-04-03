@@ -55,7 +55,7 @@
                         <p class="discount-price">
                             멤버십 할인가:
                             <strong>{{ discountedPrice}}원</strong>
-                            <span v-if="userInfo.membershipFlg !== 'Y'"></span>
+                            <span v-if="userInfo && userInfo.membershipFlg !== 'Y'"></span>
                         </p>
                     </div>
                     <p>
@@ -453,7 +453,8 @@
                         productId: "",
                         sessionId: "${sessionId}",
                         userInfo: {
-                            "membershipFlg": "Y"
+                            "membershipFlg": "N",
+                            userId: ""
                         }, //사용자 정보 가져오기
                         info: {},
                         imgList: [],
@@ -464,7 +465,7 @@
                         alreadyClicked: {},
                         averageRating: 0,
                         currentImageIndex: 0,
-                        autoSlideInterval: null,
+                        // autoSlideInterval: null,
 
                         //탭 관련
                         tabs: [
@@ -565,18 +566,33 @@
                             success: function (data) {
                                 console.log(data);
 
-                                if (data.result != "success") {
-                                    if (this.productId == "") {
-                                        alert("상품을 불러올수 없습니다.");
-                                        location.href = "/product/list.do";
-                                    }
+                                if (data.result !== "success" || !data.info) {
+                                    alert("상품을 불러올 수 없습니다.");
+                                    location.href = "/product/list.do";
+                                    return;
                                 }
+
                                 self.info = data.info;
                                 self.imgList = data.imgList;
                                 self.reviewList = data.reviewList || [];
-                                self.mainImage = self.info.filePath || '../../img/product/product update.png';
+
+                                // 썸네일 Y인 이미지가 있으면 제일 앞으로 정렬
+                                const thumbnailIndex = self.imgList.findIndex(img => img.thumbNail === 'Y');
+                                if (thumbnailIndex > -1) {
+                                    const thumbnailImage = self.imgList.splice(thumbnailIndex, 1)[0];
+                                    self.imgList.unshift(thumbnailImage); // 맨 앞에 넣기
+                                    self.currentImageIndex = 0;
+                                } else {
+                                    self.currentImageIndex = 0;
+                                }
+
+                                // self.mainImage = self.info.filePath || '../../img/product/product update.png';
                                 self.imgList.push({ filePath: "../../img/product/Official Product.jpg" });
                             },
+                            error: function () {
+                                alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
+                                location.href = "/product/list.do";
+                            }
                         });
                     },
                     goToCategory() {
@@ -597,25 +613,22 @@
                     },
                     // 클릭된 이미지로 메인 이미지 변경
                     changeImage(filePath) {
-
                         const index = this.imgList.findIndex(img => img.filePath === filePath);
                         if (index !== -1) {
                             this.currentImageIndex = index;
-                            this.stopAutoSlide(); // 클릭 시 자동 슬라이드 멈추고
-                            this.startAutoSlide(); // 다시 시작 (선택 사항)
                         }
                     },
-                    startAutoSlide() {
-                        this.autoSlideInterval = setInterval(() => {
-                            this.currentImageIndex = (this.currentImageIndex + 1) % this.imgList.length;
-                        }, 1500); // 3초마다 이미지 변경
-                    },
-                    stopAutoSlide() {
-                        clearInterval(this.autoSlideInterval);
-                    },
-                    beforeDestroy() {
-                        this.stopAutoSlide();
-                    },
+                    // startAutoSlide() {
+                    //     this.autoSlideInterval = setInterval(() => {
+                    //         this.currentImageIndex = (this.currentImageIndex + 1) % this.imgList.length;
+                    //     }, 1500); // 3초마다 이미지 변경
+                    // },
+                    // stopAutoSlide() {
+                    //     clearInterval(this.autoSlideInterval);
+                    // },
+                    // beforeDestroy() {
+                    //     this.stopAutoSlide();
+                    // },
 
                     //리뷰 보여주기
                     fnReviewList() {
@@ -695,7 +708,7 @@
                         let self = this;
                         if (!self.sessionId || self.sessionId === "") {
                             alert("로그인 후 이용해주세요.");
-                            location.href = "/user/login.do"; // ← 로그인 페이지 경로
+                            location.href = "/user/login.do";
                             return;
                         }
                         location.href = "/product/review.do?productId=" + self.productId;
@@ -752,8 +765,12 @@
                     //장바구니
                     fnAddCart() {
                         const self = this;
-                        const priceToAdd = self.userInfo.membershipFlg === 'Y' ? self.discountedPrice : self.info.price;
-
+                        // const priceToAdd = self.userInfo.membershipFlg === 'Y' ? self.discountedPrice : self.info.price;
+                        if (!self.sessionId || !self.userInfo || !self.userInfo.userId) {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         const nparmap = {
                             productId: self.productId,
                             sessionId: self.sessionId,
@@ -777,6 +794,11 @@
                     //선택한 상품만 장바구니로
                     fnBuy: function () {
                         const self = this;
+                        if (!self.sessionId || !self.userInfo || !self.userInfo.userId) {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         const nparmap = {
                             userId: self.userInfo.userId,
                             checkYn: "N"
@@ -795,7 +817,11 @@
                     //선택한 상품을 즉시 구매페이지로
                     fnAddBuy() {
                         const self = this;
-                        const priceToAdd = self.userInfo.membershipFlg === 'Y' ? self.discountedPrice : self.info.price;
+                        if (!self.sessionId || !self.userInfo || !self.userInfo.userId) {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         const nparmap = {
                             productId: self.productId,
                             sessionId: self.sessionId,
@@ -922,7 +948,11 @@
                     },
                     //멤버십 이동
                     MembershipJoin() {
-                        alert("멤버십 가입 페이지로 이동합니다!");
+                        if (!this.sessionId || this.sessionId === "") {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         location.href = "/membership/main.do";
                     },
                 },
@@ -930,9 +960,10 @@
                     const params = new URLSearchParams(window.location.search);
                     this.productId = params.get("productId") || "";
 
-                    if (this.productId == "") {
+                    if (!this.productId) {
                         alert("상품을 불러올수 없습니다.");
                         location.href = "/product/list.do";
+                        return;
                     }
 
                     let self = this;

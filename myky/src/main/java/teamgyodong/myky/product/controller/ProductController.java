@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 
@@ -19,6 +20,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.product.dao.ProductService;
+import teamgyodong.myky.product.model.Product;
+import teamgyodong.myky.product.model.Qna;
+import teamgyodong.myky.product.model.Review;
 
 
 @Controller
@@ -38,32 +42,104 @@ public class ProductController {
 	//상품 세부사항 가져오기
 	@RequestMapping("/product/view.do") 
     public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-	
+		
 		return "product/product-view"; 
     }
 	
 	//상품 리뷰 등록
 	@RequestMapping("/product/review.do")
 	public String review(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) {
+		// 세션에서 로그인 여부 확인
+	    String sessionId = (String) request.getSession().getAttribute("sessionId");
+
+	    if (sessionId == null || sessionId.isEmpty()) {
+	        // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+	        return "redirect:/user/login.do";
+	    }
+
+	    model.addAttribute("productId", map.get("productId"));
 		
 		return "product/product-review";
 	}
 	//리뷰 수정
 	@RequestMapping("/product/reviewEdit.do") 
-    public String reviewEdit(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-	
+    public String reviewEdit(HttpServletRequest request, Model model,RedirectAttributes redirectAttributes, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		String sessionId = (String) request.getSession().getAttribute("sessionId");
+	    String productId = (String) map.get("productId");
+	    String reviewId = (String) map.get("reviewId");
+		
+	    // 1. 로그인 안 된 경우
+	    if (sessionId == null || sessionId.isEmpty()) {
+	    	redirectAttributes.addFlashAttribute("alertMessage", "로그인 후 이용해주세요.");
+	        return "redirect:/user/login.do";
+	    }
+	    // 2. 리뷰 데이터 가져오기
+	    HashMap<String, Object> param = new HashMap<>();
+	    param.put("reviewId", reviewId);
+	    Review review = productService.getReviewById(param);  // 리뷰 하나 조회하는 서비스 필요
+
+	    // 3. 존재하지 않는 리뷰 or 작성자 불일치
+	    if (review == null || !sessionId.equals(review.getUserId())) {
+	    	redirectAttributes.addFlashAttribute("alertMessage", "본인만 수정할 수 있습니다.");
+	        return "redirect:/product/view.do?productId=" + productId;
+	    }
+	    // 4. 본인일 때만 수정 페이지 접근 허용
+	    model.addAttribute("productId", productId);
+	    model.addAttribute("reviewId", reviewId);
+	    
 		return "product/product-reviewEdit"; 
     }
+	
+	
 	//상품 문의 글쓰기
 	@RequestMapping("/product/qnawrite.do")
 	public String qnawrite(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) {
-		
+		// 세션에서 로그인 여부 확인
+	    String sessionId = (String) request.getSession().getAttribute("sessionId");
+
+	    if (sessionId == null || sessionId.isEmpty()) {
+	        // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+	        return "redirect:/user/login.do";
+	    }
+
+	    model.addAttribute("productId", map.get("productId"));
 		return "product/product-qna";
 	}
 	//상품 문의 글 수정
 	@RequestMapping("/product/qnaEdit.do") 
-    public String qnaEdit(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-	
+    public String qnaEdit(HttpServletRequest request, Model model,RedirectAttributes redirectAttributes, @RequestParam HashMap<String, Object> map) throws Exception{
+		String sessionId = (String) request.getSession().getAttribute("sessionId");
+	    String productId = (String) map.get("productId");
+	    String qnaId = (String) map.get("qnaId");
+	    
+	    // 1. 로그인 확인
+	    if (sessionId == null || sessionId.isEmpty()) {
+	        redirectAttributes.addFlashAttribute("alertMessage", "로그인 후 이용해주세요.");
+	        return "redirect:/user/login.do";
+	    }
+
+	    // 2. QnA 글 가져오기 (서비스에서)
+	    HashMap<String, Object> param = new HashMap<>();
+	    param.put("qnaId", qnaId);
+	    Qna qna = productService.getQnaById(param);  // 이 메서드 추가 필요!
+    	System.out.println("rerr");
+
+	    // 3. QnA가 없거나 작성자 불일치
+    	if (qna == null || 
+    		    !sessionId.equals(qna.getUserId()) || 
+    		    !productId.trim().equals(qna.getProductId().trim())
+    		) {
+    		    System.out.println("eerr");
+    		    redirectAttributes.addFlashAttribute("alertMessage", "본인만 수정할 수 있습니다.");
+    		    return "redirect:/product/view.do?productId=" + productId;
+    		}
+
+
+	    // 4. 본인일 경우에만 수정 허용
+	    model.addAttribute("productId", productId);
+	    model.addAttribute("qnaId", qnaId);
+	    
 		return "product/product-qnaEdit"; 
     }
 	
