@@ -26,6 +26,7 @@ import teamgyodong.myky.manager.model.mDonation;
 import teamgyodong.myky.manager.model.mMembership;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
+import teamgyodong.myky.manager.model.mProductImg;
 import teamgyodong.myky.manager.model.mUser;
 import teamgyodong.myky.manager.model.manager;
 
@@ -428,5 +429,122 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		return resultMap;
 	}
+	
+	
+	@Override
+	public HashMap<String, Object> insertProductFile(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+			
+			int chk =  managerMapper.selectProductThumbChk(map);
+			
+			if ( chk > 1 ) {
+				resultMap.put("result", "fail");
+				return resultMap;
+			}
+			
+			int count = managerMapper.insertProductFile(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+			try {
+	
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
+	@Override
+	public HashMap<String, Object> selectProduct(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+			
+			mProduct mProduct =  managerMapper.selectProduct(map);
+			mProductImg ThumImg =  managerMapper.selectProductThumImg(map);
+			List<mProductImg> ImgList =  managerMapper.selectProductImg(map);
+
+									
+			
+
+		
+			resultMap.put("Product", mProduct);
+			resultMap.put("ThumImg", ThumImg);
+			resultMap.put("ImgList", ImgList);
+
+			
+			resultMap.put("result", "success");
+			try {
+	
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> updateProduct(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.updateProduct(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> selectMembershipVal(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			mMembership mMembership = managerMapper.selectMembershipVal(map);
+			
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Membership", mMembership);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	@Override
+	public HashMap<String, Object> deleteProductImg(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.deleteProductImg(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 	
 }

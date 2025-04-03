@@ -297,8 +297,8 @@
 		            </div>
 		            <div class="col-md-6">
 		                <div class="card chart-container">
-		               		<div class="card-header" v-if="options.series.length === 0">검색 결과가 없습니다.</div>
-							<div id="chart" v-show="options.series.length > 0"></div>
+		               		<div class="card-header" v-show="options.series.length === 0">검색 결과가 없습니다.</div>
+							<div id="chart" v-else></div>
 		                </div>
 		            </div>
 		        </div>
@@ -338,7 +338,7 @@
                                    }
                                  },
                                },
-                               labels: ['신규회원 구매율'],
+                               labels: ['멤버쉽 가입률'],
                         },
                         year : new Date().getFullYear(),
                         month : new Date().getMonth() + 1,
@@ -426,7 +426,7 @@
                     	});
 						
 						$.ajax({
-							url: "/admin/fristBuyer.dox",
+							url: "/admin/membershipVal.dox",
 							dataType: "json",
 							type: "POST",
 							data: nparmap,
@@ -434,14 +434,14 @@
 								console.log("123",data);
 								
 								
-                    			if (Array.isArray(data.Pay) && data.Pay.length > 0) {
-
-								var per =  (parseInt(data.Pay.purchasedMembers) / (parseInt(data.Pay.purchasedMembers) + parseInt(data.Pay.nonPurchasedMembers))) * 100;
-								self.options.series.push(per.toFixed(0));
-
-								var chart = new ApexCharts(document.querySelector("#chart"), self.options);
-								chart.render();
-                    			}
+								if (data.Membership && data.Membership.membershipUserCount !== undefined) {
+									var per =  (parseInt(data.Membership.membershipUserCount) / (parseInt(data.Membership.membershipUserCount) + parseInt(data.Membership.nonMembershipUserCount))) * 100;
+									self.options.series.push(per.toFixed(0));
+	
+									var chart = new ApexCharts(document.querySelector("#chart"), self.options);
+									chart.render();
+                    			} 
+                    			
 							}
 
 						});

@@ -12,5 +12,9 @@ public class mMembership {
 	private String isCanceled;
 	private String userId;
 	private String donationYn;
+	
+	private String membershipUserCount;
+	private String nonMembershipUserCount;
+	
 	    
 }
