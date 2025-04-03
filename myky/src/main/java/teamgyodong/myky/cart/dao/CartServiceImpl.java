@@ -17,6 +17,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import teamgyodong.myky.cart.mapper.CartMapper;
 import teamgyodong.myky.cart.model.cart;
 
@@ -26,6 +28,9 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	CartMapper cartMapper;
+	
+	@Autowired
+    private ObjectMapper objectMapper;
 	
 	@Override
 	public HashMap<String, Object> getCartList(HashMap<String, Object> map) {
@@ -263,6 +268,41 @@ public class CartServiceImpl implements CartService {
 		
 		try {
 			cartMapper.updateOrderStatus(map);
+
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> editOrderInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			cartMapper.updateOrderInfo(map);
+
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> editRefundStatus(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			String productIdsJson = (String) map.get("product");
+			List<String> productIds = objectMapper.readValue(productIdsJson, List.class);
+			
+			map.put("productIds", productIds);
+			
+			cartMapper.updateRefundStatus(map);
 
 			resultMap.put("result", "success");
 		}catch(Exception e) {
