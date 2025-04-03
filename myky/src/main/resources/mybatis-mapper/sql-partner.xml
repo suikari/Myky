@@ -79,16 +79,29 @@
 <!-- 파트너 ID로 즐겨찾기 삭제 -->
 <delete id="favoritesPartnerDelete" parameterType="hashmap">
     DELETE FROM FAVORITES
-    WHERE PARTNER_DETAIL_ID = #{partnerId}
+    WHERE PARTNER_DETAIL_ID = #{partnerdetailId}
 </delete>
 
 
 	<select id="favorList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-		SELECT A.* ,F.*,p.*
-		FROM FAVORITES F
-		LEFT JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
-        LEFT JOIN PARTNER_DETAIL P ON P.PARTNER_DETAIL_ID = F.PARTNER_DETAIL_ID
-		WHERE F.USER_ID = #{userId}
+		
+		
+		        
+        
+        SELECT 
+            F.*, 
+            A.HOSPITAL_NO, A.HOS_NAME, A.HOS_ADDRESS, A.PHONE, A.NX, A.NY
+        FROM FAVORITES F
+        LEFT JOIN ANIMAL_HOSPITAL_INFO A ON F.HOSPITAL_NO = A.HOSPITAL_NO
+        WHERE F.USER_ID =  #{userId} and A.HOSPITAL_NO is not null
+        UNION         
+        SELECT 
+            F.*, 
+            P.PARTNER_DETAIL_ID, P.NAME, P.ADDRESS, P.PHONE_NUMBER, P.NX, P.NY
+        FROM FAVORITES F
+        LEFT JOIN PARTNER_DETAIL P ON F.PARTNER_DETAIL_ID = P.PARTNER_DETAIL_ID
+        WHERE F.USER_ID =  #{userId}  and F.PARTNER_DETAIL_ID is not null  
+
 	</select>
 	
 	<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
