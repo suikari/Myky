@@ -745,13 +745,15 @@
                         quantity: item.quantity,
                         price: self.getTotalPrice(item)
                     }))
-
+                    let receiverName = (self.orderInfo.receiver != null && self.orderInfo.receiver != "") ? self.orderInfo.receiver : self.userInfo.userName;
+                    let receiverPhone = (self.orderInfo.phone != null && self.orderInfo.phone != "") ? self.orderInfo.phone : self.userInfo.phoneNumber;
+                    
                     self.orderData = {
                         orderId: orderId,
                         totalPrice: finalPrice,
                         userId: self.userInfo.userId,
-                        receiverName: self.orderInfo.receiver || self.userInfo.userName,
-                        receiverPhone: self.orderInfo.phone || self.userInfo.phoneNumber,
+                        receiverName: receiverName,
+                        receiverPhone: receiverPhone,
                         receiverAddr: finalAddress,
                         paymentMethod: paymentMethod,
                         deliveryMessage: finalMessage,
@@ -821,7 +823,11 @@
                     });
                 },
                 test:function(){
-                    pageChange("/order/orderComplete.do",{userId:"as879",orderId:100});
+                    let payList = this.selectCartItems.map(item => ({
+                        productId: item.productId
+                    }))
+                    console.log(JSON.stringify(payList));
+                    // pageChange("/order/orderComplete.do",{userId:"as879",orderId:100});
                 }
             },
             mounted() {

@@ -90,6 +90,34 @@
 		where order_id = #{orderId} and user_id = #{userId}
 	
 	</update>
+
+	<update id="updateRefundStatus" parameterType="hashmap">
+	
+		update order_details
+		set
+			refund_status = #{refundStatus},
+			refund_reason = #{reason},
+			refund_reason_detail = #{reasonDetail},
+			refund_request_date = sysdate
+		where order_id = #{orderId} and product_id in
+		<foreach item="productId" collection="productIds" open="(" separator="," close=")">
+			#{productId}
+		</foreach>
+	
+	</update>
+
+	<update id="updateOrderInfo" parameterType="hashmap">
+	
+		update orders
+		set
+			receiver_name = #{receiverName},
+			receiver_phone = #{receiverPhone},
+			receiver_addr = #{receiverAddr},
+			delivery_message = #{deliveryMessage},
+			updated_at = sysdate
+		where order_id = #{orderId} and user_id = #{userId}
+	
+	</update>
 	
 	<delete id="deleteCartProduct" parameterType="hashmap">
 	
@@ -191,7 +219,7 @@
 	
 	<select id="selectAllOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	   
-	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.product_id, od.quantity, od.price, od.tracking_number 
+	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.product_id, od.quantity, od.price, od.refund_status
 	    from orders o
 	    join order_details od on o.order_id = od.order_id
 	    join (

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue3 레이아웃 예제</title>
+    <title>멍냥꽁냥 주문완료</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	

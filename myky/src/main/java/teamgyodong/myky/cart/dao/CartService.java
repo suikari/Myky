@@ -30,4 +30,8 @@ public interface CartService {
 
 	HashMap<String, Object> editOrderStatus(HashMap<String, Object> map);
 
+	HashMap<String, Object> editOrderInfo(HashMap<String, Object> map);
+
+	HashMap<String, Object> editRefundStatus(HashMap<String, Object> map);
+
 }
