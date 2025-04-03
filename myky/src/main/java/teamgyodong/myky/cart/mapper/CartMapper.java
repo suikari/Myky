@@ -51,4 +51,8 @@ public interface CartMapper {
 
 	void updateOrderStatus(HashMap<String, Object> map);
 
+	void updateOrderInfo(HashMap<String, Object> map);
+
+	void updateRefundStatus(HashMap<String, Object> map);
+
 }

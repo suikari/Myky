@@ -43,5 +43,9 @@ public class User {
 	private String maxDiscountAmount;
 	
 
+	// order
+	private String orderStatus;
+	private String orderCount;
+	
 
 }

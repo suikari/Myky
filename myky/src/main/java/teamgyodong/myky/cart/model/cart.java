@@ -35,5 +35,8 @@ public class cart {
 	private String refundRequestDate;
 	private String deliveryMessage;
 	private String trackingNumber;
-		
+	private String reason;
+	private String reasonDetail;
+	private String refundStatus;
+	
 }

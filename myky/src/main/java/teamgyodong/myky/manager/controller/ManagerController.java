@@ -46,10 +46,9 @@ public class ManagerController {
 	     } 
 		 
 	        return "manager/index";
-		
+
 		
     }
-	
 	
 	// centerList
 	@RequestMapping(value = "/admin/mainList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -71,7 +70,6 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
     
-	
 	// centerList
 	@RequestMapping(value = "/admin/memberList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -82,7 +80,6 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
     
-	
 	// centerList
 	@RequestMapping(value = "/admin/searchList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -102,6 +99,7 @@ public class ManagerController {
 		resultMap = managerService.selectAllnotVetList(map);
 		return new Gson().toJson(resultMap);
 	}
+	
 	// centerList
 	@RequestMapping(value = "/admin/membershipList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -111,6 +109,7 @@ public class ManagerController {
 		resultMap = managerService.selectAllMembershipList(map);
 		return new Gson().toJson(resultMap);
 	}
+	
 	// centerList
 	@RequestMapping(value = "/admin/boardList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -120,6 +119,7 @@ public class ManagerController {
 		resultMap = managerService.selectAllBoardList(map);
 		return new Gson().toJson(resultMap);
 	}
+	
 	// centerList
 	@RequestMapping(value = "/admin/productList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -140,6 +140,7 @@ public class ManagerController {
 		resultMap = managerService.selectLogBrowserList(map);
 		return new Gson().toJson(resultMap);
 	}
+	
 	// centerList
 	@RequestMapping(value = "/admin/fristBuyer.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -149,6 +150,17 @@ public class ManagerController {
 		resultMap = managerService.selectLogFristJoinBuy(map);
 		return new Gson().toJson(resultMap);
 	}
+	
+	// centerList
+	@RequestMapping(value = "/admin/membershipVal.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String membershipVal(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = managerService.selectMembershipVal(map);
+		return new Gson().toJson(resultMap);
+	}
+	
 	
 	// centerList
 	@RequestMapping(value = "/admin/VetList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -214,7 +226,19 @@ public class ManagerController {
 		resultMap = managerService.updateVet(map);
 		return new Gson().toJson(resultMap);
 	}
+	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/updateProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String updateProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
+		
+		resultMap = managerService.updateProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
 	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/insertVet.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -235,6 +259,27 @@ public class ManagerController {
 		
 		
 		resultMap = managerService.insertProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 게시글 한개 선택
+	@RequestMapping(value = "/admin/selectProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String selectProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.selectProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	// 게시글 한개 선택
+	@RequestMapping(value = "/admin/deleteProductImg.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String deleteProductImg(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.deleteProductImg(map);
 		return new Gson().toJson(resultMap);
 	}
 	
@@ -264,29 +309,29 @@ public class ManagerController {
 			System.out.println("Working Directory = " + path2 + "\\src\\webapp\\img");
 		
 			if (!multi.isEmpty()) {
-				File file = new File(path2 + "\\src\\main\\webapp\\img\\product\\Review", saveFileName);
+				File file = new File(path2 + "\\src\\main\\webapp\\img\\product\\img", saveFileName);
 				multi.transferTo(file);
 
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("productId", productId);
-				map.put("filePath", "../img/product/Review/" + saveFileName);
+				map.put("filePath", "../img/product/img/" + saveFileName);
 				map.put("fileName",  saveFileName);
 				map.put("fileOrgname", fileOrgname);
 				map.put("fileSize",size);
 				map.put("fileEtc", extName); 
-				map.put("thumbYn", "Y");
+				map.put("thumbYn", thumbYn);
 
-				//productService.addReviewFile(map);
+				managerService.insertProductFile(map);
 				
 				model.addAttribute("fileName", multi.getOriginalFilename());
 				model.addAttribute("uploadPath", file.getAbsolutePath());
 				}
 			}
-			return "redirect:/product/view.do";
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return "redirect:/product/view.do";
+		return "redirect:/manager/main.do?menu=product&submenu=4";
 		}
 	
 }

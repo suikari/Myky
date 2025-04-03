@@ -34,27 +34,51 @@ public class CartController {
 	CartService cartService;
 	
 	@RequestMapping("/cart/list.do") 
-	public String list(Model model) throws Exception{
-		
+	public String list(HttpServletRequest request, Model model) throws Exception {
+        HttpSession session = request.getSession();
+        String sessionId = (String) session.getAttribute("sessionId");
+        
+        if (sessionId == null) {
+            return "redirect:/user/login.do"; // 로그인 페이지로 리디렉트
+        }
+        
 		return "cart/cart";
 	}
 
 	@RequestMapping("/cart/order.do") 
-	public String order(Model model) throws Exception{
+	public String order(HttpServletRequest request, Model model) throws Exception {
+        HttpSession session = request.getSession();
+        String sessionId = (String) session.getAttribute("sessionId");
+        
+        if (sessionId == null) {
+            return "redirect:/user/login.do";
+        }
 		
 		return "cart/order";
 	}
 
 	@RequestMapping("/order/orderComplete.do") 
 	public String orderComplete(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		
+		HttpSession session = request.getSession();
+        String sessionId = (String) session.getAttribute("sessionId");
+        
+        if (sessionId == null) {
+            return "redirect:/user/login.do";
+        }
+        
 		request.setAttribute("map", map);
 		return "cart/order-complete";
 	}
 
 	@RequestMapping("/order/orderList.do") 
 	public String orderList(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		
+		HttpSession session = request.getSession();
+        String sessionId = (String) session.getAttribute("sessionId");
+        
+        if (sessionId == null) {
+            return "redirect:/user/login.do";
+        }
+        
 		request.setAttribute("map", map);
 		return "cart/order-list";
 	}
@@ -192,6 +216,26 @@ public class CartController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = cartService.editOrderStatus(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// 주문/배송 정보 변경 (orderId, userId, receiverName, receiverPhone, receiverAddr, deliveryMessage)
+	@RequestMapping(value = "/order/editInfo.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String editInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.editOrderInfo(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// 교환/반품 신청 (orderId, productId, reason, reasonDetail, refundStatus)
+	@RequestMapping(value = "/order/refund.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String refund(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.editRefundStatus(map);
 		return new Gson().toJson(resultMap);
 	}
 }

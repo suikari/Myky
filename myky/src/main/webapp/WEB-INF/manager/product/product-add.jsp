@@ -93,6 +93,7 @@
         		<div class="col-auto">
                    <label class="form-label">카테고리1:</label>
                    <select v-model="category1" class="form-select" @change="updateCategory">
+                       <option value="">카테고리1</option>
                        <option value="강아지">강아지</option>
                        <option value="고양이">고양이</option>
                        <option value="기타">기타</option>
@@ -101,6 +102,7 @@
                <div class="col-auto">
                    <label class="form-label">카테고리2:</label>
                    <select v-model="category2" class="form-select" @change="updateCategory">
+                       <option value="">카테고리2</option>
                        <option value="장난감">장난감</option>
                        <option value="용품">용품</option>
                        <option value="사료">사료</option>
@@ -123,7 +125,7 @@
                 </div>
                 <div class="col-12">
                     <label for="description" class="form-label">상품 설명</label>
-                    <textarea v-model="product.description" id="editor" class="editor-control"></textarea>
+                    <div id="editor" class="editor-control"></div>
                 </div>
                 <div class="col-md-6">
                     <label for="code" class="form-label">상품 코드</label>
@@ -143,25 +145,41 @@
                 </div>
                 <div class="col-md-6">
                     <label for="thumbnail" class="form-label">썸네일 이미지</label>
-                    <div v-if="product.thumbnailUrl">
-                        <img :src="product.thumbnailUrl" alt="썸네일" class="img-thumbnail mb-2" style="max-width: 150px;">
+                    
+                    <div v-if="thumbnailUrl">
+                        <img :src="thumbnailUrl" alt="썸네일" class="img-thumbnail mb-2" style="max-width: 150px;">
                         <button class="btn btn-danger btn-sm" @click="removeThumbnail">삭제</button>
                     </div>
-                    <input type="file" class="form-control" @change="handleFileUpload($event, 'thumbnail')">
+                    
+                    <div v-if="prev_thumbnail">
+                        <img :src="prev_thumbnail.filePath" alt="썸네일" class="img-thumbnail mb-2" style="max-width: 150px;">
+                        <button class="btn btn-danger btn-sm" @click="removePrevThumbnail">삭제</button>
+                    </div>     
+                    <input type="file" class="form-control" @change="handleFileUpload($event, 'thumbnail')" :disabled="prev_thumbnail !== null" >
                 </div>
                 <div class="col-md-6">
                     <label for="extraImages" class="form-label">추가 이미지</label>
-                    <div v-if="product.extraImagesUrls.length">
-                        <div v-for="(img, index) in product.extraImagesUrls" :key="index" class="d-inline-block me-2">
+                    <div v-if="extraImagesUrls.length">
+                        <div v-for="(img, index) in extraImagesUrls" :key="index" class="d-inline-block me-2">
                             <img :src="img" alt="추가 이미지" class="img-thumbnail mb-2" style="max-width: 100px;">
                             <button class="btn btn-danger btn-sm" @click="removeExtraImage(index)">삭제</button>
                         </div>
                     </div>
+                    <div v-if="prev_extraImages.length">
+                        <div v-for="(img, index) in prev_extraImages" :key="index" class="d-inline-block me-2">
+                            <img :src="img.filePath" alt="추가 이미지" class="img-thumbnail mb-2" style="max-width: 100px;">
+                            <button class="btn btn-danger btn-sm" @click="removePrevExtraImage(index)">삭제</button>
+                        </div>
+                    </div>
+                    
                     <input type="file" multiple class="form-control" @change="handleFileUpload($event, 'extraImages')">
                 </div>
+                
             </div>
             <div class="mt-4 text-end">
-                <button class="btn btn-success px-4" @click="fnAddProduct">{{ isEdit ? '수정' : '추가' }}</button>
+                <button v-if="isEdit" class="btn btn-success px-4" @click="fnUpdate">수정</button>
+                <button v-else-if="!isEdit" class="btn btn-success px-4" @click="fnAddProduct">추가</button>
+                
             </div>
         </div>
     </div>
@@ -176,6 +194,7 @@
             	 data() {
                      return {
 						isEdit: false,
+						productId  : "",
 	                    product: {
 	                    	productId : null,
 	                    	productName: '',
@@ -191,11 +210,17 @@
 	                        shippingFee: '',
 	                        shippingFreeMinimum: '',
 	                        deleteYn: 'N',
-	                        thumbnail: null,
-	                        thumbnailUrl: '',
-	                        extraImages: [],
-	                        extraImagesUrls: []
 	                    },
+                        thumbnail: null,
+                        thumbnailUrl: null,
+                        extraImages: [],
+                        extraImagesUrls: [],
+                        
+                        prev_thumbnail: null,
+                        prev_thumbnailUrl: null,
+                        prev_extraImages: [],
+                        prev_extraImagesUrls: [],
+                        
 						category1 : '',
 						category2 : '',
 						menu : '' , 
@@ -217,8 +242,110 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("main",data);
-                    			                    				
+                    			console.log(data);
+        						
+        						alert("등록 완료");
+
+        						 let uploadCount = 0; // 업로드할 총 파일 개수
+        			             let completedUploads = 0; // 업로드 완료된 파일 개수
+
+	       			                function checkAndRedirect() {
+	       			                    completedUploads++; // 업로드 완료될 때마다 증가
+	       			                    if (completedUploads === uploadCount) {
+	       			                        location.href = "/manager/main.do?menu=product&submenu=1";
+	       			                    }
+	       			                }
+	
+	       			                // 업로드할 파일 개수 확인
+	       			                if (self.thumbnail) uploadCount++;
+	       			            	if (self.extraImages.length > 0) uploadCount++; // 추가 이미지 한 번에 처리
+	
+	       			                // 업로드할 파일이 없으면 즉시 이동
+	       			                if (uploadCount === 0) {
+	       			                    location.href = "/manager/main.do?menu=product&submenu=1";
+	       			                    return;
+	       			                }
+	
+	       			                // 썸네일 업로드
+	       			                if (self.thumbnail) {
+	       			                    var form = new FormData();
+	       			                    form.append("file1", self.thumbnail );
+	       			                    form.append("productId", data.productId);
+	       			                    form.append("thumbYn", "Y");
+	
+	       			                    self.upload(form, checkAndRedirect);
+	       			                }
+	
+		       			          	// 추가 이미지 한 번에 업로드
+		       			             if (self.extraImages.length > 0) {
+		       			                 var imgForm = new FormData();
+		       			                 self.extraImages.forEach(file => {
+		       			                     imgForm.append("file1", file); // 여러 파일 추가
+		       			                 });
+		       			                 imgForm.append("productId", data.productId);
+		       			                 imgForm.append("thumbYn", "N");
+	
+		       			                 self.upload(imgForm, checkAndRedirect);
+		       			             }
+
+                    		}
+                    	});
+                    },
+                    fnUpdate : function() {
+                    	var self = this;
+                    	var nparmap = self.product;
+                    	$.ajax({
+                    		url: "/admin/updateProduct.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log(data);
+        						
+        						alert("수정 완료");
+
+        						 let uploadCount = 0; // 업로드할 총 파일 개수
+        			             let completedUploads = 0; // 업로드 완료된 파일 개수
+
+	       			                function checkAndRedirect() {
+	       			                    completedUploads++; // 업로드 완료될 때마다 증가
+	       			                    if (completedUploads === uploadCount) {
+	       			                        location.href = "/manager/main.do?menu=product&submenu=1";
+	       			                    }
+	       			                }
+	
+	       			                // 업로드할 파일 개수 확인
+	       			                if (self.thumbnail) uploadCount++;
+	       			            	if (self.extraImages.length > 0) uploadCount++; // 추가 이미지 한 번에 처리
+	
+	       			                // 업로드할 파일이 없으면 즉시 이동
+	       			                if (uploadCount === 0) {
+	       			                    location.href = "/manager/main.do?menu=product&submenu=1";
+	       			                    return;
+	       			                }
+	
+	       			                // 썸네일 업로드
+	       			                if (self.thumbnail) {
+	       			                    var form = new FormData();
+	       			                    form.append("file1", self.thumbnail );
+	       			                    form.append("productId", data.productId);
+	       			                    form.append("thumbYn", "Y");
+	
+	       			                    self.upload(form, checkAndRedirect);
+	       			                }
+	
+		       			          	// 추가 이미지 한 번에 업로드
+		       			             if (self.extraImages.length > 0) {
+		       			                 var imgForm = new FormData();
+		       			                 self.extraImages.forEach(file => {
+		       			                     imgForm.append("file1", file); // 여러 파일 추가
+		       			                 });
+		       			                 imgForm.append("productId", data.productId);
+		       			                 imgForm.append("thumbYn", "N");
+	
+		       			                 self.upload(imgForm, checkAndRedirect);
+		       			             }
+
                     		}
                     	});
                     },
@@ -227,8 +354,124 @@
                     },
                     updateCategory() {
                         this.product.categoryId = this.category1+ "," + this.category2;
+                    },
+                    upload(form, callback) {
+                        $.ajax({
+                            url: "/manager/fileUpload.dox",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            data: form,
+                            success: function(response) {
+                                callback(); // 업로드 완료 후 호출
+                            }
+                        });
+                    },
+        			handleFileUpload(event, type) {
+                        const files = event.target.files;
+                        if (type === 'thumbnail') {
+                            this.thumbnail = files[0];
+                            this.thumbnailUrl = URL.createObjectURL(files[0]);
+                        } else if (type === 'extraImages') {
+                            this.extraImages = Array.from(files);
+                            this.extraImagesUrls = this.extraImages.map(file => URL.createObjectURL(file));
+                        }
+                    },
+                    removeThumbnail() {
+                        this.thumbnail = null;
+                        this.thumbnailUrl = '';
+                    },
+                    // 이전 썸네일 삭제
+                    removePrevThumbnail() {
+                        this.prev_thumbnail = null;
+                        this.prev_thumbnailUrl = '';
+                    },
+                    // 현재 추가 이미지 삭제
+                    removeExtraImage(index) {
+                        this.extraImages.splice(index, 1);
+                        this.extraImagesUrls.splice(index, 1);
+                    },
+                    // 이전 추가 이미지 삭제
+                    removePrevExtraImage(index) {
+                        this.prev_extraImages.splice(index, 1);
+                        this.prev_extraImagesUrls.splice(index, 1);
+                    },
+                    removeImg(fileId) {
+                    	let self = this;
+                    	var nparmap = {
+                    			fileId : fileId,
+                    	};
+                    	$.ajax({
+                    		url: "/admin/deleteProductImg.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("main1",data);
+                    			
+                    		}
+                    	});
+                    	
+                    },                    
+                	fnEditList () {
+                    	let self = this;
+                    	var nparmap = {
+                    			productId : self.productId,
+                    	};
+                    	$.ajax({
+                    		url: "/admin/selectProduct.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("main11",data);
+                    			self.product = data.Product;
+                    			
+                    			
+                                // ✅ 썸네일 정보 설정
+                                if (data.ThumImg) {
+                                    self.prev_thumbnail = data.ThumImg;  
+                                    self.prev_thumbnailUrl = data.ThumImg.filePath;
+                                } else {
+                                    self.prev_thumbnail = null;
+                                    self.prev_thumbnailUrl = null;
+                                }
+
+                                // ✅ 추가 이미지 리스트 설정
+                                if (data.ImgList && data.ImgList.length > 0) {
+                                    self.prev_extraImages = data.ImgList;
+                                    self.prev_extraImagesUrls = data.ImgList.map(img => img.filePath);
+                                } else {
+                                    self.prev_extraImages = [];
+                                    self.prev_extraImagesUrls = [];
+                                }
+                                
+                            	var quill = new Quill('#editor', {
+                                    theme: 'snow',
+                                    modules: {
+                                        toolbar: [
+                                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                            ['bold', 'italic', 'underline'],
+                                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                            ['link', 'image'],
+                                            ['clean'],
+                                            [{ 'color': [] }, { 'background': [] }],  
+                                        ]
+                                    }
+                                	});
+                            	
+                    			quill.root.innerHTML = data.Product.description;
+
+                    			
+                             	quill.on('text-change', function() {
+                             	    self.product.description = quill.root.innerHTML;
+                             	});
+                    		}
+                    	});
+                    	
+                    	
                     }
-                	
+                    
                 	
                 },
                 mounted() {
@@ -237,24 +480,35 @@
                     
                     self.menu = params.get("menu") || "stat";
                     self.submenu = params.get("submenu") || "1";
-                    
-                	var quill = new Quill('#editor', {
-                       theme: 'snow',
-                       modules: {
-                           toolbar: [
-                               [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                               ['bold', 'italic', 'underline'],
-                               [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                               ['link', 'image'],
-                               ['clean'],
-                               [{ 'color': [] }, { 'background': [] }],  
-                           ]
-                       }
-                   	});
-                       quill.on('text-change', function() {
-                           self.content = quill.root.innerHTML;
-                       });
+                    self.productId = params.get("productId") || "";
 
+                    
+
+
+                	if ( self.productId != '') {
+                		self.isEdit = true;
+                		self.fnEditList();
+                	} else {
+                    	var quill = new Quill('#editor', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                    ['bold', 'italic', 'underline'],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    ['link', 'image'],
+                                    ['clean'],
+                                    [{ 'color': [] }, { 'background': [] }],  
+                                ]
+                            }
+                        	});
+                     	quill.on('text-change', function() {
+                     	    self.product.description = quill.root.innerHTML;
+                     	});
+                		
+                	}
+                	
+                	
                 	
                 }
             });

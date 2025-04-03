@@ -610,7 +610,8 @@
                     <div class="summary">
                         <div class="summary-item">현재 포인트 <br>{{formattedAmount(point.currentPoint)}}P</div>
                         <div class="summary-item">쿠폰<br>{{couponCnt}}개</div>
-                        <div class="summary-item">0건(0회)<br>총 주문</div>
+                        <div class="summary-item"><br>주문</div>
+                        
                     </div>
                     <div class="main-content">
                         <aside class="sidebar">
@@ -653,14 +654,18 @@
                             <span v-if="activeTab === 'order'">
                                 <h3>나의 주문처리 현황</h3>
                                 <div class="status-box">
-                                    <div>입금<br>0</div>
-                                    <div>배송 준비중<br>0</div>
-                                    <div>배송 중<br>0</div>
-                                    <div>배송 완료<br>0</div>
-                                </div>
+                                    <div>입금<br>{{ orderCnt[2].orderCount }}</div>
+                                    <div>배송 중<br>{{ orderCnt[3].orderCount }}</div>
+                                    <div>배송 완료<br>{{ orderCnt[1].orderCount }}</div>
+                                    <div>취소<br>{{ orderCnt[0].orderCount }}</div>
+                                </div>  
                                 <div class="order-list">
                                     <p>주문 내역이 없습니다.</p>
                                 </div>
+
+                                <!-- <div class="order-list">
+                                    <p>주문 내역이 없습니다.</p>
+                                </div> -->
                             </span>
 
                             <div v-if="activeTab === 'point'" class="cpoint-page">
@@ -932,6 +937,7 @@
 
     </html>
     <script>
+        
 
         function withdrawBack() {
             window.vueObj.fnResult();
@@ -985,6 +991,14 @@
                         page4: 1,
                         couponList: [],
                         couponCnt:0,
+                        orderList:[],
+                        orderCnt:[
+                            { orderStatus: 'shipped', orderCount: '0' },
+                            { orderStatus: 'delivered', orderCount: '0' },
+                            { orderStatus: 'paid', orderCount: '0' },
+                            { orderStatus: 'cancel', orderCount: '0' }
+                        ],
+                        
 
 
                     };
@@ -1284,7 +1298,29 @@
 
                             }
                         });
-                    }
+                    },
+
+                    fnOrderList:function(){
+                    let self = this;
+                    let nparmap = {
+                        userId: self.userId
+                    };
+                    console.log(nparmap);
+                    $.ajax({
+                        url: "/user/orderList.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("주문 상세 목록 >>> ",data.orderList);
+                            self.orderList = data.orderList; 
+                            self.orderCnt = data.orderCount;
+                            self.orderAllCnt = data.orderAllCount;
+                            console.log(self.orderCnt);
+
+                        }
+                    });
+                }
 
 
 
@@ -1320,6 +1356,7 @@
                     self.fnInfo2();
                     self.fnPoint();
                     self.fnCoupon();
+                    self.fnOrderList();
                     // self.fnVetInfo();
                     window.vueObj = this;
 

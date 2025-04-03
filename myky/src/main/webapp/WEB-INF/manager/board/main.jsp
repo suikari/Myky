@@ -483,7 +483,11 @@
                         if (fnkey == '' || fnkey == null ) {
                         	self.category = 'F';
                         } else {
-                        	self.category = fnkey;
+                        	if (self.category != fnkey){
+                            	self.page = 1;
+                            	self.category = fnkey;
+                        	}
+
                         }
                         
                         console.log("searchOption:", self.searchOption);
@@ -526,24 +530,24 @@
                     },
                     fnPage(num) {
                         this.page = num;
-                        this.fnBoardList();
+                        this.fnBoardList(this.category);
                     },
                     fnPageMove(direction) {
                         if (direction === "next") this.page++;
                         else this.page--;
-                        this.fnBoardList();
+                        this.fnBoardList(this.category);
                     },
                     fnOrder(orderKey) {
                         if (this.orderKey !== orderKey) this.orderType = "";
                         this.orderKey = orderKey;
                         this.orderType = this.orderType === "ASC" ? "DESC" : "ASC";
-                        this.fnBoardList();
+                        this.fnBoardList(this.category);
                     },
                     fnBoardSearch : function(){
                         let self = this;
                         let pageCnt = 1;
                         self.page = pageCnt;
-                        self.fnBoardList();
+                        self.fnBoardList(this.category);
                     },
                     fnAllCheck : function() {
                         let self = this;
