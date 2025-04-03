@@ -225,7 +225,12 @@
 				    	    type : "POST", 
 				    	    data : nparmap,
 				    	    success : function(data) { 
-                                alert("저장되었습니다.")
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/boardList.do";
+                                }
+                                alert("저장되었습니다.");
+                                
 
                                 if( $("#file1")[0].files.length > 0){
                                     var form = new FormData();

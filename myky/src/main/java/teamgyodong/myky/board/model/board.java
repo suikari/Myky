@@ -24,6 +24,9 @@ public class board {
 	private String updatedTime;
 	private String nickName;
 	
+	//FQA 메뉴
+	private String menu;
+	
 	
 	
 }

@@ -344,7 +344,11 @@
 				        	dataType:"json",	
 				        	type : "POST", 
 				        	data : nparmap,
-				        	success : function(data) { 
+				        	success : function(data) {
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/BoardList.do";
+                                }
 				        		console.log(data);
                                     self.info = data.info;
                                     self.fileList = data.fileList;

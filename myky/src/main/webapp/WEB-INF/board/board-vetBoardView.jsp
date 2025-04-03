@@ -135,7 +135,7 @@
         }
 
         .star-rating .star.active {
-            color: #FFD700;
+            color: #fca311;
         }
         .custom-hr {
             width: 1000px;
@@ -147,53 +147,6 @@
             width: 100%;
             max-width: 1000px;
         }
-        .button {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: fit-content;
-        }
-        .cmtButton {
-            padding: 6px 14px;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .cmtButtonBox{
-            border-radius: 6px;
-            max-width: 1000px;
-            margin-top: 20px;
-            margin-bottom: 5px;
-            border: 1px solid #202060;
-        }
-        .cmtButton2 {
-            padding: 6px 10px;
-            font-size: 13px;
-            font-weight: bold;
-            background-color: #c0c0c0;
-            color: #353535;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .cmtButton:hover {
-            background-color: #202060;
-            color: #fca311;
-        }
-        .cmtButton2:hover {
-            background-color: #a8a8a8;
-        }
         .editor-box {
             background-color: #f9f9f9;
             border: 1px solid #ddd;
@@ -203,8 +156,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
-
         .answer-header {
             display: flex;
             align-items: center;
@@ -215,6 +166,11 @@
             font-weight: bold;
             color: #0366d6;
             margin-right: 10px;
+        }
+        .answer-nickname2 {
+            font-weight: bold;
+            color: #202060;
+            margin-right: 10px; 
         }
 
         .answer-meta {
@@ -231,13 +187,12 @@
         }
 
         .answer-actions {
-            margin-top: 20px;
+            margin-top: 10px;
+            margin-bottom: 30px;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
-
         .answer-actions button,
         .answer-actions a {
             background: none;
@@ -245,7 +200,6 @@
             color: #0366d6;
             cursor: pointer;
         }
-
         .answer-actions button:hover,
         .answer-actions a:hover {
             text-decoration: underline;
@@ -292,20 +246,144 @@
             max-width: 1000px;
             flex-direction: column;
         }
+
         .choice-button {
             margin-top: 10px;
-            align-self: flex-end; /* 오른쪽으로 정렬 */
-            background-color: #202060;
-            color: #fca311;
+            align-self: flex-end;
+            background-color: #fca311;
+            color: #202060;
             border: none;
             border-radius: 6px;
             padding: 6px 14px;
             cursor: pointer;
             font-size: 14px;
+            margin-inline-end: auto;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
         }
         .choice-button:hover {
             background-color: #fca311;
             color: #202060;
+        }
+        .choiceSaveButton{
+            background-color: #202060;
+            color: #fca311;
+            padding: 10px 20px;
+            border-radius: 5px; 
+            border: none; 
+            cursor: pointer; 
+            margin-top: 10px;
+        }
+        .answer-box.accepted {
+            border: 3px solid #202060;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background-color: #dff0fa;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+        }
+        .emphasized-comment {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #dff0fa;
+            border-left: 4px solid #202060;
+        }
+        .underline-animated {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .underline-text {
+            display: inline-block;
+            padding-bottom: 4px;
+            margin-bottom: 30px;
+        }
+        /* 밑줄 */
+        .underline-animated::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            height: 3px;
+            width: 0;
+            background-color: #fca311;
+            transition: width 0.3s ease;
+        }
+
+        /* hover 시 밑줄 확장 */
+        .underline-animated:hover::after {
+            width: 100%;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #202060;
+            color: #fca311;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #fca311;
+            color: #202060;
+        }
+
+        /* 댓글 달기 버튼 */
+        .cmtButton {
+            padding: 6px 14px;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #202060;
+            color: #fca311;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cmtButton:hover {
+            background-color: #202060;
+            color: #fca311;
+        }
+
+        /* 채택 버튼 */
+        .choice-button {
+            margin-top: 10px;
+            align-self: flex-end;
+            background-color: #fca311;
+            color: #202060;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-inline-end: auto;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .choice-button:hover {
+            background-color: #fca311;
+            color: #202060;
+        }
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            font-weight: bold;
+            gap: 5px;
+            margin: 10px;
+            margin-top: 30px;
+            margin-bottom: 100px;
         }
     </style>
 </head>
@@ -326,25 +404,26 @@
                 <div class="view-label">
                     TITLE
                 </div>
-                
                 <div class="view-box">
-                <a style="font-size:20px">{{info.title}}</a>
-                    <!-- 날짜 표시 여기 넣기 -->
-                    <div style="color: #fca311;">작성자: {{info.nickName}}</div>
-                    <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
-                        ( 포인트 {{info.points}} )
-                        작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
+                    <a style="font-size:20px">{{info.title}}</a>
+                        <!-- 날짜 표시 여기 넣기 -->
+                        <div style="color: #fca311;">작성자: {{info.nickName}}</div>
+                        <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
+                            ( 포인트 {{info.points}} )
+                            작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
+                        </div>
                     </div>
-                </div>
-                <div class="view-label">CONTENT</div>
-                <div class="view-boxContent" v-html="info.content"></div>
+                    <div class="view-label">CONTENT</div>
+                    <div class="view-boxContent" v-html="info.content"></div>
+    
 
-                <div class="answer-actions">
-                    <div @click="showEditor" v-if="vetList.vetId && info.isAccepted === 'N'">
-                         <div class="cmtButton answerButton">답글 달기</div>
-                    </div>
-                    <div v-show="showAnsw" class="editor-box">
-                      <!--  Quill 에디터 -->
+                    <!-- 답글 달기 -->
+                    <div class="answer-actions">
+                        <div @click="showEditor" v-if="vetList.vetId && info.isAccepted === 'N'">
+                             <div class="cmtButton answerButton">답변하기</div>
+                        </div>
+                        <div v-show="showAnsw" class="editor-box">
+                            <!--  Quill 에디터 -->
                       <div id="editor" class="quill-editor"></div>
                   
                       <!--  등록 버튼 영역 -->
@@ -354,80 +433,125 @@
                     </div>
                 </div>
 
-                <!-- 답변 박스 -->
-                <div v-for="answer in answerList" class="answer-box">
-                    <template v-if="answer.isDeleted == 'N'">
-                    <div class="answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
+
+                <!-- 채택된 답변 -->
+                <div v-for="answer in answerList" class="answer-box accepted" v-if="info.isAccepted === 'Y'">
+                    <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                        질문자 채택
+                    </div>
+                    
+                    <!-- 별점 -->
+                    <div class="star-rating">
+                        <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= answer.rating }">★</span>
+                    </div>
+                    <div class="answer-nickname2">{{info.nickName}}</div>
                     <div class="answer-header">
                         <div class="answer-meta">{{ answer.createdAt }}</div>
                     </div>
+                    <!-- 후기 -->
+                    <div class="answer-comments">
+                        <span class="underline-animated underline-text">{{ answer.comments }}</span>
+                    </div>
 
-                    <div  v-html="answer.reviewText"></div>
-                    
-                    
-                 <!-- 댓글 내용 -->
-                    
-                 <template v-if="sessionId == info.userId">                        
-                    <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
-                </template>
+                    <!-- 답변 작성자 정보 -->
+                    <div class="answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
+                    <div class="answer-header">
+                    <div class="answer-meta">{{ answer.createdAt }}</div>
+                    </div>
 
-                <template v-if="showChoice == answer.reviewId && info.isAccepted === 'Y'">
-                    <div class="accepted-answer-box" style="border: 2px solid #4CAF50; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
-                        <!-- 채택된 답변 강조 -->
-                        <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #4CAF50;">
-                          질문자 채택
+                    <!-- 본문 -->
+                    <span class="underline-animated underline-text answer-comments">
+                        <div v-html="answer.reviewText"></div>
+                    </span>
+                </div>
+
+                
+                <!-- 답변 출력/채택 전 -->
+                 <div v-for="answer in answerList" class="answer-box" v-if="info.isAccepted === 'N'">
+                    <template v-if="answer.isDeleted == 'N'">
+                        <div class="answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
+                        <div class="answer-header">
+                            <div class="answer-meta">{{ answer.createdAt }}</div>
                         </div>
+                        <div v-html="answer.reviewText"></div>
+                    </template>
+                    
+                    
+
+
+                 <!-- 답변 채택 -->
+                <div v-for="answer in answerList" :key="answer.reviewId">
+                <template v-if="answer && answer.isDeleted === 'N'">
+
+                    <!-- 채택 버튼 (질문자만 보임) -->
+                    <template v-if="sessionId == info.userId && showChoice !== answer.reviewId">
+                    <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
+                    </template>
+
+                    <!-- 채택 UI (showChoice === 현재 답변) -->
+                    <template v-if="showChoice === answer.reviewId">
+                    <div class="accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
+                        
+                        <!-- 라벨 -->
+                        <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                        질문자 채택
+                        </div>
+
                         <!-- 별점 UI -->
                         <div class="form-group star-rating" style="margin-top: 15px;">
-                            <label class="rating-label" for="rating" style="font-weight: bold;">별점</label>
-                            <div class="stars" style="font-size: 20px;">
+                        <label class="rating-label" for="rating" style="font-weight: bold; color:#fca311;"></label>
+                        <div class="stars" style="font-size: 20px;">
                             <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
-                            </div>
                         </div>
-                        <!-- 후기 입력 -->
-                            <input v-if="info.isAccepted === 'N'" v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
-                            <div>{{answer.comments}}</div>
-                        <!-- 등록 버튼 -->
+                        </div>
 
-                        <button v-if="info.isAccepted === 'N'" @click="fnAnSelect(answer.userId)" style="background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; margin-top: 10px;">
-                            등록
+                        <!-- 후기 입력 -->
+                        <input v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
+
+                        <!-- 기존 댓글 표시 -->
+                        <div>{{ answer.comments }}</div>
+
+                        <!-- 등록 버튼 -->
+                        <button @click="fnAnSelect(answer.userId)" class="choiceSaveButton">
+                        등록
                         </button>
+                        <button class="choiceSaveButton" @click="fnCancelChoice">취소</button>
                     </div>
                     </template>
 
-                
-                    <template v-if="vetList.vetId == answer.vetId && info.isAccepted === 'N'">  
-                            <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
-                            
-                            
-                            <template v-if="showEdit == answer.reviewId && info.isAccepted === 'N'">
-                                <div class="editor-box">
-                                    <!-- 🖋 Quill 에디터 [수정]-->
-                                    <div>
-                                        <div id="editorEdit" class="quill-editor"></div>
-                                    </div>
-                                    <div class="reply-buttons">
-                                        <button class="cmtButton" @click="fnAnEdit()">등록</button>
-                                    </div>
-                                </div>
-                                <button class="cmtButton" @click="fnCancle">취소</button>
-                            </template>
-                            <button class="cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
-                        </template>
-                    </template>
-                <template v-else>
-                    <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
                 </template>
                 </div>
 
-                  
-                  <div class="cmtButton" style="display: flex; gap: 5px;">
-                      <template v-if="sessionId == info.userId || sessionRole == 'ADMIN' && info.isAccepted === 'N'">
-                          <button class="cmtButton" @click="fnEdit()">수정</button>
-                          <button class="cmtButton" @click="fnRemove()">삭제</button>
+                
+                    <template v-if="(vetList.vetId == answer.vetId) && info.isAccepted === 'N'">  
+                        <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
+                        <template v-if="(showEdit == answer.reviewId) && info.isAccepted === 'N'">
+                            <div class="editor-box">
+                                <!-- 🖋 Quill 에디터 [수정]-->
+                                <div>
+                                    <div id="editorEdit" class="quill-editor"></div>
+                                </div>
+                                <div class="reply-buttons">
+                                    <button class="cmtButton" @click="fnAnEdit()">등록</button>
+                                </div>
+                            </div>
+                            <button class="cmtButton" @click="fnCancle">취소</button>
                         </template>
-                        <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
-                    </div>
+                        <button class="cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
+                    </template>
+                    <template v-else>
+                        <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
+                    </template>
+                </div>
+
+                  
+                <div class="footer-buttons">
+                    <template v-if="(sessionId == info.userId || sessionRole == 'ADMIN') && info.isAccepted === 'N'">
+                        <button class="cmtButton" @click="fnEdit()">수정</button>
+                        <button class="cmtButton" @click="fnRemove()">삭제</button>
+                    </template>
+                    <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
+                </div>
                 
             </div>
         </div>        
@@ -487,6 +611,10 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/vetBoardList.do";
+                                }
                                 self.info = data.info;
                                 self.answerList = data.answerList;
                                 console.log("지우라고해서",data);
@@ -586,7 +714,7 @@
                                 self.showEdit = 0;
                                 if(data.status == "fail"){
                                     alert("이미 답변을 작성하셨습니다.");
-                                    retrun;
+                                    return;
                                 }
                                 alert("저장되었습니다");
                             }
@@ -619,7 +747,8 @@
                             reviewId : self.reviewId,
                             rating : self.rating,
                             comments : self.comments,
-                            vetBoardId : self.vetBoardId
+                            vetBoardId : self.vetBoardId,
+                            createdAt : self.createdAt,
                         };
                         console.log("userId",userId);
                         let pointAdd = {
@@ -644,6 +773,7 @@
                                     type : "POST", 
                                     data : pointAdd,
                                     success : function(data) { 
+                                        
                                         console.log("받은포인트",data);
                                         console.log("포인트 확인",self.info.points);
                                         self.fnView();
@@ -719,8 +849,11 @@
                     },
                     fnCancle : function(){
                         let self = this;
-                        alert("취소되었습니다.")
+                        alert("취소되었습니다.");
                         return;
+                    },
+                    fnCancelChoice() {
+                        this.showChoice = null;
                     },
                     editorEdit : function(contents) {
                         let self = this;
@@ -746,6 +879,7 @@
                 },
                 mounted() {
                     let self = this;
+     
                     const params = new URLSearchParams(window.location.search);
                     self.fnVetInfo();
                     self.fnView();
