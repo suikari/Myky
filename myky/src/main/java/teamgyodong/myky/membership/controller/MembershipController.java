@@ -32,13 +32,20 @@ public class MembershipController {
 
         return "membership/membership"; //폴더안에 있어서 폴더위치도 경로에 해줘야함
     }
-	//멤버십 가입
+	//멤버십 가입 약관
+	@RequestMapping("/membership/terms.do") 
+    public String MembershipTerms(HttpServletRequest request, Model model) throws Exception{
+
+        return "membership/membership-terms"; 
+    }
+	
+	//멤버십 가입- 본인확인 및 결제
 	@RequestMapping("/membership/join.do") 
-    public String join(HttpServletRequest request, Model model) throws Exception{
+    public String MembershipJoin(HttpServletRequest request, Model model) throws Exception{
 
         return "membership/membership-join"; 
     }
-	
+		
 	
 	// 멤버십 정보 조회
 	@RequestMapping(value = "/membership/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -112,4 +119,15 @@ public class MembershipController {
 
 		return new Gson().toJson(resultMap);
 	}
+	//멤버십 이용 약관 동의
+	@RequestMapping(value = "/membership/termsList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String termsList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		map.put("category", "M");
+		HashMap<String, Object> resultMap = new HashMap<>();
+	    
+	    resultMap = membershipService.getTermsList(map); // 서비스 호출
+	    return new Gson().toJson(resultMap);
+	}
+	
 }

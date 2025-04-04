@@ -38,9 +38,10 @@
                         <img src="../../img/product/product update.png" alt="이미지 없음">
                     </template>
 
-                    <div class="product-image-thumbNails">
+                    <div class="product-image-thumbNails" id="thumbnailScroll">
                         <img v-for="(img, index) in imgList" :key="index" :src="img.filePath" alt="상품 썸네일"
-                            @click="changeImage(img.filePath)" :class="{ active: index === currentImageIndex }">
+                            @click="changeImage(img.filePath)" :class="{ active: index === currentImageIndex }"
+                            draggable="false">
                     </div>
                 </div>
                 <div class="product-info">
@@ -552,6 +553,9 @@
                     currentImage() {
                         return this.imgList.length > 0 ? this.imgList[this.currentImageIndex].filePath : '';
                     },
+                    priceToAdd() {
+                        return this.userInfo.membershipFlg === 'Y' ? this.discountedPrice : this.info.price;
+                    }
                 },
                 methods: {
                     //상품 보여주기
@@ -616,19 +620,16 @@
                         const index = this.imgList.findIndex(img => img.filePath === filePath);
                         if (index !== -1) {
                             this.currentImageIndex = index;
+
+                            this.$nextTick(() => {
+                                const thumbnails = document.querySelectorAll("#thumbnailScroll img");
+                                if (thumbnails[index]) {
+                                    thumbnails[index].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                                }
+                            });
                         }
                     },
-                    // startAutoSlide() {
-                    //     this.autoSlideInterval = setInterval(() => {
-                    //         this.currentImageIndex = (this.currentImageIndex + 1) % this.imgList.length;
-                    //     }, 1500); // 3초마다 이미지 변경
-                    // },
-                    // stopAutoSlide() {
-                    //     clearInterval(this.autoSlideInterval);
-                    // },
-                    // beforeDestroy() {
-                    //     this.stopAutoSlide();
-                    // },
+
 
                     //리뷰 보여주기
                     fnReviewList() {
@@ -776,7 +777,7 @@
                             sessionId: self.sessionId,
                             userId: self.userInfo.userId,
                             quantity: self.quantity,
-                            price: priceToAdd,
+                            price: self.priceToAdd,
                             option: "",
                             checkYn: "N"
                         };
@@ -827,7 +828,7 @@
                             sessionId: self.sessionId,
                             userId: self.userInfo.userId,
                             quantity: self.quantity,
-                            price: priceToAdd,
+                            price: self.priceToAdd,
                             option: "instant",
                             checkYn: "Y"
                         };
@@ -972,9 +973,43 @@
                     self.fnUserInfo();
                     self.fnQnaList();
 
+                    setTimeout(() => {
+                        const thumbnailScroll = document.getElementById("thumbnailScroll");
+                        if (!thumbnailScroll) return;
+
+                        let isDragging = false;
+                        let startX;
+                        let scrollLeft;
+
+                        thumbnailScroll.addEventListener("mousedown", (e) => {
+                            isDragging = true;
+                            thumbnailScroll.classList.add("active");
+                            startX = e.pageX - thumbnailScroll.offsetLeft;
+                            scrollLeft = thumbnailScroll.scrollLeft;
+                        });
+
+                        thumbnailScroll.addEventListener("mouseleave", () => {
+                            isDragging = false;
+                            thumbnailScroll.classList.remove("active");
+                        });
+
+                        thumbnailScroll.addEventListener("mouseup", () => {
+                            isDragging = false;
+                            thumbnailScroll.classList.remove("active");
+                        });
+
+                        thumbnailScroll.addEventListener("mousemove", (e) => {
+                            if (!isDragging) return;
+                            e.preventDefault();
+                            const x = e.pageX - thumbnailScroll.offsetLeft;
+                            const walk = (x - startX) * 2;
+                            thumbnailScroll.scrollLeft = scrollLeft - walk;
+                        });
+                    }, 300); // 0.3초 후에 실행
                 }
             });
 
             app.mount("#app");
+
         });
     </script>

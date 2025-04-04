@@ -35,6 +35,8 @@ public interface PartnerMapper {
 
 	void favoritesPartnerDelete(HashMap<String, Object> map);
 
+	List<partnerdetail> getpartInfo(HashMap<String, Object> map);
+
 
 
 

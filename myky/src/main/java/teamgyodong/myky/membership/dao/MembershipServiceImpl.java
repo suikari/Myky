@@ -1,6 +1,7 @@
 package teamgyodong.myky.membership.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +136,23 @@ public class MembershipServiceImpl implements MembershipService {
 			resultMap.put("result", "fail");			
 		}
 		return resultMap;
+	}
+	//멤버십 이용 약관 동의
+	public HashMap<String, Object> getTermsList(HashMap<String, Object> map) {
+	    HashMap<String, Object> resultMap = new HashMap<>();
+
+	    try {
+	    	List<Membership> termsList = membershipMapper.selectTermsList(map);
+	    	
+	    	resultMap.put("list", termsList);
+	        resultMap.put("result", "success");
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        resultMap.put("result", "fail");
+	    }
+
+	    return resultMap;
 	}
 	
 }
