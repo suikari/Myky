@@ -238,6 +238,27 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
 	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/updateOrder.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String updateOrder(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.updateOrder(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/updateOrderDetail.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String updateOrderDetail(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.updateOrderDetail(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/insertVet.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -272,6 +293,7 @@ public class ManagerController {
 		resultMap = managerService.selectProduct(map);
 		return new Gson().toJson(resultMap);
 	}
+	
 	// 게시글 한개 선택
 	@RequestMapping(value = "/admin/deleteProductImg.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -280,6 +302,27 @@ public class ManagerController {
 		
 		
 		resultMap = managerService.deleteProductImg(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 게시글 한개 선택
+	@RequestMapping(value = "/admin/BestSellProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String BestSellProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.selectBestSellProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/admin/selectOrderList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String selectOrderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.selectAllOrderList(map);
 		return new Gson().toJson(resultMap);
 	}
 	

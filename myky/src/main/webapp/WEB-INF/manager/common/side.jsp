@@ -101,8 +101,7 @@
                     <ul class="submenu">
                         <li @click="fnchange('product','1')" class="submenu-item" :class="{ active: submenu === '1' }">상품 목록</li>
                         <li @click="fnchange('product','2')" class="submenu-item" :class="{ active: submenu === '2' }"> 주문 관리</li>
-                        <li @click="fnchange('product','3')" class="submenu-item" :class="{ active: submenu === '3' }"> 카테고리 관리</li>
-                    </ul>
+<!--                         <li @click="fnchange('product','3')" class="submenu-item" :class="{ active: submenu === '3' }"> 카테고리 관리</li>-->                    </ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'member' }">
                     <a @click="fnchange('member','1')" class="nav-link" :class="{ active: menu === 'member' }" href="#">회원 관리</a>
