@@ -24,6 +24,9 @@ public interface PartnerService {
 	HashMap<String, Object> favoritesPartnerRemove(HashMap<String, Object> map);
 
 
+	HashMap<String, Object> allhosList(HashMap<String, Object> map);
+
+
 	
 
 
