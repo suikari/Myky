@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import teamgyodong.myky.membership.mapper.MembershipMapper;
 import teamgyodong.myky.membership.model.Membership;
+import teamgyodong.myky.pay.mapper.PayMapper;
 
 
 @Service
@@ -24,6 +25,9 @@ public class MembershipServiceImpl implements MembershipService {
 	
 	@Autowired
 	MembershipMapper membershipMapper;
+	
+	@Autowired
+	PayMapper payMapper;
 
 	@Override
 	public HashMap<String, Object> getMembershipInfo(HashMap<String, Object> map) {
@@ -154,5 +158,23 @@ public class MembershipServiceImpl implements MembershipService {
 
 	    return resultMap;
 	}
+	//
+	public HashMap<String, Object> addMembership(HashMap<String, Object> map) {
+	    HashMap<String, Object> resultMap = new HashMap<>();
+	    try {
+	        membershipMapper.insertMembership(map);  
+
+
+	        resultMap.put("membershipId", map.get("membershipId"));
+	        resultMap.put("result", "success");
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        resultMap.put("result", "fail");
+	    }
+	    return resultMap;
+	}
+
+
 	
 }

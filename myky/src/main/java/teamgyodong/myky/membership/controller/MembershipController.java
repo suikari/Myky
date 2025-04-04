@@ -123,11 +123,19 @@ public class MembershipController {
 	@RequestMapping(value = "/membership/termsList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String termsList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		map.put("category", "M");
+
 		HashMap<String, Object> resultMap = new HashMap<>();
 	    
 	    resultMap = membershipService.getTermsList(map); // 서비스 호출
 	    return new Gson().toJson(resultMap);
 	}
+	//멤버십 결제 후 회원 추가
+	@RequestMapping(value = "/membership/addmember.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String addMembership(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	    HashMap<String, Object> resultMap = membershipService.addMembership(map);
+	    return new Gson().toJson(resultMap);
+	}
+
 	
 }

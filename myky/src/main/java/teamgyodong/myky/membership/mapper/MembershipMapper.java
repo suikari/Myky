@@ -29,6 +29,8 @@ public interface MembershipMapper {
 
 	List<Membership> selectTermsList(HashMap<String, Object> map);
 
+	void insertMembership(HashMap<String, Object> map);
+	
 	
 
 }
