@@ -333,15 +333,13 @@
                     userPoint:0,
                     usedPoint:0,
                     discountPoint:0,
-                    remainingAmount:0
+                    remainingAmount:0,
+                    totalAmount:0
                 };
             },
             computed: {
                 formattedUserPoints() {
                     return this.userPoint.toLocaleString();
-                },
-                totalAmount() {
-                    return this.totalAmount = (this.donateAmount != null) ? this.donateAmount : this.customAmount;
                 },
                 formattedDiscountAmount() {
                     return this.discountPoint.toLocaleString();
@@ -457,6 +455,7 @@
                 },
                 GetTotalAmount() {
                     this.totalAmount = (this.donateAmount != null) ? this.donateAmount : this.customAmount;
+                    // 250404 문제점 좌표
                 },
                 toggleAnonymous() {
                     this.isAnonymous = !this.isAnonymous;
@@ -518,15 +517,18 @@
                 selectAmount(amount) {
                     this.donateAmount = amount;
                     this.customAmount = "";
+                    this.GetTotalAmount();
                 },
                 clearSelection() {
                     this.donateAmount = null;
+                    this.GetTotalAmount();
                 },
                 formatCustomAmount() {
                     let rawValue = this.customAmount.replace(/[^0-9]/g, "");
 
                     if (rawValue) {
                         this.customAmount = parseInt(rawValue, 10).toLocaleString();
+                        this.GetTotalAmount();
                     } else {
                         this.customAmount = "";
                     }
