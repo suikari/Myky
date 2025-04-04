@@ -27,4 +27,5 @@ public class Membership {
 	private String content;
 	private String requiredYn;
 	private int displayOrder;
+	private String category;
 }

@@ -408,9 +408,9 @@
                     <div class="step-wrap">
                         <div class="step">
                             <span class="step-number">STEP. 02</span>
-                            <h4>본인인증 및 정보입력</h4>
-                            <img src="../../img/product/Identity.png" alt="본인인증">
-                            <p>휴대폰인증 및 가입에 필요한 정보를 입력합니다.</p>
+                            <h4>약관 및 개인정보 관련 동의</h4>
+                            <img src="../../img/product/Terms of Use.png" alt="약관 동의">
+                            <p>가입 약관 및 개인정보 관련 규정에 동의합니다.</p>
                         </div>
                         <div class="arrow">➤</div>
                     </div>
@@ -418,9 +418,9 @@
                     <div class="step-wrap">
                         <div class="step">
                             <span class="step-number">STEP. 03</span>
-                            <h4>약관 및 개인정보 관련 동의</h4>
-                            <img src="../../img/product/Terms of Use.png" alt="약관 동의">
-                            <p>가입 약관 및 개인정보 관련 규정에 동의합니다.</p>
+                            <h4>회원정보 확인</h4>
+                            <img src="../../img/product/Identity.png" alt="본인확인">
+                            <p>가입에 필요한 회원정보를 확인합니다.</p>
                         </div>
                         <div class="arrow">➤</div>
                     </div>
@@ -486,7 +486,7 @@
                     //멤버십
                     subscribe() {
                         alert("멤버십 가입 페이지로 이동!");
-                        location.href = "/membership/join.do";
+                        location.href = "/membership/terms.do";
                     },
                     //전제 회원 수 
                     fnTotalUserCnt() {

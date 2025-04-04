@@ -76,12 +76,18 @@
 		
 	</select>
 	
-	<!--멤버십 이용 약관 동의-->
+	<!--이용 약관 동의 (이해 안되시면 제 컨트롤러단부터 똑같이 따라하시면 됩니다. 카테고리만 바꾸시고)-->
 	<select id="selectTermsList" parameterType="hashmap" resultType="teamgyodong.myky.membership.model.Membership">
-	
-	    SELECT TERM_ID, TITLE, CONTENT, REQUIRED_YN, DISPLAY_ORDER
-	    FROM MEMBERSHIP_TERMS
-	    ORDER BY DISPLAY_ORDER
+		<!--dispaly_order명은 약관 순서나 항목 메뉴 번호 표시 이걸로 오름차순 정렬하시면 됩니다!!-->
+	    SELECT TERM_ID, TITLE, CONTENT, REQUIRED_YN, DISPLAY_ORDER, CATEGORY
+	    FROM TOTAL_TERMS
+	    <where>
+	    	<!--if문 카테고리 파라미터가 null이 아니어야 하고 빈 문자열도 아니여야 사용 가능-->
+	        <if test="category != null and category != ''">   
+	            CATEGORY = #{category}
+	        </if>
+	    </where>
+	    ORDER BY DISPLAY_ORDER ASC
 	    
 	</select>
 
