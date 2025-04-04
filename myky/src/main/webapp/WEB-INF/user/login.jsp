@@ -136,6 +136,7 @@
 		<button @click="fnLogin()" class="login-btn">로그인</button>
 		<button @click="fnIdFind()" class="reset-btn">아이디 찾기</button>
 		<button @click="fnPasswordReset()" class="reset-btn2">비밀번호 찾기</button>
+		<button @click="fnGoogle()" class="reset-btn2">구글</button>
 
 		<div class="social-login">
 			<a :href="location" class="social-btn">
@@ -150,7 +151,7 @@
 		</div>
 
 		<div class="social-login">
-			<a href="#" class="social-btn">
+			<a href="/googleLogin" class="social-btn">
 				<img src="../img/login/google_login.png" alt="" width="183px" height="45px">
 			</a>
 		</div>
@@ -210,7 +211,24 @@
 
 					};
 
+				},
+
+				fnGoogle() {
+					var self = this;
+					var nparmap = {
+					};
+					$.ajax({
+						url: "/user/google-user.dox", // 얘한테 요청함 'controller'에게 요청
+						dataType: "json",
+						type: "POST",
+						data: nparmap,
+						success: function (data) {
+							console.log(data);
+
+						}
+					});
 				}
+				
 
 			},
 			mounted() {

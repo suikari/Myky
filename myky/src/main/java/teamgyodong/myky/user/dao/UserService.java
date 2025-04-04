@@ -36,5 +36,7 @@ public interface UserService {
 
 	HashMap<String, Object> UserOrderList(HashMap<String, Object> map);
 
+	HashMap<String, Object> getEmail(HashMap<String, Object> map);
+
 	
 }

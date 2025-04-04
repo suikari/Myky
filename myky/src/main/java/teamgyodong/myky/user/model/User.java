@@ -21,7 +21,10 @@ public class User {
 	private String emailYn;
 	private String gender;
 	private String deleteYn;
-
+	
+	//google
+	private String id;
+	private String Name;
 	
 	// point
 	private String pointId;

@@ -530,7 +530,8 @@
             }
 
             .coupon {
-                background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+                /* background: linear-gradient(135deg, #ff9a9e, #fad0c4); */
+                background: linear-gradient(135deg, #FF5722, #ffe000c4);
                 border-radius: 12px;
                 padding: 16px;
                 color: #ffffff;
