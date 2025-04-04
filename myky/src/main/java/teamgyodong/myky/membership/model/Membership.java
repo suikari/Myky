@@ -19,4 +19,13 @@ public class Membership {
 	private String donationDate;
 	private String message;
 	private String anonymousYn;
+	
+	
+	//TERMS
+	private String termId;
+	private String title;
+	private String content;
+	private String requiredYn;
+	private int displayOrder;
+	private String category;
 }

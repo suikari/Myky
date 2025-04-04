@@ -1,6 +1,7 @@
 package teamgyodong.myky.membership.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,6 +26,8 @@ public interface MembershipMapper {
 	int selectTotalUserCnt(HashMap<String, Object> map);
 
 	void getJoinMEmber(HashMap<String, Object> map);
+
+	List<Membership> selectTermsList(HashMap<String, Object> map);
 
 	
 
