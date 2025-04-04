@@ -31,8 +31,9 @@ public class PartnerServiceImpl implements PartnerService {
 			List<partnerdetail> partnerlist = partnerMapper.getPartnerList(map); //제휴리스트
 			List<partnerdetail> favoriteList = partnerMapper.getfavoriteList(map);
 			List<partnerdetail> categoryCode = partnerMapper.getcategoryCode(map);
-			
+			List<partnerdetail> partInfo = partnerMapper.getpartInfo(map);
 
+			resultMap.put("partInfo", partInfo); 
 			resultMap.put("categoryCode", categoryCode); 
 			resultMap.put("partnerlist", partnerlist);
 			resultMap.put("hoslist", hoslist);

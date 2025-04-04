@@ -118,6 +118,19 @@
         </if>
    
 	</select>
+	
+	<select id="getpartInfo" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		select * from partner_detail
+		where 1=1
+		<if test="searchkeyword != null and searchkeyword != ''">
+		and (name like '%' || #{searchkeyword} || '%'
+		or address like '%' || #{searchkeyword} || '%')
+		</if>
+		order by partner_detail_id desc
+		<if test="page != null and pagesize != null">
+		offset #{page} rows fetch next #{pagesize} rows only
+		</if>
+</select>
 </mapper>
 
 
