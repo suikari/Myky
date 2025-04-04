@@ -1,167 +1,219 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <!DOCTYPE html>
-    <html lang="ko">
+<!DOCTYPE html>
+<html lang="ko">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>멤버십 가입 페이지</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멤버십 가입 - 약관 동의</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f6f8fa;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
 
-        <style>
-            .container {
-                max-width: 600px;
-                margin: 40px auto;
-                padding: 20px;
-                border: 1px solid #ddd;
-                border-radius: 12px;
-                background-color: #fafafa;
-                font-family: sans-serif;
-            }
+        .container {
+            max-width: 1280px;
+            margin: 60px auto;
+            padding: 24px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+        }
 
-            h2 {
-                margin-bottom: 20px;
-                font-size: 24px;
-            }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+            cursor: pointer;
+        }
 
-            input,
-            select {
-                width: 100%;
-                margin-bottom: 15px;
-                padding: 10px;
-                font-size: 16px;
-                border-radius: 8px;
-                border: 1px solid #ccc;
-            }
+        .step-box {
+            margin-bottom: 32px;
+            cursor: pointer;
 
-            label {
-                font-weight: bold;
-            }
+        }
 
-            .terms {
-                margin: 10px 0;
-            }
+        .checkbox-group {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+        }
 
-            .btn-submit {
-                width: 100%;
-                padding: 12px;
-                font-size: 18px;
-                background-color: #5c8df6;
-                color: white;
-                border: none;
-                border-radius: 10px;
-                cursor: pointer;
-            }
+        .checkbox-group > label:first-child {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            background-color: #fff3e0;
+            font-weight: 600;
+            border-radius: 10px;
+            border: 1px solid #ffd180;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
 
-            .btn-submit:disabled {
-                background-color: #ccc;
-                cursor: not-allowed;
-            }
-        </style>
-    </head>
+        .checkbox-group label input[type="checkbox"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
 
-    <body>
-        <jsp:include page="/WEB-INF/common/header.jsp" />
-        <div id="app" class="container">
-            <h2>멤버십 가입하기</h2>
+        .term-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: box-shadow 0.3s ease;
+            cursor: pointer;
+        }
 
-            <form @submit.prevent="fnjoin">
-                <div>
-                    <label for="name">이름</label>
-                    <input type="text" id="name" v-model="name" required>
+        .term-box:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .term-box label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .term-box i {
+            color: #ff7a00;
+            margin-right: 6px;
+        }
+
+        .term-content {
+            background-color: #fdfdfd;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            background-color: #ff7a00;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            background-color: #ff6900;
+        }
+
+        .btn-submit:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <jsp:include page="/WEB-INF/common/header.jsp" />
+
+    <div id="app" class="container">
+        <h2>🐾 멍냥꽁냥 멤버십 가입 - 약관 동의</h2>
+
+        <!-- STEP 1: 약관 동의 -->
+        <div class="step-box">
+            <h3>📄 아래 약관을 확인하고 동의해주세요</h3>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" v-model="allAgree" @change="toggleAll">
+                    전체 약관에 동의합니다
+                </label>
+
+                <div v-for="term in termsList" :key="term.termId" class="term-box">
+                    <label>
+                        <input type="checkbox" v-model="agreeList[term.termId]">
+                        <i class="fas fa-file-alt"></i>
+                        {{ term.requiredYn === 'Y' ? '[필수]' : '[선택]' }} {{ term.title }}
+                    </label>
+                    <div class="term-content" v-html="term.content"></div>
                 </div>
-            
-                <div>
-                    <label for="email">이메일</label>
-                    <input type="email" id="email" v-model="email" required>
-                </div>
-            
-                <div>
-                    <label for="phone">휴대폰 번호</label>
-                    <input type="text" id="phone" v-model="phone" required>
-                </div>
-            
-                <div>
-                    <label for="payment">결제 방식</label>
-                    <select id="payment" v-model="paymentMethod" required>
-                        <option value="" disabled>결제 방식을 선택하세요</option>
-                        <option value="card">신용카드</option>
-                        <option value="kakaopay">카카오페이</option>
-                        <option value="naverpay">네이버페이</option>
-                    </select>
-                </div>
-            
-                <div class="terms">
-                    <label><input type="checkbox" v-model="agree"> 이용약관에 동의합니다. (필수)</label>
-                </div>
-            
-                <button type="submit" class="btn-submit" :disabled="!agree">가입하기</button>
-            </form>
-            
-
-
+            </div>
         </div>
 
+        <button class="btn-submit" @click="nextStep" :disabled="!isRequiredAgreed">다음</button>
+    </div>
 
-        <jsp:include page="/WEB-INF/common/footer.jsp" />
-
-
-    </body>
-
-    </html>
+    <jsp:include page="/WEB-INF/common/footer.jsp" />
+</body>
+</html>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const app = Vue.createApp({
                 data() {
                     return {
-                        name: '',
-                        email: '',
-                        phone: '',
-                        paymentMethod: '',
-                        agree: false
+                        termsList: [],
+                        agreeList: {},
+                        allAgree: false
                     };
                 },
                 computed: {
-
+                    isRequiredAgreed() {
+                        return this.termsList
+                            .filter(t => t.requiredYn === 'Y')
+                            .every(t => this.agreeList[t.termId]);
+                    }
                 },
                 methods: {
-                    fnjoin() {
-                        var self = this;
-                        var nparmap = {
-                            name: self.name,
-                            email: self.email,
-                            phone: self.phone,
-                            paymentMethod: self.paymentMethod
-                        };
-
-                        if (!self.agree) {
-                            alert("이용약관에 동의해주세요.");
-                            return;
-                        }
-
+                    loadTerms() {
+                        const self = this;
                         $.ajax({
-                            url: "/membership/join.dox",
-                            dataType: "json",
+                            url: "/membership/termsList.dox",
                             type: "POST",
-                            data: nparmap,
-                            success: function (data) {
-                                console.log("멤버십 가입 완료:", data);
-                                alert("가입이 완료되었습니다!");
-                                // location.href = "/membership/complete.do"; // 완료 페이지로 이동해도 좋음
-                            },
-                            error: function () {
-                                alert("서버 오류가 발생했습니다.");
+                            dataType: "json",
+                            success(data) {
+                                if (data.list && Array.isArray(data.list)) {
+                                    self.termsList = data.list;
+                                    data.list.forEach(term => {
+                                        self.agreeList[term.termId] = false;
+                                    });
+                                } else {
+                                    alert("약관 정보를 불러올 수 없습니다.");
+                                }
                             }
                         });
+                    },
+                    toggleAll() {
+                        const checked = this.allAgree;
+                        this.termsList.forEach(term => {
+                            this.agreeList[term.termId] = checked;
+                        });
+                    },
+                    nextStep() {
+                        if (!this.isRequiredAgreed) {
+                            alert("필수 약관에 모두 동의해주세요.");
+                            return;
+                        }
+                        // 다음 단계 이동
+                        location.href = "/membership/join-step2.do";
                     }
-
-
-
                 },
                 mounted() {
-                    let self = this;
-
-
+                    this.loadTerms();
                 }
             });
 

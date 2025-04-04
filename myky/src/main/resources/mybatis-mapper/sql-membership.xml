@@ -75,6 +75,16 @@
 	    FROM USERS 
 		
 	</select>
+	
+	<!--멤버십 이용 약관 동의-->
+	<select id="selectTermsList" parameterType="hashmap" resultType="teamgyodong.myky.membership.model.Membership">
+	
+	    SELECT TERM_ID, TITLE, CONTENT, REQUIRED_YN, DISPLAY_ORDER
+	    FROM MEMBERSHIP_TERMS
+	    ORDER BY DISPLAY_ORDER
+	    
+	</select>
+
 </mapper>
 
 

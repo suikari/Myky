@@ -112,4 +112,13 @@ public class MembershipController {
 
 		return new Gson().toJson(resultMap);
 	}
+	//멤버십 이용 약관 동의
+	@RequestMapping(value = "/membership/termsList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String termsList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	    HashMap<String, Object> resultMap = new HashMap<>();
+	    resultMap = membershipService.getTermsList(map); // 서비스 호출
+	    return new Gson().toJson(resultMap);
+	}
+	
 }

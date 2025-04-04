@@ -164,6 +164,56 @@
                 background-color: #e7603e;
             }
 
+            /* 멤버십 가입 방법 */
+            .membership-steps {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .step-wrap {
+                display: flex;
+                align-items: center;
+            }
+
+            .step {
+                text-align: center;
+                padding: 10px;
+                min-width: 160px;
+            }
+
+            .step-number {
+                color: #2980b9;
+                font-size: 15px;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .step h4 {
+                font-size: 16x;
+                margin: 5px 0px;
+            }
+
+            .step img {
+                width: 60px;
+                height: 60px;
+                margin: 10px 0;
+            }
+
+            .step p {
+                font-size: 13px;
+                color: #444;
+            }
+
+            .arrow {
+                font-size: 24px;
+                color: #ccc;
+                margin: 0 10px;
+            }
+
             /* FAQ 섹션 */
             .faq-section {
                 background-color: #fdfaf5;
@@ -331,9 +381,9 @@
                     </tbody>
                 </table>
                 <!-- Tips 안내사항 영역 -->
-                <div class="tips-header" @click="showTips = !showTips">
-                    <span class="tips-title">💡 Tips</span>
-                    <span class="tips-toggle-btn"> {{ showTips ? '－' : '＋' }} </span>
+                <div class="tips-header">
+                    <span class="tips-title" @click="toggleTips">💡 Tips</span>
+                    <span class="tips-toggle-btn" @click="toggleTips"> {{ showTips ? '－' : '＋' }} </span>
                 </div>
                 <hr class="tips-divider">
                 <div v-if="showTips" class="tips-box">
@@ -343,6 +393,48 @@
                         <li>구독상품은 결제 시 적립금이나 쿠폰 사용이 불가합니다.</li>
                     </ul>
                 </div>
+
+                <div class="membership-steps">
+                    <div class="step-wrap">
+                        <div class="step">
+                            <span class="step-number">STEP. 01</span>
+                            <h4>멤버십 가입 클릭</h4>
+                            <img src="../../img/product/Join.png" alt="가입 버튼">
+                            <p>멍냥꽁냥에서 멤버십 가입을 클릭합니다.</p>
+                        </div>
+                        <div class="arrow">➤</div>
+                    </div>
+
+                    <div class="step-wrap">
+                        <div class="step">
+                            <span class="step-number">STEP. 02</span>
+                            <h4>본인인증 및 정보입력</h4>
+                            <img src="../../img/product/Identity.png" alt="본인인증">
+                            <p>휴대폰인증 및 가입에 필요한 정보를 입력합니다.</p>
+                        </div>
+                        <div class="arrow">➤</div>
+                    </div>
+
+                    <div class="step-wrap">
+                        <div class="step">
+                            <span class="step-number">STEP. 03</span>
+                            <h4>약관 및 개인정보 관련 동의</h4>
+                            <img src="../../img/product/Terms of Use.png" alt="약관 동의">
+                            <p>가입 약관 및 개인정보 관련 규정에 동의합니다.</p>
+                        </div>
+                        <div class="arrow">➤</div>
+                    </div>
+
+                    <div class="step-wrap">
+                        <div class="step">
+                            <span class="step-number">STEP. 04</span>
+                            <h4>가입 완료되었습니다</h4>
+                            <img src="../../img/product/Okay.png" alt="가입 완료">
+                            <p>멤버십 회원가입 완료.</p>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- 멤버십 가입 버튼 -->
                 <div class="price-section">
@@ -381,13 +473,16 @@
                         mDonationTotal: 0,  //멤버십 유저가 기부한 금액
                         totalUserCnt: 0,   //전체 회원 수
                         uDonationTotal: 0, //유저 전체 기부금
-                        showTips: false,   //안내사항 토글
+                        showTips: true,   //안내사항 토글
                     };
                 },
                 computed: {
 
                 },
                 methods: {
+                    toggleTips() {
+                        this.showTips = !this.showTips;
+                    },
                     //멤버십
                     subscribe() {
                         alert("멤버십 가입 페이지로 이동!");
@@ -447,7 +542,7 @@
                                 self.mDonationTotal = data.membershipDonationSum;
                             }
                         });
-                    }
+                    },
                 },
                 mounted() {
                     let self = this;

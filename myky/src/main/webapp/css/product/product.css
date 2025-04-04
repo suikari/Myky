@@ -337,8 +337,15 @@ body {
 	display: flex;
 	justify-content: left;
 	margin-top: 10px;
+	overflow: auto;
+	width: 450px;
+	/* 스크롤바 숨기기 */
+	scrollbar-width: none;
+	-ms-overflow-style: none; 
 }
-
+.product-image-thumbNails::-webkit-scrollbar {
+	display: none; 
+}
 .product-image-thumbNails img {
 	width: 100px;
 	height: 100px;
