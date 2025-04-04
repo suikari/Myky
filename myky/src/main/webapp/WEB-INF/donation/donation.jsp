@@ -236,6 +236,19 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th>보유 포인트</th>
+                                <td>{{ formattedUserPoints }} 원</td>
+                            </tr>
+                            <tr>
+                                <th>사용할 포인트</th>
+                                <td>
+                                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
+                                    <button @click="useAllPoints">전체 사용</button>
+                                    <button @click="applyPoints">적용</button>
+                                    <span>{{ formattedDiscountAmount }} 포인트 사용</span>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th>후원 메세지</th>
                                 <td><input class="donationMessage" name="donateMessage" v-model="donateMessage"
                                         placeholder="따듯한 마음을 전하세요"></td>
@@ -262,47 +275,7 @@
                         </label>
 
                         <div v-if="showTerms" class="terms">
-                            <h3>후원 약관</h3>
-                            <p>본 후원 약관(이하 "약관")은 후원자(이하 "후원자")가 [회사명] (이하 "회사")의 후원 프로그램에 참여함에 있어 동의해야 할 조건을 규정합니다. 후원자는 본 약관을 충분히 읽고 이해한 후 후원 절차를 진행해 주시기 바랍니다. 후원자가 본 프로그램에 참여함으로써 본 약관에 동의한 것으로 간주됩니다.</p>
-
-                            <h4>1. 후원 목적</h4>
-                            <p>회사는 후원자를 통해 모은 후원금으로 [후원 대상 또는 목적 설명]을 지원합니다. 후원금은 [후원금의 사용 목적 또는 구체적인 사용 내역]에 사용되며, 후원자에게 이에 대한 상세한 정보를 제공할 수 있습니다.</p>
-
-                            <h4>2. 후원자의 권리</h4>
-                            <ul>
-                                <li>후원자는 후원금의 사용내역 및 결과에 대해 정기적인 보고를 받을 권리가 있습니다.</li>
-                                <li>후원자는 후원한 금액에 대해 세액 공제 혜택을 받을 수 있는 경우, 회사가 제공하는 세액 공제 관련 서류를 요청할 수 있습니다.</li>
-                                <li>후원자는 후원금의 사용 방법에 대해 합리적인 질문을 할 수 있으며, 그에 대한 답변을 받을 권리가 있습니다.</li>
-                            </ul>
-
-                            <h4>3. 후원자의 의무</h4>
-                            <ul>
-                                <li>후원자는 후원 절차에서 요구하는 모든 정보를 정확하고 진실하게 제공해야 합니다.</li>
-                                <li>후원자는 후원금이 [후원 대상 또는 목적]에 적합하게 사용될 수 있도록 협력해야 하며, 후원금이 부정확하거나 부적절하게 사용되지 않도록 주의해야 합니다.</li>
-                            </ul>
-
-                            <h4>4. 후원금 처리 및 방법</h4>
-                            <p>후원자는 [결제 방법 예: 카드 결제, 계좌 이체 등]을 통해 후원금을 지불하며, 모든 후원금은 결제 후 즉시 처리됩니다.</p>
-                            <p>후원금은 [후원 방법 및 처리 절차 설명]에 따라 처리되며, 후원자가 요청하는 경우 관련 영수증이나 후원 내역을 제공할 수 있습니다.</p>
-
-                            <h4>5. 후원 취소 및 환불</h4>
-                            <p>후원자는 후원 후 [취소 및 환불 정책]에 따라 후원금 취소 및 환불을 요청할 수 있습니다. 다만, 후원금이 이미 특정 목적에 사용된 경우, 환불이 불가능할 수 있습니다.</p>
-                            <p>후원자의 요청에 의한 취소 및 환불은 회사의 정책에 따라 처리되며, 회사는 환불이 불가능한 경우 이에 대해 설명할 의무가 있습니다.</p>
-
-                            <h4>6. 개인정보 보호</h4>
-                            <p>후원자는 후원 과정에서 제공하는 개인정보가 회사의 개인정보 보호 정책에 따라 안전하게 처리될 것에 대해 동의합니다.</p>
-                            <p>회사는 후원자의 개인정보를 제3자에게 제공하지 않으며, 오직 후원 프로그램에 필요한 범위 내에서만 사용합니다.</p>
-
-                            <h4>7. 후원 약관 변경</h4>
-                            <p>회사는 후원 약관을 언제든지 변경할 수 있으며, 변경된 약관은 회사의 웹사이트나 이메일을 통해 후원자에게 통지됩니다.</p>
-                            <p>변경된 약관에 동의하지 않는 경우, 후원자는 후원 참여를 중단할 수 있으며, 이 경우 후원금의 반환 여부는 회사의 환불 정책에 따라 결정됩니다.</p>
-
-                            <h4>8. 법적 책임</h4>
-                            <p>후원자는 본 약관을 준수하여야 하며, 만약 이를 위반할 경우 회사는 후원자의 후원 참여를 취소하거나 법적 책임을 추궁할 수 있습니다.</p>
-                            <p>후원과 관련된 분쟁이 발생한 경우, 관련 법률에 따라 해결됩니다.</p>
-
-                            <h4>9. 기타</h4>
-                            <p>본 약관에 명시되지 않은 사항은 [관련 법령 또는 회사의 다른 규정]에 따릅니다.</p>
+                            
                         </div>
                     </div>
                     <div class="sectionContents">
@@ -312,48 +285,7 @@
                           </label>
 
                         <div v-if="showPrivacyPolicy" class="privacy-policy">
-                            <h3>개인정보 처리방침</h3>
                             
-                            <p><strong>1. 개인정보의 수집 항목</strong><br>
-                            회사는 서비스 제공을 위해 다음과 같은 개인정보를 수집합니다.<br>
-                            - 이름, 이메일 주소, 전화번호, 주소, 생년월일 등 회원가입 시 입력한 정보<br>
-                            - 결제 정보: 결제 시 제공되는 카드 정보 및 기타 결제 관련 정보<br>
-                            - 서비스 이용 기록: 로그인 기록, 서비스 이용 내역, 접속 로그 등<br>
-                            - 쿠키 및 접속 정보: 사용자의 웹사이트 이용 및 활동에 대한 정보</p>
-                          
-                            <p><strong>2. 개인정보의 수집 및 이용 목적</strong><br>
-                            회사는 수집된 개인정보를 다음과 같은 목적으로 사용합니다.<br>
-                            - 회원 관리: 회원가입, 서비스 제공 및 이용, 고객 문의 응대<br>
-                            - 서비스 제공: 주문 및 결제 처리, 배송, 구매 내역 확인<br>
-                            - 마케팅 및 광고: 맞춤형 광고 제공, 이벤트 참여, 프로모션</p>
-                          
-                            <p><strong>3. 개인정보의 보유 및 이용 기간</strong><br>
-                            회사는 회원 탈퇴 시까지 또는 개인정보 처리 방침에 명시된 목적이 달성될 때까지 개인정보를 보유합니다. 단, 관계 법령에 의한 보유 의무가 있는 경우, 법정 보유 기간 동안 보관될 수 있습니다.</p>
-                          
-                            <p><strong>4. 개인정보의 제3자 제공</strong><br>
-                            회사는 원칙적으로 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만, 법률에 의하거나 이용자가 동의한 경우에는 예외적으로 제공할 수 있습니다.</p>
-                          
-                            <p><strong>5. 개인정보의 안전성 확보 조치</strong><br>
-                            회사는 개인정보의 안전성을 확보하기 위해 다음과 같은 조치를 취하고 있습니다.<br>
-                            - 개인정보 암호화: 사용자의 개인정보는 암호화되어 안전하게 저장됩니다.<br>
-                            - 접근 권한 관리: 개인정보에 접근할 수 있는 권한을 제한하며, 해당 권한을 가진 인원은 최소화합니다.<br>
-                            - 보안 소프트웨어 설치: 개인정보 보호를 위한 보안 시스템을 구축하고 정기적으로 점검합니다.</p>
-                          
-                            <p><strong>6. 이용자의 권리와 행사 방법</strong><br>
-                            이용자는 언제든지 자신의 개인정보를 열람하고 수정할 수 있으며, 개인정보 처리의 정지를 요청할 수 있습니다. 이를 위해 고객센터 또는 설정에서 요청하실 수 있습니다.</p>
-                          
-                            <p><strong>7. 개인정보 보호 책임자</strong><br>
-                            회사는 개인정보 보호를 위해 다음과 같은 담당자를 지정하고 있습니다.<br>
-                            - 개인정보 보호 책임자: [담당자 이름]<br>
-                            - 연락처: [담당자 연락처]</p>
-                          
-                            <p><strong>8. 개인정보 처리방침의 변경</strong><br>
-                            회사는 개인정보 처리방침을 변경할 수 있으며, 변경 시 웹사이트를 통해 공지할 것입니다. 변경된 개인정보 처리방침은 공지된 날로부터 효력이 발생합니다.</p>
-                          
-                            <p><strong>9. 동의 거부 및 불이익</strong><br>
-                            이용자는 개인정보 제공에 동의하지 않을 수 있으며, 동의하지 않을 경우 일부 서비스 이용에 제한이 있을 수 있습니다.</p>
-                          
-                            <p>위 개인정보 처리방침에 동의합니다.</p>
                         </div>                          
                     </div>
                 </section>
@@ -391,16 +323,29 @@
                     customAmount: null,
                     userInfo: {},
                     membership:{},
+                    termsInfo:[],
                     donationId: null,
                     showTerms: false,
                     showPrivacyPolicy: false,
                     isMembership: false,
                     isMembershipDonation: false,
-                    isAnonymous: false
+                    isAnonymous: false,
+                    userPoint:0,
+                    usedPoint:0,
+                    discountPoint:0,
+                    remainingAmount:0
                 };
             },
             computed: {
-
+                formattedUserPoints() {
+                    return this.userPoint.toLocaleString();
+                },
+                totalAmount() {
+                    return this.totalAmount = (this.donateAmount != null) ? this.donateAmount : this.customAmount;
+                },
+                formattedDiscountAmount() {
+                    return this.discountPoint.toLocaleString();
+                },
             },
             methods: {
                 fnCenterInfo() {
@@ -436,6 +381,7 @@
                             console.log("userInfo >>> ", data.user);
                             self.userInfo = data.user;
                             self.fnMembership();
+                            self.fnGetPoint();
 
                         }
                     });
@@ -477,6 +423,41 @@
                         }
                     });
                 },
+                fnGetTerms(){
+                    var self = this;
+                    var nparmap = {
+                        category: "D"
+                    };
+                    $.ajax({
+                        url: "/membership/termsList.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("termsInfo >>> ", data.list);
+                            if(data.result === "success"){
+                                self.membership = data.list;
+                            } 
+                        }
+                    });
+                },
+                fnGetPoint: function () {
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/point/current.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            self.userPoint = parseInt(data.point.currentPoint);
+                            console.log("보유포인트 >>> ",data.result);
+                        }
+                    });
+                },
+                GetTotalAmount() {
+                    this.totalAmount = (this.donateAmount != null) ? this.donateAmount : this.customAmount;
+                },
                 toggleAnonymous() {
                     this.isAnonymous = !this.isAnonymous;
                 },
@@ -494,6 +475,45 @@
                 },
                 togglePrivacyPolicy() {
                     this.showPrivacyPolicy = !this.showPrivacyPolicy;
+                },
+                validatePoints() {
+                    this.usedPoint = parseInt(this.usedPoint) || 0;
+                },
+                calculateRemaining() {
+                    if (this.usedPoint < 0) {
+                        this.usedPoint = 0;
+                    } else if (this.usedPoint > this.totalAmount) {
+                        this.usedPoint = this.totalAmount;
+                    } else if (this.usedPoint > this.userPoint) {
+                        this.usedPoint = this.userPoint;
+                    }
+
+                    this.remainingAmount = this.totalAmount - this.usedPoint;
+                },
+                applyPoints() {
+                    let self = this;
+                    let usedPoints = parseInt(self.usedPoint) || 0;
+                    let userPoints = parseInt(self.userPoint) || 0;
+                    let totalAmount = parseInt(self.totalAmount) || 0;
+                    
+                    if (usedPoints > totalAmount) {
+                        alert("총 결제 금액보다 많은 포인트를 사용할 수 없습니다.");
+                        self.usedPoint = totalAmount;
+                    } else if (usedPoints > userPoints) {
+                        alert("보유한 포인트보다 많은 포인트를 사용할 수 없습니다.");
+                        self.usedPoint = userPoints;
+                    } else {
+                        self.usedPoint = usedPoints;
+                    }
+                    self.discountPoint = self.usedPoint;
+                    self.$nextTick(() => {
+                        self.$refs.usedPoint.focus();
+                    });
+                    return;
+                },
+                useAllPoints() {
+                    this.usedPoint = Math.min(this.userPoint, this.totalAmount);
+                    this.discountPoint = this.usedPoint;
                 },
                 selectAmount(amount) {
                     this.donateAmount = amount;
@@ -661,6 +681,7 @@
                 let self = this;
                 self.fnCenterInfo();
                 self.fnUserInfo();
+                self.fnGetTerms();
 
             }
         });

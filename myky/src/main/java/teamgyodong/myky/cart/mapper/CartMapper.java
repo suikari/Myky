@@ -55,4 +55,6 @@ public interface CartMapper {
 
 	void updateRefundStatus(HashMap<String, Object> map);
 
+	int getPartnerCount(HashMap<String, Object> map);
+
 }

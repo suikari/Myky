@@ -38,5 +38,8 @@ public class cart {
 	private String reason;
 	private String reasonDetail;
 	private String refundStatus;
+
+	private String name;
+	private String address;
 	
 }

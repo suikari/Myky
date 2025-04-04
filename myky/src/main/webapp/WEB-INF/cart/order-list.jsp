@@ -112,10 +112,7 @@
                                         <span v-if="orders.length > 1"> 외 {{ orders.length - 1 }}개</span>
                                     </td>
                                     <td>{{ formatPrice(Number(orders[0].totalPrice)) }} 원</td>
-                                    <td v-if="orders[0].orderStatus == 'paid'">주문접수</td>
-                                    <td v-else-if="orders[0].orderStatus == 'cancel'">주문취소</td>
-                                    <td v-else-if="orders[0].orderStatus == 'shipped'">배송중</td>
-                                    <td v-else-if="orders[0].orderStatus == 'delivered'">배송완료</td>
+                                    <td>{{ determineShippingStatus(orders) }}</td>
                                     <td>
                                         <button class="order-history__details-button" @click="toggleDetails(orderId)">
                                             {{ ordersByDate[date][orderId][0].showDetails ? '숨기기' : '배송정보' }}
@@ -188,12 +185,15 @@
                                                 <tbody>
                                                     <tr v-for="product in orders" :key="product.orderId">
                                                         <td>{{ product.productName }}</td>
-                                                        <td v-if="product.refundStatus != null && product.refundStatus == 'exchange'">교환접수</td>
-                                                        <td v-else-if="product.refundStatus != null && product.refundStatus == 'return'">반품접수</td>
-                                                        <td v-else-if="product.refundStatus == null && product.orderStatus == 'paid'">주문접수</td>
-                                                        <td v-else-if="product.refundStatus == null && product.orderStatus == 'cancel'">주문취소</td>
-                                                        <td v-else-if="product.refundStatus == null && product.orderStatus == 'shipped'">배송중</td>
-                                                        <td v-else-if="product.refundStatus == null && product.orderStatus == 'delivered'">배송완료</td>
+                                                        <td v-if="product.refundStatus != 'none' && product.refundStatus == 'exchange'">교환접수</td>
+                                                        <td v-else-if="product.refundStatus != 'none' && product.refundStatus == 'exchanged'">교환완료</td>
+                                                        <td v-else-if="product.refundStatus != 'none' && product.refundStatus == 'return'">반품접수</td>
+                                                        <td v-else-if="product.refundStatus != 'none' && product.refundStatus == 'returned'">반품완료</td>
+                                                        <td v-else-if="product.refundStatus != 'none' && product.refundStatus == 'shipped'">배송중</td>
+                                                        <td v-else-if="product.refundStatus != 'none' && product.refundStatus == 'delivered'">배송완료</td>
+                                                        <td v-else-if="product.refundStatus == 'none' && product.orderStatus == 'paid'">주문접수</td>
+                                                        <td v-else-if="product.refundStatus == 'none' && product.orderStatus == 'cancel'">주문취소</td>
+                                                        <td v-else-if="product.refundStatus == 'none' && product.orderStatus == 'canceled'">환불완료</td>
                                                         <td>{{ product.quantity }}</td>
                                                         <td>{{ formatPrice(Number(product.price)) }} 원</td>
                                                         <td>
@@ -203,11 +203,11 @@
                                                 </tbody>
                                             </table>
                                             <div v-if="cartMessage" class="cart-message">{{ cartMessage }}</div>
-                                            <div v-if="orders[0].orderStatus == 'paid'">
+                                            <div v-if="determineShippingStatus(orders) == '주문접수'">
                                                 <button @click="cancelOrder(orderId)" class="order-button">주문취소</button>
                                                 <button @click="toggleEditMode(orders[0])" class="order-button">배송정보수정</button>
                                             </div>
-                                            <div v-else-if="orders[0].orderStatus == 'delivered'">
+                                            <div v-else-if="['배송완료', '교환신청', '반품신청', '교환완료', '반품완료'].includes(determineShippingStatus(orders))">
                                                 <button  @click="openReturnPopup(orders)" class="order-button">교환/반품신청</button>
                                             </div>
                                             <div>
@@ -228,20 +228,20 @@
                 <h2>교환/반품 신청</h2>
                 
                 <label class="exchange-return-radio">
-                    <input type="radio" v-model="requestType" value="true"> 교환
+                    <input type="radio" v-model="isExchange" value="true"> 교환
                 </label>
                 <label class="exchange-return-radio">
-                    <input type="radio" v-model="requestType" value="false"> 반품
+                    <input type="radio" v-model="isExchange" value="false"> 반품
                 </label>
 
                 <h3>주문 상품 선택</h3>
                 <div v-for="item in selectedOrder" :key="item.productId" class="exchange-return-box">
-                    <label :class="{'disabled-item': item.refundStatus != null}">
-                        <input type="checkbox" v-model="selectedItems" :value="item.productId" :disabled="item.refundStatus != null"> {{ item.productName }}
+                    <label :class="{'disabled-item': item.refundStatus != 'delivered'}">
+                        <input type="checkbox" v-model="selectedItems" :value="item.productId" :disabled="item.refundStatus != 'delivered'"> {{ item.productName }}
                     </label>
                 </div>
 
-                <h3>{{ requestType === 'true' ? '교환 사유' : '반품 사유' }}</h3>
+                <h3>{{ isExchange === 'true' ? '교환 사유' : '반품 사유' }}</h3>
                 <select v-model="reason" class="exchange-return-select">
                     <option value="">사유를 선택해주세요</option>
                     <option value="상품 불량">상품 불량</option>
@@ -315,7 +315,6 @@
                     reason: "",
                     detailedReason:"",
                     isAgreed: false,
-                    requestType:"exchange",
                 };
             },
             computed: {
@@ -349,6 +348,25 @@
                         console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:",groupedByDate);
                     return groupedByDate;
                 },
+                determineShippingStatus() {
+                    return (orderItems) => {
+                        const statuses = orderItems.map(item => item.refundStatus);
+                        const orderStatus = orderItems[0].orderStatus;
+
+                        if (orderStatus === 'cancel') return '주문취소';
+                        if (orderStatus === 'canceled') return '환불완료';
+
+                        if (statuses.every(status => status === 'none')) return '주문접수';
+                        if (statuses.every(status => status === 'shipped')) return '배송중';
+                        if (statuses.every(status => status === 'delivered')) return '배송완료';
+                        if (statuses.some(status => status === 'exchange')) return '교환신청';
+                        if (statuses.every(status => status === 'exchanged')) return '교환완료';
+                        if (statuses.some(status => status === 'return')) return '반품신청';
+                        if (statuses.every(status => status === 'returned')) return '반품완료';
+
+                        return '주문접수';
+                    };
+                }
             },
             watch: {
                 groupedOrders: {
@@ -646,37 +664,40 @@
                     this.isAgreed = !this.isAgreed;
                 },
                 submitRequest() {
-                    if (this.selectedItems.length === 0) {
+                    let self = this;
+                    if (self.selectedItems.length === 0) {
                         alert("상품을 선택해주세요.");
                         return;
                     }
-                    if (!this.reason) {
+                    if (!self.reason) {
                         alert("교환/반품 사유를 선택해주세요.");
                         return;
                     }
-                    if (!this.detailedReason) {
+                    if (!self.detailedReason) {
                         alert("상세 사유를 작성해주세요.");
                         return;
                     }
                     
-                    let productIds = Object.values(this.selectedItems).map(productId => productId);
+                    let productIds = Object.values(self.selectedItems).map(productId => productId);
 
                     console.log(JSON.stringify(productIds));
 
+                    let refundStatus = self.isExchange ? "exchange" : "return";
+
                     console.log("교환/반품 신청 데이터:", {
-                        orderId : this.selectedOrder[0].orderId,
+                        orderId : self.selectedOrder[0].orderId,
                         product : JSON.stringify(productIds),
-                        reason: this.reason,
-                        reasonDetail: this.detailedReason,
-                        refundStatus : this.isExchange ? "exchange" : "return",
+                        reason: self.reason,
+                        reasonDetail: self.detailedReason,
+                        refundStatus : refundStatus,
                     });
 
                     let params = {
-                        orderId : this.selectedOrder[0].orderId,
+                        orderId : self.selectedOrder[0].orderId,
                         product : JSON.stringify(productIds),
-                        reason: this.reason,
-                        reasonDetail: this.detailedReason,
-                        refundStatus : this.isExchange ? "exchange" : "return"
+                        reason: self.reason,
+                        reasonDetail: self.detailedReason,
+                        refundStatus : refundStatus
                     };
                     $.ajax({
                         url: "/order/refund.dox",
@@ -687,7 +708,8 @@
                             console.log("교환/반품 접수 상태 >>> ",data);
                             if(data.result == "success"){
                                 alert("교환/반품 신청이 접수되었습니다.");
-                                this.isPopupVisible = false;
+                                self.isPopupVisible = false;
+                                self.fnOrderList();
                             }
                         }
                     });
