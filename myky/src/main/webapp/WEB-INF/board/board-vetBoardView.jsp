@@ -9,10 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <!-- Quill CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/board/board.css"/>
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
 
     <style>
-        #viewPage {
+         #viewPage {
             max-width: 1000px;
             margin: 40px auto;
             padding: 40px;
@@ -434,93 +436,100 @@
                 </div>
 
 
+                <!-- 답변 출력 전체 -->
+                <div v-for="answer in answerList" class="answer-box" 
+                :class="{ accepted: answer.comments && answer.comments !== 'null' }">
+
+                
                 <!-- 채택된 답변 -->
-                <div v-for="answer in answerList" class="answer-box accepted" v-if="info.isAccepted === 'Y'">
-                    <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
-                        질문자 채택
-                    </div>
-                    
-                    <!-- 별점 -->
-                    <div class="star-rating">
-                        <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= answer.rating }">★</span>
-                    </div>
-                    <div class="answer-nickname2">{{info.nickName}}</div>
-                    <div class="answer-header">
+                <div v-if="answer.comments && answer.comments !== 'null'">
+                <div>
+                        <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                            질문자 채택
+                        </div>
+                        
+                        <!-- 별점 -->
+                        <div class="star-rating">
+                            <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= answer.rating }">★</span>
+                        </div>
+                        <div class="answer-nickname2">{{info.nickName}}</div>
+                        <div class="answer-header">
+                            <div class="answer-meta">{{ answer.createdAt }}</div>
+                        </div>
+                        <!-- 후기 -->
+                        <div class="answer-comments">
+                            <span class="underline-animated underline-text">{{ answer.comments }}</span>
+                        </div>
+
+                        <!-- 답변 작성자 정보 -->
+                        <div class="answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
+                        <div class="answer-header">
                         <div class="answer-meta">{{ answer.createdAt }}</div>
-                    </div>
-                    <!-- 후기 -->
-                    <div class="answer-comments">
-                        <span class="underline-animated underline-text">{{ answer.comments }}</span>
-                    </div>
+                        </div>
 
-                    <!-- 답변 작성자 정보 -->
-                    <div class="answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
-                    <div class="answer-header">
-                    <div class="answer-meta">{{ answer.createdAt }}</div>
+                        <!-- 본문 -->
+                        <span class="underline-animated underline-text answer-comments">
+                            <div v-html="answer.reviewText"></div>
+                        </span>
                     </div>
-
-                    <!-- 본문 -->
-                    <span class="underline-animated underline-text answer-comments">
-                        <div v-html="answer.reviewText"></div>
-                    </span>
                 </div>
 
                 
                 <!-- 답변 출력/채택 전 -->
-                 <div v-for="answer in answerList" class="answer-box" v-if="info.isAccepted === 'N'">
-                    <template v-if="answer.isDeleted == 'N'">
+                 <!-- <div class="answer-box"> -->
+                    <div v-else-if="answer.isDeleted === 'N'">
                         <div class="answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
                         <div class="answer-header">
                             <div class="answer-meta">{{ answer.createdAt }}</div>
                         </div>
                         <div v-html="answer.reviewText"></div>
-                    </template>
+                    
+                <!-- </div> -->
                     
                     
 
 
                  <!-- 답변 채택 -->
-                <div v-for="answer in answerList" :key="answer.reviewId">
-                <template v-if="answer && answer.isDeleted === 'N'">
+                    <template v-if="answer && answer.isDeleted === 'N'">
 
                     <!-- 채택 버튼 (질문자만 보임) -->
-                    <template v-if="sessionId == info.userId && showChoice !== answer.reviewId">
-                    <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
+                        <template v-if="sessionId == info.userId && showChoice !== answer.reviewId">
+                            <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
+                        </template>
+
+                        <!-- 채택 UI (showChoice === 현재 답변) -->
+                        <template v-if="showChoice === answer.reviewId">
+                        <div class="accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
+                            
+                            <!-- 라벨 -->
+                            <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                            질문자 채택
+                            </div>
+
+                            <!-- 별점 UI -->
+                            <div class="form-group star-rating" style="margin-top: 15px;">
+                            <label class="rating-label" for="rating" style="font-weight: bold; color:#fca311;"></label>
+                            <div class="stars" style="font-size: 20px;">
+                                <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
+                            </div>
+                            </div>
+
+                            <!-- 후기 입력 -->
+                            <input v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
+
+                            <!-- 기존 댓글 표시 -->
+                            <div>{{ answer.comments }}</div>
+
+                            <!-- 등록 버튼 -->
+                            <button @click="fnAnSelect(answer.userId)" class="choiceSaveButton">
+                            등록
+                            </button>
+                            <button class="choiceSaveButton" @click="fnCancelChoice">취소</button>
+                        </div>
+                        </template>
                     </template>
-
-                    <!-- 채택 UI (showChoice === 현재 답변) -->
-                    <template v-if="showChoice === answer.reviewId">
-                    <div class="accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
-                        
-                        <!-- 라벨 -->
-                        <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
-                        질문자 채택
-                        </div>
-
-                        <!-- 별점 UI -->
-                        <div class="form-group star-rating" style="margin-top: 15px;">
-                        <label class="rating-label" for="rating" style="font-weight: bold; color:#fca311;"></label>
-                        <div class="stars" style="font-size: 20px;">
-                            <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
-                        </div>
-                        </div>
-
-                        <!-- 후기 입력 -->
-                        <input v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
-
-                        <!-- 기존 댓글 표시 -->
-                        <div>{{ answer.comments }}</div>
-
-                        <!-- 등록 버튼 -->
-                        <button @click="fnAnSelect(answer.userId)" class="choiceSaveButton">
-                        등록
-                        </button>
-                        <button class="choiceSaveButton" @click="fnCancelChoice">취소</button>
-                    </div>
-                    </template>
-
-                </template>
                 </div>
+
 
                 
                     <template v-if="(vetList.vetId == answer.vetId) && info.isAccepted === 'N'">  
@@ -539,7 +548,7 @@
                         </template>
                         <button class="cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
                     </template>
-                    <template v-else>
+                    <template v-if="isDeleted == 'Y'">
                         <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
                     </template>
                 </div>
@@ -595,7 +604,16 @@
                     };
                 },
                 computed: {
-
+                    acceptedAnswers() {
+                        return this.answerList.filter(
+                        answer => answer.comments && answer.comments !== 'null'
+                        );
+                    },
+                    normalAnswers() {
+                        return this.answerList.filter(
+                        answer => (!answer.comments || answer.comments === 'null') && answer.isDeleted === 'N'
+                        );
+                    }
                 },
                 methods: {
                     fnView(){
@@ -879,7 +897,7 @@
                 },
                 mounted() {
                     let self = this;
-     
+                    
                     const params = new URLSearchParams(window.location.search);
                     self.fnVetInfo();
                     self.fnView();

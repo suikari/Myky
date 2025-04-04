@@ -11,9 +11,9 @@
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <!-- Quill JS -->
         <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
+    <!-- <link rel="stylesheet" href="/css/board/board.css"/> -->
     <style>
-        body {
+         body {
             padding-bottom: 120px; /* 푸터 높이만큼 확보 */
         }
         #app {
@@ -308,6 +308,7 @@
                        title : "",
                        vetBoardId : "${map.vetBoardId}",
                        answerList : [],
+                       sessionId : "${sessionId}" || '',
                     };
                 },
                 computed: {
@@ -330,6 +331,18 @@
                                     alert("잘못된 주소입니다.");
                                     location.href="/board/vetBoardList.do";
                                 }
+                                // info가 null인 경우
+                                if (!data.info) {
+                                    alert("잘못된 접근입니다.");
+                                    location.href = "/board/vetBoardList.do";
+                                    return;
+                                }
+
+                                if(self.sessionId != data.info.userId){
+                                    alert("작성자만 접근 가능합니다.");
+                                    location.href="/board/vetBoardList.do";
+                                }
+
 				        		console.log("view",data);
                                     self.info = data.info;
                                     self.answerList = data.answerList;
@@ -352,7 +365,8 @@
 				        var nparmap = {
                             title : self.info.title,
                             content : self.info.content,
-                            vetBoardId : self.vetBoardId
+                            vetBoardId : self.vetBoardId,
+                            userId : self.sessionId,
                         }
 				        $.ajax({
 				        	url:"/board/vetBoardEdit.dox",
@@ -396,6 +410,11 @@
                 	var self = this;
                     const params = new URLSearchParams(window.location.search);
                 	self.fnView();
+
+                    if(self.sessionId == ''){
+                        alert("로그인이 필요합니다.");
+                        location.href="/board/vetBoardList.do";
+                    }
                 }
             }); 
             app.mount("#app");

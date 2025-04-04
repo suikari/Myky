@@ -10,10 +10,10 @@
     <!-- Quill CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
+    <!-- <link rel="stylesheet" href="/css/board/board.css"/> -->
 	
     <style>
-        body {
+       body {
             padding-bottom: 120px; /* 푸터 높이만큼 확보 */
         }
         #app {

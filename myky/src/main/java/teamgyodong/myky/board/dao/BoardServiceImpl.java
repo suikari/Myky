@@ -56,6 +56,7 @@ public class BoardServiceImpl implements BoardService {
 
 		return resultMap;
 	}
+	@Override
 	//게시글 상세보기
 	public HashMap<String, Object> boardView(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -95,6 +96,7 @@ public class BoardServiceImpl implements BoardService {
 
 	    return resultMap;
 	}
+	@Override
 	//게시글 이미지 출력
 	public void addBoardFile(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -102,6 +104,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.insertBoardFile(map);
 
 	}
+	@Override
 	//게시글 추가
 	public HashMap<String, Object> boardAdd(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -112,6 +115,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultMap;
 	}
+	@Override
 	//게시글 수정
 	public HashMap<String, Object> boardEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -121,6 +125,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultMap;
 	}
+	@Override
 	//게시글 삭제
 	public HashMap<String, Object> boardRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -128,6 +133,7 @@ public class BoardServiceImpl implements BoardService {
 		int num = boardMapper.updateRemoveBoard(map);
 		return resultMap;
 	}
+	@Override
 	//댓글 작성
 	public HashMap<String, Object> CommentAdd(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -137,6 +143,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	@Override
 	//댓글 수정 저장
 	public HashMap<String, Object> commentUpdate(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -146,6 +153,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	@Override
 	//댓글 삭제
 	public HashMap<String, Object> CommentRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -153,6 +161,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.deleteComment(map);
 		return resultMap;
 	}
+	@Override
 	//댓글 수정
 	public HashMap<String, Object> CommentEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -160,6 +169,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.updateComment(map);
 		return resultMap;
 	}
+	@Override
 	//댓글 갯수
 	public HashMap<String, Object> CommentCount(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -170,6 +180,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result","success");
 		return resultMap;
 	}
+	@Override
 	//파일 삭제
 	public HashMap<String, Object> boardRemoveFile(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -177,10 +188,12 @@ public class BoardServiceImpl implements BoardService {
 		int num = boardMapper.deleteFile(map);
 		return resultMap;
 	}
+	@Override
 	//대댓글 구현
 	public void insertReply(Map<String, Object> map) {
 	    boardMapper.insertReply(map);
 	}
+	@Override
 	//좋아요 버튼 기록 출력 (userId)
 	public HashMap<String, Object> selectLikeButton(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -211,6 +224,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("listSatus", insertSatus);
 		return resultMap;
 	}
+	@Override
 	//좋아요 버튼 status 삭제
 	public HashMap<String, Object> RemoveCnt(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -221,6 +235,7 @@ public class BoardServiceImpl implements BoardService {
 		return resultMap;
 
 	}
+	@Override
 	//좋아요 갯수 DB저장
 	public HashMap<String, Object> addlikeCntBoard(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -229,6 +244,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.updatelikeCntBoard(map);
 		return resultMap;
 	}
+	@Override
 	//수의사 게시판 목록 출력
 	public HashMap<String, Object> vetBoardList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -265,6 +281,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultMap;
 	}
+	@Override
 	//수의사 게시글 상세보기
 	public HashMap<String, Object> vetBoardView(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -306,6 +323,7 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return resultMap;
 	}
+	@Override
 	//수의사 게시글 추가
 	public HashMap<String, Object> vetBoardAdd(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -318,6 +336,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultMap;
 	}
+	@Override
 	//수의사 게시글 수정
 	public HashMap<String, Object> vetBoardEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -327,6 +346,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		return resultMap;
 	}
+	@Override
 	//수의사 게시글 삭제
 	public HashMap<String, Object> vetBoardRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -334,6 +354,7 @@ public class BoardServiceImpl implements BoardService {
 		int num = boardMapper.updateRemoveVetBoard(map);
 		return resultMap;
 	}
+	@Override
 	//수의사 답변 작성
 	public HashMap<String, Object> vetBoardAnReply(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -351,6 +372,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	@Override
 	//수의사 게시판 답변 수정
 	public HashMap<String, Object> vetBoardAnEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -358,6 +380,7 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.updateAnEdit(map);
 		return resultMap;
 	}
+	@Override
 	//수의사 답변 삭제
 	public HashMap<String, Object> vetBoardAnRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -367,6 +390,7 @@ public class BoardServiceImpl implements BoardService {
 		return resultMap;
 		
 	}
+	@Override
 	//수의사 답변 채택
 	public HashMap<String, Object> vetBoardAnSelect(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -377,6 +401,7 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	@Override
 	//FQA 게시글 보기
 	public HashMap<String, Object> FAQView(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
