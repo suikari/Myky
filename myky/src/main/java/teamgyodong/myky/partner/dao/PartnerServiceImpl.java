@@ -32,6 +32,8 @@ public class PartnerServiceImpl implements PartnerService {
 			List<partnerdetail> favoriteList = partnerMapper.getfavoriteList(map);
 			List<partnerdetail> categoryCode = partnerMapper.getcategoryCode(map);
 			List<partnerdetail> partInfo = partnerMapper.getpartInfo(map);
+			
+
 
 			resultMap.put("partInfo", partInfo); 
 			resultMap.put("categoryCode", categoryCode); 
@@ -126,6 +128,18 @@ public class PartnerServiceImpl implements PartnerService {
 
 		partnerMapper.favorList(map);
 		resultMap.put("result", "success");
+		return resultMap;
+	}
+
+	@Override
+	public HashMap<String, Object> allhosList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		List<partnerdetail> allhoslist = partnerMapper.getallhoslist(map);
+		
+		resultMap.put("allhoslist", allhoslist); 
+
 		return resultMap;
 	}
 

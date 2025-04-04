@@ -37,6 +37,8 @@ public interface PartnerMapper {
 
 	List<partnerdetail> getpartInfo(HashMap<String, Object> map);
 
+	List<partnerdetail> getallhoslist(HashMap<String, Object> map);
+
 
 
 
