@@ -18,6 +18,8 @@ public class pay {
 	private String productId;
 	private String donationId;
 	private String userId;
+	private String usedPoint;
+	private String membership;
 	
 	// product
 	private String productName;

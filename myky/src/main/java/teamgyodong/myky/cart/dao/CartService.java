@@ -34,4 +34,6 @@ public interface CartService {
 
 	HashMap<String, Object> editRefundStatus(HashMap<String, Object> map);
 
+	HashMap<String, Object> getPartnerInfo(HashMap<String, Object> map);
+
 }

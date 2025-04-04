@@ -83,6 +83,13 @@ public class CartController {
 		return "cart/order-list";
 	}
 	
+	@RequestMapping("/partner/info.do") 
+    public String info(Model model) throws Exception{
+		
+
+        return "donation/partner-info";
+    }
+	
 	// cartList
 	@RequestMapping(value = "/cart/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -236,6 +243,16 @@ public class CartController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = cartService.editRefundStatus(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// partner list! Mapper끌어오기
+	@RequestMapping(value = "/partner/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String partnerInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = cartService.getPartnerInfo(map);
 		return new Gson().toJson(resultMap);
 	}
 }

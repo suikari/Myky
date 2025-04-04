@@ -723,7 +723,8 @@
                         cancelDate: null,
                         donationId: null,
                         userId: self.userInfo.userId,
-                        usedPoint: self.usedPoint
+                        usedPoint: self.usedPoint,
+                        membershipId:null
                     };
                     $.ajax({
                         url: "/payment.dox",
