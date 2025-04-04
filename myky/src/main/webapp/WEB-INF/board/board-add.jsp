@@ -10,9 +10,10 @@
     <!-- Quill CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link rel="stylesheet" href="/css/board/board.css"/>
 
     <style>
-        body {
+       body {
             padding-bottom: 120px; /* 푸터 높이만큼 확보 */
         }
         #app {
@@ -202,7 +203,7 @@
                     return {
                        title : "",
                        content : "",
-                       sessionId : "${sessionId}",
+                       sessionId : "${sessionId}" || '',
                        boardId : "",
                        category : "",                
                     };
@@ -230,7 +231,17 @@
                                     location.href="/board/boardList.do";
                                 }
                                 alert("저장되었습니다.");
+                                // info가 null인 경우
+                                if (!data.info) {
+                                    alert("잘못된 접근입니다.");
+                                    location.href = "/board/list.do?category=" + self.category;
+                                    return;
+                                }
                                 
+                                self.info = data.info;
+                                self.fileList = data.fileList;
+                                self.fnQuill();
+
 
                                 if( $("#file1")[0].files.length > 0){
                                     var form = new FormData();
@@ -272,7 +283,20 @@
                 mounted() {
                     let self = this;
                     const params = new URLSearchParams(window.location.search);
-                    self.category = params.get("category") || "F";            	
+                    self.category = params.get("category") || "F";      
+                    
+                    if(!(self.category == 'A' || self.category == 'F')){
+                        alert("잘못된 접근입니다.");
+                        location.href="/board/list.do?category=F";
+                    }
+                    if(self.sessionId == ''){
+                        alert("로그인이 필요합니다.");
+                        location.href="/board/list.do?category="+self.category;
+                    }else if(self.sessionId != 'ADMIN' && self.category =='A'){
+                        alert("관리자만 접속 가능합니다.");
+                        location.href="/board/list.do?category="+self.category;
+                    }
+
                 	var quill = new Quill('#editor', {
                     theme: 'snow',
                     modules: {

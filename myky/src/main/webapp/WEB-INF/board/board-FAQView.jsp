@@ -7,7 +7,7 @@
     <title>Vue3 레이아웃 예제</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	
+	<link rel="stylesheet" href="/css/board/board.css"/>
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -136,6 +136,17 @@
             color: #fca311;
             text-decoration: underline;
         }
+        .buttonTitle {
+            font-weight: bold;
+            /* background-color: #ccc; */
+            /* color: #bbb; */
+            cursor: pointer;
+            border: 1px solid #f9f9f9;
+            border-radius: 6px;
+            font-size: 1px;
+            padding: 10px;
+            text-align: left;
+        }
         button.button {
             padding: 10px 20px;
             font-size: 14px;
@@ -256,7 +267,7 @@
                 <td>{{item.boardId}}</td>
                 <td>{{item.menu}}</td>
                 <td>
-                    <button class="button" @click="fnFAQDrop(item.boardId)">{{item.title}}</button>
+                    <button class="buttonTitle" @click="fnFAQDrop(item.boardId)">{{item.title}}</button>
                     <div v-if="selectedBoardId == item.boardId" ></div>
                 </td>
             </tr>

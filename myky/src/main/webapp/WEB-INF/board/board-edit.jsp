@@ -9,9 +9,9 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Quill JS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    
+    <link rel="stylesheet" href="/css/board/board.css"/>
     <style>
-        body {
+                body {
             padding-bottom: 120px; /* 푸터 높이만큼 확보 */
         }
         #app {
@@ -262,7 +262,7 @@
         .link-container:hover .preview-image {
             display: block;
         }
-</style>
+    </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
@@ -325,6 +325,7 @@
                         title : "",
                         reload : 0,
                         category : "",
+                        sessionId : "${sessionId}" || '',
                     };
                 },
                 computed: {
@@ -347,12 +348,27 @@
 				        	success : function(data) {
                                 if(data.result != 'success'){
                                     alert("잘못된 주소입니다.");
-                                    location.href="/board/BoardList.do";
+                                    location.href="/board/list.do";
                                 }
-				        		console.log(data);
+
+                                    // info가 null인 경우
+                                if (!data.info) {
+                                    alert("잘못된 접근입니다.");
+                                    location.href = "/board/list.do?category=" + self.category;
+                                    return;
+                                }
+                                
+                                if(self.sessionId != self.info.userId){
+                                        alert("작성자만 접근 가능합니다.");
+                                        location.href="/board/list.do?category="+self.category;
+                                }
+
+
+				        		console.log("mm",data);
                                     self.info = data.info;
                                     self.fileList = data.fileList;
                                     self.fnQuill();
+
 
 				        	}
 				        });
@@ -381,7 +397,8 @@
 				        var nparmap = {
                             title : self.info.title,
                             content : self.info.content,
-                            boardId : self.boardId
+                            boardId : self.boardId,
+                            userId : self.sessionId
                         }
 				        $.ajax({
 				        	url:"/board/edit.dox",
@@ -465,11 +482,23 @@
                 },
                 mounted() {
                 	var self = this;
-
                     const params = new URLSearchParams(window.location.search);
                     self.boardId = params.get("boardId") || "";
                     self.category = params.get("category") || "F";
-                	self.fnView();                        
+                	self.fnView();           
+                    
+                    if(!(self.category == 'A' || self.category == 'F')){
+                        alert("잘못된 접근입니다.");
+                        location.href="/board/list.do?category=F";
+                    }
+                    if(self.sessionId == ''){
+                        alert("로그인이 필요합니다.");
+                        location.href="/board/list.do?category="+self.category;
+                    }else if(self.sessionId != 'ADMIN' && self.category =='A'){
+                        alert("관리자만 접속 가능합니다.");
+                        location.href="/board/list.do?category="+self.category;
+                    }
+                    
                 }
             });
             app.mount("#app");

@@ -7,7 +7,8 @@
     <title>수의사 게시판</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	
+	<link rel="stylesheet" href="/css/board/board.css"/>
+    
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -207,7 +208,20 @@
             height: 30px;
             text-align: center;
         }
-
+        span {
+            margin: 0 4px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #202060;
+        }
+        span.current-page {
+            color: #fca311;
+            text-decoration: underline;
+            cursor: default;
+        }
+        span:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -271,16 +285,49 @@
                             <div class="acceptButtonY" v-if="item.isAccepted == 'Y'">채택완료</div>
                         </td>
                     </template>
-                        
                 </tr>
             </table>
-            <div v-if="index > 0">
-                <a href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1"> < </a>
-                <a href="javascript:;" v-for="num in index" @click="fnPage(num)">
-                    <span :class="{ 'current-page': page === num }">{{ num }}</span>
-                </a>
-                <a href="javascript:;" @click="fnPageMove('next')" v-if="page != index"> > </a>
-            </div>
+
+                <!-- 페이지네이션 버튼 -->
+                <div>
+                    <!-- 이전 페이지 버튼 -->
+                    <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
+                        <i class="bi bi-chevron-left"> < </i>
+                    </a>
+        
+                    <!-- 페이지 번호 -->
+                    <template v-for="num in index">
+                        <!-- 첫 번째 페이지로 이동하는 "..." -->
+                            <a v-if="num === 1 && page > 3" 
+                                href="javascript:;"  
+                                @click="fnPage(1)" 
+                                class="btn btn-outline-secondary board-page-btn">
+                                ...
+                            </a>
+                    
+                            <!-- 현재 페이지 기준 좌우 2개씩 표시 -->
+                            <span v-if="num >= page - 2 && num <= page + 2" 
+                                href="javascript:;"  
+                                @click="fnPage(num)" 
+                                class="btn btn-outline-secondary board-page-btn" 
+                                :class="{ 'current-page': page === num }">
+                                {{ num }}
+                            </span>
+                        
+                            <a v-if="num === index && page < index - 2" 
+                                href="javascript:;"  
+                                @click="fnPage(index)" 
+                                class="btn btn-outline-secondary board-page-btn">
+                                ...
+                            </a>
+                    </template>
+    
+                    <!-- 다음 페이지 버튼 -->
+                    <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
+                        <i class="bi bi-chevron-right"> > </i>
+                    </a>
+
+                </div>
             <button class="button" @click="fnAdd" v-if="sessionId">글쓰기</button>
     </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
@@ -348,7 +395,6 @@
                                     location.href="/board/vetBoardList.do";
                                 }
                                 self.list = data.vetBoard;
-                                result
                                 console.log("self.nickName", data.nickName);
                                 console.log("vetBoard list:", data.vetBoard);
 
@@ -367,8 +413,7 @@
                         location.href="/board/vetBoardAdd.do";
                     },
                     fnView(vetBoardId) {
-                        let self = this;
-                        
+                        let self = this;                        
                         localStorage.setItem("page", self.page);
                         location.href="/board/vetBoardView.do?vetBoardId=" + vetBoardId;
                     },
@@ -406,7 +451,7 @@
                     self.fnVetBoardList();
                     localStorage.removeItem('page');
                     console.log("sessionId:", this.sessionId); 
-                },
+                }
             });
 
             app.mount("#app");
