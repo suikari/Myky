@@ -57,6 +57,8 @@ public interface UserMapper {
 
 	List<User> selectOrderCnt(HashMap<String, Object> map);
 
+	User selectEmail(HashMap<String, Object> map);
+
 
 
 

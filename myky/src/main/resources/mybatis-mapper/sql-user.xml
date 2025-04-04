@@ -192,4 +192,10 @@
 		ORDER BY S.ORDER_STATUS
 	</select>
 	
+	<select id="selectEmail" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
+		SELECT *
+		FROM USERS
+		WHERE EMAIL = #{email}
+	</select>
+	
 </mapper>
