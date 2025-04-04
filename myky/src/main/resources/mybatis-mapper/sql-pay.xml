@@ -8,10 +8,10 @@
 		
 		insert into payment
 		<if test="option != 'donation'">
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId},#{usedPoint})		
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId},#{usedPoint},#{membershipId})		
 		</if>
 		<if test="option == 'donation'">
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},null,#{donationId},#{userId},0)			
+		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},null,#{donationId},#{userId},0,null)
 		</if>
 		
 	</insert>

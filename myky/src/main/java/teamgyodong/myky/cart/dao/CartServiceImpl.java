@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import teamgyodong.myky.cart.mapper.CartMapper;
 import teamgyodong.myky.cart.model.cart;
+import teamgyodong.myky.partner.mapper.PartnerMapper;
+import teamgyodong.myky.partner.model.partnerdetail;
 
 
 @Service
@@ -28,6 +30,9 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	CartMapper cartMapper;
+
+	@Autowired
+	PartnerMapper partnerMapper;
 	
 	@Autowired
     private ObjectMapper objectMapper;
@@ -304,6 +309,24 @@ public class CartServiceImpl implements CartService {
 			
 			cartMapper.updateRefundStatus(map);
 
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> getPartnerInfo(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<partnerdetail> partnerList = partnerMapper.getpartInfo(map);
+			int count = cartMapper.getPartnerCount(map);
+
+			resultMap.put("count", count);
+			resultMap.put("partnerList", partnerList);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

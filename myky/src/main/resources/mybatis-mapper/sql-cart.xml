@@ -235,6 +235,14 @@
 	
 	</select>
 	
+	<select id="getPartnerCount" parameterType="hashmap" resultType="int">
+	    select count(*) from partner_detail
+	    where 1=1
+	    <if test="searchkeyword != null and searchkeyword != ''">
+	    	and name like '%' || #{searchkeyword} || '%' or address like '%' || #{searchkeyword} || '%'
+		</if>
+	</select>
+	
 </mapper>
 
 
