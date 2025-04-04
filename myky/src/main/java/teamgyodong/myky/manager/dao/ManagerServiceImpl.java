@@ -29,6 +29,8 @@ import teamgyodong.myky.manager.model.mProduct;
 import teamgyodong.myky.manager.model.mProductImg;
 import teamgyodong.myky.manager.model.mUser;
 import teamgyodong.myky.manager.model.manager;
+import teamgyodong.myky.manager.model.order;
+import teamgyodong.myky.manager.model.orderdetail;
 
 
 @Service
@@ -376,6 +378,33 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 		
+	
+	@Override
+	public HashMap<String, Object> selectBestSellProduct(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mProduct> mProduct = managerMapper.selectBestSellProduct(map);
+			List<mProduct> mOrder = managerMapper.selectTotOrder(map);
+
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Product", mProduct);	
+			resultMap.put("Order", mOrder);			
+
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+		
+	
+	
+	
 	@Override
 	public HashMap<String, Object> updateUser(HashMap<String, Object> map) {
 		
@@ -510,6 +539,42 @@ public class ManagerServiceImpl implements ManagerService {
 	}
 	
 	@Override
+	public HashMap<String, Object> updateOrder(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.updateOrder(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> updateOrderDetail(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.updateOrderDetail(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
 	public HashMap<String, Object> selectMembershipVal(HashMap<String, Object> map) {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -546,5 +611,40 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	//게시글 상세보기
+	@Override
+	public HashMap<String, Object> selectAllOrderList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+				
+	    List<order> order = managerMapper.selectAllOrderList(map);
+		
+	    int count = managerMapper.selectAllOrderCnt(map);
+
+		Map<String, Object> countMap = new HashMap<>();
+		countMap.put("cnt", count);
+		
+	    for (order detail : order) {
+	        map.put("orderId", detail.getOrderId()); // 댓글 ID → 대댓글 검색용
+	        List<orderdetail> replies = managerMapper.selectOrderDetailList(map);
+	        detail.setOrderdetail(replies); // 💥 replies를 comment 객체에 직접 세팅
+	    }
+
+		
+
+		
+		resultMap.put("count", count);
+	    resultMap.put("order", order);
+	    resultMap.put("result", "success");
+	    
+		try {
+
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+	
+	    return resultMap;
+	}
 	
 }

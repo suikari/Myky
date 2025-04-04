@@ -320,326 +320,384 @@
 		    cursor: not-allowed;
 		}
 
-    
+    .status-received { color: #555; background-color: #f0f0f0; padding: 4px 8px; border-radius: 4px; }
+	.status-shipped { color: #0a58ca; background-color: #e0f0ff; }
+	.status-delivered { color: #198754; background-color: #d1e7dd; }
+	.status-exchange { color: #6f42c1; background-color: #e9d8fd; }
+	.status-exchanged { color: #5c2d91; background-color: #dcd1f7; }
+	.status-return { color: #fd7e14; background-color: #ffe5d0; }
+	.status-returned { color: #dc3545; background-color: #f8d7da; }
+	
     </style>
     
 </head>
 <body>
-
     <div id="app" class="dashboard-container col-9">
-       
-         <!-- Main Content1 -->
-         <div class=" main-content">
-                <h2>상품 관리</h2>
-
-
-				<div class="card p-3">
-	               	 <div class="row g-2 align-items-center mb-3">
-						    <!-- N개씩 보기 -->
-						    <div class="col-auto">
-						        <select v-model="pageSize" class="form-select board-select" @change="fnMainList">
-						            <option value="10">10개씩</option>
-   						            <option value="50">50개씩</option>
-   						            <option value="100">100개씩</option>
-						        </select>
-						    </div>
-						
-						    <!-- 검색 옵션 -->
-						    <div class="col-auto">
-						        <select v-model="searchOption" class="form-select">
-						            <option value="all">전체</option>
-						            <option value="title">제목</option>
-						            <option value="userId">작성자</option>
-						        </select>
-						    </div>
-						
-						    <!-- 검색어 입력 -->
-						    <div class="col">
-						        <input v-model="keyword" @keyup.enter="fnMainList" class="form-control board-search" placeholder="🔍 검색어 입력" />
-						    </div>
-						
-						    <!-- 검색 버튼 -->
-						    <div class="col-auto">
-						        <button class="btn btn-primary board-search-btn" @click="fnBoardSearch">검색</button>
-						    </div>
-					</div>
-						
-	                <table class="table member-table">
-	                    <thead>
-	                        <tr>
-	                            <th>번호</th>
-	                            <th>카테고리</th>
-	                            <th>상품코드</th>
-								<th>가격</th>
-	                            <th>상품명</th>
-	                            <th>등록일</th>
-	                            <th>상태</th>
-	                            <th>관리</th>
-	                        </tr>
-	                    </thead>
-	                    <tbody>
-	                    	<template v-for="(member, index) in members" >
-	                        <tr >
-	                            <td>{{ index + 1 }}</td>
-	                            <td>{{ member.categoryId }}</td>
-	                            <td>{{ member.productCode }}</td>	
-								<td>{{ member.price }}</td>								
-	                            <td>{{ member.productName }}</td>
-	                            <td>{{ member.registrationDate }}</td>
-	                            <td>
-	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
-	                                    {{ member.DeleteYn === 'N' ? '판매중' : '판매중지' }}
-	                                </span>
-	                            </td>
-	                            <td>
-           							<button class="btn-edit me-2" @click="fnEdit(member.productId)">수정</button>
-	                                <!-- <button class="btn-delete">삭제</button> -->
-	                            </td>
-	                        </tr>
-	                        
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>주문 관리</h2>
+            <div class="card p-3">
+                <!-- 검색 및 필터링 -->
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-auto">
+                        <select v-model="pageSize" class="form-select board-select" @change="fnMainList">
+                            <option value="10">10개씩</option>
+                            <option value="50">50개씩</option>
+                            <option value="100">100개씩</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <select v-model="searchOption" class="form-select">
+                            <option value="all">전체</option>
+                            <option value="orderId">주문번호</option>
+                            <option value="userId">사용자 ID</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <input v-model="keyword" @keyup.enter="fnMainList" class="form-control board-search" placeholder="🔍 검색어 입력" />
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary board-search-btn" @click="fnBoardSearch">검색</button>
+                    </div>
+                </div>
+                <!-- 주문 리스트 -->
+                <table class="table member-table">
+                    <thead>
+                        <tr>
+                            <th>주문번호</th>
+                            <th>구매자 ID</th>
+                            <th>총 가격</th>
+                            <th>주문 상태</th>
+                            <th>주문일</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-for="(order, index) in orders">
+                            <tr >
+                                <td @click="toggleDetails(order.orderId)">{{ order.orderId }}</td>
+                                <td @click="toggleDetails(order.orderId)">{{ order.userId }}</td>
+                                <td @click="toggleDetails(order.orderId)">{{ order.totalPrice }}</td>
+                                <td @click="toggleDetails(order.orderId)">
+                                    <span class="status-received" :class="getStatusClass(order.orderStatus)">
+							            {{ getStatusLabel(order.orderStatus) }}
+							        </span>
+                                </td  @click="toggleDetails(order.orderId)">
+                                <td @click="toggleDetails(order.orderId)">{{ order.orderedAt }}</td>
+                                <td>
+                                    <button @click="fnEditOrder(order.orderId)" class="btn-edit me-2">수정</button>
+                                </td>
+                            </tr>
+                            
                             <!-- 토글되는 수정 입력란 -->
-							<tr v-if="selectedMemberId === member.productId">
+							<tr v-if="updateOrderId === order.orderId">
 							    <td colspan="8">
 							        <div class="edit-form d-flex flex-column gap-3 p-3 border rounded">
 							            <!-- 첫 번째 줄: 상품명, 상품코드, 가격 -->
 							            <div class="d-flex flex-wrap gap-3">
 							                <div class="col-auto">
-							                    <label class="form-label">상품명:</label>
-							                    <input type="text" v-model="editData.productName" class="form-control">
-							                </div>
-							                <div class="col-auto">
-							                    <label class="form-label">상품코드:</label>
-							                    <input type="text" v-model="editData.productCode" class="form-control">
-							                </div>
-							                <div class="col-auto">
-							                    <label class="form-label">가격:</label>
-							                    <input type="text" v-model="editData.price" class="form-control">
-							                </div>
-							            </div>
-							
-							            <!-- 두 번째 줄: 카테고리1, 카테고리2, 판매 상태 & 버튼 -->
-							            <div class="d-flex flex-wrap gap-3 align-items-center">
-							                <div class="col-auto">
-							                    <label class="form-label">카테고리1:</label>
-							                    <select v-model="category1" class="form-select">
-							                        <option value="강아지">강아지</option>
-							                        <option value="고양이">고양이</option>
-							                        <option value="기타">기타</option>
+							                    <label class="form-label">주문상태:</label>
+							                    <select v-model="editData.orderStatus" class="form-select">
+							                        <option value="paid">주문완료</option>
+							                        <option value="cancel">환불신청</option>
+							                        <option value="canceled">환불완료</option>
 							                    </select>
 							                </div>
-							                <div class="col-auto">
-							                    <label class="form-label">카테고리2:</label>
-							                    <select v-model="category2" class="form-select">
-							                        <option value="장난감">장난감</option>
-							                        <option value="용품">용품</option>
-							                        <option value="사료">사료</option>
-							                        <option value="간식">간식</option>
-							                        <option value="영양제">영양제</option>
-							                    </select>
-							                </div>						                
-							                <div class="col-auto d-flex align-items-center">
-							                    <label class="form-label me-2">판매 상태:</label>
-							                    <div class="form-check form-switch">
-							                        <input class="form-check-input" type="checkbox" v-model="editData.DeleteYn" true-value="N" false-value="Y">
-							                    </div>
+									        <div class="col-auto d-flex align-items-center">
+									            <label for="deleteYn" class="form-label me-2">환불 상태:</label>
+									            <div class="form-check form-switch">
+									                <input class="form-check-input" type="checkbox" id="deleteYn" v-model="editData.refundStatus" 
+									                    true-value="Y" false-value="N">
+									            </div>
+									        </div>
+									        
+							                <div class="col-auto ">
+							                    <button class="btn btn-primary me-2 custom-btn" @click="fnOrderSave">저장</button>
+							                    <button class="btn btn-secondary custom-btn" @click="updateOrderId = null">취소</button>
 							                </div>
-							                <div class="col-auto d-flex">
-							                    <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
-							                    <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
-							                </div>
+							                
 							            </div>
+
+
 							        </div>
 							    </td>
 							</tr>
-    						</template>
-	                    </tbody>
-	                </table>
-	                
-					<div class="d-flex justify-content-between align-items-center mt-3">
-				    <!-- 생성 버튼 왼쪽에 배치 -->
-				    <div>
-					        <button class="btn btn-success" @click="isCreating = !isCreating">상품 등록</button>
-					    </div>
+							
+                            <!-- 주문 상세 토글 -->
+                            <tr v-if="selectedOrderId === order.orderId">
+                                <td colspan="6">
+                                    <div class="edit-form p-3 border rounded">
+                                        <h5>주문 상세</h5>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>상품명</th>
+                                                    <th>주문상태</th>
+                                                    <th>운송장번호</th>
+                                                    <th>수량</th>
+                                                    <th>가격</th>
+                                                    <th>관리</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template  v-for="product in order.orderdetail">
+                                                <tr>
+                                                    <td>{{ product.productName }}</td>
+                                                    <td>
+												        <span :class="getStatusClass(product.refundStatus)">
+												            {{ getStatusLabel(product.refundStatus) }}
+												        </span>
+					                           		</td>
+					                           	    <td>{{ product.trackingNumber }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                    <td>{{ product.price }} 원</td>
+                                                    <td>
+					                                    <button @click="fnEditOrderDetail(product)"  class="btn-edit me-2">수정</button>
+					                                </td>
+                                                </tr>
+                                                
+                                                <!-- 토글되는 수정 입력란 -->
+												<tr v-if="updateOrderDetailId === product.orderDetailId && updateproductId === product.productId">
+												    <td colspan="8">
+												        <div class="edit-form d-flex flex-column gap-3 p-3 border rounded">
+												            <!-- 첫 번째 줄: 상품명, 상품코드, 가격 -->
+												            <div class="d-flex flex-wrap gap-3">
+												            	<!-- 이름 입력 필드 -->
+														        <div class="col">
+														            <label for="userName" class="form-label">운송장번호 : </label>
+														            <input type="text" id="userName" v-model="editData.trackingNumber" class="form-control">
+														        </div>
+												                <div class="col-auto">
+												                    <label class="form-label">주문상태 : </label>
+												                    <select v-model="editData.refundStatus" class="form-select">
+												                        <option value="none">주문접수</option>
+												                        <option value="shipped">배송중</option>
+												                        <option value="delivered">배송완료</option>
+												                        <option value="exchange">교환신청</option>
+												                        <option value="exchanged">교환완료</option>
+												                        <option value="return">반품신청</option>												                        
+												                        <option value="returned">반품완료</option>	
+												                    </select>
+												                </div>														        
+												                <div class="col-auto ">
+												                    <button class="btn btn-primary me-2 custom-btn" @click="fnOrderDetailSave">저장</button>
+												                    <button class="btn btn-secondary custom-btn" @click="updateOrderDetailId = null">취소</button>
+												                </div>
+												                
+												            </div>
 					
-					    <!-- 페이지네이션 버튼 중앙에 배치 -->
-					    <div class="d-flex justify-content-center">
-					        <!-- 이전 페이지 버튼 -->
-					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
-					            <i class="bi bi-chevron-left"></i>
-					        </a>
 					
-					        <!-- 페이지 번호 -->
-							<template v-for="num in index">
-								<!-- 첫 번째 페이지로 이동하는 "..." -->
-								    <a v-if="num === 1 && page > 3" 
-								       href="javascript:;"  
-								       @click="fnPage(1)" 
-								       class="btn btn-outline-secondary board-page-btn">
-								       ...
-								    </a>
-								
-								    <!-- 현재 페이지 기준 좌우 2개씩 표시 -->
-								    <a v-if="num >= page - 2 && num <= page + 2" 
-								       href="javascript:;"  
-								       @click="fnPage(num)" 
-								       class="btn btn-outline-secondary board-page-btn" 
-								       :class="{ 'active': page === num }">
-								       {{ num }}
-								    </a>
-								
-								    <a v-if="num === index && page < index - 2" 
-								       href="javascript:;"  
-								       @click="fnPage(index)" 
-								       class="btn btn-outline-secondary board-page-btn">
-								       ...
-								    </a>
-							</template>
-					
-					        <!-- 다음 페이지 버튼 -->
-					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
-					            <i class="bi bi-chevron-right"></i>
-					        </a>
-					    </div>
-					</div>
-					
-	            </div>
-
-
-
+												        </div>
+												    </td>
+												</tr>
+												</template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <!-- 페이지네이션 -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                        <template v-for="num in index">
+                            <a href="javascript:;" @click="fnPage(num)" class="btn btn-outline-secondary board-page-btn" :class="{ 'active': page === num }">
+                                {{ num }}
+                            </a>
+                        </template>
+                        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
 </body>
-</html>
 
 <script>
-    
-   
-            const app = Vue.createApp({
-            	 data() {
-                     return {
- 	                    index: 0,
-						menu : '',
-						submenu : '',  
-						members : {},
-						selectedMemberId : null,
-				        editData: {
-
-				        },
-	                    searchOption: 'userId',
-	                    page: 1,
-	                    pageSize: 10,
-	                    keyword: '',
-			        	category1 : '',
-			        	category2 : '',
-                     };
-                 },
-                computed: {
-                },
-                methods: {
-                	fnMainList : function() {
-                    	var self = this;
-                    	var nparmap = {
-                                searchOption: self.searchOption,
-                                page: (self.page - 1) * self.pageSize,
-                                pageSize: self.pageSize,
-                                keyword: self.keyword,
-                    	};
-                    	$.ajax({
-                    		url: "/admin/productList.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("main",data);
-								self.members = data.Product;
-                                if (data.count && data.count.cnt !== undefined) {
-                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
-                                    console.log("1!", self.index);
-
-                                } else {
-                                    self.index = 0;
-                                    console.warn("count 정보 없음!", data);
-                                }		
-                    		}
-                    	});
-                    },
-                    fnEdit(productId) {
-                    	var self = this;
-
-                    	console.log("1",productId);
-                        if (self.selectedMemberId === productId) {
-                        	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",productId);
-
-                        } else {
-                            const member = self.members.find(m => m.productId === productId);
-                            self.editData = { ...member };  // 수정할 데이터 채우기
-                            self.selectedMemberId = productId;
-                        	console.log("3",self.editData);
-
-                        }
-                    },
-                    fnSave () {
-                    	var self = this;
-                    	var nparmap = {
-                    			userId : self.selectedMemberId,
-    				            userName : self.editData.userName ,
-    				            DeleteYn : self.editData.DeleteYn,
-                    	};
-                    	$.ajax({
-                    		url: "/admin/updateUser.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			//console.log("main",data);
-                    			alert("수정 완료");
-                            	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                				self.fnMainList();
-                    		}
-                    	});
-                    },
-                    fnView(boardId) {
-                        let self = this;
-                        localStorage.setItem("page", self.page);
-                        location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
-                    },
-                    fnPage(num) {
-                        this.page = num;
-                        this.fnMainList();
-                    },
-                    fnPageMove(direction) {
-                        if (direction === "next") this.page++;
-                        else this.page--;
-                        this.fnMainList();
-                    },
-                    fnOrder(orderKey) {
-                        if (this.orderKey !== orderKey) this.orderType = "";
-                        this.orderKey = orderKey;
-                        this.orderType = this.orderType === "ASC" ? "DESC" : "ASC";
-                        this.fnMainList();
-                    },
-                    fnBoardSearch : function(){
-                        let self = this;
-                        let pageCnt = 1;
-                        self.page = pageCnt;
-                        self.fnMainList();
-                    },
-                	
-                },
-                mounted() {
-                	let self = this;
-                	const params = new URLSearchParams(window.location.search);
-                    
-                    self.menu = params.get("menu") || "stat";
-                    self.submenu = params.get("submenu") || "1";
-					self.fnMainList();
-
-                	
+const app = Vue.createApp({
+    data() {
+        return {
+            index: 0,
+            orders: [],
+            selectedOrderId: null,
+            searchOption: 'orderId',
+            page: 1,
+            pageSize: 10,
+            keyword: '',
+            editData: {},
+            updateOrderId : '',
+            updateOrderDetailId : '',
+            updateproductId : '',
+        };
+    },
+    methods: {
+        fnMainList() {
+            var self = this;
+            var params = {
+                    page: (self.page - 1) * self.pageSize,
+                    pageSize: self.pageSize,
+            };
+            $.ajax({
+                url: "/admin/selectOrderList.dox",
+                dataType: "json",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                	console.log("dete",data);
+                    self.orders = data.order;
+                    self.index = Math.ceil(data.count / self.pageSize);
                 }
             });
+        },
+        toggleDetails(orderId) {
+            this.selectedOrderId = this.selectedOrderId === orderId ? null : orderId;
+        },
+        fnPage(num) {
+            this.page = num;
+            this.fnMainList();
+        },
+        fnPageMove(direction) {
+            if (direction === "next") this.page++;
+            else this.page--;
+            this.fnMainList();
+        },
+        fnBoardSearch() {
+            this.page = 1;
+            this.fnMainList();
+        },
+        getStatusLabel(status) {
+            switch (status) {
+                // 상품 상태
+                case 'none': return '주문접수';
+                case 'shipped': return '배송중';
+                case 'delivered': return '배송완료';
+                case 'exchange': return '교환신청';
+                case 'exchanged': return '교환완료';
+                case 'return': return '반품신청';
+                case 'returned': return '반품완료';
+
+                // 주문 상태
+                case 'paid': return '주문완료';
+                case 'cancel': return '환불신청';
+                case 'canceled': return '환불완료';
+
+                default: return '알수없음';
+            }
+        },
+        getStatusClass(status) {
+            switch (status) {
+                // 상품 상태
+                case 'none': return 'status-received';
+                case 'shipped': return 'status-shipped';
+                case 'delivered': return 'status-delivered';
+                case 'exchange': return 'status-exchange';
+                case 'exchanged': return 'status-exchanged';
+                case 'return': return 'status-return';
+                case 'returned': return 'status-returned';
+
+                // 주문 상태 (겹치는 클래스 사용)
+                case 'paid': return 'status-delivered';
+                case 'cancel': return 'status-return';
+                case 'canceled': return 'status-returned';
+
+                default: return 'status-unknown';
+            }
+        },
+        fnEditOrder(orderId){
+        	
+        	var self = this;
+
+            if (self.updateOrderId === orderId) {
+            	self.updateOrderId = null;  // 같은 걸 누르면 닫힘
+            	self.updateproductId
+
+            } else {
+                const member = self.orders.find(m => m.orderId === orderId);
+                self.editData = { ...member };  // 수정할 데이터 채우기
+                self.updateOrderId = orderId;
+
+            }
             
-            app.mount("#app");
+        },
+		fnEditOrderDetail(orderDetail){
+        	var self = this;
+			console.log(orderDetail);
+			
+            if (self.updateOrderDetailId === orderDetail.orderId) {
+            	self.updateOrderDetailId = null;  // 같은 걸 누르면 닫힘
+            	self.updateproductId = null;  // 같은 걸 누르면 닫힘
+
+            } else {
+                //const member = orderDetail.find(m => m.orderDetailId === orderDetail.orderId);
+                //self.editData = { ...member };  // 수정할 데이터 채우기
+                self.editData = orderDetail;
+                self.updateOrderDetailId = orderDetail.orderDetailId;
+            	self.updateproductId = orderDetail.productId; 
+            }
             
-    </script>
+        },
+        fnOrderSave() {
+            var self = this;
+            var params = {
+            		orderId : self.updateOrderId,
+            		orderStatus : self.editData.orderStatus,
+            		refundStatus : self.editData.refundStatus            		
+            };
+            
+            console.log('123',"");
+            
+            $.ajax({
+                url: "/admin/updateOrder.dox",
+                dataType: "json",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                	console.log("dete",data);
+                	alert('수정 완료');
+                	self.fnMainList();
+                    self.updateOrderId = null; 
+                   
+                }
+            });
+           
+        },
+        fnOrderDetailSave() {
+            var self = this;
+            var params = {
+            		orderDetailId  : self.updateOrderDetailId,
+            		productId      : self.updateproductId,
+            		trackingNumber : self.editData.trackingNumber,
+            		refundStatus   : self.editData.refundStatus     		
+            };
+            
+            console.log('123',"");
+            
+            $.ajax({
+                url: "/admin/updateOrderDetail.dox",
+                dataType: "json",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                	console.log("dete",data);
+                	alert('수정 완료');
+                	self.fnMainList();
+                	self.updateOrderDetailId = null;
+                	self.updateproductId = null;  
+                }
+            });
+           
+        },
+    },
+    mounted() {
+        this.fnMainList();
+    }
+});
+app.mount("#app");
+</script>

@@ -21,8 +21,12 @@ public class mProduct {
 	private String shippingFee;
 	private String shippingFreeMinimum;
 	private String deleteYn;
+	private String totalSold;
 
-    
+	private String totalSales;
+	private String totalOrders;
+	private String averageOrder;
+	
 
 	private String fileId;
 	private String filePath ;

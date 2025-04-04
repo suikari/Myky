@@ -259,6 +259,7 @@
     width: 40px;
     height: 20px;
 }
+
 /* 버튼 글자 크기 맞추기 */
 .custom-btn {
     font-size: 14px; /* 글자 크기를 텍스트에 맞게 조정 */
