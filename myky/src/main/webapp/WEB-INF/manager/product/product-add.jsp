@@ -153,7 +153,7 @@
                     
                     <div v-if="prev_thumbnail">
                         <img :src="prev_thumbnail.filePath" alt="썸네일" class="img-thumbnail mb-2" style="max-width: 150px;">
-                        <button class="btn btn-danger btn-sm" @click="removePrevThumbnail">삭제</button>
+                        <button class="btn btn-danger btn-sm" @click="removePrevThumbnail(prev_thumbnail.fileId)">삭제</button>
                     </div>     
                     <input type="file" class="form-control" @change="handleFileUpload($event, 'thumbnail')" :disabled="prev_thumbnail !== null" >
                 </div>
@@ -168,7 +168,7 @@
                     <div v-if="prev_extraImages.length">
                         <div v-for="(img, index) in prev_extraImages" :key="index" class="d-inline-block me-2">
                             <img :src="img.filePath" alt="추가 이미지" class="img-thumbnail mb-2" style="max-width: 100px;">
-                            <button class="btn btn-danger btn-sm" @click="removePrevExtraImage(index)">삭제</button>
+                            <button class="btn btn-danger btn-sm" @click="removePrevExtraImage(index,img.fileId)">삭제</button>
                         </div>
                     </div>
                     
@@ -215,21 +215,26 @@
                         thumbnailUrl: null,
                         extraImages: [],
                         extraImagesUrls: [],
-                        
                         prev_thumbnail: null,
                         prev_thumbnailUrl: null,
                         prev_extraImages: [],
                         prev_extraImagesUrls: [],
-                        
-						category1 : '',
-						category2 : '',
 						menu : '' , 
 						submenu : '' ,  
 						
                      };
                  },
                 computed: {
-
+                    category1() {
+                        return this.product.categoryId && this.product.categoryId.includes(',')
+                            ? this.product.categoryId.split(',')[0].trim()
+                            : (this.product.categoryId || '').trim();
+                    },
+                    category2() {
+                        return this.product.categoryId && this.product.categoryId.includes(',')
+                            ? (this.product.categoryId.split(',')[1] || '').trim()
+                            : '';
+                    }
                 },
                 methods: {
                 	fnMainList : function() {
@@ -328,7 +333,7 @@
 	       			                if (self.thumbnail) {
 	       			                    var form = new FormData();
 	       			                    form.append("file1", self.thumbnail );
-	       			                    form.append("productId", data.productId);
+	       			                    form.append("productId", self.product.productId);
 	       			                    form.append("thumbYn", "Y");
 	
 	       			                    self.upload(form, checkAndRedirect);
@@ -340,7 +345,7 @@
 		       			                 self.extraImages.forEach(file => {
 		       			                     imgForm.append("file1", file); // 여러 파일 추가
 		       			                 });
-		       			                 imgForm.append("productId", data.productId);
+		       			                 imgForm.append("productId", self.product.productId);
 		       			                 imgForm.append("thumbYn", "N");
 	
 		       			                 self.upload(imgForm, checkAndRedirect);
@@ -382,9 +387,15 @@
                         this.thumbnailUrl = '';
                     },
                     // 이전 썸네일 삭제
-                    removePrevThumbnail() {
+                    removePrevThumbnail(fileId) {
+                        if(!confirm('썸네일을 삭제하시겠습니까?')){
+                            return false;
+                        }
+                        
                         this.prev_thumbnail = null;
                         this.prev_thumbnailUrl = '';
+                        this.removeImg(fileId);
+
                     },
                     // 현재 추가 이미지 삭제
                     removeExtraImage(index) {
@@ -392,9 +403,14 @@
                         this.extraImagesUrls.splice(index, 1);
                     },
                     // 이전 추가 이미지 삭제
-                    removePrevExtraImage(index) {
+                    removePrevExtraImage(index,fileId) {
+                    	if(!confirm('해당 이미지를 삭제하시겠습니까?')){
+                            return false;
+                        }
+                    	
                         this.prev_extraImages.splice(index, 1);
                         this.prev_extraImagesUrls.splice(index, 1);
+                        this.removeImg(fileId);
                     },
                     removeImg(fileId) {
                     	let self = this;

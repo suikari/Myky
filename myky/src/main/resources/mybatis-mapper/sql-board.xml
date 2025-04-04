@@ -112,7 +112,7 @@
 		WHERE F.BOARD_ID = #{boardId} AND F.parent_comment_id = #{parentId} ORDER BY F.comment_id ASC
 	</select>
 	
-	<!--자유게시판 게시글 조회수-->
+	<!--자유게시판 게시글 조회수 증가-->
 	<update id="updateCnt" parameterType="hashmap">
 		UPDATE FREE_BOARD
 		SET
@@ -160,6 +160,7 @@
 		WHERE COMMENT_ID = #{commentId}
 	</update>
 	
+	<!--자유게시판 댓글 삭제(UPDATE)-->
 	<update id="deleteComment" parameterType="hashmap">
 		UPDATE FREE_BOARD_COMMENT
 		SET
@@ -167,11 +168,13 @@
 		WHERE COMMENT_ID = #{commentId}
 	</update>
 	
+	<!--자유게시판 파일업로드 기능-->
 	<insert id="insertBoardFile" parameterType="hashmap">
 		INSERT INTO FREE_BOARD_FILE
 		VALUES(FREE_BOARD_FILE_SEQ.NEXTVAL, #{boardId}, #{fileName}, #{filePath}, #{originalName}, #{fileExt}, SYSDATE, #{fileSize})
 	</insert>
 	
+	<!--자유게시판 이미지업로드 기능-->
 	<select id="selectBoardImg" parameterType="hashmap" resultType="teamgyodong.myky.board.model.boardFile">
 		SELECT * 
 		FROM FREE_BOARD_FILE F
@@ -179,6 +182,7 @@
 		WHERE F.BOARD_ID = #{boardId}
 	</select>
 	
+	<!--자유게시판 파일 삭제-->
 	<delete id="deleteFile" parameterType="hashmap">
 		DELETE FROM FREE_BOARD_FILE
 		WHERE FILE_ID = #{fileId}
@@ -224,7 +228,8 @@
 	</update>
 	
 
-	<!-- 수의사 게시판 -->
+
+	<!-- 수의사 게시판 리스트 출력-->
 	<select id="selectVetBoardList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetBoard" >
 		SELECT F.*, U.*, TO_CHAR(F.CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedTime,
 			(SELECT COUNT(*)
@@ -303,7 +308,7 @@
 		WHERE F.VET_BOARD_ID = #{vetBoardId}
 	</select>
 	
-	<!--수의사 게시글 조회수-->
+	<!--수의사 게시글 조회수 증가-->
 	<update id="updateVetBoardCnt" parameterType="hashmap">
 		UPDATE VET_BOARD
 		SET
@@ -338,8 +343,8 @@
 	
 	<!--수의사 답변 등록-->
 	<insert id="insertVetAnReply" parameterType="hashmap">
-		INSERT INTO VET_ANSWER(REVIEW_ID, VET_BOARD_ID, RATING, REVIEW_TEXT, CREATED_AT, VET_ID, COMMENTS, IS_DELETED )
-		VALUES(VET_REVIEW_SEQ.NEXTVAL, #{vetBoardId}, 0, #{reviewText}, SYSDATE, #{vetId}, '', 'N')
+		INSERT INTO VET_ANSWER(REVIEW_ID, VET_BOARD_ID, RATING, REVIEW_TEXT, CREATED_AT, VET_ID, COMMENTS, IS_DELETED, ACCEPTED )
+		VALUES(VET_REVIEW_SEQ.NEXTVAL, #{vetBoardId}, 0, #{reviewText}, SYSDATE, #{vetId}, '', 'N', 'N')
 	</insert>
 	
 	<!--수의사 답변 수정-->
@@ -358,7 +363,7 @@
 		WHERE REVIEW_ID = #{reviewId}
 	</update>
 	
-		<!-- 수의사 답변 채택-->
+	<!-- 수의사 답변 채택-->
 	<update id="updateVetAnSelect" parameterType="hashmap">
 		UPDATE VET_ANSWER
 		SET

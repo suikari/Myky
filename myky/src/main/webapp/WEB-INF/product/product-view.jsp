@@ -629,8 +629,6 @@
                             });
                         }
                     },
-
-
                     //리뷰 보여주기
                     fnReviewList() {
                         const self = this;

@@ -257,5 +257,20 @@ public class UserServiceImpl implements UserService {
 			}
 			return resultMap;
 		}
+		
+		public HashMap<String, Object> getEmail(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<String, Object>(); 
+			User user = userMapper.selectEmail(map);
+			
+			int count = user!= null ? 1 : 0;
+
+			resultMap.put("count", count); // 결과 값
+			resultMap.put("user", user);
+			return resultMap;
+			// if num > 0 데이터 삽입 잘 된거
+			// 아니면 뭔가 문제 있는거 확인이 가능
+
+		}
+		
 	
 }

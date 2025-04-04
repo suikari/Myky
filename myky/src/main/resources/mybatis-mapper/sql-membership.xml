@@ -91,6 +91,14 @@
 	    
 	</select>
 
+	<insert id="insertMembership" parameterType="hashmap" useGeneratedKeys="true" keyColumn="membership_Id" keyProperty="membershipId">
+		
+		insert into membership (membership_id , membership_type, expiration_date,renewal_date, is_canceled,user_id,donation_yn )
+		values (membership_seq.nextval,#{membershipType}, ADD_MONTHS(SYSDATE, #{expirationDate}),sysdate,'N',#{userId},'N')
+		
+	</insert>
+
+	
 </mapper>
 
 

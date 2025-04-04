@@ -27,6 +27,7 @@ public class board {
 	//FQA 메뉴
 	private String menu;
 	
+	private String accepted;
 	
 	
 }

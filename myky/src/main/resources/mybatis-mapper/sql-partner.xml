@@ -109,6 +109,11 @@
           FROM PARTNER_DETAIL
 	</select>
 	
+	<select id="getallhoslist" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
+		  SELECT  *
+          FROM ANIMAL_HOSPITAL_INFO
+	</select>
+	
 	<select id="getcategoryCode" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		  SELECT DISTINCT *
     FROM PARTNER_DETAIL

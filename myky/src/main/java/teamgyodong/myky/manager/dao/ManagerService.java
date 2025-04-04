@@ -30,15 +30,23 @@ public interface ManagerService {
 	HashMap<String, Object> selectAllMembershipList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllProductList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllOrderList(HashMap<String, Object> map);
 
+	
+	
+	
 	HashMap<String, Object> selectProduct(HashMap<String, Object> map);
+	HashMap<String, Object> selectBestSellProduct(HashMap<String, Object> map);
 
 	
 	
 	HashMap<String, Object> updateUser(HashMap<String, Object> map);
 	HashMap<String, Object> updateVet(HashMap<String, Object> map);
 	HashMap<String, Object> updateProduct(HashMap<String, Object> map);
+	HashMap<String, Object> updateOrder(HashMap<String, Object> map);
+	HashMap<String, Object> updateOrderDetail(HashMap<String, Object> map);
 
+	
 	
 	
 	

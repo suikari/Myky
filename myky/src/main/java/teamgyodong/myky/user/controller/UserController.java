@@ -12,13 +12,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,7 +66,10 @@ public class UserController {
     private String redirect_uri;
     
 
-    
+	// ✅ JavaMailSender 추가
+    @Autowired
+    private JavaMailSender mailSender;
+
     
     
 	
@@ -134,8 +143,8 @@ public class UserController {
 	
 	//아이디 찾기 주소
 	@RequestMapping("/user/findid.do") //브라우저 웹주소
-    public String add(Model model) throws Exception{
-
+    public String add(HttpServletRequest request, Model model) throws Exception{
+		request.setAttribute("test", "test");
         return "user/id-find"; // member 폴더로 묶임
         }
 	
@@ -381,70 +390,134 @@ public class UserController {
 	}
 	
 	
-//	@PostMapping("/user/EmailAuth.dox")
-//	@ResponseBody
-//	public Map<String, Object> emailAuth(@RequestParam String email) {
-//	    Map<String, Object> response = new HashMap<>();
-//	    
-//	    // 랜덤 인증 코드 생성
-//	    String authCode = String.valueOf((int) ((Math.random() * 900000) + 100000));
-//
-//	    // 이메일 전송
-//	    boolean emailSent = googleAuthExample.sendEmail(email, authCode);
-//
-//	    if (emailSent) {
-//	        response.put("success", true);
-//	    } else {
-//	        response.put("success", false);
-//	    }
-//
-//	    return response;
-//	}
 	
+
+
+
+    // ✅ 이메일 인증 코드 전송
+    @PostMapping("/email/send-auth-code")
+    @ResponseBody
+    public Map<String, Object> sendAuthCode(@RequestBody Map<String, String> request, HttpSession session) {
+        String email = request.get("email");
+        Map<String, Object> response = new HashMap<>();
+
+        if (email == null || email.isEmpty()) {
+            response.put("success", false);
+            response.put("message", "이메일을 입력하세요.");
+            return response;
+        }
+
+        String authCode = String.format("%06d", new Random().nextInt(1000000));
+        session.setAttribute("emailAuthCode", authCode);
+        session.setMaxInactiveInterval(5 * 60); // 5분 유지
+
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("쇼핑몰 회원가입 이메일 인증 코드");
+            message.setText("인증 코드: " + authCode + "\n5분 안에 입력해 주세요.");
+            mailSender.send(message);
+
+            response.put("success", true);
+            response.put("message", "인증번호가 발송되었습니다.");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "이메일 발송 실패: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    // ✅ 인증 코드 확인
+    @PostMapping("/email/verify-auth-code")
+    @ResponseBody
+    public Map<String, Object> verifyAuthCode(@RequestBody Map<String, String> request, HttpSession session) {
+        String inputCode = request.get("code");
+        String sessionCode = (String) session.getAttribute("emailAuthCode");
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (sessionCode == null) {
+            response.put("success2", false);
+            response.put("message", "인증 코드가 만료되었거나 요청되지 않았습니다.");
+        } else if (sessionCode.equals(inputCode)) {
+            response.put("success", true);
+            response.put("message", "이메일 인증 완료!");
+            session.removeAttribute("emailAuthCode");
+        } else {
+            response.put("success", false);
+            response.put("message", "인증번호가 일치하지 않습니다.");
+        }
+
+        return response;
+    }
+    
+    
+    
+    
+    
+    // 이메일 인증 샘플 페이지
+    @RequestMapping("/emailSample.do")
+    public String sample(Model model) throws Exception {
+        return "user/emailSample";
+    }
+    
 	
+    //이메일 테스트용
+    @PostMapping("/email/test.dox")
+    @ResponseBody
+    public String testEmail() {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo("glodstone1@gmail.com");  // 테스트할 이메일
+            message.setSubject("야야야야야야야");
+            message.setText("이메일 전송이 정상적으로 작동합니다!");
+            mailSender.send(message);
+            return "이메일 전송 성공!";
+        } catch (Exception e) {
+            return "이메일 전송 실패: " + e.getMessage();
+        }
+    }
 	
-//    // 인증 코드 전송
-//    @PostMapping("/user/EmailAuth.dox")
-//    @ResponseBody
-//    public Map<String, Object> sendEmailAuth(@RequestParam("email") String email, HttpSession session) {
-//        Map<String, Object> response = new HashMap<>();
-//        
-//        // 랜덤한 6자리 인증 코드 생성
-//        String authCode = String.format("%06d", new Random().nextInt(1000000));
-//        
-//        // Google API를 사용하여 이메일 전송 (구현 필요)
-//        boolean emailSent = googleAuthExample.sendEmail(email, authCode);
-//        
-//        if (emailSent) {
-//            // 세션에 인증 코드 저장
-//            session.setAttribute("authCode", authCode);
-//            response.put("success", true);
-//        } else {
-//            response.put("success", false);
-//        }
-//        
-//        return response;
+    
+    
+    
+    
+    
+    //구글 로그인
+    @RequestMapping("/googleLogin")
+    public String googleLogin() {
+    	
+        return "redirect:/oauth2/authorization/google"; // 구글 로그인 페이지로 리디렉트
+    }
+    
+    
+    
+    
+//    @RequestMapping("/user/google-user.dox")
+//    public String user(@AuthenticationPrincipal OAuth2User principal) {
+//    	request.setAttribute("info", principal.getAttributes());
+//        return "test"; // 로그인한 사용자 정보 반환
 //    }
-//
-//    // 인증 코드 검증
-//    @PostMapping("/user/VerifyEmailAuth.dox")
-//    @ResponseBody
-//    public Map<String, Object> verifyEmailAuth(@RequestParam("email") String email,
-//                                               @RequestParam("authCode") String authCode,
-//                                               HttpSession session) {
-//        Map<String, Object> response = new HashMap<>();
-//        
-//        // 세션에서 저장된 인증 코드 가져오기
-//        String storedCode = (String) session.getAttribute("authCode");
-//        
-//        if (storedCode != null && storedCode.equals(authCode)) {
-//            response.put("success", true);
-//        } else {
-//            response.put("success", false);
-//        }
-//        
-//        return response;
-//    }
-//	
-//	
+    
+
+	@RequestMapping(value = "/user/google-user.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String googleUserInfo(Model model, @RequestParam HashMap<String, Object> map, @AuthenticationPrincipal OAuth2User principal) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("info", principal.getAttributes());
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+	//유저 후원내역 출력
+	@RequestMapping(value = "/user/socialEmail.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String socialEmail(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.getEmail(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+    
 }
