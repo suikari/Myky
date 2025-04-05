@@ -373,8 +373,8 @@
 	                            <th>가입일</th>
 	                            <th>종료일</th>
 	                            <th>해제여부</th>	                          
-	                            <th>관리</th>
-	                        </tr>
+<!-- 	                        <th>관리</th> -->	    
+                   	    </tr>
 	                    </thead>
 	                    <tbody>
 	                    	<template v-for="(member, index) in members" >
@@ -385,13 +385,13 @@
 	                            <td>{{ member.expirationDate }}</td>
 	                            <td>
 	                                <span :class="member.isCanceled === 'N' ? 'status-active' : 'status-inactive'">
-	                                    {{ member.isCanceled === 'N' ? '회원' : '해제' }}
+	                                    {{ member.isCanceled === 'N' ? '사용중' : '해제' }}
 	                                </span>
 	                            </td>
-	                            <td>
+	                            <!-- <td>
            							<button class="btn-edit me-2" @click="fnEdit(member.userId)">수정</button>
-	                                <!-- <button class="btn-delete">삭제</button> -->
-	                            </td>
+	                                <button class="btn-delete">삭제</button>
+	                            </td> -->
 	                        </tr>
 	                        
                             <!-- 토글되는 수정 입력란 -->

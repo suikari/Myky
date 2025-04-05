@@ -414,7 +414,9 @@
 							            </div>							
 							            <!-- 사용자 ID 셀렉트 박스 및 연동해제 버튼 -->
 							            <div class="col-auto d-flex align-items-center">
-							                <label for="userId" class="form-label me-2">사용자 ID:</label>
+							            	<label for="userId" class="form-label me-2">사용중인 ID: <span></span> </label>
+							            	
+							                <label for="userId" class="form-label me-2">변경할 ID:</label>
 							                <select v-model="editData.userId" id="userId" class="form-select">
 							                    <option v-for="user in users" :value="user.userId">
 							                        {{ user.userId }}
@@ -560,7 +562,8 @@
 	                        email: '',
 	                        phone: '',
 	                        hospital: ''
-	                    }
+	                    },
+				        editprveid : '',
 
                      };
                  },
@@ -622,6 +625,7 @@
                         } else {
                             const member = self.members.find(m => m.vetNumber === userId);
                             self.editData = { ...member };  // 수정할 데이터 채우기
+                            self.editprveid = member.userId;
                             self.selectedMemberId = userId;
                         	console.log("3",self.editData);
 
