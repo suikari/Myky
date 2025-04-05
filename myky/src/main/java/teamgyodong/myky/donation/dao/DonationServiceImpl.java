@@ -69,10 +69,11 @@ public class DonationServiceImpl implements DonationService {
 		try {
 			donationMapper.insertHistory(map);
 			
+
 			if(map.get("option").equals("membership")) {
 				membershipMapper.updateDonationYn(map);
 			}
-			
+
 			resultMap.put("donationId", map.get("donationId"));
 			resultMap.put("result", "success");
 		}catch(Exception e) {

@@ -270,7 +270,16 @@ public class ManagerController {
 		resultMap = managerService.insertVet(map);
 		return new Gson().toJson(resultMap);
 	}
-	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/insertBoard.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String insertBoard(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.insertBoard(map);
+		return new Gson().toJson(resultMap);
+	}
 	
 	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/insertProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

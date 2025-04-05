@@ -53,7 +53,9 @@ public interface ManagerService {
 	HashMap<String, Object> insertVet(HashMap<String, Object> map);
 	HashMap<String, Object> insertProduct(HashMap<String, Object> map);
 	HashMap<String, Object> insertProductFile(HashMap<String, Object> map);
+	HashMap<String, Object> insertBoard(HashMap<String, Object> map);
 
+	
 	
 	
 	

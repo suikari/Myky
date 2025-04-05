@@ -504,8 +504,6 @@
                         currentPageNew: 0,  // 신규 상품 현재 페이지
                         itemsPerPage: 5,   // 한 페이지당 상품 개수
                         code: "",
-                        googleInfo: [],
-                        email: ""
 
 
                     };
@@ -645,59 +643,6 @@
                             }
                         }, 50); // 50ms마다 실행 (속도 조절 가능)
                     },
-
-
-                    fnGoogle() {
-                        var self = this;
-                        var nparmap = {
-                        };
-                        $.ajax({
-                            url: "/user/google-user.dox", // 얘한테 요청함 'controller'에게 요청
-                            dataType: "json",
-                            type: "POST",
-                            data: nparmap,
-                            success: function (data) {
-                                if (data.info != null) {
-
-                                    self.googleInfo = data.info;
-                                    console.log(self.googleInfo.email);
-                                    self.fnGoogleAuth();
-
-                                }
-                            }
-                        });
-                    },
-                    fnGoogleAuth() {
-                        var self = this;
-                        var nparmap = {
-                            email: self.googleInfo.email
-                        };
-                        $.ajax({
-                            url: "/user/google-user.dox", // 얘한테 요청함 'controller'에게 요청
-                            dataType: "json",
-                            type: "POST",
-                            data: nparmap,
-                            success: function (data) {
-                                console.log(data);
-                                if (!sessionStorage.getItem("socialLoginConfirmed")) {
-                                    if (data.count > 0) {
-                                        alert(data.user.userName + "님 환영해요!");
-                                    } else {
-                                        if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
-                                            sessionStorage.setItem("socialLoginConfirmed", "true"); // ✅ 확인 후 다시 안 뜨게 저장
-                                            location.href = "/user/consent.do";
-                                        }
-                                        sessionStorage.setItem("socialLoginConfirmed", "false"); // ✅ 확인 후 다시 안 뜨게 저장
-                                        return;
-                                    }
-                                }
-
-                            }
-                        });
-                    }
-
-
-
                 },
                 mounted() {
                     let self = this;
@@ -740,7 +685,7 @@
                         alert(self.alertMessage);
 
                     }
-                    self.fnGoogle();
+                    
 
 
 

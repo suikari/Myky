@@ -308,6 +308,10 @@
 		    text-align: center;
 		}	
 		
+		.editor-control {
+		    height: 200px;
+		    width: 100%;
+        }
 		
     </style>
     
@@ -325,10 +329,9 @@
 
 					<!-- 게시판 선택 버튼 -->
 					<div class="d-flex justify-content-center gap-2 mt-3">
-					    <button class="btn btn-primary" @click="fnBoardList('F')">자유게시판</button>
-					    <button class="btn btn-warning" @click="fnBoardList('A')">공지게시판</button>
-					    <button class="btn btn-info" @click="fnBoardList('FAQ')">FAQ게시판</button>
-					    <button class="btn btn-success" @click="fnBoardList('VET')">수의사게시판</button>
+					    <button class="btn"  :class="currentType === 'F' ? 'btn-primary' : 'btn-outline-primary'" @click="fnBoardList('F')">자유게시판</button>
+					    <button class="btn"  :class="currentType === 'A' ? 'btn-warning' : 'btn-outline-warning'" @click="fnBoardList('A')">공지게시판</button>
+					    <button class="btn"  :class="currentType === 'FAQ' ?  'btn-info' : 'btn-outline-info'"    @click="fnBoardList('FAQ')">FAQ게시판</button>
 					</div>
 					
 				    <div class="card-body">
@@ -396,54 +399,96 @@
 				            </tbody>
 				        </table>
 				        
-					<div class="d-flex justify-content-between align-items-center mt-3">
-					    <!-- 선택 삭제 버튼 -->
-					    <button class="btn btn-danger board-delete-btn" @click="fnDeleteSelected" :disabled="selectList.length === 0">
-					        선택 삭제
-					    </button>
+						<div class="d-flex justify-content-between align-items-center mt-3">
+						    <!-- 버튼 영역 -->
+						    <div class="d-flex gap-2 me-auto">
+						        <!-- 선택 삭제 버튼 -->
+						        <button class="btn btn-danger board-delete-btn" @click="fnDeleteSelected" :disabled="selectList.length === 0">
+						            선택 삭제
+						        </button>
+						        <button class="btn btn-success" @click="fnEditer">
+						            글등록
+						        </button>
+						    </div>
+						
+						    <!-- 페이지네이션 버튼 -->
+						    <div class="d-flex align-items-center">
+						        <!-- 이전 페이지 버튼 -->
+						        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
+						            <i class="bi bi-chevron-left"></i>
+						        </a>
+						
+						        <template v-for="num in index">
+						            <!-- 첫 번째 페이지로 이동하는 "..." -->
+						            <a v-if="num === 1 && page > 3" 
+						               href="javascript:;"  
+						               @click="fnPage(1)" 
+						               class="btn btn-outline-secondary board-page-btn">
+						               ...
+						            </a>
+						
+						            <!-- 현재 페이지 기준 좌우 2개씩 표시 -->
+						            <a v-if="num >= page - 2 && num <= page + 2" 
+						               href="javascript:;"  
+						               @click="fnPage(num)" 
+						               class="btn btn-outline-secondary board-page-btn" 
+						               :class="{ 'active': page === num }">
+						               {{ num }}
+						            </a>
+						
+						            <!-- 마지막 페이지로 이동하는 "..." -->
+						            <a v-if="num === index && page < index - 2" 
+						               href="javascript:;"  
+						               @click="fnPage(index)" 
+						               class="btn btn-outline-secondary board-page-btn">
+						               ...
+						            </a>
+						        </template>
+						
+						        <!-- 다음 페이지 버튼 -->
+						        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="page != index">
+						            <i class="bi bi-chevron-right"></i>
+						        </a>
+						    </div>
+						</div>
+
+					<!-- Vet 등록 창 (토글) -->
+					<div v-if="isCreating" class="edit-form d-flex flex-column p-3 mt-3 border rounded">
+					    <div class="d-flex gap-3">
+					        <div class="col">
+					            <label for="vetNickname" class="form-label">제목:</label>
+					            <input type="text" id="vetNickname" v-model="newBoard.title" class="form-control">
+					        </div>
+					        <div class="col-auto">
+			                    <label class="form-label">FAQ 메뉴:</label>
+			                    <select v-model="newBoard.menu" class="form-select">
+			                    	<option value="">구분없음</option>
+			                    	<option value="이용방법">이용방법</option>
+			                        <option value="교환/반품">교환/반품</option>
+			                        <option value="계정">계정</option>
+			                        <option value="상품관련">상품관련</option>
+			                        <option value="배송">배송</option>
+			                        <option value="결제관리">결제관리</option>
+			                    </select>
+							</div>
+					    </div>
 					
-					    <!-- 페이지네이션 버튼 -->
-					    <div>
-					        <!-- 이전 페이지 버튼 -->
-					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
-					            <i class="bi bi-chevron-left"></i>
-					        </a>
-								<template v-for="num in index">
-									<!-- 첫 번째 페이지로 이동하는 "..." -->
-									    <a v-if="num === 1 && page > 3" 
-									       href="javascript:;"  
-									       @click="fnPage(1)" 
-									       class="btn btn-outline-secondary board-page-btn">
-									       ...
-									    </a>
-									
-									    <!-- 현재 페이지 기준 좌우 2개씩 표시 -->
-									    <a v-if="num >= page - 2 && num <= page + 2" 
-									       href="javascript:;"  
-									       @click="fnPage(num)" 
-									       class="btn btn-outline-secondary board-page-btn" 
-									       :class="{ 'active': page === num }">
-									       {{ num }}
-									    </a>
-									
-									    <a v-if="num === index && page < index - 2" 
-									       href="javascript:;"  
-									       @click="fnPage(index)" 
-									       class="btn btn-outline-secondary board-page-btn">
-									       ...
-									    </a>
-								</template>
-					
-					        <!-- 다음 페이지 버튼 -->
-					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="page != index">
-					            <i class="bi bi-chevron-right"></i>
-					        </a>
+					    <div class="d-flex gap-3 mt-3">
+					        <div class="col">
+					            <label for="vetHospital" class="form-label">게시글 내용:</label>
+                    			<div id="editor" class="editor-control"></div>
+					        </div>
+					    </div>
+					 
+					    <!-- 저장 및 취소 버튼 -->
+					    <div class="d-flex justify-content-end mt-3">
+					        <button class="btn btn-primary me-2 custom-btn" @click="fnCreate">저장</button>
+					        <button class="btn btn-secondary custom-btn" @click="isCreating = false">취소</button>
 					    </div>
 					</div>
-
 				        
-				    </div>
-				</div>
+				  </div>
+			</div>
 				               
 
 
@@ -459,18 +504,26 @@
             const app = Vue.createApp({
             	 data() {
                      return {
-                         boardList: [],
-	                     index: 0,
-	                     pageSize: 5,
-	                     page: 1,
-	                     searchOption: "all",
-	                     keyword: "",
-	                     orderKey: "",
-	                     orderType: "",
-	                     sessionId : "${sessionId}" || "",
-	                     category : "",
-	                     selectList : [],
-	                     allChk : false,
+						boardList: [],
+						index: 0,
+						pageSize: 5,
+						page: 1,
+						searchOption: "all",
+						keyword: "",
+						orderKey: "",
+						orderType: "",
+						sessionId : "${sessionId}" || "",
+						category : "",
+						selectList : [],
+						allChk : false,
+						isCreating : false,
+						newBoard: {
+						   title : '',
+						   userId : '${sessionId}',
+						   content : '',
+						   menu : '',
+						},
+						currentType : '',
                      };
                  },
                 computed: {
@@ -479,6 +532,7 @@
                 methods: {
                 	fnBoardList : function( fnkey ) {
                         let self = this;
+                        self.isCreating = false;
                         
                         if (fnkey == '' || fnkey == null ) {
                         	self.category = 'F';
@@ -489,6 +543,8 @@
                         	}
 
                         }
+                        
+                        self.currentType = self.category;
                         
                         console.log("searchOption:", self.searchOption);
                         
@@ -580,6 +636,65 @@
         					}
         				});
                     },
+                    fnEditer: function () {
+                    	  let self = this;
+                    	  self.isCreating = !self.isCreating;
+
+                    	  // 에디터 창이 보이게 바뀐 후 DOM이 렌더링되기 때문에
+                    	  this.$nextTick(() => {
+                    		  
+                    	    self.quill = new Quill('#editor', {
+                    	      theme: 'snow',
+                    	      modules: {
+                    	        toolbar: [
+                    	          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    	          ['bold', 'italic', 'underline'],
+                    	          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    	          ['link', 'image'],
+                    	          ['clean'],
+                    	          [{ 'color': [] }, { 'background': [] }]
+                    	        ]
+                    	      }
+                    	    });
+
+                    	    // 에디터 내용 바인딩
+                    	    self.quill.on('text-change', function () {
+                    	      self.newBoard.content = self.quill.root.innerHTML;
+                    	    });
+                    	  });
+                    },
+                    fnCreate() {
+                    	let self = this;
+                        let nparmap =  {
+                                title : self.newBoard.title,
+                                content : self.newBoard.content,
+                                userId : self.sessionId,
+                                category : self.category,	
+                                menu     : self.newBoard.menu,
+                        };
+                        console.log("저장할 게시판 데이터:", nparmap);                        
+
+                    	$.ajax({
+                    		url: "/admin/insertBoard.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			console.log("main1",data);
+                    			
+                    			self.newBoard.title = '';
+                    			self.newBoard.content = '';
+                    			self.newBoard.menu = '';
+
+                                self.isCreating = false; // 저장 후 폼 닫기
+
+            					self.fnBoardList(self.category);
+
+                    		}
+                    	});
+                    	
+                    }
+                    
                     
                 },
                 mounted() {
@@ -591,7 +706,6 @@
                     self.category = params.get("category") || "F";
 
                     self.fnBoardList();
-
                 	
                 }
             });

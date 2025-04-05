@@ -722,6 +722,13 @@
 		
 	</select>
 
+	<!--자유게시판 게시글 작성-->
+	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
+		INSERT INTO FREE_BOARD(BOARD_ID, TITLE, CONTENT, CREATED_AT, UPDATED_AT, USER_ID, LIKES, DISLIKES, CATEGORY, CNT, MENU)
+		VALUES(FREE_BOARD_SEQ.NEXTVAL, #{title}, #{content}, SYSDATE, SYSDATE, #{userId}, 0, 0, #{category}, 0, #{menu})
+	</insert>
+	
+	
 	<insert id="insertVet" parameterType="hashmap" useGeneratedKeys="true" keyColumn="vet_number" keyProperty="vetNumber">
 		INSERT INTO veterinarian(vet_number,vet_id, vet_name , vet_nickname , email, phone_number, affiliated_hospital, last_active_time, created_at,updated_at,user_id)
 		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{vetName}, #{vetNickname},#{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')

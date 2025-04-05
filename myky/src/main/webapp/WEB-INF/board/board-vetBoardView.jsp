@@ -408,13 +408,13 @@
                 </div>
                 <div class="view-box">
                     <a style="font-size:20px">{{info.title}}</a>
-                        <!-- 날짜 표시 여기 넣기 -->
-                        <div style="color: #fca311;">작성자: {{info.nickName}}</div>
-                        <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
-                            ( 포인트 {{info.points}} )
-                            작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
-                        </div>
+                    <!-- 날짜 표시 여기 넣기 -->
+                    <div style="color: #fca311;">작성자: {{info.nickName}}</div>
+                    <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
+                        ( 포인트 {{info.points}} )
+                        작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
                     </div>
+                </div>
                     <div class="view-label">CONTENT</div>
                     <div class="view-boxContent" v-html="info.content"></div>
     
@@ -437,13 +437,9 @@
 
 
                 <!-- 답변 출력 전체 -->
-                <div v-for="answer in answerList" class="answer-box" 
-                :class="{ accepted: answer.comments && answer.comments !== 'null' }">
-
-                
-                <!-- 채택된 답변 -->
-                <div v-if="answer.comments && answer.comments !== 'null'">
-                <div>
+                <div v-for="answer in answerList" class="answer-box">
+                    <!-- 채택된 답변 -->
+                    <div v-if="answer.comments">
                         <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
                             질문자 채택
                         </div>
@@ -472,65 +468,55 @@
                             <div v-html="answer.reviewText"></div>
                         </span>
                     </div>
-                </div>
-
-                
-                <!-- 답변 출력/채택 전 -->
-                 <!-- <div class="answer-box"> -->
-                    <div v-else-if="answer.isDeleted === 'N'">
+                    <!-- 답변 출력/채택 전 -->
+                    <div v-else>
                         <div class="answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
                         <div class="answer-header">
                             <div class="answer-meta">{{ answer.createdAt }}</div>
                         </div>
                         <div v-html="answer.reviewText"></div>
-                    
-                <!-- </div> -->
-                    
-                    
+                    </div>
 
 
                  <!-- 답변 채택 -->
                     <template v-if="answer && answer.isDeleted === 'N'">
 
                     <!-- 채택 버튼 (질문자만 보임) -->
-                        <template v-if="sessionId == info.userId && showChoice !== answer.reviewId">
+                        <template v-if="sessionId == info.userId && showChoice !== answer.reviewId && info.isAccepted == 'N'">
                             <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
                         </template>
 
                         <!-- 채택 UI (showChoice === 현재 답변) -->
                         <template v-if="showChoice === answer.reviewId">
-                        <div class="accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
-                            
-                            <!-- 라벨 -->
-                            <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
-                            질문자 채택
+                            <div class="accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
+                                
+                                <!-- 라벨 -->
+                                <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                                질문자 채택
+                                </div>
+
+                                <!-- 별점 UI -->
+                                <div class="form-group star-rating" style="margin-top: 15px;">
+                                <label class="rating-label" for="rating" style="font-weight: bold; color:#fca311;"></label>
+                                    <div class="stars" style="font-size: 20px;">
+                                        <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
+                                    </div>
+                                </div>
+
+                                <!-- 후기 입력 -->
+                                <input v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
+
+                                <!-- 기존 댓글 표시 -->
+                                <div>{{ answer.comments }}</div>
+
+                                <!-- 등록 버튼 -->
+                                <button @click="fnAnSelect(answer.userId)" class="choiceSaveButton">
+                                    등록
+                                </button>
+                                <button class="choiceSaveButton" @click="fnCancelChoice">취소</button>
                             </div>
-
-                            <!-- 별점 UI -->
-                            <div class="form-group star-rating" style="margin-top: 15px;">
-                            <label class="rating-label" for="rating" style="font-weight: bold; color:#fca311;"></label>
-                            <div class="stars" style="font-size: 20px;">
-                                <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
-                            </div>
-                            </div>
-
-                            <!-- 후기 입력 -->
-                            <input v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
-
-                            <!-- 기존 댓글 표시 -->
-                            <div>{{ answer.comments }}</div>
-
-                            <!-- 등록 버튼 -->
-                            <button @click="fnAnSelect(answer.userId)" class="choiceSaveButton">
-                            등록
-                            </button>
-                            <button class="choiceSaveButton" @click="fnCancelChoice">취소</button>
-                        </div>
                         </template>
                     </template>
-                </div>
-
-
                 
                     <template v-if="(vetList.vetId == answer.vetId) && info.isAccepted === 'N'">  
                         <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
@@ -552,14 +538,15 @@
                         <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
                     </template>
                 </div>
-
                   
                 <div class="footer-buttons">
-                    <template v-if="(sessionId == info.userId || sessionRole == 'ADMIN') && info.isAccepted === 'N'">
+                    <template v-if="sessionId == info.userId && info.isAccepted === 'N'">
                         <button class="cmtButton" @click="fnEdit()">수정</button>
+                    </template>
+                    <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
                         <button class="cmtButton" @click="fnRemove()">삭제</button>
                     </template>
-                    <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
+                        <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
                 </div>
                 
             </div>

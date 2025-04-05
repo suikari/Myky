@@ -158,7 +158,7 @@ public class MembershipServiceImpl implements MembershipService {
 
 	    return resultMap;
 	}
-	//
+	//멤버십 결제 및 추가
 	public HashMap<String, Object> addMembership(HashMap<String, Object> map) {
 	    HashMap<String, Object> resultMap = new HashMap<>();
 	    try {
@@ -174,6 +174,23 @@ public class MembershipServiceImpl implements MembershipService {
 	    }
 	    return resultMap;
 	}
+	//맴버심 가입 여부  확인
+	public HashMap<String, Object> checkMembership(HashMap<String, Object> map) {
+	    HashMap<String, Object> resultMap = new HashMap<>();
+	    try {
+	        String userId = (String) map.get("userId");
+	        String membershipId = membershipMapper.selectMembershipIdByUserId(userId);
+
+	        resultMap.put("joined", membershipId != null);
+	        resultMap.put("result", "success");
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        resultMap.put("result", "fail");
+	    }
+	    return resultMap;
+	}
+
 
 
 	
