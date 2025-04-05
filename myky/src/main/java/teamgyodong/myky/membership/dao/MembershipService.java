@@ -21,6 +21,8 @@ public interface MembershipService {
 	HashMap<String, Object> getTermsList(HashMap<String, Object> map);
 
 	HashMap<String, Object> addMembership(HashMap<String, Object> map);
+
+	HashMap<String, Object> checkMembership(HashMap<String, Object> map);
 	
 		
 

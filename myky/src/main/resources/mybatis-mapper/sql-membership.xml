@@ -98,6 +98,12 @@
 		
 	</insert>
 
+	<select id="selectMembershipIdByUserId"  parameterType="hashmap" resultType="String">
+		SELECT MEMBERSHIP_ID
+	    FROM MEMBERSHIP
+	    WHERE USER_ID = #{userId}
+	</select>
+	
 	
 </mapper>
 
