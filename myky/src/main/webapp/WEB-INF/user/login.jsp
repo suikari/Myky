@@ -136,7 +136,7 @@
 		<button @click="fnLogin()" class="login-btn">로그인</button>
 		<button @click="fnIdFind()" class="reset-btn">아이디 찾기</button>
 		<button @click="fnPasswordReset()" class="reset-btn2">비밀번호 찾기</button>
-		<button @click="fnGoogle()" class="reset-btn2">구글</button>
+		<button @click="fnGoogleLogout()" class="reset-btn2">구글 로그아웃</button>
 
 		<div class="social-login">
 			<a :href="location" class="social-btn">
@@ -151,7 +151,7 @@
 		</div>
 
 		<div class="social-login">
-			<a href="/googleLogin" class="social-btn">
+			<a href="javascript:;"  @click ="fnGoogleLogin" class="social-btn">
 				<img src="../img/login/google_login.png" alt="" width="183px" height="45px">
 			</a>
 		</div>
@@ -178,6 +178,7 @@
 					var nparmap = {
 						userId: self.userId,
 						pwd: self.pwd,
+						
 					};
 					$.ajax({
 						url: "/user/login.dox", // 얘한테 요청함 'controller'에게 요청
@@ -212,22 +213,17 @@
 					};
 
 				},
-
-				fnGoogle() {
-					var self = this;
-					var nparmap = {
-					};
-					$.ajax({
-						url: "/user/google-user.dox", // 얘한테 요청함 'controller'에게 요청
-						dataType: "json",
-						type: "POST",
-						data: nparmap,
-						success: function (data) {
-							console.log(data);
-
-						}
-					});
+				fnGoogleLogin (){
+					sessionStorage.removeItem("socialLoginConfirmed");
+					location.href = "/googleLogin";
+				},
+				fnGoogleLogout (){
+					// sessionStorage.removeItem("socialLoginConfirmed");
+					window.location.href = "https://accounts.google.com/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:80818081/main.do";
+					// location.href = "/logout";
 				}
+
+
 				
 
 			},

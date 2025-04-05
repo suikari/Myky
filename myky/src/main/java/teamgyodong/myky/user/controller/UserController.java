@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -491,6 +492,13 @@ public class UserController {
         return "redirect:/oauth2/authorization/google"; // 구글 로그인 페이지로 리디렉트
     }
     
+    //구글 로그아웃
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        request.logout(); // Spring Security에서 사용자 로그아웃
+        return "redirect:/localhost:8081/user/login.do"; // 홈이나 원하는 경로로 리디렉션
+    }
+    
     
     
     
@@ -505,6 +513,10 @@ public class UserController {
 	@ResponseBody
 	public String googleUserInfo(Model model, @RequestParam HashMap<String, Object> map, @AuthenticationPrincipal OAuth2User principal) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		if(principal==null) {
+			return new Gson().toJson("구글 세션 정보 없음");
+
+		}
 		resultMap.put("info", principal.getAttributes());
 		return new Gson().toJson(resultMap);
 	}
