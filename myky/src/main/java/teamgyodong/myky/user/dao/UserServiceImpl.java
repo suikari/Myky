@@ -259,18 +259,36 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		public HashMap<String, Object> getEmail(HashMap<String, Object> map) {
-			HashMap<String, Object> resultMap = new HashMap<String, Object>(); 
-			User user = userMapper.selectEmail(map);
-			
-			int count = user!= null ? 1 : 0;
+		    HashMap<String, Object> resultMap = new HashMap<>();
 
-			resultMap.put("count", count); // 결과 값
-			resultMap.put("user", user);
-			return resultMap;
-			// if num > 0 데이터 삽입 잘 된거
-			// 아니면 뭔가 문제 있는거 확인이 가능
+		    String sessionId = (String) session.getAttribute("sessionId");
+		    System.out.println("ttee = " + sessionId); 
 
+		    if (sessionId != null && !sessionId.equals("")) {
+		        resultMap.put("result", "fail1");
+		        return resultMap;
+		    }
+
+		    // 이메일로 유저 검색
+		    User user = userMapper.selectEmail(map); // map 안에 "email"이 들어있어야 함
+		    int count = user != null ? 1 : 0;
+
+		    if (count == 1) {
+		        // 로그인 성공 처리
+		        session.setAttribute("sessionId", user.getUserId());
+		        session.setAttribute("sessionName", user.getUserName());
+		        session.setAttribute("sessionRole", user.getRole());
+		        session.setMaxInactiveInterval(60 * 60); // 1시간 유지
+
+		        // 마지막 로그인 시간 갱신
+		        userMapper.updateLastLogin(user.getUserId());
+
+		        resultMap.put("user", user);
+		    }
+
+		    resultMap.put("count", count); 
+		    resultMap.put("result", "success"); // 회원 여부에 상관 없이 success 리턴하고 count로 판단
+		    return resultMap;
 		}
-		
 	
 }

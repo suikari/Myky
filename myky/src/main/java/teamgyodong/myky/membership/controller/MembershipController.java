@@ -136,6 +136,14 @@ public class MembershipController {
 	    HashMap<String, Object> resultMap = membershipService.addMembership(map);
 	    return new Gson().toJson(resultMap);
 	}
+	
+	//멤버십 가입 회원 확인
+	@RequestMapping(value = "/membership/checkStatus.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String checkMembership(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	    HashMap<String, Object> resultMap = membershipService.checkMembership(map);
+	    return new Gson().toJson(resultMap);
+	}
 
 	
 }

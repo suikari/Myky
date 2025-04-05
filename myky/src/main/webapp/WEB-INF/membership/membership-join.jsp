@@ -215,6 +215,7 @@
                                 console.log("결제 정보 >>> ", rsp);
 
                                 self.fnAddMembership(rsp);
+                                location.href = "/membership/main.do";
 
                             } else {
                                 alert("결제에 실패했습니다.");

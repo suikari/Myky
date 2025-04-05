@@ -225,10 +225,10 @@
                                 <th>후원금액</th>
                                 <td v-if="!isMembershipDonation">
                                     <div class="donateAmountContainer">
-                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 100}" @click="selectAmount(100)">10,000원</button>
-                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 300}" @click="selectAmount(300)">30,000원</button>
-                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 500}" @click="selectAmount(500)">50,000원</button>
-                                        <input type="text" class="customAmountInput" v-model="customAmount" @input="formatCustomAmount" @focus="clearSelection" placeholder="직접입력">
+                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 1000}" @click="selectAmount(1000)">10,000원</button>
+                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 3000}" @click="selectAmount(3000)">30,000원</button>
+                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 5000}" @click="selectAmount(5000)">50,000원</button>
+                                        <input type="text" class="customAmountInput" v-model="customAmount" @input="formatCustomAmount" @focus="clearSelection" @blur="validateCustomAmount" @keyup.enter="validateCustomAmount" placeholder="직접입력">
                                     </div>
                                 </td>
                                 <td v-else>
@@ -240,12 +240,13 @@
                                 <td>{{ formattedUserPoints }} 원</td>
                             </tr>
                             <tr>
-                                <th>사용할 포인트</th>
+                                <th>사용 포인트</th>
                                 <td>
-                                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
+                                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints" @keyup.enter="applyPoints" placeholder="사용할 적립금 입력">
                                     <button @click="useAllPoints">전체 사용</button>
                                     <button @click="applyPoints">적용</button>
-                                    <span>{{ formattedDiscountAmount }} 포인트 사용</span>
+                                    <span>{{ formattedDiscountPoint }} 포인트 사용</span>
+                                    <div v-if="usedPoint != 0">포인트를 차감한 금액 {{ remainingAmount }} 원이 결제됩니다.</div>
                                 </td>
                             </tr>
                             <tr>
@@ -275,7 +276,7 @@
                         </label>
 
                         <div v-if="showTerms" class="terms">
-                            
+                            <div v-html="termsInfo[0].content"></div>
                         </div>
                     </div>
                     <div class="sectionContents">
@@ -285,11 +286,11 @@
                           </label>
 
                         <div v-if="showPrivacyPolicy" class="privacy-policy">
-                            
+                            <div v-html="termsInfo[1].content"></div>
                         </div>                          
                     </div>
                 </section>
-                <button class="donationButton" @click="fnPayment">다음</button>
+                <button class="donationButton" @click="fnPaymentCheck">다음</button>
             </div>
         </div>
     </div>
@@ -341,7 +342,7 @@
                 formattedUserPoints() {
                     return this.userPoint.toLocaleString();
                 },
-                formattedDiscountAmount() {
+                formattedDiscountPoint() {
                     return this.discountPoint.toLocaleString();
                 },
             },
@@ -434,7 +435,7 @@
                         success: function (data) {
                             console.log("termsInfo >>> ", data.list);
                             if(data.result === "success"){
-                                self.membership = data.list;
+                                self.termsInfo = data.list;
                             } 
                         }
                     });
@@ -452,10 +453,6 @@
                             console.log("보유포인트 >>> ",data.result);
                         }
                     });
-                },
-                GetTotalAmount() {
-                    this.totalAmount = (this.donateAmount != null) ? this.donateAmount : this.customAmount;
-                    // 250404 문제점 좌표
                 },
                 toggleAnonymous() {
                     this.isAnonymous = !this.isAnonymous;
@@ -476,62 +473,49 @@
                     this.showPrivacyPolicy = !this.showPrivacyPolicy;
                 },
                 validatePoints() {
-                    this.usedPoint = parseInt(this.usedPoint) || 0;
-                },
-                calculateRemaining() {
-                    if (this.usedPoint < 0) {
-                        this.usedPoint = 0;
-                    } else if (this.usedPoint > this.totalAmount) {
-                        this.usedPoint = this.totalAmount;
-                    } else if (this.usedPoint > this.userPoint) {
+                    this.usedPoint = Number(this.usedPoint.toString().replace(/[^0-9]/g, ''));
+                    if (this.usedPoint > this.userPoint) {
+                        alert("보유 포인트를 초과할 수 없습니다.");
                         this.usedPoint = this.userPoint;
                     }
-
-                    this.remainingAmount = this.totalAmount - this.usedPoint;
+                    if (this.usedPoint > this.totalAmount) {
+                        this.usedPoint = this.totalAmount;
+                    }
+                },
+                validateCustomAmount() {
+                    if (this.donateAmount < 1000) {
+                        alert("최소 금액은 1,000원 이상입니다.");
+                        this.donateAmount = 1000;
+                        this.customAmount = "1,000";
+                        this.calculateTotal();
+                    }
+                },
+                calculateTotal() {
+                    this.totalAmount = this.donateAmount;
+                    this.applyPoints();
                 },
                 applyPoints() {
-                    let self = this;
-                    let usedPoints = parseInt(self.usedPoint) || 0;
-                    let userPoints = parseInt(self.userPoint) || 0;
-                    let totalAmount = parseInt(self.totalAmount) || 0;
-                    
-                    if (usedPoints > totalAmount) {
-                        alert("총 결제 금액보다 많은 포인트를 사용할 수 없습니다.");
-                        self.usedPoint = totalAmount;
-                    } else if (usedPoints > userPoints) {
-                        alert("보유한 포인트보다 많은 포인트를 사용할 수 없습니다.");
-                        self.usedPoint = userPoints;
-                    } else {
-                        self.usedPoint = usedPoints;
-                    }
-                    self.discountPoint = self.usedPoint;
-                    self.$nextTick(() => {
-                        self.$refs.usedPoint.focus();
-                    });
-                    return;
+                    this.validatePoints();
+                    this.discountPoint = this.usedPoint;
+                    this.remainingAmount = this.totalAmount - this.discountPoint;
                 },
                 useAllPoints() {
                     this.usedPoint = Math.min(this.userPoint, this.totalAmount);
-                    this.discountPoint = this.usedPoint;
+                    this.applyPoints();
                 },
                 selectAmount(amount) {
                     this.donateAmount = amount;
                     this.customAmount = "";
-                    this.GetTotalAmount();
+                    this.calculateTotal();
                 },
                 clearSelection() {
-                    this.donateAmount = null;
-                    this.GetTotalAmount();
+                    this.donateAmount = 0;
                 },
                 formatCustomAmount() {
-                    let rawValue = this.customAmount.replace(/[^0-9]/g, "");
-
-                    if (rawValue) {
-                        this.customAmount = parseInt(rawValue, 10).toLocaleString();
-                        this.GetTotalAmount();
-                    } else {
-                        this.customAmount = "";
-                    }
+                    const raw = this.customAmount.replace(/[^0-9]/g, '');
+                    this.customAmount = Number(raw).toLocaleString();
+                    this.donateAmount = Number(raw);
+                    this.calculateTotal();
                 },
                 fnToggleAllAgree: function (event) {
                     let isChecked = event.target.checked;
@@ -539,7 +523,7 @@
                         checkbox.checked = isChecked;
                     });
                 },
-                fnPayment: function () {
+                fnPaymentCheck:function(){
                     var self = this;
 
                     var policyChecked = document.querySelector("input[name='policyCheck']").checked;
@@ -555,8 +539,43 @@
                         return;
                     }
 
-                    let amount = (self.donateAmount != null) ? self.donateAmount : self.customAmount;
+                    if(self.usedPoint != 0){
+                        self.fnPointCheck();
+                    } else {
+                        self.fnPayment();
+                    }
+                },
+                fnPointCheck(){
+                    let self = this;
+                    let params = { userId: self.userInfo.userId };
+                    $.ajax({
+                        url: "/point/current.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: params,
+                        success: function (data) {
+                            if(self.userPoint != data.point.currentPoint){
+                                alert("보유 포인트에 변동이 있습니다. 확인 후 다시 시도해주세요.");
+                                self.fnGetPoint();
+                                self.$nextTick(() => {
+                                    self.$refs.usedPoint.focus();
+                                });
+                                return;
+                            } else {
+                                self.fnPayment();
+                            }
+                        }
+                    });
+                },
+                fnPayment: function () {
+                    let self = this;
+
+                    let amount = self.totalAmount;
                     
+                    if(self.usedPoint > 0){
+                        amount = self.remainingAmount;
+                    }
+
                     console.log("amount >>> ", amount);
 
                     let anonymousYn = self.isAnonymous ? "Y" : "N";
@@ -572,7 +591,23 @@
                             option:"membership"
                         };
                         self.fnMembershipDonation(donation);
-                        return;
+
+                    } else if(self.remainingAmount == 0){
+                        // 포인트 결제
+                        let merchantUid = "point_donation_" + new Date().getTime();
+                        
+                        let paymentData = {
+                            merchant_uid: merchantUid,
+                            name: self.info.centerName + " 후원 포인트 결제",
+                            paid_amount: self.totalAmount,
+                            pay_method: "point_only",
+                            status: "paid",
+                            card_quota: null
+                        };
+                        alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
+                        self.fnDonation(paymentData, self.totalAmount, anonymousYn);
+                        self.fnUsePoint();
+
                     } else {
                         // 결제 진행
     
@@ -580,7 +615,9 @@
                             console.error('IMP is not initialized');
                             return;
                         }
-    
+
+                        console.log("결제 금액 >>> ",amount);
+
                         IMP.request_pay({
                             channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
                             pg: "html5_inicis",
@@ -592,7 +629,7 @@
                         }, function (rsp) {
                             if (rsp.success) {
                                 alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
-                                self.fnDonation(rsp, amount, anonymousYn);
+                                self.fnDonation(rsp, self.totalAmount, anonymousYn);
                                 // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
                                 console.log("결제 정보 >>> ", rsp);
                             } else {
@@ -602,16 +639,18 @@
                         });
                     }
                 },
-                fnPaymentHistory: function (rsp) {
+                fnPaymentHistory: function (rsp,amount) {
                     let self = this;
 
                     let paymentMethod = "";
-                    if (rsp.pay_method == "card") {
+                    if (rsp.pay_method == "card" && self.usedPoint == 0) {
                         paymentMethod = rsp.pay_method + "-" + rsp.card_name;
+                    } else if(rsp.pay_method == "card" && self.usedPoint > 0){
+                        paymentMethod = rsp.pay_method + "-" + rsp.card_name + " + point";
                     } else {
                         paymentMethod = rsp.pay_method;
                     }
-
+                    
                     console.log("paymentMethod >>> ", paymentMethod);
                     console.log("fnPaymentHistory >> self.donationId >>> ", self.donationId);
 
@@ -619,7 +658,7 @@
                         option:"donation",
                         paymentCode: rsp.merchant_uid,
                         description: rsp.name,
-                        amount: rsp.paid_amount,
+                        amount: amount,
                         paymentMethod: paymentMethod,
                         installment: rsp.card_quota,
                         subscriptionPeriod: null,
@@ -628,7 +667,9 @@
                         cancelDate: null,
                         orderId: null,
                         donationId: self.donationId,
-                        userId: self.userInfo.userId
+                        userId: self.userInfo.userId,
+                        usedPoint : self.usedPoint,
+                        membershipId:null
                     };
                     $.ajax({
                         url: "/payment.dox",
@@ -637,12 +678,15 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("결제 정보 저장 여부 >>> ", data.result);
+                            self.goToMain();
+                            self.fnUsePoint();
                         }
                     });
                 },
                 fnDonation: function (rsp, amount, anonymousYn) {
                     var self = this;
                     var nparmap = {
+                        option:"donation",
                         centerId: self.centerId,
                         amount: amount,
                         message: self.donateMessage,
@@ -659,7 +703,7 @@
                             self.donationId = data.donationId;
                             console.log("fnDonation >> self.donationId >>> ", self.donationId);
                             // DB 저장 후 후원ID 가져오기
-                            self.fnPaymentHistory(rsp);
+                            self.fnPaymentHistory(rsp, amount);
 
                         }
                     });
@@ -675,9 +719,39 @@
                         success: function (data) {
                             console.log("후원 정보 저장 여부 >>> ", data.result);
                             alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
+                            self.donationId = data.donationId;
+                            self.fnPaymentHistory(donation, amount);
                         }
                     });
-                }
+                },
+                fnUsePoint: function () {
+                    let self = this;
+                    let usedPoint = -Math.abs(parseInt(self.usedPoint));
+
+                    console.log("사용 포인트 >> ", usedPoint);
+                    if(usedPoint == 0){
+                        return;
+                    }
+
+                    var nparmap = {
+                        usedPoint: usedPoint,
+                        remarks: "후원 시 포인트 사용",
+                        userId: self.userInfo.userId
+                    };
+                    $.ajax({
+                        url: "/point/used.dox",
+                        dataType: "json",
+                        type: "POST",
+                        data: nparmap,
+                        success: function (data) {
+                            console.log("포인트 사용 내역 저장 >>> ", data.result);
+
+                        }
+                    });
+                },
+                goToMain() {
+                    window.location.href = "/main.do";
+                },
             },
             mounted() {
                 let self = this;

@@ -215,8 +215,8 @@
                     fnSave(){
                         let self = this;
                         let usedPoint = -Math.abs(parseInt(self.usedPoint));
-
-                        if(!usedPoint){
+                        console.log("usedPoint",usedPoint + "," + self.usedPoint);
+                        if(!(self.isNumber(usedPoint))){
                             alert("숫자만 입력해주세요");
                             return;
                         }
@@ -306,12 +306,21 @@
                         location.href="/board/vetBoardList.do";
                     
                     },
+                    isNumber(val) {
+                        let self = this;
+
+                        return typeof val === 'number' && !isNaN(val);
+                    }
                 },
                 mounted() {
                 	let self = this;
                     const params = new URLSearchParams(window.location.search);
-
                     self.getPoints();
+
+                    if(self.sessionId == ''){
+                        alert("로그인이 필요합니다.");
+                        location.href="/board/vetBoardList.do?category="+self.category;
+                    }
                     var quill = new Quill('#editor', {
                     theme: 'snow',
                     modules: {

@@ -391,11 +391,12 @@
                                             <a class="cmt2button" @click="fnReply(item.commentId)">답글 달기</a>
 
                                             <!-- 수정/삭제 -->
-                                            <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
-                                                <template v-if="item.isDeleted == 'N'">
-                                                    <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
-                                                    <button class="cmtButton2"
-                                                        @click="fnCommentRemove(item.commentId)">❌</button>
+                                            <template v-if="item.isDeleted == 'N'">
+                                                <template v-if="sessionId == item.userId">
+                                                        <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
+                                                </template>
+                                                <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
+                                                    <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
                                                 </template>
                                             </template>
                                         </div>
@@ -421,7 +422,7 @@
                                     </div>
                                     <div v-else>
                                         <div v-if="reply.isDeleted == 'Y'">
-                                            <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
+                                            <div style="margin-bottom: 10px;">삭제된 댓글입니다.</div>
                                         </div>
                                         <div v-else>
                                             <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
@@ -429,10 +430,11 @@
                                             <div
                                                 style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
                                                 <span>{{ reply.updatedTime }}</span>
-                                                <template v-if="sessionId === reply.userId || sessionRole === 'ADMIN'">
+                                                <template v-if="sessionId === reply.userId">
                                                     <button class="cmtButton2" @click="fnCommentEdit(reply)">수정</button>
-                                                    <button class="cmtButton2"
-                                                        @click="fnCommentRemove(reply.commentId)">❌</button>
+                                                </template>
+                                                <template v-if="sessionId === reply.userId || sessionRole === 'ADMIN'">
+                                                    <button class="cmtButton2" @click="fnCommentRemove(reply.commentId)">❌</button>
                                                 </template>
                                             </div>
                                         </div>
@@ -455,8 +457,10 @@
                 </div>
 
                 <div class="buttonMargin" style="display: flex; gap: 5px;">
-                    <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
+                    <template v-if="sessionId == info.userId">
                         <button class="button" @click="fnEdit()">수정</button>
+                    </template>
+                    <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">    
                         <button class="button" @click="fnRemove()">삭제</button>
                     </template>
                     <button class="button" @click="fnBack(info)">뒤로가기</button>

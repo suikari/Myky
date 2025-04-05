@@ -408,6 +408,12 @@ public class BoardServiceImpl implements BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		List<board> menu = boardMapper.selectBoardList(map);
 		
+		int count = boardMapper.selectBoardCnt(map);
+		
+		Map<String, Object> countMap = new HashMap<>();
+		countMap.put("cnt", count);
+
+		resultMap.put("count", countMap);
 		resultMap.put("menu", menu);
 		resultMap.put("result", "success");
 		return resultMap;

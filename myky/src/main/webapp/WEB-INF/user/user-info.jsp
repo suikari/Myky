@@ -161,7 +161,6 @@
             .custom-file-label:hover {
                 background-color: #45a049;
             }
-
         </style>
     </head>
 
@@ -254,10 +253,10 @@
                     <label for="file1" class="custom-file-label">프로필 업로드</label>
                 </div>
                 <div>
-                    <button class="custom-file-label"@click="fnDeletePic()">프로필 사진 삭제</button>
+                    <button class="custom-file-label" @click="fnDeletePic()">프로필 사진 삭제</button>
                 </div>
 
-                
+
 
                 <div class="user-info-box2">
                     <div class="user-info-label">이름 :</div>
@@ -277,11 +276,32 @@
                     </template>
                 </div>
 
-                <div class="user-info-box2">
+                <!-- <div class="user-info-box2">
                     <div class="user-info-label">이메일 :</div>
                     <input type="text" v-model="user.email" class="user-info-input">
-                </div>
+                    <button @click="sendEmailAuth">인증번호 받기</button>
+                </div> -->
 
+                <div class="user-info-box2">
+                    <template v-if="!emailFlg">
+                        <label for="email" class="user-info-label">이메일 :</label>
+                        <input id="email" class="user-info-input" v-model="user.email" placeholder="이메일을 입력하세요" class="user-info-input" />
+                        <button class="user-info-btn" @click="sendEmailAuth">인증번호 받기</button>
+                    </template>
+                
+
+                    <template v-else>
+                        <label for="email" class="user-info-label">이메일 :</label>
+                        <input id="email" class="user-info-input" v-model="user.email" disabled>
+                    </template>
+                </div>
+                    <div v-if="showVerification">
+                        <input type="text" v-model="authCode" placeholder="인증번호 입력" class="user-info-input"/>
+                        <button class="user-info-btn" @click="verifyCode">인증 확인</button>
+                    </div>
+
+                    <p v-if="message">{{ message }}</p>
+                
                 <div class="user-info-box2">
                     <div class="user-info-label">생년월일 :</div>
                     <input type="text" v-model="user.birthDate" class="user-info-input">
@@ -375,7 +395,12 @@
                         num1: "",
                         num2: "",
                         previewImage: "",
-                        picFlg: false
+                        picFlg: false,
+                        emailPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 유효성 검사 정규식
+                        emailFlg: false,
+                        showVerification: false,
+                        message: "",
+                        authCode: ""
 
 
                     };
@@ -603,21 +628,84 @@
                             reader.readAsDataURL(file);
                         }
                     },
-                    fnDeletePic : function () {
+                    fnDeletePic: function () {
                         let self = this;
-                        if(confirm("프로필 사진을 삭제하시겠습니까?")){
-                            self.previewImage ="";
-                            self.user.profileImage ="";
-                            self.picFlg=false;
+                        if (confirm("프로필 사진을 삭제하시겠습니까?")) {
+                            self.previewImage = "";
+                            self.user.profileImage = "";
+                            self.picFlg = false;
                             document.getElementById("file1").value = ""; // 파일 선택 필드 초기화
 
 
-                        }else{
+                        } else {
                             return;
                         }
 
+                    },
+
+                    async sendEmailAuth() {
+                        let self = this;
+                        if (!self.user.email) {
+                            alert("이메일을 입력하세요.");
+                            return;
+                        }
+
+                        if (!this.emailPattern.test(self.user.email)) {
+                            alert("유효한 이메일 형식을 입력하세요.");
+                            return;
+                        }
+                        this.message = "인증번호를 전송 중...";
+                        alert("인증번호를 전송 했습니다.");
+
+
+                        try {
+                            const response = await fetch("/email/send-auth-code", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email: this.user.email })
+                            });
+
+                            const result = await response.json();
+                            if (result.success) {
+                                this.showVerification = true;
+                                alert("인증번호가 발송되었습니다.");
+                            } else {
+                                alert("이메일 발송 실패.");
+                            }
+                        } catch (error) {
+                            alert("서버 오류 발생");
+     
+                        }
+                    },
+
+                    async verifyCode() {
+                        if (!this.authCode) {
+                            return;
+                        }
+
+                        try {
+                            const response = await fetch("/email/verify-auth-code", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email: this.user.email, code: this.authCode })
+                            });
+
+                            const result = await response.json();
+                            if (result.success) {
+                                this.message = "이메일 인증이 완료되었습니다!";
+                                this.showVerification = false;
+                                this.emailFlg = true;
+                            } else if (result.success2) {
+                                this.message = "인증시간이 만료되었습니다. 인증코드를 다시 신청하십시오!";
+                                this.showVerification = false;
+                            } else {
+                                this.message = "인증번호가 일치하지 않습니다.";
+                            }
+                        } catch (error) {
+                            this.message = "서버 오류 발생.";
+                        }
                     }
-                    
+
 
                 },
                 mounted() {
