@@ -411,10 +411,14 @@
 							            <div class="col">
 							                <label for="userNickName" class="form-label">닉네임:</label>
 							                <input type="text" id="userNickName" v-model="editData.vetNickname" class="form-control">
-							            </div>							
+							            </div>			
+							            <div class="col">
+							                	<label for="userId" class="form-label me-2">
+							                		사용중인 ID : <span >{{editprveid}}</span>
+							                	 </label>
+							            </div>					
 							            <!-- 사용자 ID 셀렉트 박스 및 연동해제 버튼 -->
 							            <div class="col-auto d-flex align-items-center">
-							            	<label for="userId" class="form-label me-2">사용중인 ID: <span></span> </label>
 							            	
 							                <label for="userId" class="form-label me-2">변경할 ID:</label>
 							                <select v-model="editData.userId" id="userId" class="form-select">
@@ -441,7 +445,7 @@
 						                
 					<div class="d-flex justify-content-between align-items-center mt-3">
 				    <!-- 생성 버튼 왼쪽에 배치 -->
-				    <div>
+				    	<div>
 					        <button class="btn btn-success" @click="isCreating = !isCreating">생성</button>
 					    </div>
 					
@@ -696,8 +700,6 @@
                     		}
                     	});
                     	
-                   		
-
                     }
                     
                     
