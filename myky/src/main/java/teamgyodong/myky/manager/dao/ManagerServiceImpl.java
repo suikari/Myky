@@ -488,6 +488,27 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	@Override
+	public HashMap<String, Object> insertBoard(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+			
+			int count = managerMapper.insertBoard(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+			try {
+	
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 	
 	@Override
 	public HashMap<String, Object> selectProduct(HashMap<String, Object> map) {

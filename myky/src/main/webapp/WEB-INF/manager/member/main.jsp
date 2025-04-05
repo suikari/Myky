@@ -412,6 +412,10 @@
 								            <label for="userName" class="form-label">이름:</label>
 								            <input type="text" id="userName" v-model="editData.userName" class="form-control">
 								        </div>
+								         <div class="col">
+								            <label for="userName" class="form-label">보유 포인트 : {{currentPoint}}</label>
+								            <button class="btn btn-primary me-2 custom-btn" @click="">수정</button>
+								        </div>
 										<!-- 탈퇴 여부 토글 스위치 -->
 								        <div class="col-auto d-flex align-items-center">
 								            <label for="deleteYn" class="form-label me-2">회원 상태:</label>
@@ -500,11 +504,11 @@
 				            userName : '',
 				            DeleteYn : '',
 				        },
+				        currentPoint : 0,
 	                    searchOption: 'userId',
 	                    page: 1,
 	                    pageSize: 5,
 	                    keyword: '',
-
                      };
                  },
                 computed: {
@@ -551,7 +555,7 @@
                             self.editData = { ...member };  // 수정할 데이터 채우기
                             self.selectedMemberId = userId;
                         	console.log("3",userId);
-
+                        	self.getPoints(userId);
                         }
                     },
                     fnSave () {
@@ -599,6 +603,22 @@
                         let pageCnt = 1;
                         self.page = pageCnt;
                         self.fnMainList();
+                    },
+                    getPoints : function(userId){
+                        let self = this;
+                        let nparmap = {
+                            userId : userId,
+                        };
+                        $.ajax({
+				        	url:"/point/current.dox",
+				        	dataType:"json",	
+				        	type : "POST", 
+				        	data : nparmap,
+				        	success : function(data) { 
+				        		console.log("11",data);
+                                self.currentPoint = data.point.currentPoint;
+				        	}
+				        });
                     },
                 	
                 },

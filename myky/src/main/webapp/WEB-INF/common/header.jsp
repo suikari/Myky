@@ -52,9 +52,9 @@
 	        
 	        <div v-else class="top-bar">
 	            <span>{{sessionName}} 님 환영합니다! </span> 
-	            | <a href="/order/orderList.do">주문조회</a> 
+	             <a href="/order/orderList.do">주문조회</a> 
 	            | <a href="/board/list.do?category=A">공지사항</a> 
-	            <a v-if="sessionRole == 'ADMIN' " href="/manager/main.do"> | 관리자콘솔</a> 
+	            | <a v-if="sessionRole == 'ADMIN' " href="/manager/main.do"> 관리자콘솔</a> 
 	            | <a href="/member/logout.do">로그아웃</a>
 	        </div>
         </div>
