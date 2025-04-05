@@ -9,18 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	<link rel="stylesheet" href="/css/board/board.css"/>
     <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        #app {
-            padding-bottom: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+
         /* 공지사항 제목 */
         .section-header {
             /* background-color: #202060; */
@@ -105,47 +94,51 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
-        table {
+        #fb-board-app {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-bottom: 120px;
+        }
+        #fb-board-app table {
             width: 100%;
             border-collapse: collapse;
             background-color: #fff;
         }
-        th {
+
+        #fb-board-app th {
             background-color: #202060;
             color: #fca311;
             padding: 12px;
             font-weight: 600;
             font-size: 15px;
         }
-        td {
-            padding: 12px;
-            font-size: 14px;
-            color: #333;
-            background-color: #fafafa;
-        }
-        tr:nth-child(even) td {
-            background-color: #f0f0f0;
-        }
-        a {
+
+        #fb-board-app a {
             color: #202060;
             font-weight: bold;
             text-decoration: none;
             margin: 0 6px;
         }
-        a:hover {
+
+        #fb-board-app a:hover {
             color: #fca311;
             text-decoration: underline;
         }
+
         .buttonTitle {
             font-weight: bold;
             /* background-color: #ccc; */
-            /* color: #bbb; */
+            /* color: #000000; */
             cursor: pointer;
-            border: 1px solid #f9f9f9;
-            border-radius: 6px;
-            font-size: 1px;
+            /* border: 1px solid #f9f9f9; */
+            /* border-radius: 6px; */
+            font-size: 15px;
             padding: 10px;
-            text-align: left;
+            text-align: center;
+        }
+        .buttonTitle:hover {
+            color: #fca311;
         }
         button.button {
             padding: 10px 20px;
@@ -165,6 +158,26 @@
         }
         .buttonMargin{
             margin-bottom: 100px;
+        }
+        .fb-pagination {
+            text-align: center;
+        }
+
+        .fb-pagination span {
+            margin: 0 4px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #202060;
+        }
+
+        .fb-pagination span.current-page {
+            color: #fca311;
+            text-decoration: underline;
+            cursor: default;
+        }
+
+        .fb-pagination span:hover {
+            text-decoration: underline;
         }
         div {
             text-align: center;
@@ -203,7 +216,7 @@
         .dropdown-content {
             display: none;  /* 기본적으로 숨김 처리 */
             padding: 10px;
-            background-color: #f9f9f9;  /* 배경색 */
+            background-color: #f9f9f9; 
             border: 1px solid #ddd;  /* 테두리 */
             border-radius: 5px;  /* 모서리 둥글게 */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* 그림자 효과 */
@@ -212,74 +225,135 @@
             line-height: 1.6;  /* 줄 간격 */
             max-height: 300px;  /* 최대 높이 */
             overflow-y: auto;  /* 내용이 넘칠 경우 스크롤 */
+            font-weight: bold;
         }
 
             /* 드롭다운 메뉴가 열릴 때 표시되도록 */
         tr.dropdown-content {
             display: table-row;  /* 드롭다운이 보이도록 설정 */
         }
-        .dropdown-content:nth-child(odd) {
-            background-color: #ffffff;  /* 홀수번째 항목은 흰색 */
-        }
-        .dropdown-content:nth-child(even) {
-            background-color: #f1f1f1;  /* 짝수번째 항목은 회색 */  
-        }
             /* 드롭다운 컨텐츠에 마우스를 올렸을 때 */
         .dropdown-content:hover {
-            background-color: #525252;  /* 호버시 배경색 */
+            background-color: #f8f8f8;  /* 호버시 배경색 */
+            color: #202060;
+            font-weight: bold;
+        }
+        .setCss {
+            width: 100%;
+            max-width: 1000px;
+
+        }
+        tr.faq-td.faq-even td {
+            background-color: #f0f0f0;
+        }
+        tr.faq-td.faq-odd td {
+            background-color: #fafafa;
         }
     </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
     <div id="app" class="container">
+        <div id="fb-board-app">
 
 
-        <div class="section-header">
-            FAQ
+            <div class="section-header" @click="fnFAQView('')">
+                FAQ
+            </div>
+            <div class="section-headerDown">
+                자주 묻는 질문
+            </div>    
+            <div class="setCss"></div>
+            <hr class="custom-hr">
+
+
+            <div class="setCss">
+                <button class="button" @click="fnChange('이용방법')">이용방법</button>
+                <button class="button" @click="fnChange('교환/반품')">교환/반품</button>
+                <button class="button" @click="fnChange('계정')">계정</button>
+                <button class="button" @click="fnChange('상품관련')">상품관련</button>
+                <button class="button" @click="fnChange('배송')">배송</button>
+                <button class="button" @click="fnChange('결제관리')">결제관리</button>
+
+                <template class="search-right">
+                    <select v-model="pageSize" @change="fnBoardSearch">
+                        <option value="5">5개씩</option>
+                        <option value="10">10개씩</option>
+                        <option value="15">15개씩</option>
+                        <option value="20">20개씩</option>
+                    </select>
+                </template>
+            </div>
+            <table class="table-wrapper setCss" style="width: 100%; max-width: 1000px;">
+                <tr>
+                    <th>번호</th>
+                    <th>카테고리</th>
+                    <th>제목</th> 
+                </tr>
+
+                <!-- 게시글 목록 -->
+
+
+                <template v-for="(item, index) in menu">
+                    <template v-if="item.isDeleted == 'N'">
+                        <tr :class="['faq-td', index % 2 === 1 ? 'faq-even' : 'faq-odd']" @click="fnFAQDrop(item.boardId)">
+                            <td>{{item.boardId}}</td>
+                            <td>{{item.menu}}</td>
+                            <td>
+                                <div class="buttonTitle">{{item.title}}</div>
+                            </td>
+                        </tr>
+
+                        <tr v-show="selectedBoardId == item.boardId" class="dropdown-content">
+                            <td colspan="3">
+                                <div v-html="item.content"></div>
+                            </td>
+                        </tr>
+                    </template>
+                </template>
+            </table>
+
+            <!-- 페이지네이션 버튼 -->
+            <div>
+                <!-- 이전 페이지 버튼 -->
+                <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
+                    <i class="bi bi-chevron-left"> < </i>
+                </a>
+    
+                <!-- 페이지 번호 -->
+                <template v-for="num in index">
+                    <!-- 첫 번째 페이지로 이동하는 "..." -->
+                        <a v-if="num === 1 && page > 3" 
+                        href="javascript:;"  
+                        @click="fnPage(1)" 
+                        class="btn btn-outline-secondary board-page-btn">
+                        ...
+                        </a>
+                
+                        <!-- 현재 페이지 기준 좌우 2개씩 표시 -->
+                        <span v-if="num >= page - 2 && num <= page + 2" 
+                        href="javascript:;"  
+                        @click="fnPage(num)" 
+                        class="btn btn-outline-secondary board-page-btn" 
+                        :class="{ 'current-page': page === num }">
+                        {{ num }}
+                        </span>
+                    
+                        <a v-if="num === index && page < index - 2" 
+                        href="javascript:;"  
+                        @click="fnPage(index)" 
+                        class="btn btn-outline-secondary board-page-btn">
+                        ...
+                        </a>
+                </template>
+    
+                <!-- 다음 페이지 버튼 -->
+                <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
+                    <i class="bi bi-chevron-right"> > </i>
+                </a>
+            </div>
+
         </div>
-        <div class="section-headerDown">
-            자주 묻는 질문
-        </div>    
-        <div class="setCss"></div>
-        <hr class="custom-hr">
-
-        <div>
-            <button class="button" @click="fnFAQView('이용방법')">이용방법</button>
-            <button class="button" @click="fnFAQView('교환/반품')">교환/반품</button>
-            <button class="button" @click="fnFAQView('계정')">계정</button>
-            <button class="button" @click="fnFAQView('상품관련')">상품관련</button>
-            <button class="button" @click="fnFAQView('배송')">배송</button>
-            <button class="button" @click="fnFAQView('결제관리')">결제관리</button>
-        </div>
-
-        <table class="table-wrapper">
-            <tr>
-                <th>번호</th>
-                <th>카테고리</th>
-                <th>제목</th> 
-            </tr>
-
-            <!-- 게시글 목록 -->
-
-            <template v-for="item in menu">
-            <tr>
-                <td>{{item.boardId}}</td>
-                <td>{{item.menu}}</td>
-                <td>
-                    <button class="buttonTitle" @click="fnFAQDrop(item.boardId)">{{item.title}}</button>
-                    <div v-if="selectedBoardId == item.boardId" ></div>
-                </td>
-            </tr>
-
-            <tr v-show="selectedBoardId == item.boardId" class="dropdown-content">
-                <td colspan="3">
-                    <div v-html="item.content"></div>
-                </td>
-            </tr>
-            </template>
-        </table>
-
     </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
@@ -299,6 +373,10 @@
                         boardId : "",
                         content : "",
                         selectedBoardId : null,
+                        index: 0,
+                        pageSize: 5,
+                        page: 1,
+                        isDeleted : "",
                     };
                 },
                 computed: {
@@ -307,10 +385,14 @@
                 methods: {
                     fnFAQView(menuName) {
                         let self = this;
-                    
+                        self.selectedBoardId = null;
+
                         let nparmap = {
                             menu : menuName,
                             category: self.category,
+                            searchOption: self.searchOption,
+                            page: (self.page - 1) * self.pageSize,
+                            pageSize: self.pageSize,
                         }
                         $.ajax({
 				    	    url:"/board/FAQView.dox",
@@ -324,8 +406,20 @@
                                     location.href="/board/FAQView.do";
                                 }
                                 self.menu = data.menu;
+                                if (data.count && data.count.cnt !== undefined) {
+                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                } else {
+                                    self.index = 0;
+                                    console.warn("count 정보 없음!", data);
+                                }
                             }
 				        });       
+                    },
+                    fnChange(menu){
+                        let self = this;
+
+                        self.page = 1;
+                        self.fnFAQView(menu);
                     },
                     fnFAQDrop : function (boardId){
                         let self = this;
@@ -340,7 +434,22 @@
                             self.selectedBoardId = boardId;
                         	console.log("3",boardId);
                         }
-                    }
+                    },
+                    fnBoardSearch : function(){
+                        let self = this;
+                        let pageCnt = 1;
+                        self.page = pageCnt;
+                        self.fnFAQView();
+                    },
+                    fnPage(num) {
+                        this.page = num;
+                        this.fnFAQView();
+                    },
+                    fnPageMove(direction) {
+                        if (direction === "next") this.page++;
+                        else this.page--;
+                        this.fnFAQView();
+                    },
                 },
                 mounted() {
                 	let self = this;

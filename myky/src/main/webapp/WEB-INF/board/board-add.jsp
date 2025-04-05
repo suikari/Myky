@@ -204,6 +204,7 @@
                        title : "",
                        content : "",
                        sessionId : "${sessionId}" || '',
+                       sessionRole : "${sessionRole}",
                        boardId : "",
                        category : "",                
                     };
@@ -292,11 +293,10 @@
                     if(self.sessionId == ''){
                         alert("로그인이 필요합니다.");
                         location.href="/board/list.do?category="+self.category;
-                    }else if(self.sessionId != 'ADMIN' && self.category =='A'){
+                    }else if(self.sessionRole != 'ADMIN' && self.category =='A'){
                         alert("관리자만 접속 가능합니다.");
                         location.href="/board/list.do?category="+self.category;
                     }
-
                 	var quill = new Quill('#editor', {
                     theme: 'snow',
                     modules: {
