@@ -74,6 +74,9 @@
                 AND (F.USER_ID LIKE '%' || #{keyword} || '%'
                 AND F.TITLE LIKE '%' || #{keyword2} || '%')
             </if>
+            <if test="menu != null and menu != ''">
+            	AND MENU = #{menu}
+            </if>
 			AND CATEGORY= #{category}
 		    AND IS_DELETED = 'N'
 	</select>
@@ -243,7 +246,7 @@
 		) U ON F.USER_ID = U.USER_ID
 		WHERE 1=1
 		    <if test="searchOption != null and searchOption == 'all'">
-		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
+		        AND (F.TITLE LIKE '%' || #{keyword} || '%'
 		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
 		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
@@ -378,7 +381,7 @@
 		UPDATE VET_BOARD
 		SET
 			IS_ACCEPTED = 'Y'
-		WHERE VET_BOARD_ID = #{vetBoardId}		
+		WHERE VET_BOARD_ID = #{vetBoardId}
 	</update>
 	
 	<!-- 이미 작성한 댓글 있는지 확인 -->
@@ -389,7 +392,7 @@
 	      AND VET_BOARD_ID = #{vetBoardId}
 	</select>
 	
-
+	
 </mapper>
 
 

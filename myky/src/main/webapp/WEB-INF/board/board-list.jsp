@@ -287,7 +287,7 @@
                     <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
                         <i class="bi bi-chevron-right"> > </i>
                     </a>
-                        </div>
+                </div>
 
                     <template  v-if="category == 'A'">
                         <button class="button" @click="fnAdd" v-if="sessionRole == 'ADMIN'">글쓰기</button>
@@ -369,7 +369,6 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             fnAdd() {
                 let self = this;
-
                 location.href="/board/add.do?category="+self.category;
             },
             fnView(boardId) {
