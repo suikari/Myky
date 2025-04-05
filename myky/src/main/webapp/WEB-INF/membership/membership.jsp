@@ -418,7 +418,7 @@
                     <div class="step-wrap">
                         <div class="step">
                             <span class="step-number">STEP. 03</span>
-                            <h4>회원정보 확인</h4>
+                            <h4>회원정보 확인 및 결제</h4>
                             <img src="../../img/product/Identity.png" alt="본인확인">
                             <p>가입에 필요한 회원정보를 확인합니다.</p>
                         </div>
@@ -473,7 +473,13 @@
                         mDonationTotal: 0,  //멤버십 유저가 기부한 금액
                         totalUserCnt: 0,   //전체 회원 수
                         uDonationTotal: 0, //유저 전체 기부금
-                        showTips: true,   //안내사항 토글
+                        showTips: true,   //안내사항 토글,
+
+                        sessionId: "${sessionId}",
+                        userInfo: {
+                            "membershipFlg": "N",
+                            userId: ""
+                        }, //사용자 정보 가져오기
                     };
                 },
                 computed: {
@@ -483,10 +489,56 @@
                     toggleTips() {
                         this.showTips = !this.showTips;
                     },
+                    //유저 아이디 정보 가져오기
+                    fnUserInfo() {
+                        var self = this;
+                        console.log("sessionId >>> ", self.sessionId);
+                        var nparmap = {
+                            userId: self.sessionId
+                        };
+                        $.ajax({
+                            url: "/user/info.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("userInfo >>> ", data.user);
+                                self.userInfo = data.user;
+                            }
+                        });
+                    },
                     //멤버십
                     subscribe() {
-                        alert("멤버십 가입 페이지로 이동!");
-                        location.href = "/membership/terms.do";
+                        let self = this;
+
+                        if (!self.userInfo || !self.userInfo.userId) {
+                            alert("로그인이 필요합니다.");
+                            location.href = "/login.do";
+                            return;
+                        }
+                        var nparmap = {
+                            userId: self.userInfo.userId
+                        };
+                        $.ajax({
+                            url: "/membership/checkStatus.dox",
+                            type: "POST",
+                            dataType: "json",
+                            data: nparmap,
+                            success: function (res) {
+                                if (res.result === "success") {
+                                    if (res.joined) {
+                                        alert("이미 멤버십에 가입되어 있습니다.");
+                                    } else {
+                                        location.href = "/membership/terms.do";
+                                    }
+                                } else {
+                                    alert("멤버십 가입 여부 확인 중 오류가 발생했습니다.");
+                                }
+                            },
+                            error: function () {
+                                alert("서버와의 통신에 문제가 발생했습니다.");
+                            }
+                        });
                     },
                     //전제 회원 수 
                     fnTotalUserCnt() {
@@ -546,6 +598,7 @@
                 },
                 mounted() {
                     let self = this;
+                    self.fnUserInfo();
                     self.fnMainList();
                     self.fnDonation();
                     self.fnTotalDonation();
