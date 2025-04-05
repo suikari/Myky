@@ -8,10 +8,10 @@
 		
 		insert into payment
 		<if test="option != 'donation'">
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId},#{usedPoint},#{membershipId})		
+			values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},ORDERS_SEQ.NEXTVAL,#{donationId},#{userId},#{usedPoint},#{membershipId})		
 		</if>
 		<if test="option == 'donation'">
-		values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},null,#{donationId},#{userId},0,null)
+			values (payment_seq.nextval,#{paymentCode},#{description},#{amount},#{paymentMethod},#{installment},#{subscriptionPeriod},sysdate,#{paymentStatus},#{isCanceled},#{cancelDate},null,#{donationId},#{userId},#{usedPoint},null)
 		</if>
 		
 	</insert>
@@ -28,13 +28,11 @@
 	 
 	<select id="selectCurrentPoint" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
 	 	
-	 	select coalesce(
-		    (select current_point
-		     from point
-		     where user_id = #{userId}
-		     order by usage_date desc
-		     fetch first 1 rows only), 0) as current_point
-		from dual
+	 	select current_point
+	    from point
+	    where user_id = #{userId}
+	    order by usage_date desc
+	    fetch first 1 rows only
 
 	</select>
 	 
@@ -46,7 +44,7 @@
 			sysdate, 
 			#{usedPoint}, 
 			(
-				select coalesce(current_point, 0) + #{usedPoint} 
+				select current_point + #{usedPoint} 
 				from point 
 				where user_id = #{userId}
 				order by usage_date desc

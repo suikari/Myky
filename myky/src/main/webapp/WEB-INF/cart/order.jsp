@@ -626,7 +626,7 @@
                         data: params,
                         success: function (data) {
                             if(self.userPoint != data.point.currentPoint){
-                                alert("보유 포인트에 변동이 있습니다. 확인 후 결제해주세요.");
+                                alert("보유 포인트에 변동이 있습니다. 확인 후 다시 결제해주세요.");
                                 self.fnGetPoint();
                                 self.$nextTick(() => {
                                     self.$refs.usedPoint.focus();
