@@ -28,7 +28,7 @@
 	 
 	<select id="selectCurrentPoint" parameterType="hashmap" resultType="teamgyodong.myky.pay.model.pay">
 	 	
-	 	select current_point
+	 	select nvl(current_point,0) as current_point
 	    from point
 	    where user_id = #{userId}
 	    order by usage_date desc
