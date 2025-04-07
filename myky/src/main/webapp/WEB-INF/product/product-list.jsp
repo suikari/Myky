@@ -10,7 +10,7 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
         <link rel="stylesheet" href="/css/product/product.css" />
         <style>
-            
+
         </style>
     </head>
 
@@ -118,39 +118,6 @@
 
                 <!-- 페이지네이션 버튼 중앙에 배치 -->
                 <div class="pagination">
-                    <!-- 이전 페이지 버튼 -->
-                    <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;"
-                        @click="fnPageMove('prev')" v-if="page != 1">
-                        <i class="bi bi-chevron-left">
-                            << /i>
-                    </a>
-                    <!-- 페이지 번호 -->
-                    <template v-for="num in index">
-                        <!-- 첫 번째 페이지로 이동하는 "..." -->
-                        <a v-if="num === 1 && page > 3" href="javascript:;" @click="fnPage(1)"
-                            class="btn btn-outline-secondary board-page-btn">
-                            ...
-                        </a>
-
-                        <!-- 현재 페이지 기준 좌우 2개씩 표시 -->
-                        <a v-if="num >= page - 2 && num <= page + 2" href="javascript:;" @click="fnPage(num)"
-                            class="btn btn-outline-secondary board-page-btn" :class="{ 'active': page === num }">
-                            {{ num }}
-                        </a>
-
-                        <a v-if="num === index && page < index - 2" href="javascript:;" @click="fnPage(index)"
-                            class="btn btn-outline-secondary board-page-btn">
-                            ...
-                        </a>
-                    </template>
-
-                    <!-- 다음 페이지 버튼 -->
-                    <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;"
-                        @click="fnPageMove('next')" v-if="index > 0 && page != index">
-                        <i class="bi bi-chevron-right">></i>
-                    </a>
-                </div>
-                <!-- <div class="pagination">
                     <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> < </a>
                             <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
                                 :class="{ active: page === num }">
@@ -159,7 +126,7 @@
                             </a>
                             <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
                     </a>
-                </div> -->
+                </div>
             </main>
         </div>
 
