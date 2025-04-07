@@ -9,438 +9,69 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <!-- Quill CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/board/board.css"/>
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link rel="stylesheet" href="/css/board/board.css"/>
     
 
     <style>
-         #viewPage {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 10px;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-
-        #viewPage .view-header {
-            font-size: 36px;
-            font-weight: bold;
-            color: #202060;
-            margin-bottom: 10px;
-        }
-
-        #viewPage .view-sub {
-            color: #333;
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-
-        #viewPage .view-label {
-            font-size: 25px;
-            font-weight: bold;
-            color: #202060;
-            margin-top: 40px;
-            margin-bottom: 10px;
-            max-width: 1000px;
-            align-items: center;
-        }
-        .view-labelContent {
-            height: 500px;
-            text-align: center;
-            align-items: center;
-        }
-
-        #viewPage .view-box {
-            border: 2px solid #202060;
-            font-weight: bold;
-            border-radius: 6px;
-            padding: 15px;
-            background-color: #fdfdfd;
-            font-size: 16px;
-            line-height: 1.8;
-            color: #333;
-            word-break: break-word;
-            white-space: pre-wrap;
-            align-items: center;
-            width: 100%;
-            max-width: 1000px;
-        }
-        .view-boxContent{
-            border: 1px solid #202060;
-            border-radius: 6px;
-            padding: 15px;
-            background-color: #fdfdfd;
-            font-size: 16px;
-            line-height: 1.8;
-            color: #333;
-            word-break: break-word;
-            white-space: pre-wrap;
-            min-height: 500px;
-            text-align: center;
-            align-items: center;
-            width: 100%;
-            max-width: 1000px;
-        }
-        #viewPage .view-files {
-            margin-top: 10px;
-            width: 100%;
-            max-width: 1000px;
-            text-align: center;
-            align-items: center;
-        }
-
-        #viewPage .file-link {
-            color: #202060;
-            font-weight: bold;
-            text-decoration: none;
-            margin-right: 10px;
-            display: inline-block;
-            align-items: center;
-            text-align: center;
-        }
-        .view-files {
-            margin-bottom: 20px;
-            color: #202060;
-            border: 1px solid #202060;
-            border-radius: 6px;
-            padding: 15px;
-            text-align: center;
-            align-items: center;
-        }
-        #viewPage .file-link:hover {
-            color: #fca311;
-        }
-        .rating-label {
-            display: block;
-            font-weight: bold;
-            font-size: 16px;
-            color: #000;
-            margin-bottom: 6px;
-        }
-
-        .star-rating .stars {
-            display: inline-block;
-        }
-        .star-rating .stars {
-                display: inline-block;
-        }
-
-        .star-rating .star {
-            font-size: 24px;
-            cursor: pointer;
-            color: #eee;
-            transition: color 0.2s;
-            user-select: none;
-
-        }
-
-        .star-rating .star.active {
-            color: #fca311;
-        }
-        .custom-hr {
-            width: 1000px;
-            max-width: 100%;
-            border: none;
-            border-top: 1px solid #ccc;
-            margin-top: 10px;
-            margin-bottom: 100px;
-            width: 100%;
-            max-width: 1000px;
-        }
-        .editor-box {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 16px;
-            max-width: 1000px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .answer-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .answer-nickname {
-            font-weight: bold;
-            color: #0366d6;
-            margin-right: 10px;
-        }
-        .answer-nickname2 {
-            font-weight: bold;
-            color: #202060;
-            margin-right: 10px; 
-        }
-
-        .answer-meta {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .answer-content {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
-        }
-
-        .answer-actions {
-            margin-top: 10px;
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .answer-actions button,
-        .answer-actions a {
-            background: none;
-            border: none;
-            color: #0366d6;
-            cursor: pointer;
-        }
-        .answer-actions button:hover,
-        .answer-actions a:hover {
-            text-decoration: underline;
-        }
-
-        .deleted-answer {
-            color: #999;
-            font-style: italic;
-        }
-        .editor-wrapper {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #ffffff;
-            border-radius: 6px;
-            border: 1px solid #ffffff;
-            max-width: 1000px;
-            width: 100%;
-            height: 700px;
-        }
-        .quill-editor {
-            height: 200px;
-            width: 100%;
-            margin-bottom: 16px;
-        }
-        .reply-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .answerButton{
-            width: 7%;
-            text-align: center;
-        }
-        .answer-box {
-            background-color: #f6f8fa;
-            border: 1px solid #d1d5da;
-            border-radius: 10px;
-            padding: 16px;
-            margin: 20px 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            position: relative;
-            width: 100%;
-            position: relative;
-            max-width: 1000px;
-            flex-direction: column;
-        }
-
-        .choice-button {
-            margin-top: 10px;
-            align-self: flex-end;
-            background-color: #fca311;
-            color: #202060;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 14px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-inline-end: auto;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .choice-button:hover {
-            background-color: #fca311;
-            color: #202060;
-        }
-        .choiceSaveButton{
-            background-color: #202060;
-            color: #fca311;
-            padding: 10px 20px;
-            border-radius: 5px; 
-            border: none; 
-            cursor: pointer; 
-            margin-top: 10px;
-        }
-        .answer-box.accepted {
-            border: 3px solid #202060;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 25px;
-            background-color: #dff0fa;
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
-        }
-        .emphasized-comment {
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #dff0fa;
-            border-left: 4px solid #202060;
-        }
-        .underline-animated {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-        }
-        .underline-text {
-            display: inline-block;
-            padding-bottom: 4px;
-            margin-bottom: 30px;
-        }
-        /* 밑줄 */
-        .underline-animated::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            height: 3px;
-            width: 0;
-            background-color: #fca311;
-            transition: width 0.3s ease;
-        }
-
-        /* hover 시 밑줄 확장 */
-        .underline-animated:hover::after {
-            width: 100%;
-        }
-        .button {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #fca311;
-            color: #202060;
-        }
-
-        /* 댓글 달기 버튼 */
-        .cmtButton {
-            padding: 6px 14px;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .cmtButton:hover {
-            background-color: #202060;
-            color: #fca311;
-        }
-
-        /* 채택 버튼 */
-        .choice-button {
-            margin-top: 10px;
-            align-self: flex-end;
-            background-color: #fca311;
-            color: #202060;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 14px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-inline-end: auto;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .choice-button:hover {
-            background-color: #fca311;
-            color: #202060;
-        }
-        .footer-buttons {
-            display: flex;
-            justify-content: center;
-            font-weight: bold;
-            gap: 5px;
-            margin: 10px;
-            margin-top: 30px;
-            margin-bottom: 100px;
-        }
+      
     </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
-    <div id="app" class="container">
+    <div id="fb-app" class="fb-container">
 
-            <div id="viewPage">
-    
-                <div class="view-header" >
+            <div id="fb-viewPage">
+                <div class="fb-section-header" >
                     VIEW
                 </div>
-                <div class="view-sub">
+                <div class="fb-section-headerDown">
                     질문과 답
                 </div>
-                <hr class="custom-hr">
+                <hr class="fb-custom-hr">
 
-                <div class="view-label">
+                <div class="fb-title-label">
                     TITLE
                 </div>
-                <div class="view-box">
+                <div class="fb-view-box">
                     <a style="font-size:20px">{{info.title}}</a>
-                    <!-- 날짜 표시 여기 넣기 -->
-                    <div style="color: #fca311;">작성자: {{info.nickName}}</div>
-                    <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
-                        ( 포인트 {{info.points}} )
-                        작성일: ( {{ info.updatedTime }} )  조회수: ( {{info.cnt}} )
+
+                    <div class="fb-author-box">
+                        <span class="fb-author-label">작성자</span>
+                        <span class="fb-author-name">{{info.nickName}}</span>
+                        <span class="fb-badge">{{info.points}} P</span>
+                      </div>
+                    <div>
+                        <div class="fb-meta">
+                            <span class="fb-date">🕒 {{info.createdAt}}</span>
+                            <span class="fb-views">|  조회수 {{info.cnt}}</span>
+                        </div>
                     </div>
                 </div>
-                    <div class="view-label">CONTENT</div>
-                    <div class="view-boxContent" v-html="info.content"></div>
+                    <div class="fb-view-label">CONTENT</div>
+                    <div class="fb-view-boxContent" v-html="info.content"></div>
+                    
     
 
                     <!-- 답글 달기 -->
-                    <div class="answer-actions">
-                        <div @click="showEditor" v-if="vetList.vetId && info.isAccepted === 'N'">
-                             <div class="cmtButton answerButton">답변하기</div>
+                    <div class="fb-answer-actions">
+                        <div @click="showEditor" v-if=" (vetList.vetId && info.userId != sessionId) && info.isAccepted === 'N'">
+                            <div class="fb-answerButton">답변하기</div>
                         </div>
-                        <div v-show="showAnsw" class="editor-box">
-                            <!--  Quill 에디터 -->
-                      <div id="editor" class="quill-editor"></div>
-                  
-                      <!--  등록 버튼 영역 -->
-                      <div class="reply-buttons">
-                        <button class="cmtButton" @click="fnSaveReply">등록</button>
-                      </div>
+                        <div v-show="showAnsw" class="fb-editor-box">
+                                <!--  Quill 에디터 -->
+                            <div id="fb-editor" class="fb-quill-editor"></div>
+                            <!--  등록 버튼 영역 -->
+                            <button class="fb-cmtButton" @click="fnSaveReply">등록</button>
+                        </div>
                     </div>
-                </div>
 
 
                 <!-- 답변 출력 전체 -->
-                <div v-for="answer in answerList" class="answer-box">
+                <div v-for="answer in answerList" class="fb-answer-box">
                     <!-- 채택된 답변 -->
                     <div v-if="answer.comments">
-                        <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                        <div class="fb-accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
                             질문자 채택
                         </div>
                         
@@ -448,50 +79,51 @@
                         <div class="star-rating">
                             <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= answer.rating }">★</span>
                         </div>
-                        <div class="answer-nickname2">{{info.nickName}}</div>
-                        <div class="answer-header">
-                            <div class="answer-meta">{{ answer.createdAt }}</div>
+                        <div class="fb-answer-nickname2">{{info.nickName}}</div>
+                        <div class="fb-answer-header">
+                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
                         </div>
                         <!-- 후기 -->
-                        <div class="answer-comments">
+                        <div class="fb-answer-comments">
                             <span class="underline-animated underline-text">{{ answer.comments }}</span>
                         </div>
 
                         <!-- 답변 작성자 정보 -->
-                        <div class="answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
-                        <div class="answer-header">
-                        <div class="answer-meta">{{ answer.createdAt }}</div>
+                        <div class="fb-answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
+                        <div class="fb-answer-header">
+                        <div class="fb-answer-meta">{{ answer.createdAt }}</div>
                         </div>
 
                         <!-- 본문 -->
-                        <span class="underline-animated underline-text answer-comments">
+                        <span class="underline-animated underline-text fb-answer-comments">
                             <div v-html="answer.reviewText"></div>
                         </span>
                     </div>
+
                     <!-- 답변 출력/채택 전 -->
                     <div v-else>
-                        <div class="answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
-                        <div class="answer-header">
-                            <div class="answer-meta">{{ answer.createdAt }}</div>
+                        <div class="fb-answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
+                        <div class="fb-answer-header">
+                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
                         </div>
-                        <div v-html="answer.reviewText"></div>
+                        <div v-if="answer.isDeleted == 'N'" v-html="answer.reviewText"></div>
+                        <div v-if="answer.isDeleted == 'Y'" > 삭제된 답변입니다 </div>
                     </div>
-
 
                  <!-- 답변 채택 -->
                     <template v-if="answer && answer.isDeleted === 'N'">
 
                     <!-- 채택 버튼 (질문자만 보임) -->
                         <template v-if="sessionId == info.userId && showChoice !== answer.reviewId && info.isAccepted == 'N'">
-                            <button @click="fnShowChoice(answer.reviewId)" class="choice-button">채택</button>
+                            <button @click="fnShowChoice(answer.reviewId)" class="fb-choice-button">채택</button>
                         </template>
 
                         <!-- 채택 UI (showChoice === 현재 답변) -->
                         <template v-if="showChoice === answer.reviewId">
-                            <div class="accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
+                            <div class="fb-accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
                                 
                                 <!-- 라벨 -->
-                                <div class="accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                                <div class="fb-accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
                                 질문자 채택
                                 </div>
 
@@ -508,45 +140,46 @@
 
                                 <!-- 기존 댓글 표시 -->
                                 <div>{{ answer.comments }}</div>
-
+                                
                                 <!-- 등록 버튼 -->
-                                <button @click="fnAnSelect(answer.userId)" class="choiceSaveButton">
+                                <button @click="fnAnSelect(answer.userId)" class="fb-choiceSaveButton">
                                     등록
                                 </button>
-                                <button class="choiceSaveButton" @click="fnCancelChoice">취소</button>
+                                <button class="fb-choiceSaveButton" @click="fnCancelChoice">취소</button>
                             </div>
                         </template>
                     </template>
                 
-                    <template v-if="(vetList.vetId == answer.vetId) && info.isAccepted === 'N'">  
-                        <button class="cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
+                    <template v-if="(vetList.vetId == answer.vetId) && info.isAccepted === 'N' && answer.isDeleted == 'N'">  
+                        <button class="fb-cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
                         <template v-if="(showEdit == answer.reviewId) && info.isAccepted === 'N'">
-                            <div class="editor-box">
+                            <div class="fb-editor-box">
                                 <!-- 🖋 Quill 에디터 [수정]-->
                                 <div>
-                                    <div id="editorEdit" class="quill-editor"></div>
+                                    <div id="editorEdit" class="fb-quill-editor"></div>
                                 </div>
-                                <div class="reply-buttons">
-                                    <button class="cmtButton" @click="fnAnEdit()">등록</button>
+                                <div class="fb-reply-buttons">
+                                    <button class="fb-cmtButton" @click="fnAnEdit()">등록</button>
                                 </div>
                             </div>
-                            <button class="cmtButton" @click="fnCancle">취소</button>
+                            <button class="fb-cmtButton" @click="fnCancle">취소</button>
                         </template>
-                        <button class="cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
+                        <button class="fb-cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
                     </template>
+                    
                     <template v-if="isDeleted == 'Y'">
                         <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
                     </template>
                 </div>
                   
-                <div class="footer-buttons">
+                <div class="fb-footer-buttons">
                     <template v-if="sessionId == info.userId && info.isAccepted === 'N'">
-                        <button class="cmtButton" @click="fnEdit()">수정</button>
+                        <button class="fb-cmtButton" @click="fnEdit()">수정</button>
                     </template>
-                    <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">
-                        <button class="cmtButton" @click="fnRemove()">삭제</button>
+                    <template v-if="(sessionId == info.userId || sessionRole == 'ADMIN') && info.isAccepted == 'N'">
+                        <button class="fb-cmtButton" @click="fnRemove()">삭제</button>
                     </template>
-                        <button class="cmtButton" @click="fnBack(info)">뒤로가기</button>
+                        <button class="fb-cmtButton" @click="fnBack(info)">뒤로가기</button>
                 </div>
                 
             </div>
@@ -588,6 +221,8 @@
                         points : "",
                         remark : "수의사 상담 point 적립",
                         isSelected : false,
+                        quillEdit: null, // ← 여기!
+
                     };
                 },
                 computed: {
@@ -622,7 +257,7 @@
                                 }
                                 self.info = data.info;
                                 self.answerList = data.answerList;
-                                console.log("지우라고해서",data);
+                                console.log("fnView",data);
 				        	}
 				        });
                     },
@@ -823,8 +458,11 @@
                         var nparmap = {
                             reviewId : reviewId,
                         };
-                        console.log("보내는 리뷰 ID:", reviewId); // 👈
-
+                        if (!confirm("정말 삭제하시겠습니까?")) {
+                           alert("취소되었습니다.");
+                           return;
+                        } 
+                        
                         $.ajax({
                             url: "/board/vetBoardAnRemove.dox",
                             dataType: "json",
@@ -862,24 +500,37 @@
                     },
                     editorEdit : function(contents) {
                         let self = this;
-                        var quillEdit = new Quill('#editorEdit', {
-                            theme: 'snow',
-                            modules: {
-                                toolbar: [
-                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                    ['bold', 'italic', 'underline'],
-                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                    ['link', 'image'],
-                                    ['clean'],
-                                    [{ 'color': [] }, { 'background': [] }]
-                                ]
+                       
+                            // 이미 인스턴스가 있다면 재생성하지 않음
+                            if (self.quillEdit) {
+                                self.quillEdit.root.innerHTML = contents;
+                                return;
                             }
-                        });
-                        quillEdit.root.innerHTML = contents;
-                        // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
-                        quillEdit.on('text-change', function () {
-                            self.reviewText = quillEdit.root.innerHTML;
-                        });
+
+                            // 새로 생성
+                            self.quillEdit = new Quill('#editorEdit', {
+                                theme: 'snow',
+                                modules: {
+                                    toolbar: [
+                                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                        ['bold', 'italic', 'underline'],
+                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                        ['link', 'image'],
+                                        ['clean'],
+                                        [{ 'color': [] }, { 'background': [] }]
+                                    ]
+                                }
+                            });
+
+                            // 초기 내용 설정
+                            self.quillEdit.root.innerHTML = contents;
+
+                            // 에디터 내용이 변경될 때마다 Vue 데이터 업데이트
+                            self.quillEdit.on('text-change', function () {
+                                self.reviewText = self.quillEdit.root.innerHTML;
+                            });
+
+
                     },
                 },
                 mounted() {
@@ -889,7 +540,7 @@
                     self.fnVetInfo();
                     self.fnView();
                     self.getCurrent();
-                    var quill = new Quill('#editor', {
+                    var quill = new Quill('#fb-editor', {
                     theme: 'snow',
                     modules: {
                         toolbar: [
@@ -908,6 +559,6 @@
                 }
             });
 
-            app.mount("#app");
+            app.mount("#fb-app");
         });
     </script>
