@@ -242,6 +242,9 @@
 		and (name like '%' || #{searchKeyword} || '%'
 		or address like '%' || #{searchKeyword} || '%')
 		</if>
+		<if test="categoryCode != null and categoryCode != ''">
+			and category_code = #{categoryCode}
+		</if>
 	</select>
 	
 </mapper>
