@@ -313,6 +313,23 @@
 		    width: 100%;
         }
 		
+		/* 버튼 스타일 */
+		.btn-edit {
+		    background-color: #0d6efd;
+		    color: white;
+		    border: none;
+		    padding: 5px 10px;
+		    border-radius: 5px;
+		}
+
+		.btn-delete {
+		    background-color: #dc3545;
+		    color: white;
+		    border: none;
+		    padding: 5px 10px;
+		    border-radius: 5px;
+		}
+		
     </style>
     
 </head>
@@ -322,16 +339,15 @@
        
          <!-- Main Content1 -->
          <div class=" main-content">
-                <h2>게시글 목록</h2>
+                <h2>상품 리뷰/문의 관리</h2>
 
 				<!-- 게시판 리스트 -->
 				<div class="card">
 
 					<!-- 게시판 선택 버튼 -->
 					<div class="d-flex justify-content-center gap-2 mt-3">
-					    <button class="btn"  :class="currentType === 'F' ? 'btn-primary' : 'btn-outline-primary'" @click="fnBoardList('F')">자유게시판</button>
-					    <button class="btn"  :class="currentType === 'A' ? 'btn-warning' : 'btn-outline-warning'" @click="fnBoardList('A')">공지게시판</button>
-					    <button class="btn"  :class="currentType === 'FAQ' ?  'btn-info' : 'btn-outline-info'"    @click="fnBoardList('FAQ')">FAQ게시판</button>
+					    <button class="btn"  :class="currentType === 'F' ? 'btn-primary' : 'btn-outline-primary'" @click="fnBoardList('F')">상품 리뷰</button>
+					    <button class="btn"  :class="currentType === 'A' ? 'btn-warning' : 'btn-outline-warning'" @click="fnBoardList('A')">상품 문의</button>
 					</div>
 					
 				    <div class="card-body">
@@ -375,27 +391,88 @@
 				                    <th class="board-th">제목</th>
 				                    <th class="board-th">작성자</th>
 				                    <th class="board-th">작성일</th>
-				                    <th class="board-th">조회수</th>
 				                    <th style="width: 10%;" class="text-center">상태</th>  
-				                    
+				                    <th v-if="currentType == 'A'" >관리</th>
 				                </tr>
 				            </thead>
 				            <tbody>
-				                <tr v-for="(post, index) in boardList" class="board-tr">
+				                <template v-for="(post, index) in boardList">
+				                <tr  class="board-tr">
 				                    <td><input type="checkbox" :value="post.boardId" v-model="selectList"></td>
 				                    <td class="board-td">{{ index + 1 }}</td>
 				                    <td class="board-td">
-				                        <a @click="fnView(post.boardId)" class="board-title">{{ post.title }}</a>
+				                        <a @click="fnView(post.productId)" class="board-title">{{ post.title }}</a>
 				                    </td>
 				                    <td class="board-td">{{ post.userId }}</td>
 				                    <td class="board-td">{{ post.createdAt }}</td>
-				                    <td class="board-td">{{ post.cnt }}</td>
 				                    <td>
-		                                <span :class="post.isDeleted === 'N' ? 'status-active' : 'status-inactive'">
-		                                    {{ post.isDeleted === 'N' ? '정상' : '삭제' }}
-		                                </span>
+				                      <span v-if="post.deleteYn" :class="post.deleteYn === 'N' ? 'status-active' : 'status-inactive'">
+									    {{ post.deleteYn === 'N' ? '정상' : '삭제' }}
+									  </span>
+									  <span v-else-if="post.answerText" class="badge bg-success">
+									    답변완료
+									  </span>
+									  <span v-else class="badge bg-danger">
+									    답변필요
+									  </span>
 	                           		</td>
+	                           		<td  v-if="currentType == 'A'" >
+           								<button class="btn-edit me-2" @click="fnEdit(post.qnaId)">답변</button>
+	                            	</td>
 				                </tr>
+								<!-- 토글되는 수정 입력란 -->
+								<tr v-if="updateqnaId === post.qnaId">
+								    <td colspan="8">
+								        <div class="edit-form border rounded p-4 bg-light">
+								            
+								            <!-- 상품 정보 (썸네일 + 상품명) -->
+								            <div class="row align-items-center mb-4" v-if="productInfo">
+								                <!-- 썸네일 이미지 -->
+								                <div class="col-auto">
+								                    <img 
+								                        :src="productInfo.filePath" 
+								                        alt="상품 이미지" 
+								                        class="img-thumbnail" 
+								                        style="width: 80px; height: 80px; object-fit: cover;" 
+								                    />
+								                </div>
+								                <!-- 상품 이름 -->
+								                <div class="col">
+								                    <h5 class="mb-0 fw-bold">{{ productInfo.productName }}</h5>
+								                </div>
+								            </div>
+								
+								            <!-- 질문 내용 -->
+								            <div class="row mb-3">
+								                <div class="col-12">
+								                    <label class="form-label fw-bold">질문 내용:</label>
+								                    <div class="form-control" v-html="editData.questionText"></div>
+								                </div>
+								            </div>
+								
+								            <!-- 관리자 답변 입력 -->
+								            <div class="row mb-3">
+								                <div class="col-12">
+								                    <label for="answerText" class="form-label fw-bold">관리자 답변:</label>
+								                    <input
+								                        type="text"
+								                        id="answerText"
+								                        v-model="editData.answerText"
+								                        class="form-control"
+								                        placeholder="답변 내용을 입력하세요"
+								                    />
+								                </div>
+								            </div>
+								
+								            <!-- 버튼 영역 -->
+								            <div class="d-flex justify-content-end gap-2">
+								                <button class="btn btn-primary custom-btn" @click="fnSave">저장</button>
+								                <button class="btn btn-secondary custom-btn" @click="updateqnaId = null">취소</button>
+								            </div>
+								        </div>
+								    </td>
+								</tr>
+				                </template>
 				            </tbody>
 				        </table>
 				        
@@ -405,9 +482,6 @@
 						        <!-- 선택 삭제 버튼 -->
 						        <button class="btn btn-danger board-delete-btn" @click="fnDeleteSelected" :disabled="selectList.length === 0">
 						            선택 삭제
-						        </button>
-						        <button class="btn btn-success" @click="fnEditer">
-						            글등록
 						        </button>
 						    </div>
 						
@@ -451,41 +525,6 @@
 						        </a>
 						    </div>
 						</div>
-
-					<!-- Vet 등록 창 (토글) -->
-					<div v-if="isCreating" class="edit-form d-flex flex-column p-3 mt-3 border rounded">
-					    <div class="d-flex gap-3">
-					        <div class="col">
-					            <label for="vetNickname" class="form-label">제목:</label>
-					            <input type="text" id="vetNickname" v-model="newBoard.title" class="form-control">
-					        </div>
-					        <div class="col-auto">
-			                    <label class="form-label">FAQ 메뉴:</label>
-			                    <select v-model="newBoard.menu" class="form-select">
-			                    	<option value="">구분없음</option>
-			                    	<option value="이용방법">이용방법</option>
-			                        <option value="교환/반품">교환/반품</option>
-			                        <option value="계정">계정</option>
-			                        <option value="상품관련">상품관련</option>
-			                        <option value="배송">배송</option>
-			                        <option value="결제관리">결제관리</option>
-			                    </select>
-							</div>
-					    </div>
-					
-					    <div class="d-flex gap-3 mt-3">
-					        <div class="col">
-					            <label for="vetHospital" class="form-label">게시글 내용:</label>
-                    			<div id="editor" class="editor-control"></div>
-					        </div>
-					    </div>
-					 
-					    <!-- 저장 및 취소 버튼 -->
-					    <div class="d-flex justify-content-end mt-3">
-					        <button class="btn btn-primary me-2 custom-btn" @click="fnCreate">저장</button>
-					        <button class="btn btn-secondary custom-btn" @click="isCreating = false">취소</button>
-					    </div>
-					</div>
 				        
 				  </div>
 			</div>
@@ -499,7 +538,7 @@
 </html>
 
 <script>
-    
+
    
             const app = Vue.createApp({
             	 data() {
@@ -517,13 +556,9 @@
 						selectList : [],
 						allChk : false,
 						isCreating : false,
-						newBoard: {
-						   title : '',
-						   userId : '${sessionId}',
-						   content : '',
-						   menu : '',
-						},
 						currentType : '',
+						updateqnaId : '',
+						productInfo : {},
                      };
                  },
                 computed: {
@@ -546,6 +581,19 @@
                         
                         self.currentType = self.category;
                         
+                        
+                        let url = "";
+                        
+                        
+                        if (self.category == 'F') {
+                        	url = "/product/reviewList.dox";
+                        } else {
+                        	url = "/product/qnaList.dox";
+                        }
+                        
+                         
+                        
+                        
                         console.log("searchOption:", self.searchOption);
                         
                         let nparmap = {
@@ -558,21 +606,27 @@
                             userId: self.userId,
                             category : self.category,
                         };
-                        
                         self.selectList = [];
                         self.allChk = false;
                         
                         $.ajax({
-                            url: "/admin/boardList.dox",
+                            url: url,
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
                                 console.log("data", data);
-
-                                self.boardList = data.Board;
-                                if (data.count && data.count.cnt !== undefined) {
-                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+								
+                                if (data.reviewList ) {
+                                    self.boardList = data.reviewList;
+                                }
+                                
+                                if (data.list ) {
+                                    self.boardList = data.list;
+                                }
+                                
+                                if (data.totalCount && data.totalCount !== undefined) {
+                                    self.index = Math.ceil(data.totalCount / self.pageSize);
                                 } else {
                                     self.index = 0;
                                     console.warn("count 정보 없음!", data);
@@ -580,10 +634,25 @@
                             }
                         });
                 	},
-                    fnView(boardId) {
+                	fnProduct(productId) {
+                        var self = this;
+                        var nparmap = { productId: productId };
+                        $.ajax({
+                            url: '/product/get.dox',
+                            dataType: 'json',
+                            type: 'POST',
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("234",data);
+                                self.productInfo = data.info;
+
+                            }
+                        });
+                    },
+                    fnView(productId) {
                         let self = this;
                         localStorage.setItem("page", self.page);
-                        location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
+                        location.href="/product/view.do?productId=" + productId ;
                     },
                     fnPage(num) {
                         this.page = num;
@@ -637,65 +706,37 @@
         					}
         				});
                     },
-                    fnEditer: function () {
-                    	  let self = this;
-                    	  self.isCreating = !self.isCreating;
+                    fnEdit(qnaId){
+                    	
+                    	var self = this;
 
-                    	  // 에디터 창이 보이게 바뀐 후 DOM이 렌더링되기 때문에
-                    	  this.$nextTick(() => {
-                    		  
-                    	    self.quill = new Quill('#editor', {
-                    	      theme: 'snow',
-                    	      modules: {
-                    	        toolbar: [
-                    	          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                    	          ['bold', 'italic', 'underline'],
-                    	          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    	          ['link', 'image'],
-                    	          ['clean'],
-                    	          [{ 'color': [] }, { 'background': [] }]
-                    	        ]
-                    	      }
-                    	    });
-
-                    	    // 에디터 내용 바인딩
-                    	    self.quill.on('text-change', function () {
-                    	      self.newBoard.content = self.quill.root.innerHTML;
-                    	    });
-                    	  });
+                        if (self.updateqnaId === qnaId) {
+                        	self.updateqnaId = null;  // 같은 걸 누르면 닫힘
+							self.productInfo = null ;
+                        } else {
+                            const member = self.boardList.find(m => m.qnaId === qnaId);
+                            self.editData = { ...member };  // 수정할 데이터 채우기
+                            self.updateqnaId = qnaId;
+                            self.fnProduct(self.editData.productId);
+                        }
+                        
                     },
-                    fnCreate() {
-                    	let self = this;
-                        let nparmap =  {
-                                title : self.newBoard.title,
-                                content : self.newBoard.content,
-                                userId : self.sessionId,
-                                category : self.category,	
-                                menu     : self.newBoard.menu,
-                        };
-                        console.log("저장할 게시판 데이터:", nparmap);                        
-
+                    fnSave() {
+                    	var self = this;
+                    	var nparmap = self.editData;
                     	$.ajax({
-                    		url: "/admin/insertBoard.dox",
+                    		url: "/admin/UpdateAdminQna.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("main1",data);
-                    			
-                    			self.newBoard.title = '';
-                    			self.newBoard.content = '';
-                    			self.newBoard.menu = '';
-
-                                self.isCreating = false; // 저장 후 폼 닫기
-
-            					self.fnBoardList(self.category);
-
+                    			//console.log("main",data);
+                    			alert("수정 완료");
+                            	self.updateqnaId = null;  // 같은 걸 누르면 닫힘
+                				self.fnBoardList();
                     		}
                     	});
-                    	
-                    }
-                    
+                    },
                     
                 },
                 mounted() {

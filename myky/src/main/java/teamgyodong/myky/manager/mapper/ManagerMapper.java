@@ -12,6 +12,7 @@ import teamgyodong.myky.manager.model.mBoard;
 import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
 import teamgyodong.myky.manager.model.mMembership;
+import teamgyodong.myky.manager.model.mPartner;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
 import teamgyodong.myky.manager.model.mProductImg;
@@ -44,6 +45,7 @@ public interface ManagerMapper {
 	List<mProduct> selectAllProductList(HashMap<String, Object> map);
 	List<mProduct> selectBestSellProduct(HashMap<String, Object> map);
 	List<mProduct> selectTotOrder(HashMap<String, Object> map);
+	List<mPartner> selectAllPartnerList(HashMap<String, Object> map);
 
 	
 	List<order> selectAllOrderList(HashMap<String, Object> map);
@@ -52,6 +54,7 @@ public interface ManagerMapper {
 	List<mProductImg> selectProductImg(HashMap<String, Object> map);
 	mProductImg selectProductThumImg(HashMap<String, Object> map);
 	
+
 	
 	
 	mPay selectLogFristJoinBuy(HashMap<String, Object> map);
@@ -67,9 +70,9 @@ public interface ManagerMapper {
 	int selectAllBoardCnt(HashMap<String, Object> map);
 	int selectAllProductCnt(HashMap<String, Object> map);
 	int selectAllOrderCnt(HashMap<String, Object> map);
+	int selectAllPartnerCnt(HashMap<String, Object> map);
 
 	
-
 
 	
 	
@@ -83,6 +86,7 @@ public interface ManagerMapper {
 	int insertProduct(HashMap<String, Object> map);
 	int insertProductFile(HashMap<String, Object> map);
 	int insertBoard(HashMap<String, Object> map);
+	int insertPartnerDetail(HashMap<String, Object> map);
 
 	
 	
@@ -92,7 +96,8 @@ public interface ManagerMapper {
 	int updateProduct(HashMap<String, Object> map);
 	int updateOrder(HashMap<String, Object> map);
 	int updateOrderDetail(HashMap<String, Object> map);
-
+	int updatePartnerDetail(HashMap<String, Object> map);
+	int UpdateAdminQna(HashMap<String, Object> map);
 	
 	
 	

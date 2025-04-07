@@ -94,6 +94,8 @@
                     <ul class="submenu">
                         <li @click="fnchange('board','1')" class="submenu-item" :class="{ active: submenu === '1' }">게시글 관리</li>
                         <li @click="fnchange('board','2')" class="submenu-item" :class="{ active: submenu === '2' }">댓글 관리</li>
+                        <li @click="fnchange('board','3')" class="submenu-item" :class="{ active: submenu === '3' }">수의사 게시판</li> 
+                        <li @click="fnchange('board','4')" class="submenu-item" :class="{ active: submenu === '4' }">상품 리뷰/문의</li>       
                     </ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'product' }">
@@ -101,7 +103,8 @@
                     <ul class="submenu">
                         <li @click="fnchange('product','1')" class="submenu-item" :class="{ active: submenu === '1' }">상품 목록</li>
                         <li @click="fnchange('product','2')" class="submenu-item" :class="{ active: submenu === '2' }"> 주문 관리</li>
-<!--                         <li @click="fnchange('product','3')" class="submenu-item" :class="{ active: submenu === '3' }"> 카테고리 관리</li>-->                    </ul>
+<!--                    <li @click="fnchange('product','3')" class="submenu-item" :class="{ active: submenu === '3' }"> 카테고리 관리</li>--> 
+                	</ul>
                 </li>
                 <li class="nav-item" :class="{ active: menu === 'member' }">
                     <a @click="fnchange('member','1')" class="nav-link" :class="{ active: menu === 'member' }" href="#">회원 관리</a>
@@ -109,6 +112,7 @@
                         <li @click="fnchange('member','1')" class="submenu-item" :class="{ active: submenu === '1' }">회원 관리</li>
                         <li @click="fnchange('member','2')" class="submenu-item" :class="{ active: submenu === '2' }">멤버쉽 관리</li>
 						<li @click="fnchange('member','3')" class="submenu-item" :class="{ active: submenu === '3' }">수의사 관리</li>
+						<li @click="fnchange('member','4')" class="submenu-item" :class="{ active: submenu === '4' }">제휴사 관리</li>
                     </ul>
                 </li>
             </ul>

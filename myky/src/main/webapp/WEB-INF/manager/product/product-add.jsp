@@ -221,20 +221,11 @@
                         prev_extraImagesUrls: [],
 						menu : '' , 
 						submenu : '' ,  
-						
+						category1 : '',
+						category2 : '',
                      };
                  },
                 computed: {
-                    category1() {
-                        return this.product.categoryId && this.product.categoryId.includes(',')
-                            ? this.product.categoryId.split(',')[0].trim()
-                            : (this.product.categoryId || '').trim();
-                    },
-                    category2() {
-                        return this.product.categoryId && this.product.categoryId.includes(',')
-                            ? (this.product.categoryId.split(',')[1] || '').trim()
-                            : '';
-                    }
                 },
                 methods: {
                 	fnMainList : function() {
@@ -298,7 +289,12 @@
                     },
                     fnUpdate : function() {
                     	var self = this;
+                    	
+                    	self.product.categoryId = self.category1 + ',' + self.category2
+                    	
                     	var nparmap = self.product;
+                    	
+                    	
                     	$.ajax({
                     		url: "/admin/updateProduct.dox",
                     		dataType: "json",

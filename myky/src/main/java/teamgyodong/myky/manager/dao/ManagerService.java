@@ -31,6 +31,7 @@ public interface ManagerService {
 	HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllProductList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllOrderList(HashMap<String, Object> map);
+	HashMap<String, Object> selectAllPartnerList(HashMap<String, Object> map);
 
 	
 	
@@ -45,7 +46,10 @@ public interface ManagerService {
 	HashMap<String, Object> updateProduct(HashMap<String, Object> map);
 	HashMap<String, Object> updateOrder(HashMap<String, Object> map);
 	HashMap<String, Object> updateOrderDetail(HashMap<String, Object> map);
+	HashMap<String, Object> updatePartnerDetail(HashMap<String, Object> map);
+	HashMap<String, Object> UpdateAdminQna(HashMap<String, Object> map);
 
+	
 	
 	
 	
@@ -54,6 +58,7 @@ public interface ManagerService {
 	HashMap<String, Object> insertProduct(HashMap<String, Object> map);
 	HashMap<String, Object> insertProductFile(HashMap<String, Object> map);
 	HashMap<String, Object> insertBoard(HashMap<String, Object> map);
+	HashMap<String, Object> insertPartnerDetail(HashMap<String, Object> map);
 
 	
 	
