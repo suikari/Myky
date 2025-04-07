@@ -14,6 +14,7 @@ import teamgyodong.myky.cart.mapper.CartMapper;
 import teamgyodong.myky.cart.model.cart;
 import teamgyodong.myky.donation.model.donation;
 import teamgyodong.myky.manager.model.Vet;
+import teamgyodong.myky.membership.model.Membership;
 import teamgyodong.myky.pay.mapper.PayMapper;
 import teamgyodong.myky.user.mapper.UserMapper;
 import teamgyodong.myky.user.model.User;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PayMapper payMapper;
+	
 	
 	@Autowired // 세션용(중요! 유저 로그인 관련!)
 	HttpSession session;
@@ -246,8 +248,10 @@ public class UserServiceImpl implements UserService {
 			try {
 				List<cart> orderList = userMapper.selectUserOrderList(map);
 				List <User>orderCount = userMapper.selectOrderCnt(map);
+				int orderAllCount=userMapper.selectOrderAllCnt(map);
 				
 
+				resultMap.put("orderAllCount", orderAllCount);
 				resultMap.put("orderList", orderList);
 				resultMap.put("orderCount", orderCount);
 				resultMap.put("result", "success");
@@ -290,5 +294,38 @@ public class UserServiceImpl implements UserService {
 		    resultMap.put("result", "success"); // 회원 여부에 상관 없이 success 리턴하고 count로 판단
 		    return resultMap;
 		}
+		
+		
+		public HashMap<String, Object> searchEmail(HashMap<String, Object> map) {
+		    HashMap<String, Object> resultMap = new HashMap<>();
+		    // 이메일로 유저 검색
+		    User user = userMapper.selectEmail(map); // map 안에 "email"이 들어있어야 함
+		    int count = user != null ? 1 : 0;
+		    if (count == 0) {
+			    resultMap.put("count", count); 
+			    resultMap.put("result", "success");
+		    }else {
+			    resultMap.put("result", "fail"); // 회원 여부에 상관 없이 success 리턴하고 count로 판단	
+		    	
+		    }
+		    return resultMap;
+		}
+		
+		
+		public HashMap<String, Object> searchMemberShip(HashMap<String, Object> map) {
+			HashMap<String, Object> resultMap = new HashMap<>();
+		    Membership ship = userMapper.selectMembershipId(map); // map 안에 "email"이 들어있어야 함
+		    int count = ship != null ? 1 : 0;
+		    if (count != 0) {
+			    resultMap.put("count", count); 
+			    resultMap.put("ship", ship); 
+			    resultMap.put("result", "success");
+		    }else {
+			    resultMap.put("result", "fail"); // 회원 여부에 상관 없이 success 리턴하고 count로 판단	
+		    	
+		    }
+		    return resultMap;
+		}
+		
 	
 }

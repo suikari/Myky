@@ -10,6 +10,7 @@ import teamgyodong.myky.board.model.comment;
 import teamgyodong.myky.cart.model.cart;
 import teamgyodong.myky.donation.model.donation;
 import teamgyodong.myky.manager.model.Vet;
+import teamgyodong.myky.membership.model.Membership;
 import teamgyodong.myky.user.model.User;
 
 @Mapper
@@ -58,6 +59,12 @@ public interface UserMapper {
 	List<User> selectOrderCnt(HashMap<String, Object> map);
 
 	User selectEmail(HashMap<String, Object> map);
+
+	int selectOrderAllCnt(HashMap<String, Object> map);
+
+	Membership selectMembershipId(HashMap<String, Object> map);
+
+	
 
 
 
