@@ -12,4 +12,6 @@ public interface DonationService {
 
 	HashMap<String, Object> getDonationInfo(HashMap<String, Object> map);
 
+	HashMap<String, Object> getUserDonationInfo(HashMap<String, Object> map);
+
 }

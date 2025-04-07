@@ -10,181 +10,52 @@
     <!-- Quill CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <!-- <link rel="stylesheet" href="/css/board/board.css"/> -->
+    <link rel="stylesheet" href="/css/board/board.css"/>
 	
     <style>
-       body {
-            padding-bottom: 120px; /* 푸터 높이만큼 확보 */
-        }
-        #app {
-            padding-bottom: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        /* EDIT */
-        .section-header {
-            color: #202060;
-            font-weight: bold;
-            height: 70px;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            display: flex;
-            align-items: left; /* 세로 중앙 정렬 */
-            justify-content: left; /* 가로 중앙 정렬 */
-            font-size: 50px;
-            width: 100%;
-            margin-top: 100px;
-            max-width: 1000px;
-        }
-        .section-headerDown {
-            color: #333;
-            font-weight: bold;
-            text-align: left;
-            display: flex;
-            align-items: left; /* 세로 중앙 정렬 */
-            justify-content: left;
-            width: 100%;
-            margin-top: 10px;
-            max-width: 1000px;
-            width: 100
-        }
-        .title-label {
-            font-size: 20px;
-            font-weight: bold;
-            color: #202060;
-            margin-bottom: 30px;
-            width: 1000px;
-            max-width: 100%;
-        }
-        /* 제목 input 박스 */
-        input {
-            margin-top: -100px;
-            width: 100%;
-            max-width: 500px;
-            padding: 8px 10px;
-            border: 2px solid #202060;
-            border-radius: 6px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .title-input {
-            max-width: 1000px;
-            width: 100%;            
-        }
-       .title-inputImg{
-            width: 1000px;
-            margin-bottom: -50px;
-            margin-top: 80px;
-        }
-        input:focus {
-            border-color: #fca311;
-        }
-        /* 에디터 컨테이너 감싸기 */
-        #editor {
-          background-color: #ffffff; /* 크림톤 배경 */
-          border: 2px solid #202060; /* 연한 베이지 */
-          border-radius: 12px;
-          padding: 15px;
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-          font-family: 'Nanum Gothic', sans-serif;
-          font-size: 16px;
-          line-height: 1.6;
-          align-items: center;
-          margin-top: 30px;
-          transition: border-color 0.3s;
-          width: 1000px;
-        }
-        #editor .ql-editor:focus{
-            outline: none;
-            border-color: #fca311 !important;
-            border-radius: 12px;
-            box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.3);
-        }
-        /* 툴바도 살짝 꾸미기 */
-        .ql-toolbar {
-            margin-top: 0px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 8px;
-            color: #202060;
-            font-weight: bold;
-            font-size: 20px;
-            width: 1000px;
-            margin-bottom: -20px;
-        }
-        .buttonStyle {
-            margin-top: 50px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
 
-        button:hover {
-            background-color: #fca311;
-            color: #202060;
-        }
-        .custom-hr {
-            width: 1000px;
-            max-width: 100%;
-            border: none;
-            border-top: 1px solid #ccc;
-            margin-top: 10px;
-            margin-bottom: 40px;
-            width: 100%;
-
-            max-width: 1000px;
-        }
     </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
  
-    <div id="app" class="container">
+    <div id="fb-app" class="fb-container">
 
-
-        <div class="section-header">
+        <div class="fb-section-header">
             ADD
         </div>
-            <div class="section-headerDown">
-                게시글 내용을 작성합니다.
-            </div>
-            <hr class="custom-hr">
+        <div class="fb-section-headerDown">
+            게시글 내용을 작성합니다.
+        </div>
+        
+        <hr class="fb-custom-hr">
 
-            <div class="title-label">
-                <div>TITLE</div>
-            <div class="title-input">
-                <input v-model="title">
-            </div>
-            </div>
-            <div class="title-label">
-                POINT
-                <div>
-                    현재 point 
-                    {{currentPoint.currentPoint}}개
+        <div class="fb-title-label">
+            <div>TITLE</div>
+        </div>
+        <div class="fb-title-input">
+            <input v-model="title">
+        </div>
+        <div class="fb-title-label">POINT</div>
+            <div class="fb-point-input">
+                <div class="fb-point-box">
+                    <span class="fb-point-unit2">보유포인트</span>
+                    <input v-model="usedPoint" class="fb-point-place fb-point-clear-input"
+                    :placeholder="currentPoint.currentPoint" @input="fnCheck" >
+                    <span class="fb-point-unit">P</span>
+                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click=" usedPoint = 0 "><img src="../img/freeBoard/close.png"></button>
+
                 </div>
-                <input v-model="usedPoint" @input="fnCheck">개 사용
+                <button class="fb-point-button" :class="{ 'fb-point-button-active': isUsed }" @click="fnUsePoint">사용</button>
             </div>
-            <div class="title-label">CONTENT</div>
+            <div class="fb-title-label">CONTENT</div>
             <div>
-                <div id="editor" style="height: 300px;"></div>
+                <div id="fb-editor" style="height: 300px;"></div>
             </div>
-            <div>
-                <button class="buttonStyle" @click="fnSave">저장</button>
-                <button class="button" @click="fnBack(info)">뒤로가기</button>
-            </div>
+        <div class="fb-buttonStyle">
+            <button class="fb-button" @click="fnSave">저장</button>
+            <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+        </div>
     </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
@@ -205,7 +76,8 @@
                        point : "",
                        currentPoint : "",
                        usedPoint : "",
-                       remark : "수의사 상담 point 차감"
+                       remark : "수의사 상담 point 차감",
+                       isUsed: false,
                     };
                 },
                 computed: {
@@ -310,6 +182,10 @@
                         let self = this;
 
                         return typeof val === 'number' && !isNaN(val);
+                    },
+                    fnUsePoint (){
+                        let self = this;
+                        self.isUsed = !self.isUsed;
                     }
                 },
                 mounted() {
@@ -321,7 +197,7 @@
                         alert("로그인이 필요합니다.");
                         location.href="/board/vetBoardList.do?category="+self.category;
                     }
-                    var quill = new Quill('#editor', {
+                    var quill = new Quill('#fb-editor', {
                     theme: 'snow',
                     modules: {
                         toolbar: [
@@ -339,6 +215,6 @@
                     });
                 }
             });
-            app.mount("#app");
+            app.mount("#fb-app");
         });
     </script>

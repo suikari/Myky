@@ -24,6 +24,7 @@ import teamgyodong.myky.manager.model.mBoard;
 import teamgyodong.myky.manager.model.mComment;
 import teamgyodong.myky.manager.model.mDonation;
 import teamgyodong.myky.manager.model.mMembership;
+import teamgyodong.myky.manager.model.mPartner;
 import teamgyodong.myky.manager.model.mPay;
 import teamgyodong.myky.manager.model.mProduct;
 import teamgyodong.myky.manager.model.mProductImg;
@@ -308,6 +309,33 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	
+	@Override
+	public HashMap<String, Object> selectAllPartnerList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<mPartner> mPartner = managerMapper.selectAllPartnerList(map);
+			int count = managerMapper.selectAllPartnerCnt(map);
+			
+			Map<String, Object> countMap = new HashMap<>();
+			countMap.put("cnt", count);
+
+			resultMap.put("count", countMap);
+			
+			resultMap.put("result", "success");			
+			resultMap.put("Partner", mPartner);			
+		}catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
 	@Override
 	public HashMap<String, Object> selectAllBoardList(HashMap<String, Object> map) {
 		
@@ -402,9 +430,6 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 		
-	
-	
-	
 	@Override
 	public HashMap<String, Object> updateUser(HashMap<String, Object> map) {
 		
@@ -666,6 +691,66 @@ public class ManagerServiceImpl implements ManagerService {
 		}
 	
 	    return resultMap;
+	}
+	
+	
+	
+	
+	
+	@Override
+	public HashMap<String, Object> insertPartnerDetail(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.insertPartnerDetail(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
+	
+	@Override
+	public HashMap<String, Object> updatePartnerDetail(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.updatePartnerDetail(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> UpdateAdminQna(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.UpdateAdminQna(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
 	}
 	
 }

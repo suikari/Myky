@@ -59,7 +59,7 @@
 					<span>{{sessionName}} 님 환영합니다! </span>
 					 <a href="/order/orderList.do">주문조회</a>
 					| <a href="/board/list.do?category=A">공지사항</a>
-					| <a v-if="sessionRole == 'ADMIN' " href="/manager/main.do">  관리자콘솔</a>
+					<a v-if="sessionRole == 'ADMIN' " href="/manager/main.do">| 관리자콘솔</a>
 					| <a href="/member/logout.do">로그아웃</a>
 				</div>
 			</div>
@@ -237,7 +237,7 @@
 									return;
 								}else{
 									self.googleInfo = data.info;
-									console.log(self.googleInfo.email);
+									console.log(self.googleInfo);
 									self.fnGoogleAuth();
 								}
 							}
@@ -273,7 +273,11 @@
 									} else {
 										console.log("구글 카운트:", data.count);
 										if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
-											location.href = "/user/consent.do";
+											//sessionStorage.setItem("socialLoginConfirmed", "true"); 
+											//location.href = "/user/consent.do";
+
+											pageChange("/user/consent.do", {email : self.googleInfo.email, name : self.googleInfo.name});
+											
 										}
 									}
 								}

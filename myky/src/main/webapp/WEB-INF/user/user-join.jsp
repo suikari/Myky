@@ -217,7 +217,7 @@
                 <template v-if="!emailFlg">
                     <label for="email" class="label">이메일 :</label>
                     <input id="email" class="input-field email" v-model="user.email" placeholder="이메일을 입력하세요" />
-                    <button @click="sendEmailAuth">인증번호 받기</button>
+                    <button @click="fnEmailChecked()">인증번호 받기</button>
                 </template>
 
                 <template v-else>
@@ -246,7 +246,6 @@
                     -<input class="phone-input" v-model="num1" style="width: 40px;">
                     -<input class="phone-input" v-model="num2" style="width: 40px;">
                 </span>
-                <button class="btn-phone-check" @click="numCheck()">인증버튼</button>
             </div>
 
             <div class="birthdate-section">
@@ -283,14 +282,14 @@
                     return {
                         user: { // 이렇게 맵으로 선언해서 한꺼번에 갖고 가기 쉽다
                             userId: "",
-                            userName: "",
+                            userName:  "" || "${map.name}",
                             pwd: "",
                             address: "",
                             nickName: "",
                             phoneNumber: "",
                             birthDate: "",
                             gender: "M",
-                            email: "",
+                            email: "" || "${map.email}",
                             agreeYn: "${map.agree2}",
                             phoneYn: "${map.agree3}",
                             emailYn: "${map.agree4}"
@@ -307,7 +306,9 @@
                         showVerification: false,
                         message: "",
                         emailPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 유효성 검사 정규식
-                        passwordPattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/  // 정규식 적용
+                        passwordPattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,  // 정규식 적용
+                        nickPattern: /^[가-힣a-zA-Z0-9]+$/, // 닉네임 유효성 검사 정규식
+                        userNamePattern: /^[가-힣a-zA-Z]+$/
 
                     };
                 },
@@ -336,6 +337,10 @@
                             alert("이름을 입력해주십시오.");
                             return;
                         }
+                        if (!self.userNamePattern.test(self.user.userName)) {
+                            alert("이름은 한글 또는 영문만 입력할 수 있습니다. EX)김철수,brianKim");
+                            return;
+                        }
                         if (self.nickFlg == false) {
                             alert("닉네임을 중복체크 해주십시오.");
                             return;
@@ -344,17 +349,15 @@
                             alert("주소를 입력해주십시오.");
                             return;
                         }
+                        if (!self.emailFlg) {
+                            alert("메일 인증 바랍니다.");
+                            return;
+                        }
                         if (self.num1.length != 4 || self.num2.length != 4) {
                             alert("전화번호는 4자리씩 입력바랍니다.");
                             return;
                         }
                         self.user.phoneNumber = self.selectNum + self.num1 + self.num2;
-
-                        if (!self.emailFlg) {
-                            alert("메일 인증 바랍니다.");
-                            return;
-                        }
-
                         if (self.user.birthDate.length != 8 && self.user.birthDate.length != 0) {
                             alert("생년월일 8자리 혹은 미입력으로 진행해주십시오. ex)20050130");
                             return;
@@ -397,6 +400,11 @@
                             alert("아이디는 최소 4~16글짜로 입력바랍니다.");
                             return;
                         }
+                        if (!self.nickPattern.test(self.user.userId)) {
+                            alert('아이디는 한글, 영문, 숫자만 사용할 수 있습니다.');
+                            return;
+                        }
+                        
                         var nparmap =
                         {
                             userId: self.user.userId,
@@ -421,10 +429,13 @@
                     fnNickChecked: function () {
                         var self = this;
                         if (self.user.nickName.length > 8 || self.user.nickName == "") {
-                            alert("닉네임은 한글 8글짜 이하로 입력가능합니다.");
+                            alert("닉네임은 한글,영문 8글짜 이하로 입력가능합니다.");
                             return;
                         }
-
+                        if (!self.nickPattern.test(self.user.nickName)) {
+                            alert('닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.');
+                            return;
+                        }
 
                         var nparmap =
                         {
@@ -447,12 +458,6 @@
                             }
                         });
                     },
-                    numCheck: function () {
-                        var self = this;
-                        alert("인증되었습니다(임시)");
-                        self.authFlg = true;
-                        console.log(self.authFlg);
-                    },
                     fnSearchAddr: function () {
                         window.open("/addr.do", "addr", "width=300, height=500")
                     },
@@ -466,10 +471,41 @@
                         console.log(engAddr);
                         console.log(zipNo);
                     },
+                    fnIdChecked: function () {
+                        var self = this;
+                        if (self.user.userId.length < 4 || self.user.userId.length > 16) {
+                            alert("아이디는 최소 4~16글짜로 입력바랍니다.");
+                            return;
+                        }
+                        if (!self.nickPattern.test(self.user.userId)) {
+                            alert('아이디는 한글, 영문, 숫자만 사용할 수 있습니다.');
+                            return;
+                        }
+                        
+                        var nparmap =
+                        {
+                            userId: self.user.userId,
+                        }; // 유저아이디 하나만 보내기
+                        $.ajax({
+                            url: "/user/check.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                if (data.count == 0) {
+                                    alert("사용 가능한 아이디입니다");
+                                    self.idFlg = true;
+                                    self.user.userId.disabled = true;
+                                } else {
+                                    alert("중복된 아이디입니다");
+                                }
+                            }
+                        });
+                    },
 
-
-                    async sendEmailAuth() {
-                        let self = this;
+                    fnEmailChecked: function () {
+                        var self = this;
                         if (!self.user.email) {
                             this.message = "이메일을 입력하세요.";
                             return;
@@ -479,6 +515,32 @@
                             this.message = "유효한 이메일 형식을 입력하세요.";
                             return;
                         }
+
+                        var nparmap =
+                        {
+                            email: self.user.email
+                        };
+                        $.ajax({
+                            url: "/user/emailCheck.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                if (data.count == 0) {
+                                    self.sendEmailAuth();
+
+
+                                } else {
+                                    alert("중복된 이메일입니다");
+                                    return;
+                                }
+                            }
+                        });
+                    },
+
+                    async sendEmailAuth() {
+                        let self = this;
                         this.message = "인증번호를 전송 중...";
 
 
@@ -531,10 +593,13 @@
                     }
                 },
                 mounted() {
+                    let self = this;
                     window.vueObj = this; //obj를 선언해야 주소가 들어간다
-                    console.log(this.user.agreeYn);
-                    console.log(this.user.phoneYn);
-                    console.log(this.user.emailYn);
+                    if(self.user.email!=""){
+                        self.emailFlg=true;
+                    }
+
+
                 }
             });
 

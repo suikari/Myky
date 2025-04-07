@@ -180,7 +180,8 @@ public class UserController {
 	
     //유저 회원가입 전 동의서 주소
 	@RequestMapping("/user/consent.do") //브라우저 웹주소
-    public String consent(Model model) throws Exception{
+	    public String consent(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+			request.setAttribute("map", map);
 
         return "user/user-consent"; // member 폴더로 묶임
         }
@@ -522,7 +523,7 @@ public class UserController {
 	}
 	
 	
-	//유저 후원내역 출력
+	//구글 이메일 내용 출력
 	@RequestMapping(value = "/user/socialEmail.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String socialEmail(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -531,5 +532,22 @@ public class UserController {
 		return new Gson().toJson(resultMap);
 	}
 	
+	//이메일 중복체크
+	@RequestMapping(value = "/user/emailCheck.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String emailCheck(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.searchEmail(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	//멤버쉽 가입 여부 정보 출력
+	@RequestMapping(value = "/user/memberShip.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String memberCheck(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = userService.searchMemberShip(map);
+		return new Gson().toJson(resultMap);
+	}
     
 }

@@ -45,6 +45,13 @@ public class DonationController {
 		request.setAttribute("map", map);
 		return "donation/donation";
 	}
+
+	@RequestMapping("/donation/complete.do") 
+	public String donationComplete(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		
+		request.setAttribute("map", map);
+		return "donation/donationSummary";
+	}
 	
 	// centerList
 	@RequestMapping(value = "/center/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -76,13 +83,23 @@ public class DonationController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	// 후원 내역 조회
+	// 후원 내역 조회 (전체 조회)
 	@RequestMapping(value = "/donation/info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String donationInfo(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = donationService.getDonationInfo(map);
+		return new Gson().toJson(resultMap);
+	}
+
+	// 후원 내역 조회 (userId로 조회)
+	@RequestMapping(value = "/donation/complete.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String donationComplete(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = donationService.getUserDonationInfo(map);
 		return new Gson().toJson(resultMap);
 	}
 }

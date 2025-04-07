@@ -508,6 +508,30 @@
 	    
 	</select>
 	
+	
+	
+	<select id="selectAllPartnerList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mPartner">
+	
+		SELECT *
+		FROM partner_detail
+		Where 1=1
+	    ORDER BY partner_detail_id DESC
+		<if test="page != null and pageSize != null" >
+		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		</if>
+		
+	</select>
+	
+	
+	<select id="selectAllPartnerCnt" parameterType="hashmap" resultType="int">
+	
+		SELECT COUNT(*)
+        from partner_detail 
+        Where 1=1
+	    
+	</select>
+	
+	
 	<select id="selectProduct" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mProduct">
 	
 		SELECT *
@@ -735,7 +759,46 @@
 	</insert>
 
 
-
+	
+	<insert id="insertPartnerDetail" parameterType="hashmap" useGeneratedKeys="true" keyColumn="partner_detail_id" keyProperty="partnerdetailId">
+		INSERT INTO partner_detail(partner_detail_id, name, address, phone_number, website_url, opening_hours, regular_holiday, category_code, nx, ny)
+		VALUES(partner_detail_seq.nextval, #{name}, #{address}, #{phoneNumber},#{websiteUrl}, #{openingHours}, #{regularHoliday}, #{categoryCode}, #{nx}, #{ny})
+	</insert>	
+    
+	<update id="updatePartnerDetail" parameterType="hashmap" >
+		UPDATE partner_detail
+		SET     		
+	    <if test="name != null and name != ''">
+			name = #{name},
+	    </if>
+	    <if test="address != null and address != ''">
+			address = #{address},
+	    </if>
+	    <if test="phoneNumber != null and phoneNumber != ''">
+			phone_number = #{phoneNumber},
+	    </if>
+	    <if test="openingHours != null and openingHours != ''">
+			opening_hours = #{openingHours},
+	    </if>
+	    <if test="websiteUrl != null and websiteUrl != ''">
+			website_url = #{websiteUrl},
+	    </if>
+	    <if test="regularHoliday != null and regularHoliday != '' ">
+			regular_holiday = #{regularHoliday},
+	    </if>
+	    <if test="categoryCode != null and categoryCode != ''">
+			 category_code = #{categoryCode},
+	    </if>
+	    <if test="nx != null and nx != ''">
+			 nx = #{nx},
+	    </if>
+	    <if test="ny != null and ny != ''">
+			ny = #{ny},
+	    </if>
+			partner_detail_id = partner_detail_id
+		WHERE partner_detail_id = #{partnerdetailId}
+	</update>
+	
 
 	<update id="updateProduct" parameterType="hashmap" >
 		UPDATE product
@@ -914,6 +977,16 @@
 		  AND product_id =   #{productId}
 	</update>	
 	
+	
+	 <!--QnA 글 수정-->
+	 <update id="UpdateAdminQna" parameterType="hashmap" >
+		UPDATE PRODUCT_QNA
+		SET
+			ANSWER_TEXT  = #{answerText}  , 
+			ANSWERED_AT = SYSDATE			
+		WHERE QNA_ID = #{qnaId} 
+	 </update>
+	 
 </mapper>
 
 

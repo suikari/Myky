@@ -127,15 +127,19 @@
 	<select id="getpartInfo" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
 		select * from partner_detail
 		where 1=1
-		<if test="searchkeyword != null and searchkeyword != ''">
-		and (name like '%' || #{searchkeyword} || '%'
-		or address like '%' || #{searchkeyword} || '%')
+		<if test="searchKeyword != null and searchKeyword != ''">
+			and (name like '%' || #{searchKeyword} || '%'
+			or address like '%' || #{searchKeyword} || '%')
+		</if>
+		<if test="categoryCode != null and categoryCode != ''">
+			and category_code = #{categoryCode}
 		</if>
 		order by partner_detail_id desc
-		<if test="page != null and pagesize != null">
-		offset #{page} rows fetch next #{pagesize} rows only
+		<if test="page != null and pageSize != null">
+			offset #{page} rows fetch next #{pageSize} rows only
 		</if>
-</select>
+	</select>
+	
 </mapper>
 
 

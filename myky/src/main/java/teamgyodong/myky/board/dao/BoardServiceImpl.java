@@ -85,11 +85,10 @@ public class BoardServiceImpl implements BoardService {
 	        comment.setReplies(replies); // 💥 replies를 comment 객체에 직접 세팅
 	    }
 
-	    List<board> boardList = boardMapper.selectBoard(map);
+	    board boardList = boardMapper.selectBoard(map);
 	    List<boardFile> fileList = boardMapper.selectBoardImg(map);
-	    board info = boardList.isEmpty() ? null : boardList.get(0);
 
-	    resultMap.put("info", info);
+	    resultMap.put("info", boardList);
 	    resultMap.put("fileList", fileList);
 	    resultMap.put("cmtList", cmtList); // 여기에 대댓글이 포함됨
 	    resultMap.put("result", "success");
@@ -319,7 +318,6 @@ public class BoardServiceImpl implements BoardService {
 		}catch (Exception e){
 			 e.printStackTrace();
 			 resultMap.put("result", "fail");
-
 		}
 		return resultMap;
 	}

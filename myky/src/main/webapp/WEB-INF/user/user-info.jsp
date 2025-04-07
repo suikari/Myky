@@ -283,25 +283,28 @@
                 </div> -->
 
                 <div class="user-info-box2">
-                    <template v-if="!emailFlg">
+
+                    <template v-if="emailFlg">
                         <label for="email" class="user-info-label">이메일 :</label>
-                        <input id="email" class="user-info-input" v-model="user.email" placeholder="이메일을 입력하세요" class="user-info-input" />
-                        <button class="user-info-btn" @click="sendEmailAuth">인증번호 받기</button>
+                        <input id="email" class="user-info-input" v-model="user.email" disabled>
+                        <button class="user-info-btn" @click="sendEmailEdit()">이메일 수정</button>
                     </template>
-                
 
                     <template v-else>
                         <label for="email" class="user-info-label">이메일 :</label>
-                        <input id="email" class="user-info-input" v-model="user.email" disabled>
+                        <input id="email" class="user-info-input" v-model="user.email" placeholder="이메일을 입력하세요"
+                            class="user-info-input" />
+                        <button class="user-info-btn" @click="fnEmailChecked">인증번호 받기</button>
+                        <button class="user-info-btn" @click="sendEmailCancel()">인증 취소</button>
                     </template>
                 </div>
-                    <div v-if="showVerification">
-                        <input type="text" v-model="authCode" placeholder="인증번호 입력" class="user-info-input"/>
-                        <button class="user-info-btn" @click="verifyCode">인증 확인</button>
-                    </div>
 
-                    <p v-if="message">{{ message }}</p>
-                
+                <div v-if="showVerification" class="user-info-box2">
+                    <label for="email" class="user-info-label">인증번호:</label>
+                    <input id="email" v-model="authCode" placeholder="인증번호 입력" class="user-info-input" />
+                    <button class="user-info-btn" @click="verifyCode">인증 확인</button>
+                </div>
+
                 <div class="user-info-box2">
                     <div class="user-info-label">생년월일 :</div>
                     <input type="text" v-model="user.birthDate" class="user-info-input">
@@ -397,10 +400,14 @@
                         previewImage: "",
                         picFlg: false,
                         emailPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 유효성 검사 정규식
-                        emailFlg: false,
+                        nickPattern: /^[가-힣a-zA-Z0-9]+$/, // 닉네임 유효성 검사 정규식
+                        userNamePattern: /^[가-힣a-zA-Z]+$/,
+                        emailFlg: true,
                         showVerification: false,
                         message: "",
-                        authCode: ""
+                        authCode: "",
+                        originalEmail: "",
+
 
 
                     };
@@ -433,16 +440,26 @@
                             alert("닉네임 저장 혹은 취소 바랍니다.");
                             return;
                         }
+
                         if (self.user.userName == "") {
-                            alert("이름을 1자 이상 적어주십시오.");
+                            alert("이름을 입력해주십시오.");
                             return;
                         }
+
+                        if (!self.userNamePattern.test(self.user.userName)) {
+                            alert("이름은 한글 또는 영문만 입력할 수 있습니다.");
+                            return;
+                        }
+
                         if (self.user.profileImage == null) {
                             self.user.profileImage = "";
                         }
-                        if (self.user.email == null) {
-                            self.user.email = "";
+
+                        if (!self.emailFlg) {
+                            alert("이메일 인증을 끝내주십시오");
+                            return;
                         }
+
                         if (self.user.birthDate == null) {
                             self.user.birthDate = "";
                         }
@@ -566,6 +583,10 @@
                             alert("닉네임은 한글 8글짜 이하로 입력가능합니다.");
                             return;
                         }
+                        if (!self.nickPattern.test(self.user.nickName)) {
+                            alert('닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.');
+                            return;
+                        }
                         var nparmap =
                         {
                             nickName: self.user.nickName
@@ -642,9 +663,9 @@
                         }
 
                     },
-
-                    async sendEmailAuth() {
-                        let self = this;
+                    
+                    fnEmailChecked: function () {
+                        var self = this;
                         if (!self.user.email) {
                             alert("이메일을 입력하세요.");
                             return;
@@ -654,7 +675,32 @@
                             alert("유효한 이메일 형식을 입력하세요.");
                             return;
                         }
-                        this.message = "인증번호를 전송 중...";
+
+                        var nparmap =
+                        {
+                            email: self.user.email
+                        };
+                        $.ajax({
+                            url: "/user/emailCheck.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log(data);
+                                if (data.count == 0) {
+                                    self.sendEmailAuth();
+
+
+                                } else {
+                                    alert("중복된 이메일입니다");
+                                    return;
+                                }
+                            }
+                        });
+                    },
+
+                    async sendEmailAuth() {
+                        let self = this;
                         alert("인증번호를 전송 했습니다.");
 
 
@@ -674,7 +720,7 @@
                             }
                         } catch (error) {
                             alert("서버 오류 발생");
-     
+
                         }
                     },
 
@@ -692,20 +738,31 @@
 
                             const result = await response.json();
                             if (result.success) {
-                                this.message = "이메일 인증이 완료되었습니다!";
+                                alert("이메일 인증이 완료되었습니다!");
                                 this.showVerification = false;
                                 this.emailFlg = true;
                             } else if (result.success2) {
-                                this.message = "인증시간이 만료되었습니다. 인증코드를 다시 신청하십시오!";
+                                alert("인증시간이 만료되었습니다. 인증코드를 다시 신청하십시오!");
                                 this.showVerification = false;
                             } else {
-                                this.message = "인증번호가 일치하지 않습니다.";
+                                alert("인증번호가 일치하지 않습니다.");
                             }
                         } catch (error) {
-                            this.message = "서버 오류 발생.";
-                        }
-                    }
+                            alert("서버 오류 발생.");
 
+                        }
+                    },
+                    sendEmailEdit: function () {
+                        let self = this;
+                        self.originalEmail = self.user.email;
+                        self.emailFlg = false;
+                    },
+                    sendEmailCancel: function () {
+                        let self = this;
+                        self.user.email = self.originalEmail;
+                        self.emailFlg = true;
+                        self.showVerification = false;
+                    }
 
                 },
                 mounted() {

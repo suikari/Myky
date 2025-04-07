@@ -172,7 +172,7 @@
 	    where 1=1
 	    AND o.user_id = #{userId} 
 	    order by o.ordered_at desc
-	
+		OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
 	</select>
 	
 	<select id="selectOrderCnt" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
@@ -192,10 +192,25 @@
 		ORDER BY S.ORDER_STATUS
 	</select>
 	
+	
 	<select id="selectEmail" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
 		SELECT *
 		FROM USERS
 		WHERE EMAIL = #{email}
 	</select>
+	
+	
+	<select id="selectMembershipId"  parameterType="hashmap" resultType="teamgyodong.myky.membership.model.Membership">
+		SELECT *
+	    FROM MEMBERSHIP
+	    WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id="selectOrderAllCnt" parameterType="hashmap" resultType="int">
+       SELECT COUNT(*)
+       FROM ORDERS
+       WHERE USER_ID = #{userId}
+	</select>
+	
 	
 </mapper>

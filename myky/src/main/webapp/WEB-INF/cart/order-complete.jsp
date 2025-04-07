@@ -7,98 +7,10 @@
     <title>멍냥꽁냥 주문완료</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	
+    <link rel="stylesheet" type="text/css" href="/css/cart/cart.css" />
+    
     <style>
-.order-complete {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
 
-.order-complete__title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.order-complete__info {
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #666;
-    text-align: left;
-}
-
-.order-complete__table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.order-complete__th, .order-complete__td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-.order-complete__th {
-    background: #f7f7f7;
-    font-weight: bold;
-}
-
-.order-complete__td img {
-    border-radius: 5px;
-}
-
-.order-complete__shipping, 
-.order-complete__points {
-    text-align: left;
-    padding: 15px;
-    border-radius: 8px;
-    background: #f9f9f9;
-    margin-bottom: 15px;
-}
-
-.order-complete__shipping h3,
-.order-complete__points h3 {
-    font-size: 18px;
-    color: #444;
-    margin-bottom: 10px;
-}
-
-.order-complete__buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.order-complete__button {
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.order-complete__button.main {
-    background: #FF8C42;
-    color: white;
-}
-
-.order-complete__button.history {
-    background: #FF8C42;
-    color: white;
-}
-
-.order-complete__button:hover {
-    opacity: 0.8;
-}
     </style>
 </head>
 <body>

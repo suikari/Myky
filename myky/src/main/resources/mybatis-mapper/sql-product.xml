@@ -161,7 +161,10 @@
 		FROM PRODUCT P
 		INNER JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
 		LEFT JOIN REVIEW_FILE F ON R.REVIEW_ID = F.REVIEW_ID AND F.THUMB_YN = 'Y'
-		WHERE P.PRODUCT_ID = #{productId}
+		WHERE 1=1
+		<if  test="productId != null and productId != ''">
+			 AND P.PRODUCT_ID = #{productId}
+		</if>
 		ORDER BY CREATED_AT DESC
     	OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
@@ -170,7 +173,10 @@
 	<select id="selectReviewCount" parameterType="hashmap" resultType="int">
 	    SELECT COUNT(*)
 	    FROM PRODUCT_REVIEWS 
-	    WHERE PRODUCT_ID = #{productId}
+	    WHERE 1=1
+		<if  test="productId != null and productId != ''">
+			 AND PRODUCT_ID = #{productId}
+		</if>
 	    	AND DELETE_YN != 'Y'
 	</select>
 	
@@ -192,7 +198,10 @@
 	<select id="selectQnaList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Qna">
 	    SELECT *
 	    FROM PRODUCT_QNA
-	    WHERE PRODUCT_ID = #{productId}
+	    WHERE 1=1
+		<if  test="productId != null and productId != ''">
+			 AND PRODUCT_ID = #{productId}
+		</if>
 	    ORDER BY QNA_ID DESC
 	    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
@@ -201,7 +210,10 @@
 	<select id="selectQnaCnt" parameterType="hashmap" resultType="int">
 	    SELECT COUNT(*)
 	    FROM PRODUCT_QNA 
-	    WHERE PRODUCT_ID = #{productId}
+	      WHERE 1=1
+		<if  test="productId != null and productId != ''">
+			 AND PRODUCT_ID = #{productId}
+		</if>
 	</select>
 	
 	<!-- QnA 글쓰기 -->

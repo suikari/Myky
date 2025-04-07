@@ -558,6 +558,7 @@
                             userId: self.userId,
                             category : self.category,
                         };
+                        
                         self.selectList = [];
                         self.allChk = false;
                         

@@ -233,7 +233,7 @@
 		    border-radius: 5px;
 		}
 		
-		
+
 /* 수정 폼 스타일 - 부트스트랩 사용 */
 .edit-form {
     display: flex;
@@ -328,6 +328,12 @@
 	.status-return { color: #fd7e14; background-color: #ffe5d0; }
 	.status-returned { color: #dc3545; background-color: #f8d7da; }
 	
+		.product-thumb {
+		  width: 60px;
+		  height: 60px;
+		  object-fit: cover;
+		}
+		
     </style>
     
 </head>
@@ -431,6 +437,7 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
                                                     <th>주문상태</th>
                                                     <th>운송장번호</th>
@@ -442,6 +449,9 @@
                                             <tbody>
                                                 <template  v-for="product in order.orderdetail">
                                                 <tr>
+                                                    <td>    
+                                                    	<img :src="product.filePath" alt="상품 이미지" class="img-thumbnail me-2 product-thumb">
+													</td>
                                                     <td>{{ product.productName }}</td>
                                                     <td>
 												        <span :class="getStatusClass(product.refundStatus)">
@@ -558,6 +568,7 @@ const app = Vue.createApp({
         },
         toggleDetails(orderId) {
             this.selectedOrderId = this.selectedOrderId === orderId ? null : orderId;
+            this.updateOrderId = null;
         },
         fnPage(num) {
             this.page = num;
@@ -613,10 +624,11 @@ const app = Vue.createApp({
         fnEditOrder(orderId){
         	
         	var self = this;
+			self.selectedOrderId = null;
 
             if (self.updateOrderId === orderId) {
             	self.updateOrderId = null;  // 같은 걸 누르면 닫힘
-            	self.updateproductId
+            	self.updateproductId = null;
 
             } else {
                 const member = self.orders.find(m => m.orderId === orderId);

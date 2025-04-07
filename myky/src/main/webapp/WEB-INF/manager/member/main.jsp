@@ -414,7 +414,7 @@
 								        </div>
 								         <div class="col">
 								            <label for="userName" class="form-label">보유 포인트 : {{currentPoint}}</label>
-								            <button class="btn btn-primary me-2 custom-btn" @click="">수정</button>
+								            <button class="btn btn-primary me-2 custom-btn" @click="FnAddPoint">포인트 수정</button>
 								        </div>
 										<!-- 탈퇴 여부 토글 스위치 -->
 								        <div class="col-auto d-flex align-items-center">
@@ -620,6 +620,23 @@
 				        	}
 				        });
                     },
+                    FnAddPoint () {
+                    	
+                    	Swal.fire({
+                    		  title: "포인트 수정값을 입력하세요",
+                    		  input: "number",
+                    		  icon: "info",
+                    		  showCancelButton: true,
+                    		  confirmButtonColor: "#3085d6",
+                    		  cancelButtonColor : "#d33",
+                    		  confirmButtonText : "수정",
+                    		  cancelButtonText : "취소", 
+                    		}).then((result) => {
+                    		  if (result.isConfirmed) {
+                    		    
+                    		  }
+                    		});
+                    }
                 	
                 },
                 mounted() {

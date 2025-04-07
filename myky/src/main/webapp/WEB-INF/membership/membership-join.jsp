@@ -8,127 +8,107 @@
         <title>멤버십 가입 - 본인확인 및 결제</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-
+        <link rel="stylesheet" href="/css/membership/membership.css" />
         <style>
-            body {
-                font-family: 'Pretendard', sans-serif;
-                background-color: #f2f4f6;
-                margin: 0;
-                padding: 0;
-            }
 
-            .membership-container {
-                max-width: 1280px;
-                margin: 60px auto;
-                background-color: #ffffff;
-                border-radius: 16px;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-                padding: 40px 32px;
-            }
-
-            .membership-header {
-                text-align: center;
-                margin-bottom: 40px;
-            }
-
-            .membership-header h2 {
-                font-size: 28px;
-                color: #222;
-            }
-
-            .info-box,
-            .payment-box {
-                background-color: #fdfdfd;
-                border: 1px solid #e2e2e2;
-                border-radius: 12px;
-                padding: 24px 20px;
-                margin-bottom: 30px;
-            }
-
-            .info-list {
-                list-style: none;
-                padding: 0;
-            }
-
-            .info-list li {
-                font-size: 15px;
-                padding: 6px 0;
-                border-bottom: 1px dashed #ddd;
-            }
-
-            .plan-options {
-                display: flex;
-                gap: 20px;
-                margin-bottom: 10px;
-            }
-
-            .plan-options label {
-                padding: 10px 18px;
-                background-color: #f0f0f0;
-                border-radius: 10px;
-                cursor: pointer;
-                border: 1px solid #ccc;
-            }
-
-            .plan-options input[type="radio"] {
-                margin-right: 8px;
-            }
-
-            .btn-main,
-            .btn-submit {
-                width: 100%;
-                padding: 16px;
-                font-size: 16px;
-                background-color: #ff7a00;
-                color: #fff;
-                border: none;
-                border-radius: 12px;
-                cursor: pointer;
-                font-weight: 600;
-            }
-
-            .btn-submit:disabled {
-                background-color: #ccc;
-            }
         </style>
     </head>
 
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
 
-        <div id="app" class="membership-container">
-            <div class="membership-header">
-                <h2>🐾 멍냥꽁냥 멤버십 가입 - Step 2</h2>
-                <p>회원 정보를 확인하고 결제를 진행해주세요.</p>
+        <div id="app" class="membership-wrapper">
+            <div class="step-title">
+                <h2>🐾 멍냥꽁냥 멤버십 가입</h2>
             </div>
+            <ul class="step-bar">
+                <li class="active">1. 회원 정보 확인</li>
+                <li :class="{ active: confirmed }">2. 결제</li>
+            </ul>
 
             <!-- ✅ 회원 정보 확인 -->
-            <div class="info-box" v-if="!confirmed">
+            <div class="card-section">
                 <h3>🙋 회원 정보 확인</h3>
-                <ul class="info-list">
-                    <li><strong>이름:</strong> {{ userInfo.userName }}</li>
-                    <li><strong>아이디:</strong> {{ userInfo.userId }}</li>
-                    <li><strong>닉네임:</strong> {{ userInfo.nickName }}</li>
-                    <li><strong>이메일:</strong> {{ userInfo.email }}</li>
-                    <li><strong>연락처:</strong> {{ userInfo.phoneNumber }}</li>
-                    <li><strong>주소:</strong> {{ userInfo.address }}</li>
-                </ul>
-                <button class="btn-main" @click="confirmed = true">확인</button>
+                <div class="info-grid">
+                    <div class="info-item"><strong>이름:</strong> {{ userInfo.userName }}</div>
+                    <div class="info-item"><strong>아이디:</strong> {{ userInfo.userId }}</div>
+                    <div class="info-item"><strong>닉네임:</strong> {{ userInfo.nickName }}</div>
+                    <div class="info-item"><strong>이메일:</strong> {{ userInfo.email }}</div>
+                    <div class="info-item"><strong>연락처:</strong> {{ userInfo.phoneNumber }}</div>
+                    <div class="info-item"><strong>주소:</strong> {{ userInfo.address }}</div>
+                </div>
+                <div class="mt-4">
+                    <button class="btn-main" v-if="!confirmed" @click="handleConfirm">정보 확인 완료</button>
+                    <button class="btn-main" v-else disabled>✅ 정보 확인 완료</button>
+                </div>
             </div>
 
             <!-- ✅ 결제 수단 선택 -->
-             <!-- 멤버십 중복 체크.... -->
-            <div class="payment-box" v-if="confirmed">
+            <div class="card-section" ref="paymentBox" id="payment-section">
                 <h3>💳 결제 옵션 선택</h3>
-                <div class="plan-options">
-                    <label><input type="radio" name="plan" v-model="selectedPlan" value="1"> 1개월</label>
-                    <label><input type="radio" name="plan" v-model="selectedPlan" value="6"> 6개월</label>
-                    <label><input type="radio" name="plan" v-model="selectedPlan" value="12"> 12개월</label>
+
+                <div class="plan-options" ref="planOptions" style="position: relative;">
+                    <!-- 1개월 -->
+                    <div class="plan-card" :class="{ active: selectedPlan === '1' }" @click="selectPlan('1')">
+                        <div class="plan-icon">📦</div>
+                        <div><strong>1개월</strong></div>
+                        <div class="price-highlight">12,900원</div>
+                    </div>
+
+                    <!-- 6개월 -->
+                    <div class="plan-card" :class="{ active: selectedPlan === '6' }" @click="selectPlan('6')">
+                        <div class="plan-badge">추천</div>
+                        <div class="plan-icon">🔥</div>
+                        <div><strong>6개월</strong></div>
+
+                        <div class="price-box">
+                            <div class="price-original"> 77400원</div>
+                            <div class="price-sale"> 65,790원</div>
+                        </div>
+
+                        <div v-if="selectedPlan === '6'" class="discount-tooltip">
+                            💡 {{ selectedPlanText }}
+                        </div>
+                    </div>
+
+                    <!-- 12개월 -->
+                    <div class="plan-card" :class="{ active: selectedPlan === '12' }" @click="selectPlan('12')">
+                        <div class="plan-badge">BEST</div>
+                        <div class="plan-icon">💎</div>
+                        <div><strong>12개월</strong></div>
+
+                        <div class="price-box">
+                            <div class="price-original"> 154,800원</div>
+                            <div class="price-sale"> 123,840원</div>
+                        </div>
+
+                        <div v-if="selectedPlan === '12'" class="discount-tooltip">
+                            💡 {{ selectedPlanText }}
+                        </div>
+                    </div>
+
                 </div>
-                <button class="btn-submit" :disabled="!selectedPlan" @click="submitPayment">가입하고 결제하기</button>
+
+                <div class="payment-button-wrapper">
+                    <button class="btn-main" :disabled="!selectedPlan || !confirmed" @click="submitPayment()">
+                        결제 후 멤버십 가입완료
+                    </button>
+                </div>
+
+                <p class="text-center text-muted mt-3">※ 결제 완료 후 멤버십 혜택이 즉시 적용됩니다.</p>
             </div>
 
+            <div class="card-section">
+                <h3>❓ 유의사항</h3>
+                <ul class="text-muted small">
+                    <li>결제 후 환불은 불가하며, 혜택은 즉시 적용됩니다.</li>
+                    <li>멤버십은 기간 만료 시 자동으로 종료됩니다.</li>
+                    <li>포인트는 가입 즉시 자동 지급됩니다.</li>
+                    <li>결제 수단은 카드만 지원됩니다. (카카오페이, 네이버페이 등 포함)</li>
+                </ul>
+            </div>
         </div>
+
 
         <jsp:include page="/WEB-INF/common/footer.jsp" />
 
@@ -154,6 +134,10 @@
                         confirmed: false,
                         membershipType: "1",
                         selectedPlan: "",
+                        showTooltip: false,
+                        tooltipText: '',
+                        selectedPlanText: '',
+                        tooltipStyle: {}
                     };
                 },
                 computed: {
@@ -177,9 +161,57 @@
                             }
                         });
                     },
+                    handleConfirm() {
+                        this.confirmed = true;
+                        this.$nextTick(() => {
+                            const el = this.$refs.paymentBox;
+                            if (el) {
+                                const offsetTop = el.getBoundingClientRect().top + window.pageYOffset;
+                                window.scrollTo({
+                                    top: offsetTop - 200, // ← 여기서 100은 살짝 위쪽 여백 확보
+                                    behavior: 'smooth'
+                                });
+                            }
+                        });
+                    },
+                    selectPlan(plan) {
+                        this.selectedPlan = plan;
+                        let msg = '';
+                        let total = 0;
+
+                        if (plan === '6') {
+                            total = 12900 * 6 * 0.85; // 15% 할인
+                            msg = '6개월 이용권' + ' (15% 할인)';
+                        } else if (plan === '12') {
+                            total = 12900 * 12 * 0.8; // 20% 할인
+                            msg = '12개월 이용권' + ' (20% 할인)';
+                        }
+
+                        this.selectedPlanText = ''; // 이전 툴팁 제거
+
+                        this.$nextTick(() => {
+                            const tooltip = this.$refs.tooltip;
+                            const planOptions = this.$refs.planOptions;
+                            const selectedIndex = plan === '6' ? 1 : plan === '12' ? 2 : plan === '1' ? 0 : null;
+
+                            if (tooltip && planOptions && selectedIndex !== null) {
+                                const selectedCard = planOptions.querySelectorAll('.plan-card')[selectedIndex];
+                                const cardRect = selectedCard.getBoundingClientRect();
+                                const containerRect = planOptions.getBoundingClientRect();
+
+                                this.tooltipStyle = {
+                                    top: (cardRect.top - containerRect.top - 40) + 'px',
+                                    left: (cardRect.left - containerRect.left + cardRect.width / 2) + 'px'
+                                };
+                            }
+
+                            this.selectedPlanText = msg;
+                        });
+                    },
+
                     submitPayment() {
                         const self = this;
-                        
+
                         let amount = 0;
                         let label = "";
                         switch (self.selectedPlan) {
@@ -188,11 +220,11 @@
                                 label = "1개월 멤버십";
                                 break;
                             case "6":
-                                amount = 100;
+                                amount = 100;  //65790원 15% 할인률
                                 label = "6개월 멤버십";
                                 break;
                             case "12":
-                                amount = 129000;
+                                amount = 123840;  //123840원 20% 할인률
                                 label = "12개월 멤버십";
                                 break;
                         }
@@ -232,7 +264,7 @@
                             membershipType: self.membershipType,
                             expirationDate: self.expirationDate
                         };
-                        console.log("nparmap",nparmap);
+                        console.log("nparmap", nparmap);
                         $.ajax({
                             url: "/membership/addmember.dox",
                             dataType: "json",
@@ -267,17 +299,17 @@
                             amount: rsp.paid_amount,
                             paymentMethod: paymentMethod,
                             installment: rsp.card_quota,
-                            subscriptionPeriod: self.expirationDate, 
+                            subscriptionPeriod: self.expirationDate,
                             paymentStatus: rsp.status,
                             isCanceled: "N",
                             cancelDate: null,
                             orderId: null,
-                            donationId : null,
+                            donationId: null,
                             membershipId: self.membershipId,
                             userId: self.userInfo.userId,
-                            usedPoint : null
+                            usedPoint: null
                         };
-                        console.log("nparmap",nparmap);
+                        console.log("nparmap", nparmap);
                         $.ajax({
                             url: "/payment.dox",
                             dataType: "json",
@@ -288,6 +320,7 @@
                             }
                         });
                     },
+
                 },
                 mounted() {
                     let self = this;
