@@ -74,7 +74,7 @@
              <% } else if ("2".equals(submenu)) { %>
                  <jsp:include page="/WEB-INF/manager/board/comment.jsp"/>
              <% } else if ("3".equals(submenu)) { %>            
-             
+                 <jsp:include page="/WEB-INF/manager/board/vetboard.jsp"/>             
              <% } else if ("4".equals(submenu)) { %>
                  <jsp:include page="/WEB-INF/manager/board/product.jsp"/>
              <% } %>

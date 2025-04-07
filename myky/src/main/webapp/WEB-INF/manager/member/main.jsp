@@ -414,7 +414,7 @@
 								        </div>
 								         <div class="col">
 								            <label for="userName" class="form-label">보유 포인트 : {{currentPoint}}</label>
-								            <button class="btn btn-primary me-2 custom-btn" @click="FnAddPoint">포인트 수정</button>
+								            <button class="btn btn-primary me-2 custom-btn" @click="FnAddPoint(editData.userId)">포인트 수정</button>
 								        </div>
 										<!-- 탈퇴 여부 토글 스위치 -->
 								        <div class="col-auto d-flex align-items-center">
@@ -620,24 +620,39 @@
 				        	}
 				        });
                     },
-                    FnAddPoint () {
-                    	
-                    	Swal.fire({
-                    		  title: "포인트 수정값을 입력하세요",
+                    FnAddPoint: async function(userId) {
+                    		let self = this;
+                    		
+                    	    let { value: point } = await Swal.fire({
+                    		  title: "추가 또는 삭감할 포인트를 입력하세요",
                     		  input: "number",
-                    		  icon: "info",
-                    		  showCancelButton: true,
-                    		  confirmButtonColor: "#3085d6",
-                    		  cancelButtonColor : "#d33",
-                    		  confirmButtonText : "수정",
-                    		  cancelButtonText : "취소", 
-                    		}).then((result) => {
-                    		  if (result.isConfirmed) {
-                    		    
-                    		  }
+                    		  inputLabel: "Point",
+                    		  inputPlaceholder: "예: 1000 , -1000"
                     		});
-                    }
-                	
+                    	    
+                    		if (point) {
+                    		  
+                    		  let pointAdd = {
+                                      userId : userId, //받을 수의사 아이디
+                                      usedPoint: Number(point),
+                                      remarks : "관리자에 의한 포인트 수정",
+                              }
+                			  
+                			  $.ajax({
+                                  url:"/point/used.dox",
+                                  dataType:"json",	
+                                  type : "POST", 
+                                  data : pointAdd,
+                                  success : function(data) { 
+                                	  alert("수정 완료");
+	                                  	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
+	                      				self.fnMainList();
+                                  },
+                                  
+                              });
+                    		  
+                    		}
+                    },   
                 },
                 mounted() {
                 	let self = this;
