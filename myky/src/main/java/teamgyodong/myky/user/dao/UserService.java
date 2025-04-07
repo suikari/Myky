@@ -38,5 +38,10 @@ public interface UserService {
 
 	HashMap<String, Object> getEmail(HashMap<String, Object> map);
 
+	HashMap<String, Object> searchEmail(HashMap<String, Object> map);
+
+	HashMap<String, Object> searchMemberShip(HashMap<String, Object> map);
+
+
 	
 }

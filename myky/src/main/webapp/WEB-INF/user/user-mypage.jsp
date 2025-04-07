@@ -29,8 +29,19 @@
             .user-info {
                 display: flex;
                 align-items: center;
+                justify-content: space-between;
                 padding: 20px;
                 border-bottom: 1px solid #ddd;
+            }
+
+            .user-details {
+                flex-grow: 1;
+                padding-left: 20px;
+            }
+
+            .user-rank-mark img {
+                width: 60px;
+                height: 60px;
             }
 
             .profile-pic {
@@ -40,18 +51,50 @@
                 border-radius: 100%;
             }
 
+            /* 전체 summary 박스 레이아웃 */
             .summary {
                 display: flex;
-                justify-content: space-around;
-                padding: 20px 0;
+                justify-content: space-between;
+                gap: 20px;
+                margin: 20px 0;
+                padding: 10px 0;
             }
 
+            /* 공통 summary item 스타일 */
             .summary-item {
-                background: #eee;
-                padding: 15px;
-                border-radius: 10px;
+                flex: 1;
+                padding: 25px 15px;
                 text-align: center;
-                width: 30%;
+                border-radius: 15px;
+                color: #fff;
+                font-size: 18px;
+                font-weight: 600;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                line-height: 1.6;
+                letter-spacing: 0.5px;
+            }
+
+            /* 호버 효과 */
+            .summary-item:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            /* 각 항목별 색상 커스터마이징 */
+            .point-box {
+                background: linear-gradient(135deg, #FFD700, #FFA500);
+                /* 노랑 → 주황 */
+            }
+
+            .coupon-box {
+                background: linear-gradient(135deg, #8A2BE2, #BA55D3);
+                /* 보라 계열 */
+            }
+
+            .order-box {
+                background: linear-gradient(135deg, #00BFFF, #1E90FF);
+                /* 파랑 계열 */
             }
 
             .main-content {
@@ -82,18 +125,39 @@
                 padding: 20px;
             }
 
+
+
             .status-box {
                 display: flex;
-                justify-content: space-around;
-                padding: 10px 0;
+                justify-content: space-between;
+                gap: 15px;
+                padding: 20px;
+                margin: 20px 0;
+                background-color: #f9f9f9;
+                border-radius: 15px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+                font-family: 'Noto Sans KR', sans-serif;
             }
 
-            .status-box div {
-                background: #eee;
-                padding: 15px;
+            .status-item {
+                flex: 1;
+                padding: 15px 10px;
+                background-color: #ffffff;
                 border-radius: 10px;
                 text-align: center;
-                width: 20%;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+                transition: transform 0.2s ease;
+                cursor: default;
+            }
+
+            .status-item:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .status-label {
+                font-size: 14px;
+                color: #888;
             }
 
             .order-list {
@@ -103,6 +167,64 @@
                 border-radius: 10px;
                 margin-top: 10px;
             }
+
+
+            .order-table {
+                width: 100%;
+                border-collapse: collapse;
+                background-color: #fff;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+                margin-bottom: 20px;
+            }
+
+            .order-table th {
+                background-color: #f0f0f0;
+                color: #333;
+                font-weight: 600;
+                padding: 12px 10px;
+                text-align: center;
+                font-size: 15px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .order-table td {
+                text-align: center;
+                padding: 12px 10px;
+                font-size: 14px;
+                color: #444;
+                border-bottom: 1px solid #eee;
+            }
+
+            .order-table td img {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+            }
+
+
+
+            .order-table tr:last-child {
+                border-bottom: none;
+            }
+
+            .order-table td:nth-child(2) {
+                font-weight: bold;
+                flex: 2;
+            }
+
+            .order-table td:nth-child(5) {
+                color: #007bff;
+                font-weight: bold;
+            }
+
+            .order-table tr:hover {
+                background-color: #fafafa;
+            }
+
 
             a {
                 text-decoration: none;
@@ -548,7 +670,7 @@
                 padding: 16px;
                 color: #ffffff;
                 font-family: 'Arial', sans-serif;
-                width:800px;
+                width: 800px;
                 height: 200px;
                 text-align: center;
                 line-height: 150px;
@@ -592,6 +714,26 @@
                 color: #ffffff;
             }
 
+            .badge {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+
+            .badge-yes {
+                background-color: #4caf50;
+                /* 초록색 */
+                color: white;
+            }
+
+            .badge-no {
+                background-color: #ccc;
+                /* 회색 */
+                color: #333;
+            }
         </style>
     </head>
 
@@ -605,14 +747,39 @@
                         <img :src="user.profileImage" alt="" class="profile-pic">
                         <div class="user-details">
                             <h2>안녕하세요, {{user.userName}}님!</h2>
-                            <p>{{user.userName}}님의 회원등급은 <strong>{{user.role}}</strong>입니다.</p>
+                            <template v-if="membershipYn === 'Y'">
+                                <span class="badge badge-yes">
+                                    ⭐ 멤버십 회원
+                                </span>
+                            </template>
+                            <template v-else>
+                                <span class="badge badge-no">
+                                    🛈 일반 회원
+                                </span>
+                            </template>
                         </div>
+
+                        <!-- <div class="user-rank-mark" style="font-size: 72px;">
+
+                            <span v-if="membershipYn === 'Y'">👑</span>
+                            <span v-else>👤</span>
+                        </div> -->
+
+
                     </div>
+
+
+
                     <div class="summary">
-                        <div class="summary-item">현재 포인트 <br>{{formattedAmount(point.currentPoint)}}P</div>
-                        <div class="summary-item">쿠폰<br>{{couponCnt}}개</div>
-                        <div class="summary-item"><br>주문</div>
-                        
+                        <div class="summary-item point-box">
+                            💰 현재 포인트 <br>{{formattedAmount(point.currentPoint)}}P
+                        </div>
+                        <div class="summary-item coupon-box">
+                            🎟 쿠폰<br>{{couponCnt}}개
+                        </div>
+                        <div class="summary-item order-box">
+                            📦 주문 수<br>{{orderAllCnt}} 회
+                        </div>
                     </div>
                     <div class="main-content">
                         <aside class="sidebar">
@@ -653,15 +820,66 @@
 
                         <section class="order-status">
                             <span v-if="activeTab === 'order'">
-                                <h3>나의 주문처리 현황</h3>
+                                <h3>최근 주문내역 현황</h3>
                                 <div class="status-box">
-                                    <div>입금<br>{{ orderCnt[2].orderCount }}</div>
-                                    <div>배송 중<br>{{ orderCnt[3].orderCount }}</div>
-                                    <div>배송 완료<br>{{ orderCnt[1].orderCount }}</div>
-                                    <div>취소<br>{{ orderCnt[0].orderCount }}</div>
-                                </div>  
-                                <div class="order-list">
-                                    <p>주문 내역이 없습니다.</p>
+                                    <div class="status-item">
+                                        <span class="status-label">주문접수</span><br>
+                                        <span class="status-count">{{ orderCnt[2].orderCount }}</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="status-label">배송 중</span><br>
+                                        <span class="status-count">{{ orderCnt[3].orderCount }}</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="status-label">배송 완료</span><br>
+                                        <span class="status-count">{{ orderCnt[1].orderCount }}</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="status-label">취소</span><br>
+                                        <span class="status-count">{{ orderCnt[0].orderCount }}</span>
+                                    </div>
+                                </div>
+                                <div class="order-list" v-if="">
+                                    <table class="order-table">
+                                        <tr>
+                                            <th>제품 사진</th>
+                                            <th>제품 명</th>
+                                            <th>제품 가격</th>
+                                            <th>제품 수량</th>
+                                            <th>주문 상태</th>
+                                            <th>주문 날짜</th>
+                                        </tr>
+                                        <template v-if="orderList!=''">
+                                            <tr v-for="item in orderList">
+                                                <td><span><img :src="item.filepath" alt=""></span></td>
+                                                <td><span @click="fnProduct(item.productId)"><a
+                                                            href="javascript:;">{{item.productName}}</a></span></td>
+                                                <td><span>{{formattedAmount(item.price)}} 원</span></td>
+                                                <td><span>{{item.quantity}} 개</span></td>
+                                                <td>
+                                                    <span v-if="item.orderStatus == 'paid'"
+                                                        class="anonymous">주문접수</span>
+                                                    <span v-if="item.orderStatus == 'shipped'" class="anonymous">배송
+                                                        중</span>
+                                                    <span v-if="item.orderStatus == 'delivered'" class="anonymous">배송
+                                                        완료</span>
+                                                    <span v-if="item.orderStatus == 'cancel'"
+                                                        class="anonymous">취소</span>
+                                                </td>
+                                                <td><span>{{item.orderedAt}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6" @click="fnOrderListStatus()"><a href="javascript:;">주문조회
+                                                        하러가기</a></td>
+                                            </tr>
+                                        </template>
+                                        <template v-if="orderList==''">
+                                            <tr>
+                                                <td colspan="6">주문 내역이 없습니다</td>
+                                            </tr>
+                                        </template>
+
+                                    </table>
                                 </div>
 
                                 <!-- <div class="order-list">
@@ -715,7 +933,8 @@
                                         <div class="coupon">
                                             <ul class="coupon-list">
                                                 <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
-                                                <li class="coupon-item coupon-discount">-{{item.discountRate}}% SALES</li>
+                                                <li class="coupon-item coupon-discount">-{{item.discountRate}}% SALES
+                                                </li>
                                                 <li class="coupon-item coupon-condition">
                                                     {{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능</li>
                                                 <li class="coupon-item coupon-limit">최대
@@ -938,7 +1157,7 @@
 
     </html>
     <script>
-        
+
 
         function withdrawBack() {
             window.vueObj.fnResult();
@@ -991,15 +1210,19 @@
                         pageSize4: 10,
                         page4: 1,
                         couponList: [],
-                        couponCnt:0,
-                        orderList:[],
-                        orderCnt:[
+                        couponCnt: 0,
+                        orderList: [],
+                        orderCnt: [
                             { orderStatus: 'shipped', orderCount: '0' },
                             { orderStatus: 'delivered', orderCount: '0' },
                             { orderStatus: 'paid', orderCount: '0' },
                             { orderStatus: 'cancel', orderCount: '0' }
                         ],
-                        
+                        orderAllCnt: "",
+                        membership: {},
+                        membershipYn: "",
+                        paramsTab: "${map.paramsTab}"
+
 
 
                     };
@@ -1301,27 +1524,65 @@
                         });
                     },
 
-                    fnOrderList:function(){
-                    let self = this;
-                    let nparmap = {
-                        userId: self.userId
-                    };
-                    console.log(nparmap);
-                    $.ajax({
-                        url: "/user/orderList.dox",
-                        dataType: "json",
-                        type: "POST",
-                        data: nparmap,
-                        success: function (data) {
-                            console.log("주문 상세 목록 >>> ",data.orderList);
-                            self.orderList = data.orderList; 
-                            self.orderCnt = data.orderCount;
-                            self.orderAllCnt = data.orderAllCount;
-                            console.log(self.orderCnt);
+                    fnOrderList: function () {
+                        let self = this;
+                        let nparmap = {
+                            userId: self.userId
+                        };
+                        console.log(nparmap);
+                        $.ajax({
+                            url: "/user/orderList.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("주문 상세 목록 >>> ", data.orderList);
+                                self.orderList = data.orderList;
+                                self.orderCnt = data.orderCount;
+                                self.orderAllCnt = data.orderAllCount;
+                                console.log('올카운트', self.orderAllCnt);
 
+                            }
+                        });
+                    },
+
+                    fnMemberShipInfo() {
+                        var self = this;
+                        var nparmap = {
+                            userId: self.userId
+
+                        };
+                        console.log("파라", nparmap);
+                        $.ajax({
+                            url: "/user/memberShip.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("데이타 카운트", data.count);
+                                if (data.count > 0) {
+                                    self.ship = data.ship;
+                                    self.membershipYn = "Y";
+                                } else {
+                                    self.membershipYn = "N";
+                                }
+
+                            }
+                        });
+                    },
+                    fnGetTab() {
+                        if (self.paramsTab != null) {
+                            self.activeTab = self.paramsTab;
                         }
-                    });
-                }
+                    },
+                    fnOrderListStatus: function () {
+                        location.href = "/order/orderList.do";
+                    },
+                    fnProduct(productId) {
+                        let self = this;
+                        self.productId = productId;
+                        location.href = "/product/view.do?productId=" + self.productId;
+                    },
 
 
 
@@ -1358,6 +1619,8 @@
                     self.fnPoint();
                     self.fnCoupon();
                     self.fnOrderList();
+                    self.fnMemberShipInfo();
+                    self.fnGetTab();
                     // self.fnVetInfo();
                     window.vueObj = this;
 

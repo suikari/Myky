@@ -247,6 +247,9 @@
                         agree3: "N",
                         agree4: "N",
                         checked: false, //체크 온오프 용
+                        email : "${map.email}",
+                        name : "${map.name}",
+
 
                     };
                 },
@@ -282,12 +285,20 @@
                             reurn;
                         }
 
-                pageChange("/user/join.do", {agree1 : self.agree1 , agree2 : self.agree2, agree3 : self.agree3 , agree4 : self.agree4});
+                pageChange("/user/join.do", {agree1 : self.agree1,
+                     agree2 : self.agree2,
+                      agree3 : self.agree3 ,
+                       agree4 : self.agree4 ,
+                        email : self.email,
+                        name : self.name
+                    });
                 // pageChange ("보낼 주소" / 키:밸류)
             }
                 },
                 mounted() {
-                    
+                    let self = this;
+                    console.log(self.name);
+                    console.log(self.email);
 
                 }
             });
