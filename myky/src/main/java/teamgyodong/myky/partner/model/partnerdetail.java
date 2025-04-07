@@ -24,11 +24,9 @@ public class partnerdetail {
 	private String phoneNumber;
 	private String address;
 	private String websiteUrl;
-	private String reservationUrl;
 	private String openingHours;
-	private String LUNCHBREAK;
 	private String regularHoliday;
-	//private String PARTNERDETAILID;
+
 	
 	//즐겨찾기
 	private int favoriteId;
