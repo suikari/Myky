@@ -437,7 +437,7 @@
                 // 병원 리스트 불러오기
                 if (filterByDistance) {
                     console.log("🔄 근처 병원 리스트 불러오는 중...");
-                    await this.fnMemberList("", latitude, longitude);
+                    await this.fnPartnerList("", latitude, longitude);
                 } else {
                     console.log("🔄 전체 병원 리스트 불러오는 중...");
                     await this.fnallhosList();
@@ -746,9 +746,15 @@
 
                     self.favoritesList = data.favoriteList;
 
-                    self.partnerlist = (data.partnerlist || []).filter(partner => {
-                    return partner.partnerName?.includes(keyword) || partner.partnerDesc?.includes(keyword);
-                });
+                    const keywordText = keyword.trim().toLowerCase();
+
+self.partnerlist = (data.partnerlist || []).filter(partner => {
+    const name = partner.partnerName?.toLowerCase() || "";
+    const desc = partner.partnerDesc?.toLowerCase() || "";
+    return name.includes(keywordText) || desc.includes(keywordText);
+});
+console.log("📌 필터링된 제휴사 리스트:", self.partnerlist);
+
                     // ✅ 마커 추가
                     if (data) {
                         self.gulist = Array.isArray(data.gulist) ? self.removeDuplicates(data.gulist, "GU") : [];
@@ -1183,7 +1189,7 @@
                 if (!partner.NX || !partner.NY || partner.NX === "0" || partner.NY === "0") {
                     console.warn("🚨 좌표가 없음!", partner);
                     return;
-                }
+                } 
 
                 var position = new kakao.maps.LatLng(parseFloat(partner.NY), parseFloat(partner.NX));
                 var favoriteMarkerImage = new kakao.maps.MarkerImage(
