@@ -8,148 +8,10 @@
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/cart/cart.css" />
 
     <style>
-        .ordercontainer {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-        }
-
-        .ordercontainer h2,
-        .ordercontainer h3 {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .orderTable {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .orderTable th,
-        .orderTable td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        .orderTable th {
-            background: #f5f5f5;
-            font-weight: bold;
-        }
-
-        .inputField {
-            width: 80%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        .inputField.short {
-            width: 10%;
-            display: inline-block;
-        }
-
-        .delivery-section {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 5px;
-            background: #fafafa;
-        }
-
-        .delivery-section label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .delivery-section select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background: white;
-            cursor: pointer;
-        }
-
-        .payBtn {
-            width: 100%;
-            padding: 12px;
-            background: #FF8C42;
-            color: white;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .payBtn:hover {
-            background: #e07b3e;
-        }
-
-        .discountTable {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 16px;
-            background-color: #fff;
-            overflow: hidden;
-        }
-
-        .discountTable th,
-        .discountTable td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        .discountTable th {
-            background-color: #f8f8f8;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .discountTable td {
-            color: #555;
-        }
-
-        .discountTable tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .discountTable input[type="text"] {
-            width: 120px;
-            padding: 6px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-right: 5px;
-        }
-
-        .discountTable button {
-            padding: 6px 10px;
-            border: none;
-            background-color: #FF8C42;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s ease;
-            margin-left: 10px;
-        }
-
-        .discountTable button:hover {
-            background-color: #e07b3e;
-        }
+        
     </style>
 </head>
 
@@ -824,11 +686,7 @@
                     });
                 },
                 test:function(){
-                    let payList = this.selectCartItems.map(item => ({
-                        productId: item.productId
-                    }))
-                    console.log(JSON.stringify(payList));
-                    // pageChange("/order/orderComplete.do",{userId:"as879",orderId:100});
+                    pageChange("/order/orderComplete.do",{userId:"as879",orderId:100});
                 }
             },
             mounted() {

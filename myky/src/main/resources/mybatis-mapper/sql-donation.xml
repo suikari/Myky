@@ -32,6 +32,15 @@
 		join users u on d.user_id = u.user_id
 		
 	</select>
+
+	<select id="selectUserDonationInfo" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
+		
+		select d.* , c.center_name, u.nickname from donation_history d
+		left join donation_center c on d.center_id = c.center_id
+		join users u on d.user_id = u.user_id
+		where d.user_id = #{userId} and d.donation_id = #{donationId}
+		
+	</select>
 	
 </mapper>
 

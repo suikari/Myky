@@ -9,157 +9,10 @@
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/donation/donation.css" />
 
     <style>
-        .body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            background-color: #fff;
-        }
-
-        .donationContainer {
-            max-width: 1280px;
-            margin: 30px auto;
-            padding: 20px;
-        }
-
-        .boardTitle {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .boardContents {
-            font-size: 16px;
-            color: #555;
-        }
-
-        #sections section {
-            text-align: left;
-            padding: 20px;
-            border-bottom: 1px dotted #FFA145;
-        }
-
-        .sectionTitle {
-            font-size: 20px;
-            font-weight: bold;
-            color: #444;
-            margin-bottom: 20px;
-            margin-left: 30px;
-
-        }
-
-        .sectionContents {
-            color: #555;
-            margin-bottom: 20px;
-            margin-left: 30px;
-        }
-
-        .donationTable {
-            width: 100%;
-            margin-top: 10px;
-            border-collapse: collapse;
-            margin-left: 30px;
-
-        }
-
-        .donationTable table {
-            width: 80%;
-            border: 1px solid #ddd;
-            background: #fff;
-            border-radius: 5px;
-            margin-left: 30px;
-
-        }
-
-        .donationTable th,
-        .donationTable td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-
-        }
-
-        .donationTable th {
-            width: 100px;
-            background: #FFBC7B;
-            font-weight: bold;
-        }
-
-        .donateAmountContainer {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .donateAmountBtn {
-            background: #f5f5f5;
-            border: 1px solid #ccc;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .donateAmountBtn.selected {
-            background: #FFBC7B;
-            color: white;
-            font-weight: bold;
-            border: 1px solid #FF8C42;
-        }
-
-        .customAmountInput {
-            width: 120px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .donationCheckbox {
-            margin-right: 5px;
-            margin-left: 30px;
-        }
-
-        .donationButton {
-            width: 30%;
-            padding: 10px;
-            background: #FFBC7B;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 30px auto;
-        }
-
-        .donationButton:hover {
-            background: #FFA145;
-        }
-
-        .donationMessage {
-            width: 90%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .privacy-policy, .terms {
-            padding: 20px;
-            border: 1px solid #ddd;
-            background-color: #f9f9f9;
-            margin-top: 10px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
+        
     </style>
 </head>
 
@@ -168,19 +21,19 @@
 
 
 
-    <div id="app" class="body">
+    <div id="app" class="donationBody">
         <div class="donationContainer">
-            <div class="boardTitle">
+            <div class="donationTitle">
                 <h2>후원하기</h2>
             </div>
-            <div class="boardContents">
-                <p>당신의 따뜻한 후원,</p>
+            <div class="donationContents">
+                <p>당신의 따뜻한 후원이</p>
                 <p>고통받는 동물을 구해내는 힘이 됩니다.</p>
             </div>
 
-            <div id="sections">
+            <div id="donationSections">
                 <section>
-                    <div class="sectionTitle">후원정보</div>
+                    <div class="donationTitleTitle">후원정보</div>
                     <div class="donationTable">
                         <table>
                             <tr>
@@ -188,12 +41,13 @@
                                 <td>
                                     <span>일시후원</span>
                                     <span v-if="isMembership">
-                                         :: 
+                                        ::
                                         <label>
-                                            <input type="radio" v-model="isMembershipDonation" :value="true" @change="checkMembershipDonation"> 멤버십 후원
+                                            <input type="radio" v-model="isMembershipDonation" :value="true"
+                                                @change="checkMembershipDonation"> 멤버십 후원
                                         </label>
                                         <label>
-                                            <input type="radio" v-model="isMembershipDonation" :value="false" > 일반 후원
+                                            <input type="radio" v-model="isMembershipDonation" :value="false"> 일반 후원
                                         </label>
                                     </span>
                                 </td>
@@ -225,28 +79,40 @@
                                 <th>후원금액</th>
                                 <td v-if="!isMembershipDonation">
                                     <div class="donateAmountContainer">
-                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 1000}" @click="selectAmount(1000)">10,000원</button>
-                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 3000}" @click="selectAmount(3000)">30,000원</button>
-                                        <button type="button" class="donateAmountBtn" :class="{'selected': donateAmount === 5000}" @click="selectAmount(5000)">50,000원</button>
-                                        <input type="text" class="customAmountInput" v-model="customAmount" @input="formatCustomAmount" @focus="clearSelection" @blur="validateCustomAmount" @keyup.enter="validateCustomAmount" placeholder="직접입력">
+                                        <button type="button" class="donateAmountBtn"
+                                            :class="{'selected': donateAmount === 100}"
+                                            @click="selectAmount(100)">10,000원</button>
+                                        <button type="button" class="donateAmountBtn"
+                                            :class="{'selected': donateAmount === 300}"
+                                            @click="selectAmount(300)">30,000원</button>
+                                        <button type="button" class="donateAmountBtn"
+                                            :class="{'selected': donateAmount === 500}"
+                                            @click="selectAmount(500)">50,000원</button>
+                                        <input type="text" class="customAmountInput" v-model="customAmount"
+                                            @input="formatCustomAmount" @focus="clearSelection"
+                                            @blur="validateCustomAmount" @keyup.enter="validateCustomAmount"
+                                            placeholder="직접입력">
                                     </div>
                                 </td>
                                 <td v-else>
                                     <div>멤버십으로 후원이 진행됩니다.</div>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr v-if="!isMembershipDonation" class="point-row">
                                 <th>보유 포인트</th>
                                 <td>{{ formattedUserPoints }} 원</td>
                             </tr>
-                            <tr>
+                            <tr v-if="!isMembershipDonation" class="point-row">
                                 <th>사용 포인트</th>
-                                <td>
-                                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints" @keyup.enter="applyPoints" placeholder="사용할 적립금 입력">
-                                    <button @click="useAllPoints">전체 사용</button>
-                                    <button @click="applyPoints">적용</button>
-                                    <span>{{ formattedDiscountPoint }} 포인트 사용</span>
-                                    <div v-if="usedPoint != 0">포인트를 차감한 금액 {{ remainingAmount }} 원이 결제됩니다.</div>
+                                <td class="point-input-wrap">
+                                    <span class="point-button-group">
+                                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints"
+                                        @keyup.enter="applyPoints" class="point-input" placeholder="사용할 적립금 입력">
+                                        <button @click="useAllPoints" class="point-btn">전체 사용</button>
+                                        <button @click="applyPoints" class="point-btn">적용</button>
+                                    </span>
+                                    <span class="point-summary">{{ formattedDiscountPoint }} 포인트 사용</span>
+                                    <div v-if="usedPoint != 0" class="point-remaining">포인트를 차감한 금액 {{ remainingAmount }} 원이 결제됩니다.</div>
                                 </td>
                             </tr>
                             <tr>
@@ -258,36 +124,37 @@
                     </div>
                 </section>
                 <section>
-                    <div class="sectionTitle">출금 정책</div>
-                    <p class="sectionContents"><strong>[출금 정책 안내]</strong></p>
-                    <p class="sectionContents">※ 일시 납입은 신청 즉시 결제가 이루어집니다.</p>
-                    <label class="sectionContents">
+                    <div class="donationSectionTitle">출금 정책</div>
+                    <p class="donationSectionContents"><strong>[출금 정책 안내]</strong></p>
+                    <p class="donationSectionContents">※ 일시 납입은 신청 즉시 결제가 이루어집니다.</p>
+                    <label>
                         <input class="donationCheckbox" name="policyCheck" type="checkbox"> 상기 출금 정책을 모두 이해함
                     </label>
                 </section>
                 <section>
-                    <div class="sectionTitle">
-                        <label><input type="checkbox" name="agreeAll" @change="fnToggleAllAgree"> 전체 동의하기</label>
+                    <div class="donationTitle">
+                        <label class="donationSectionTitle"><input type="checkbox" name="agreeAll" @change="fnToggleAllAgree"> 전체 동의하기</label>
                     </div>
-                    <div class="sectionContents">
+                    <div class="donationContents">
                         <label>
                             <input class="donationCheckbox" name="agree" type="checkbox">[필수] 후원약관 동의
                             <a href="javascript:void(0);" @click="toggleTerms">{{ showTerms ? '[닫기]' : '[보기]' }}</a>
                         </label>
 
-                        <div v-if="showTerms" class="terms">
+                        <div v-if="showTerms" class="donationTerms">
                             <div v-html="termsInfo[0].content"></div>
                         </div>
                     </div>
-                    <div class="sectionContents">
+                    <div class="donationContents">
                         <label>
-                            <input class="donationCheckbox" name="agree" type="checkbox">[필수] 개인정보 처리방침 동의 
-                            <a href="javascript:void(0)" @click="togglePrivacyPolicy">{{ showPrivacyPolicy ? '[닫기]' : '[보기]' }}</a>
-                          </label>
+                            <input class="donationCheckbox" name="agree" type="checkbox">[필수] 개인정보 처리방침 동의
+                            <a href="javascript:void(0)" @click="togglePrivacyPolicy">{{ showPrivacyPolicy ? '[닫기]'
+                                : '[보기]' }}</a>
+                        </label>
 
                         <div v-if="showPrivacyPolicy" class="privacy-policy">
                             <div v-html="termsInfo[1].content"></div>
-                        </div>                          
+                        </div>
                     </div>
                 </section>
                 <button class="donationButton" @click="fnPaymentCheck">다음</button>
@@ -296,7 +163,7 @@
     </div>
 
 
-    <jsp:include page="/WEB-INF/common/footer.jsp"/>
+    <jsp:include page="/WEB-INF/common/footer.jsp" />
 
 
 </body>
@@ -323,19 +190,20 @@
                     donateMessage: "",
                     customAmount: null,
                     userInfo: {},
-                    membership:{},
-                    termsInfo:[],
+                    membership: {},
+                    termsInfo: [],
                     donationId: null,
                     showTerms: false,
                     showPrivacyPolicy: false,
                     isMembership: false,
                     isMembershipDonation: false,
                     isAnonymous: false,
-                    userPoint:0,
-                    usedPoint:0,
-                    discountPoint:0,
-                    remainingAmount:0,
-                    totalAmount:0
+                    userPoint: 0,
+                    usedPoint: 0,
+                    discountPoint: 0,
+                    remainingAmount: 0,
+                    totalAmount: 0,
+                    membershipAmount: 5000
                 };
             },
             computed: {
@@ -379,13 +247,14 @@
                         success: function (data) {
                             console.log("userInfo >>> ", data.user);
                             self.userInfo = data.user;
-                            self.fnMembership();
+                            self.fnValidMembership();
                             self.fnGetPoint();
 
                         }
                     });
                 },
-                fnValidMembership:function(){
+                fnValidMembership: function () {
+                    // 멤버십 활성화 여부 확인
                     var self = this;
                     var nparmap = {
                         userId: self.userInfo.userId
@@ -397,14 +266,13 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("validMembership >>> ", data.result);
-                            if(data.result === "success"){
+                            if (data.result === "success") {
                                 self.fnMembership();
-                                self.isMembership = true;
-                            } 
+                            }
                         }
                     });
                 },
-                fnMembership(){
+                fnMembership() {
                     var self = this;
                     var nparmap = {
                         userId: self.userInfo.userId
@@ -416,13 +284,14 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("membershipInfo >>> ", data.info);
-                            if(data.result === "success"){
+                            if (data.result === "success") {
                                 self.membership = data.info;
-                            } 
+                                self.isMembership = true;
+                            }
                         }
                     });
                 },
-                fnGetTerms(){
+                fnGetTerms() {
                     var self = this;
                     var nparmap = {
                         category: "D"
@@ -434,9 +303,9 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("termsInfo >>> ", data.list);
-                            if(data.result === "success"){
+                            if (data.result === "success") {
                                 self.termsInfo = data.list;
-                            } 
+                            }
                         }
                     });
                 },
@@ -450,7 +319,7 @@
                         data: params,
                         success: function (data) {
                             self.userPoint = parseInt(data.point.currentPoint);
-                            console.log("보유포인트 >>> ",data.result);
+                            console.log("보유포인트 >>> ", data.result);
                         }
                     });
                 },
@@ -458,9 +327,9 @@
                     this.isAnonymous = !this.isAnonymous;
                 },
                 checkMembershipDonation() {
-                    if(this.membership.donationYn === 'Y'){
+                    if (this.membership.donationYn === 'Y') {
                         alert("이번달은 이미 멤버십 후원 기능을 이용하셨습니다. \n후원자님의 따듯한 마음에 감사드립니다.");
-                        
+
                         setTimeout(() => {
                             this.isMembershipDonation = false;
                         }, 0);
@@ -483,10 +352,10 @@
                     }
                 },
                 validateCustomAmount() {
-                    if (this.donateAmount < 1000) {
-                        alert("최소 금액은 1,000원 이상입니다.");
-                        this.donateAmount = 1000;
-                        this.customAmount = "1,000";
+                    if (this.donateAmount < 100) {
+                        alert("최소 금액은 100원 이상입니다.");
+                        this.donateAmount = 100;
+                        this.customAmount = "100";
                         this.calculateTotal();
                     }
                 },
@@ -523,8 +392,13 @@
                         checkbox.checked = isChecked;
                     });
                 },
-                fnPaymentCheck:function(){
+                fnPaymentCheck: function () {
                     var self = this;
+
+                    if(self.userInfo == null){
+                        alert("로그인이 필요한 기능입니다. \n로그인 페이지로 이동합니다.");
+                        window.location.href = "/user/login.do";
+                    }
 
                     var policyChecked = document.querySelector("input[name='policyCheck']").checked;
                     var checkboxes = document.querySelectorAll("input[name='agree']");
@@ -539,13 +413,13 @@
                         return;
                     }
 
-                    if(self.usedPoint != 0){
+                    if (self.usedPoint != 0) {
                         self.fnPointCheck();
                     } else {
                         self.fnPayment();
                     }
                 },
-                fnPointCheck(){
+                fnPointCheck() {
                     let self = this;
                     let params = { userId: self.userInfo.userId };
                     $.ajax({
@@ -554,7 +428,7 @@
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            if(self.userPoint != data.point.currentPoint){
+                            if (self.userPoint != data.point.currentPoint) {
                                 alert("보유 포인트에 변동이 있습니다. 확인 후 다시 시도해주세요.");
                                 self.fnGetPoint();
                                 self.$nextTick(() => {
@@ -571,31 +445,31 @@
                     let self = this;
 
                     let amount = self.totalAmount;
-                    
-                    if(self.usedPoint > 0){
+
+                    if (self.usedPoint > 0) {
                         amount = self.remainingAmount;
                     }
 
                     console.log("amount >>> ", amount);
 
                     let anonymousYn = self.isAnonymous ? "Y" : "N";
-                    
-                    if(self.isMembershipDonation){
+
+                    if (self.isMembershipDonation) {
                         let donation = {
                             centerId: self.centerId,
-                            amount: 5000,
+                            amount: self.membershipAmount,
                             message: self.donateMessage,
                             userId: self.userInfo.userId,
                             anonymousYn: anonymousYn,
-                            donationYn:"Y",
-                            option:"membership"
+                            donationYn: "Y",
+                            option: "membership"
                         };
                         self.fnMembershipDonation(donation);
 
-                    } else if(self.remainingAmount == 0){
+                    } else if (self.remainingAmount == 0) {
                         // 포인트 결제
                         let merchantUid = "point_donation_" + new Date().getTime();
-                        
+
                         let paymentData = {
                             merchant_uid: merchantUid,
                             name: self.info.centerName + " 후원 포인트 결제",
@@ -604,19 +478,17 @@
                             status: "paid",
                             card_quota: null
                         };
-                        alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
                         self.fnDonation(paymentData, self.totalAmount, anonymousYn);
-                        self.fnUsePoint();
 
                     } else {
                         // 결제 진행
-    
+
                         if (typeof IMP === 'undefined') {
                             console.error('IMP is not initialized');
                             return;
                         }
 
-                        console.log("결제 금액 >>> ",amount);
+                        console.log("결제 금액 >>> ", amount);
 
                         IMP.request_pay({
                             channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
@@ -628,7 +500,6 @@
                             buyer_tel: self.userInfo.phoneNumber,
                         }, function (rsp) {
                             if (rsp.success) {
-                                alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
                                 self.fnDonation(rsp, self.totalAmount, anonymousYn);
                                 // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
                                 console.log("결제 정보 >>> ", rsp);
@@ -639,23 +510,23 @@
                         });
                     }
                 },
-                fnPaymentHistory: function (rsp,amount) {
+                fnPaymentHistory: function (rsp, amount) {
                     let self = this;
 
                     let paymentMethod = "";
                     if (rsp.pay_method == "card" && self.usedPoint == 0) {
                         paymentMethod = rsp.pay_method + "-" + rsp.card_name;
-                    } else if(rsp.pay_method == "card" && self.usedPoint > 0){
+                    } else if (rsp.pay_method == "card" && self.usedPoint > 0) {
                         paymentMethod = rsp.pay_method + "-" + rsp.card_name + " + point";
                     } else {
                         paymentMethod = rsp.pay_method;
                     }
-                    
+
                     console.log("paymentMethod >>> ", paymentMethod);
                     console.log("fnPaymentHistory >> self.donationId >>> ", self.donationId);
 
                     var nparmap = {
-                        option:"donation",
+                        option: "donation",
                         paymentCode: rsp.merchant_uid,
                         description: rsp.name,
                         amount: amount,
@@ -668,8 +539,8 @@
                         orderId: null,
                         donationId: self.donationId,
                         userId: self.userInfo.userId,
-                        usedPoint : self.usedPoint,
-                        membershipId:null
+                        usedPoint: self.usedPoint,
+                        membershipId: null
                     };
                     $.ajax({
                         url: "/payment.dox",
@@ -678,15 +549,15 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("결제 정보 저장 여부 >>> ", data.result);
-                            self.goToMain();
                             self.fnUsePoint();
+                            pageChange("/donation/complete.do", { userId: self.userInfo.userId, donationId: self.donationId });
                         }
                     });
                 },
                 fnDonation: function (rsp, amount, anonymousYn) {
                     var self = this;
                     var nparmap = {
-                        option:"donation",
+                        option: "donation",
                         centerId: self.centerId,
                         amount: amount,
                         message: self.donateMessage,
@@ -710,6 +581,15 @@
                 },
                 fnMembershipDonation: function (donation) {
                     var self = this;
+                    let merchantUid = "membership_donation_" + new Date().getTime();
+                    let paymentData = {
+                        merchant_uid: merchantUid,
+                        name: self.info.centerName + " 멤버십 후원 결제",
+                        paid_amount: self.membershipAmount,
+                        pay_method: "membership_donate",
+                        status: "paid",
+                        card_quota: null
+                    };
                     var nparmap = donation;
                     $.ajax({
                         url: "/center/donate.dox",
@@ -718,9 +598,8 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("후원 정보 저장 여부 >>> ", data.result);
-                            alert("\'" + self.info.centerName + "\'에 후원해 주셔서 감사합니다! \n당신의 따뜻한 마음이 소중한 생명을 살립니다.");
                             self.donationId = data.donationId;
-                            self.fnPaymentHistory(donation, amount);
+                            self.fnPaymentHistory(paymentData, self.membershipAmount);
                         }
                     });
                 },
@@ -729,7 +608,7 @@
                     let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
                     console.log("사용 포인트 >> ", usedPoint);
-                    if(usedPoint == 0){
+                    if (usedPoint == 0) {
                         return;
                     }
 
