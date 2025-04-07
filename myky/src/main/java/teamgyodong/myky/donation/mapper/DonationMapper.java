@@ -18,4 +18,6 @@ public interface DonationMapper {
 
 	List<donation> selectDonationInfo(HashMap<String, Object> map);
 
+	donation selectUserDonationInfo(HashMap<String, Object> map);
+
 }

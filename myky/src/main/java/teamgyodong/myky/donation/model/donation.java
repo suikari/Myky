@@ -18,4 +18,6 @@ public class donation {
 	private String message;
 	private String userId;
 	private String anonymousYn;
+	
+	private String nickName;
 }

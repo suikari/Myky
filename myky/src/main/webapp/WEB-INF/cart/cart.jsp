@@ -7,19 +7,9 @@
     <title>멍냥꽁냥 장바구니</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/cart/cart.css" />
 	
     <style>
-        .container { max-width: 900px; margin: auto; padding: 20px; }
-        h2 { text-align: center; }
-        .cartTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .cartTable th, .cartTable td { padding: 10px; border: 1px solid #ddd; text-align: center; }
-        .cartTable th { background: #f5f5f5; }
-        .quantityBtn { cursor: pointer; padding: 5px 10px; }
-        .removeBtn { background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; }
-        .orderBtn { width: 100%; padding: 10px; background: #FF8C42; color: white; font-size: 16px; border: none; cursor: pointer; margin-top: 20px; }
-        .orderTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .orderTable th, .orderTable td {  padding: 12px; border: 1px solid #ddd; text-align: center; }
-        .orderTable th { background: #f5f5f5; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -27,7 +17,7 @@
  
 
 
-    <div id="app" class="container">
+    <div id="app" class="cartContainer">
         <h2>장바구니</h2>
         <table class="cartTable">
             <thead>
@@ -65,7 +55,7 @@
         </table>
 
         <h3>주문 상품</h3>
-        <table class="orderTable">
+        <table class="cartOrderTable">
             <thead>
                 <tr>
                     <th>상품 이미지</th>
@@ -102,7 +92,7 @@
         <h2 v-else>
             <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
         </h2>
-        <button class="orderBtn" @click="orderItems">주문하기</button>
+        <button class="cartOrderBtn" @click="orderItems">주문하기</button>
     </div>
 
 

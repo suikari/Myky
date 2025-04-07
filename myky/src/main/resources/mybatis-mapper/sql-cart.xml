@@ -168,7 +168,7 @@
 		into order_details (order_detail_id, product_id, quantity, price, order_id)
 		values
 	        (
-				order_details_seq.nextval,
+				get_order_details_id(),
 				#{order.productId},
 	            #{order.quantity},
 	            #{order.price},
@@ -238,8 +238,9 @@
 	<select id="getPartnerCount" parameterType="hashmap" resultType="int">
 	    select count(*) from partner_detail
 	    where 1=1
-	    <if test="searchkeyword != null and searchkeyword != ''">
-	    	and name like '%' || #{searchkeyword} || '%' or address like '%' || #{searchkeyword} || '%'
+		<if test="searchKeyword != null and searchKeyword != ''">
+		and (name like '%' || #{searchKeyword} || '%'
+		or address like '%' || #{searchKeyword} || '%')
 		</if>
 	</select>
 	

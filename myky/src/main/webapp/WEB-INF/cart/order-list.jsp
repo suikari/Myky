@@ -9,58 +9,10 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-	
+    <link rel="stylesheet" type="text/css" href="/css/cart/cart.css" />
+    
     <style>
-    .order-body {font-family: 'Arial', sans-serif;background-color: #f4f7fc;}
-    .order-container {max-width: 1280px;margin: 0 auto;padding: 20px;}
-    .order-container h2 {text-align: center; margin: 50px;}
-    .order-history {background: #ffffff;padding: 30px;border-radius: 10px;box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);}
-    .order-history__filter {display: flex;align-items: center;gap: 15px;margin-bottom: 20px;flex-wrap: wrap;}
-    .order-history__button {background: #ffaf7d;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;transition: background 0.3s, transform 0.2s;font-size: 14px;}
-    .order-history__button:hover {background: #f1a373;transform: scale(1.05);}
-    .order-history__button:active {transform: scale(1);}
-    .order-history__input, .order-history__select {padding: 8px 12px;border: 1px solid #ccc;border-radius: 5px;font-size: 14px;transition: border-color 0.3s;}
-    .order-history__input:focus, .order-history__select:focus {border-color: #FF8C42;outline: none;}
-    .order-history__table {width: 100%;border-collapse: collapse;margin-top: 20px;background-color: #ffffff;border-radius: 8px;overflow: hidden;}
-    .order-history__table th, .order-history__table td {border: 1px solid #ddd;padding: 12px;text-align: center;}
-    .order-history__table th {background-color: #ffaf7d;color: white;font-weight: bold;}
-    .order-history__table td {background-color: #f9f9f9;}
-    .order-history__table tr:hover {background-color: #f1f1f1;}
-    .order-history__details-button {background-color: #ffbc93;color: white;border: none;padding: 8px 16px;border-radius: 5px;cursor: pointer;transition: background 0.3s;font-size: 14px;}
-    .order-history__details-button:hover {background-color: #f1a373;}
-    .order-history__details {background-color: #f1f1f1;padding: 20px;border-radius: 8px;margin-top: 10px;text-align: left;font-size: 14px;}
-    .order-history__details hr {margin: 15px 0;}
-    .order-history__details-table {width: 100%;border-collapse: collapse;margin-top: 10px;}
-    .order-history__details-table th, .order-history__details-table td {border: 1px solid #ddd;padding: 8px 12px;text-align: left;}
-    .order-history__details-table th {background-color: #fff0e4;font-weight: normal;color: #333;}
-    .order-history__details-table td {background-color: #fff;}
-    .order-date {font-size: 18px;font-weight: bold;background: #e9ecef;padding: 10px;margin-top: 20px;border-radius: 8px;color: #333;display: inline-block;}
-    .order-id {font-weight: bold;font-size: 16px;margin-top: 10px;}
-    .order-edit-form {background-color: #fff;padding: 20px;border: 1px solid #ddd;border-radius: 5px;box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);}
-    .order-input {width: 100%;padding: 8px;margin: 5px 0;border: 1px solid #ccc;border-radius: 4px;font-size: 14px;}
-    .order-input.short {width: 80px;text-align: center;}
-    .order-button {background-color: #ffaf7d;color: white;padding: 8px 12px;border: none;border-radius: 4px;cursor: pointer;font-size: 14px; margin: 5px 20px 5px 0;}
-    .order-button:hover {background-color: #f1a373;}
-    .add-to-cart-button {background-color: white;color: black;border: 1px solid #ccc;padding: 5px 10px;border-radius: 5px;cursor: pointer;transition: all 0.3s ease;}
-    .add-to-cart-button:hover {background-color: #f5f5f5;}
-    .added-to-cart {background-color: #ffaf7d !important;color: white !important;border: 1px solid #ccc !important;}
-    .cart-message {position: fixed;top: 50%;left: 50%;transform: translateX(-50%);background-color: rgba(255, 194, 154, 0.9);color: white;padding: 10px 20px;border-radius: 5px;font-size: 14px;transition: opacity 0.5s ease-in-out;opacity: 1;}
-    .cart-message.fade-out {opacity: 0;}
-    @keyframes fadeOut {0% { opacity: 1; }100% { opacity: 0; }}
-    .exchange-return-popup-overlay {position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.5);display: flex;justify-content: center;align-items: center;z-index: 1000;}
-    .exchange-return-popup-container {background: #fff;padding: 20px;border-radius: 8px;width: 500px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);text-align: center;}
-    .exchange-return-popup-container h3 {margin-top: 30px;}
-    .exchange-return-radio {display: inline-block;margin: 10px;font-size: 16px;}
-    .exchange-return-checkbox {display: flex;align-items: center;margin: 0;}
-    .exchange-return-box {padding: 5px;margin: 5px 40px;}
-    .exchange-return-select {width: 400px;padding: 8px;margin-top: 5px;border: 1px solid #ccc;border-radius: 5px;}
-    .exchange-return-textarea {width: 400px;height: 80px;padding: 8px;border: 1px solid #ccc;border-radius: 5px;resize: none;margin-top: 5px;}
-    .exchange-return-notice {width: 450px;background: #f8f8f8;padding: 10px;margin: 15px auto;border-left: 4px solid #ff6600;font-size: 14px; text-align: left;}
-    .exchange-return-agreement {display: flex;align-items: center;justify-content: center;margin: 10px 0;}
-    .exchange-return-submit {background: #007aff;color: white;border: none;padding: 10px;width: 100%;border-radius: 5px;cursor: pointer;margin-top: 10px;}
-    .exchange-return-submit:disabled {background: #ccc;cursor: not-allowed;}
-    .exchange-return-close {background: #ddd;color: black;border: none;padding: 10px;width: 100%;border-radius: 5px;cursor: pointer;margin-top: 5px;}
-    .disabled-item {color: gray;text-decoration: line-through;cursor: not-allowed;}
+    
     </style>
 </head>
 <body>
@@ -92,7 +44,7 @@
                 <!-- 주문 내역 테이블 -->
                 <div v-for="(ordersByOrderId, date) in groupedOrders" :key="date">
                     <div class="order-date">{{ date }}</div>
-                    <div v-for="(orders, orderId) in ordersByOrderId" :key="orderId">
+                    <div v-for="(orders, orderId) in ordersByOrderId" :key="orderId" :id="'order-' + orderId">
                         <div class="order-id">주문번호: {{ orderId }}</div>
                         <table class="order-history__table">
                             <thead>
@@ -284,8 +236,8 @@
             data() {
                 return {
                     sessionId:"${sessionId}",
+                    focusOrderId:"${map.orderId}",
                     userInfo:{},
-                    orderId:"${map.orderId}",
                     orderList: [],
                     startDate: "",
                     endDate: "",
@@ -375,6 +327,13 @@
                     },
                     deep: true,
                     immediate: true
+                },
+                orderList(newList) {
+                    if (this.focusOrderId && newList.length > 0) {
+                        this.$nextTick(() => {
+                            this.scrollToOrder(this.focusOrderId);
+                        });
+                    }
                 }
             },
             methods: {
@@ -713,11 +672,30 @@
                             }
                         }
                     });
-
+                },
+                scrollToOrder(orderId) {
+                    console.log("🔍 scrollToOrder 실행됨. orderId:", orderId);
+                    const target = document.getElementById('order-' + orderId);
+                    console.log("🎯 찾은 DOM 엘리먼트:", target);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        target.classList.add('highlight-order');
+                        setTimeout(() => target.classList.remove('highlight-order'), 2000);
+                    } else {
+                        console.warn("⚠️ 해당 orderId를 가진 요소가 존재하지 않습니다.");
+                    }
                 }
             },
             mounted() {
                 this.fnUserInfo();
+
+                let orderId = this.focusOrderId;
+                console.log("✅ 넘어온 orderId:", orderId);
+                if (orderId) {
+                    this.$nextTick(() => {
+                        this.scrollToOrder(orderId);
+                    });
+                }
                 
             }
         });
