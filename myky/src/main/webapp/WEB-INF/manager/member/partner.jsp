@@ -233,39 +233,38 @@
 		    border-radius: 5px;
 		}
 		
+				
+		/* 수정 폼 스타일 - 부트스트랩 사용 */
+		.edit-form {
+		    display: flex;
+		    gap: 15px;
+		    background-color: #f8f9fa;
+		    padding: 10px;
+		    border-radius: 10px;
+		    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		}
 		
-/* 수정 폼 스타일 - 부트스트랩 사용 */
-.edit-form {
-    display: flex;
-    gap: 15px;
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 각 입력 요소가 가로로 꽉 차게 하기 위해 col 사용 */
-.edit-form .col {
-    flex: 1;  /* 모든 항목들이 고르게 넓어지도록 설정 */
-}
-
-/* 버튼 영역을 오른쪽 끝에 배치 */
-.edit-form .col.d-flex.justify-content-end {
-    flex: 0;
-}
-
-/* 스위치 토글 크기 */
-.form-check-input {
-    width: 40px;
-    height: 20px;
-}
-
-/* 버튼 글자 크기 맞추기 */
-.custom-btn {
-    font-size: 14px; /* 글자 크기를 텍스트에 맞게 조정 */
-    padding: 5px 15px; /* 적당한 여백을 설정 */
-    text-align: center;
-}
+		/* 각 입력 요소가 가로로 꽉 차게 하기 위해 col 사용 */
+		.edit-form .col {
+		    flex: 1;  /* 모든 항목들이 고르게 넓어지도록 설정 */
+		}
+		
+		/* 버튼 영역을 오른쪽 끝에 배치 */
+		.edit-form .col.d-flex.justify-content-end {
+		    flex: 0;
+		}
+		
+		/* 스위치 토글 크기 */
+		.form-check-input {
+		    width: 40px;
+		    height: 20px;
+		}
+		/* 버튼 글자 크기 맞추기 */
+		.custom-btn {
+		    font-size: 14px; /* 글자 크기를 텍스트에 맞게 조정 */
+		    padding: 5px 15px; /* 적당한 여백을 설정 */
+		    text-align: center;
+		}
 
 		/* 페이지 버튼 기본 스타일 */
 		.board-page-btn {
@@ -339,10 +338,10 @@
 						    <!-- N개씩 보기 -->
 						    <div class="col-auto">
 						        <select v-model="pageSize" class="form-select board-select" @change="fnMainList">
-						            <option value="5">5개씩</option>
-						            <option value="10">10개씩</option>
-						            <option value="15">15개씩</option>
 						            <option value="20">20개씩</option>
+ 						            <option value="50">50개씩</option>
+ 						            <option value="100">100개씩</option>
+						            
 						        </select>
 						    </div>
 						
@@ -370,12 +369,11 @@
 	                    <thead>
 	                        <tr>
 	                            <th>번호</th>
-	                            <th>이름</th>
-								<th>닉네임</th>
-	                            <th>이메일</th>
-	                            <th>가입일</th>
-	                            <th>상태</th>
-								<th>멤버쉽</th>
+	                            <th>시설명</th>
+	                            <th>주소</th>
+								<th>전화번호</th>
+	                            <th>오픈시간</th>
+	                            <th>분류</th>
 	                            <th>관리</th>
 	                        </tr>
 	                    </thead>
@@ -383,63 +381,105 @@
 	                    	<template v-for="(member, index) in members" >
 	                        <tr >
 	                            <td>{{ index + 1 }}</td>
-	                            <td>{{ member.userName }}</td>
-								<td>{{ member.nickName }}</td>								
-	                            <td>{{ member.email }}</td>
-	                            <td>{{ member.createdAt }}</td>
+	                            <td>{{ member.name }}</td>
+	                            <td>{{ member.address }}</td>
+								<td>{{ member.phoneNumber }}</td>								
+	                            <td>{{ member.openingHours }}</td>
+	                            <td>{{ getCategoryLabel(member.categoryCode) }}</td>
 	                            <td>
-	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
-	                                    {{ member.DeleteYn === 'N' ? '회원' : '탈퇴회원' }}
-	                                </span>
-	                            </td>
-								<td>
-								    <span :class="member.membershipType ? 'status-active' : 'status-inactive'">
-								        {{ member.membershipType ? '멤버쉽' : '일반회원' }}
-								    </span>
-								</td>
-	                            <td>
-           							<button class="btn-edit me-2" @click="fnEdit(member.userId)">수정</button>
+	                                <button class="btn-edit"  @click="fnEdit(member.partnerdetailId)">수정</button>
 	                                <!-- <button class="btn-delete">삭제</button> -->
 	                            </td>
 	                        </tr>
 	                        
                             <!-- 토글되는 수정 입력란 -->
-							<tr v-if="selectedMemberId === member.userId">
-								<td colspan="8">
-								    <div class="edit-form d-flex align-items-center p-3 border rounded">
-								        <!-- 이름 입력 필드 -->
-								        <div class="col">
-								            <label for="userName" class="form-label">이름:</label>
-								            <input type="text" id="userName" v-model="editData.userName" class="form-control">
-								        </div>
-								         <div class="col">
-								            <label for="userName" class="form-label">보유 포인트 : {{currentPoint}}</label>
-								            <button class="btn btn-primary me-2 custom-btn" @click="FnAddPoint">포인트 수정</button>
-								        </div>
-										<!-- 탈퇴 여부 토글 스위치 -->
-								        <div class="col-auto d-flex align-items-center">
-								            <label for="deleteYn" class="form-label me-2">회원 상태:</label>
-								            <div class="form-check form-switch">
-								                <input class="form-check-input" type="checkbox" id="deleteYn" v-model="editData.DeleteYn" 
-								                    true-value="N" false-value="Y">
-								            </div>
-								        </div>
-								
-								        <!-- 저장 및 취소 버튼 -->
-								        <div class="col-auto d-flex justify-content-end">
-								            <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
-								            <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
-								        </div>
-								    </div>
-								</td>
-						    </tr> 
+							<tr v-if="selectedMemberId === member.partnerdetailId">
+							    <td colspan="8">
+							        <div class="edit-form d-flex flex-column gap-3 p-3 border rounded">
+							            <div class="d-flex gap-3">
+							                <!-- 카테고리 선택 -->
+							                <div class="col">
+							                    <label for="editCategory" class="form-label">카테고리:</label>
+							                    <select id="editCategory" v-model="editData.categoryCode" class="form-select">
+							                        <option value="1">숙소</option>
+							                        <option value="2">식당</option>
+							                        <option value="3">관광지</option>
+							                        <option value="4">편의시설</option>
+							                    </select>
+							                </div>
+							                <!-- 이름 -->
+							                <div class="col">
+							                    <label for="editName" class="form-label">이름:</label>
+							                    <input type="text" id="editName" v-model="editData.name" class="form-control">
+							                </div>
+							                <!-- 전화번호 -->
+							                <div class="col">
+							                    <label for="editPhone" class="form-label">전화번호:</label>
+							                    <input type="text" id="editPhone" v-model="editData.phoneNumber" class="form-control">
+							                </div>
+							            </div>
+							
+							            <div class="d-flex gap-3">
+							                <!-- 주소 -->
+							                <div class="col">
+							                    <label for="editAddress" class="form-label">주소:</label>
+							                    <input type="text" id="editAddress" v-model="editData.address" class="form-control">
+							                </div>
+							                <!-- 웹사이트 -->
+							                <div class="col">
+							                    <label for="editWebsite" class="form-label">웹사이트:</label>
+							                    <input type="text" id="editWebsite" v-model="editData.websiteUrl" class="form-control">
+							                </div>
+							                <!-- 예약 URL -->
+							                <div class="col">
+							                    <label for="editReservation" class="form-label">예약 URL:</label>
+							                    <input type="text" id="editReservation" v-model="editData.reservationUrl" class="form-control">
+							                </div>
+							            </div>
+							
+							            <div class="d-flex gap-3">
+							                <!-- 운영시간 -->
+							                <div class="col">
+							                    <label for="editOpeningHours" class="form-label">운영시간:</label>
+							                    <input type="text" id="editOpeningHours" v-model="editData.openingHours" class="form-control">
+							                </div>
+							                <!-- 정기휴일 -->
+							                <div class="col">
+							                    <label for="editHoliday" class="form-label">정기휴일:</label>
+							                    <input type="text" id="editHoliday" v-model="editData.regularHoliday" class="form-control">
+							                </div>
+							                <!-- 좌표 nx -->
+							                <div class="col">
+							                    <label for="editNx" class="form-label">X 좌표 (nx):</label>
+							                    <input type="text" id="editNx" v-model="editData.nx" class="form-control">
+							                </div>
+							                <!-- 좌표 ny -->
+							                <div class="col">
+							                    <label for="editNy" class="form-label">Y 좌표 (ny):</label>
+							                    <input type="text" id="editNy" v-model="editData.ny" class="form-control">
+							                </div>
+							            </div>
+							
+							            <!-- 저장 및 취소 버튼 -->
+							            <div class="d-flex justify-content-end mt-3">
+							                <button class="btn btn-primary me-2 custom-btn" @click="fnSave">저장</button>
+							                <button class="btn btn-secondary custom-btn" @click="selectedMemberId = null">취소</button>
+							            </div>
+							        </div>
+							    </td>
+							</tr>
     						</template>
 	                    </tbody>
 	                </table>
-	                
-					<div class="d-flex justify-content-center align-items-center mt-3">
-					    <!-- 페이지네이션 버튼 -->
-					    <div>
+						                
+					<div class="d-flex justify-content-between align-items-center mt-3">
+				    <!-- 생성 버튼 왼쪽에 배치 -->
+				    	<div>
+					        <button class="btn btn-success" @click="isCreating = !isCreating">생성</button>
+					    </div>
+					
+					    <!-- 페이지네이션 버튼 중앙에 배치 -->
+					    <div class="d-flex justify-content-center">
 					        <!-- 이전 페이지 버튼 -->
 					        <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
 					            <i class="bi bi-chevron-left"></i>
@@ -479,6 +519,73 @@
 					    </div>
 					</div>
 					
+					<!-- 제휴사 등록 창 (토글) -->
+					<div v-if="isCreating" class="edit-form d-flex flex-column p-3 mt-3 border rounded">
+					    <div class="d-flex gap-3">
+					        <div class="col">
+					            <label for="categoryCode" class="form-label">카테고리:</label>
+					            <select id="categoryCode" v-model="newHospital.categoryCode" class="form-select">
+					                <option value="">선택하세요</option>
+					                <option value="1">숙소</option>
+					                <option value="2">식당</option>
+					                <option value="3">관광지</option>
+					                <option value="4">편의시설</option>
+					            </select>
+					        </div>
+					        <div class="col">
+					            <label for="name" class="form-label">시설명:</label>
+					            <input type="text" id="name" v-model="newHospital.name" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="phoneNumber" class="form-label">전화번호:</label>
+					            <input type="text" id="phoneNumber" v-model="newHospital.phoneNumber" class="form-control">
+					        </div>
+					    </div>
+					
+					    <div class="d-flex gap-3 mt-3">
+					        <div class="col">
+					            <label for="address" class="form-label">주소:</label>
+					            <input type="text" id="address" v-model="newHospital.address" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="websiteUrl" class="form-label">웹사이트 URL:</label>
+					            <input type="url" id="websiteUrl" v-model="newHospital.websiteUrl" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="reservationUrl" class="form-label">예약 URL:</label>
+					            <input type="url" id="reservationUrl" v-model="newHospital.reservationUrl" class="form-control">
+					        </div>
+					    </div>
+					
+					    <div class="d-flex gap-3 mt-3">
+					        <div class="col">
+					            <label for="openingHours" class="form-label">영업시간:</label>
+					            <input type="text" id="openingHours" v-model="newHospital.openingHours" class="form-control" placeholder="예: 09:00 ~ 18:00">
+					        </div>
+					        <div class="col">
+					            <label for="regularHoliday" class="form-label">정기휴일:</label>
+					            <input type="text" id="regularHoliday" v-model="newHospital.regularHoliday" class="form-control" placeholder="예: 일요일">
+					        </div>
+					    </div>
+					
+					    <div class="d-flex gap-3 mt-3">
+					        <div class="col">
+					            <label for="nx" class="form-label">위도 (nx):</label>
+					            <input type="text" id="nx" v-model="newHospital.nx" class="form-control">
+					        </div>
+					        <div class="col">
+					            <label for="ny" class="form-label">경도 (ny):</label>
+					            <input type="text" id="ny" v-model="newHospital.ny" class="form-control">
+					        </div>
+					    </div>
+					
+					    <!-- 저장 및 취소 버튼 -->
+					    <div class="d-flex justify-content-end mt-3">
+					        <button class="btn btn-primary me-2 custom-btn" @click="fnCreate">저장</button>
+					        <button class="btn btn-secondary custom-btn" @click="isCreating = false">취소</button>
+					    </div>
+					</div>
+						
 	            </div>
 
 
@@ -499,16 +606,39 @@
 						menu : '',
 						submenu : '',  
 						members : [],
+						users : [],
 						selectedMemberId : null,
 				        editData: {
-				            userName : '',
-				            DeleteYn : '',
+				        	name : '',
+				            userId : '',
 				        },
-				        currentPoint : 0,
 	                    searchOption: 'userId',
 	                    page: 1,
-	                    pageSize: 5,
+	                    pageSize: 20,
 	                    keyword: '',
+	                    isCreating: false, // Vet 등록 창 표시 여부
+	                    newHospital: {
+	                        categoryCode: '',
+	                        name: '',
+	                        phoneNumber: '',
+	                        address: '',
+	                        websiteUrl: '',
+	                        reservationUrl: '',
+	                        openingHours: '',
+	                        lunchBreak: '',
+	                        nx: '',
+	                        ny: ''
+	                    },
+				        editprveid : '',
+	                    getCategoryLabel(code) {
+                		    const categoryMap = {
+                		      '1': '숙소',
+                		      '2': '식당',
+                		      '3': '관광지',
+                		      '4': '편의시설'
+                		    };
+                		    return categoryMap[code] || '기타';
+                	 	},
                      };
                  },
                 computed: {
@@ -524,49 +654,49 @@
                                 keyword: self.keyword,
                     	};
                     	$.ajax({
-                    		url: "/admin/memberList.dox",
+                    		url: "/admin/selectPartnerList.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("main",data);
-								self.members = data.User;
-                                if (data.count && data.count.cnt !== undefined) {
+								self.members = data.Partner;    
+								
+								if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                     console.log("1!", self.index);
 
                                 } else {
-                                    self.index = 0;
+                                    self.index = 1;
                                     console.warn("count 정보 없음!", data);
-                                }		
+                                }	
+		                    	
                     		}
                     	});
                     },
-                    fnEdit(userId) {
+                    fnEdit(Id) {
                     	var self = this;
-
-                    	console.log("1",userId);
-                        if (self.selectedMemberId === userId) {
+						
+                    	console.log("1",Id);
+                        if (self.selectedMemberId === Id) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",userId);
+                        	console.log("2",Id);
 
                         } else {
-                            const member = self.members.find(m => m.userId === userId);
+                            const member = self.members.find(m => m.partnerdetailId === Id);
                             self.editData = { ...member };  // 수정할 데이터 채우기
-                            self.selectedMemberId = userId;
-                        	console.log("3",userId);
-                        	self.getPoints(userId);
+                            self.editprveid = member.partnerdetailId;
+                            self.selectedMemberId = Id;
+                        	console.log("3",self.editData);
+
                         }
                     },
                     fnSave () {
                     	var self = this;
-                    	var nparmap = {
-                    			userId : self.selectedMemberId,
-    				            userName : self.editData.userName ,
-    				            DeleteYn : self.editData.DeleteYn,
-                    	};
+                    	console.log(self.editData);
+                    	var nparmap = self.editData;
                     	$.ajax({
-                    		url: "/admin/updateUser.dox",
+                    		url: "/admin/updatePartnerDetail.dox",
                     		dataType: "json",
                     		type: "POST",
                     		data: nparmap,
@@ -604,39 +734,37 @@
                         self.page = pageCnt;
                         self.fnMainList();
                     },
-                    getPoints : function(userId){
+                    fnCreate() {
                         let self = this;
+                        
                         let nparmap = {
-                            userId : userId,
+                        		categoryCode: self.newHospital.categoryCode || 1,
+                        		name: self.newHospital.name || ' ',
+                                phoneNumber: self.newHospital.phoneNumber || ' ',
+                                address: self.newHospital.address || ' ',
+                                websiteUrl: self.newHospital.websiteUrl || ' ',
+                                reservationUrl: self.newHospital.reservationUrl || ' ',
+                                openingHours: self.newHospital.openingHours || ' ',
+                                regularHoliday: self.newHospital.regularHoliday || ' ',
+                                nx: self.newHospital.nx || 0,
+                                ny: self.newHospital.ny || 0
                         };
+                        console.log("저장할 병원 데이터:", nparmap);
                         $.ajax({
-				        	url:"/point/current.dox",
-				        	dataType:"json",	
-				        	type : "POST", 
-				        	data : nparmap,
-				        	success : function(data) { 
-				        		console.log("11",data);
-                                self.currentPoint = data.point.currentPoint;
-				        	}
-				        });
-                    },
-                    FnAddPoint () {
-                    	
-                    	Swal.fire({
-                    		  title: "포인트 수정값을 입력하세요",
-                    		  input: "number",
-                    		  icon: "info",
-                    		  showCancelButton: true,
-                    		  confirmButtonColor: "#3085d6",
-                    		  cancelButtonColor : "#d33",
-                    		  confirmButtonText : "수정",
-                    		  cancelButtonText : "취소", 
-                    		}).then((result) => {
-                    		  if (result.isConfirmed) {
-                    		    
-                    		  }
-                    		});
+                            url: "/admin/insertPartnerDetail.dox",  // ← 적절한 URL로 수정
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("등록 성공:", data);
+                                self.newHospital = {};            // 입력 폼 초기화
+                                self.fnMainList();                // 목록 새로고침
+                                self.isCreating = false;          // 폼 닫기
+                            }
+                        });
                     }
+                    
+                    
                 	
                 },
                 mounted() {
@@ -647,10 +775,12 @@
                     self.submenu = params.get("submenu") || "1";
 					self.fnMainList();
 
-                	
                 }
             });
             
             app.mount("#app");
             
     </script>
+
+
+

@@ -261,6 +261,17 @@ public class ManagerController {
 	}
 	
 	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/updatePartnerDetail.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String updatePartnerDetail(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.updatePartnerDetail(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/insertVet.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String insertVet(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -289,6 +300,18 @@ public class ManagerController {
 		
 		
 		resultMap = managerService.insertProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/insertPartnerDetail.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String insertPartnerDetail(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.insertPartnerDetail(map);
 		return new Gson().toJson(resultMap);
 	}
 	
@@ -332,6 +355,27 @@ public class ManagerController {
 		
 		
 		resultMap = managerService.selectAllOrderList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/admin/selectPartnerList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String selectPartnerList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.selectAllPartnerList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+	@RequestMapping(value = "/admin/UpdateAdminQna.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String UpdateAdminQna(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.UpdateAdminQna(map);
 		return new Gson().toJson(resultMap);
 	}
 	

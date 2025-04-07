@@ -403,7 +403,11 @@
                         <div class="board-title">후원내역</div>
                         <div class="board-div scroll" id="scrollBox">
                             <div v-for="post in donations" class="post-item">
-                                <div>{{ post.userId }} 님이 {{ post.centerName }} 에 </div>
+                                <div>
+                                <span  v-if="post.anonymousYn == 'N' ">{{ post.nickName }} </span>
+                                <span  v-if="post.anonymousYn == 'Y' "> 익명 </span>
+                                
+                                  님이 {{ post.centerName }} 에 </div>
                                 <div class="post-content">{{ post.amount }} 원을 후원 해주셨습니다.</div>
                                 <div class="post-content">{{ post.donationDate }}</div>
                             </div>
@@ -622,7 +626,7 @@
                         });
                     },
                     fnView(boardId) {
-                        location.href = "/board/view.do?boardId=" + boardId;
+                        location.href = "/board/view.do?category=A&boardId=" + boardId;
                     },
                     fnPView(productId) {
                         location.href = "/product/view.do?productId=" + productId;
