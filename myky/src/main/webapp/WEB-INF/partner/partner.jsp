@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko" class="map">
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -12,7 +12,7 @@
       <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css" rel="stylesheet">
       <link rel="stylesheet" type="text/css" href="/css/partner/partner.css">
     <title>첫번째 페이지</title>
-    
+   
 </head>
 <body>
     <jsp:include page="/WEB-INF/common/header.jsp" />
@@ -172,6 +172,7 @@
             keyword: "",
             websiteUrl : "",
             openingHours : "",
+            partnerKeyword: '',
             places: [],
             isFavoritesVisible: false,
             isLoggedIn: false,
@@ -747,13 +748,23 @@
                     self.favoritesList = data.favoriteList;
 
                     const keywordText = keyword.trim().toLowerCase();
+console.log("🔍 검색용 keywordText:", keywordText);
 
-self.partnerlist = (data.partnerlist || []).filter(partner => {
-    const name = partner.partnerName?.toLowerCase() || "";
-    const desc = partner.partnerDesc?.toLowerCase() || "";
-    return name.includes(keywordText) || desc.includes(keywordText);
+const filteredPartner = (data.partnerlist || []).filter(partner => {
+  return (
+    (partner.name && partner.name.toLowerCase().includes(keywordText)) ||
+    (partner.partnerDesc && partner.partnerDesc.toLowerCase().includes(keywordText)) ||
+    (partner.address && partner.address.toLowerCase().includes(keywordText))
+  );
 });
-console.log("📌 필터링된 제휴사 리스트:", self.partnerlist);
+
+// console.log("📌 필터링된 제휴사 리스트:", filteredPartner);
+// console.log("✅ partnerlist 원본 데이터 샘플:", data.partnerlist[0]);
+ self.partnerlist = filteredPartner;
+
+// console.log("📌 필터링된 제휴사 리스트:", filteredPartner);
+
+// console.log("📌 필터링된 제휴사 리스트:", self.partnerlist);
 
                     // ✅ 마커 추가
                     if (data) {
