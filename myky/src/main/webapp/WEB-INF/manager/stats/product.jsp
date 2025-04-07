@@ -16,9 +16,9 @@
         <div class="main-content">
             <h2>상품 판매 통계</h2>
             <div class="filters">
-                <input type="date" v-model="startDate" class="form-control">
+                <input type="date" v-model="startDate" class="form-control" @change="fetchSalesData" >
                 <span>~</span>
-                <input type="date" v-model="endDate" class="form-control">
+                <input type="date" v-model="endDate" class="form-control"  @change="fetchSalesData">
                 <button @click="fetchSalesData" class="btn btn-primary">조회</button>
             </div>
             <div class="card">
