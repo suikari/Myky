@@ -62,7 +62,7 @@ public interface UserMapper {
 
 	int selectOrderAllCnt(HashMap<String, Object> map);
 
-	Membership selectMembershipId(HashMap<String, Object> map);
+	List<Membership> selectMembershipId(HashMap<String, Object> map);
 
 	
 

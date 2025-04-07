@@ -51,50 +51,56 @@
                 border-radius: 100%;
             }
 
-            /* 전체 summary 박스 레이아웃 */
+            /* summary 전체 컨테이너 */
             .summary {
                 display: flex;
                 justify-content: space-between;
-                gap: 20px;
-                margin: 20px 0;
-                padding: 10px 0;
+                gap: 30px;
+                margin: 30px 0;
+                padding: 10px;
             }
 
-            /* 공통 summary item 스타일 */
+            /* 공통 summary item 박스 */
             .summary-item {
                 flex: 1;
-                padding: 25px 15px;
+                padding: 40px 20px;
                 text-align: center;
-                border-radius: 15px;
+                border-radius: 20px;
                 color: #fff;
-                font-size: 18px;
-                font-weight: 600;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-                line-height: 1.6;
-                letter-spacing: 0.5px;
+                font-size: 22px;
+                font-weight: 700;
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                line-height: 2;
+                letter-spacing: 0.8px;
             }
 
             /* 호버 효과 */
             .summary-item:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+                transform: translateY(-7px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
             }
 
-            /* 각 항목별 색상 커스터마이징 */
+            /* 아이콘 부분 강조 */
+            .summary-item::first-line {
+                font-size: 25px;
+            }
+
+
+            /* 개별 항목 배경 */
             .point-box {
-                background: linear-gradient(135deg, #FFD700, #FFA500);
-                /* 노랑 → 주황 */
+                background: linear-gradient(135deg, #FFD700, #ffa600de);
+                /* 금색 → 주황 */
             }
 
             .coupon-box {
-                background: linear-gradient(135deg, #8A2BE2, #BA55D3);
-                /* 보라 계열 */
+                background: linear-gradient(135deg, #8A2BE2, #DA70D6);
+                /* 진보라 → 라일락 */
             }
 
             .order-box {
                 background: linear-gradient(135deg, #00BFFF, #1E90FF);
-                /* 파랑 계열 */
+                /* 시원한 파랑톤 */
             }
 
             .main-content {
@@ -769,18 +775,24 @@
                     </div>
 
 
-
                     <div class="summary">
                         <div class="summary-item point-box">
-                            💰 현재 포인트 <br>{{formattedAmount(point.currentPoint)}}P
+                            💸
+                            현재 포인트
+                            {{ formattedAmount(point.currentPoint) }}P 💰
                         </div>
                         <div class="summary-item coupon-box">
-                            🎟 쿠폰<br>{{couponCnt}}개
+                            🎟
+                            쿠폰
+                            {{ couponCnt }} 개 ✨
                         </div>
                         <div class="summary-item order-box">
-                            📦 주문 수<br>{{orderAllCnt}} 회
+                            📦
+                            주문 수
+                            {{ orderAllCnt }} 회 🚚
                         </div>
                     </div>
+
                     <div class="main-content">
                         <aside class="sidebar">
 
@@ -839,7 +851,7 @@
                                         <span class="status-count">{{ orderCnt[0].orderCount }}</span>
                                     </div>
                                 </div>
-                                <div class="order-list" v-if="">
+                                <div class="order-list">
                                     <table class="order-table">
                                         <tr>
                                             <th>제품 사진</th>
@@ -910,10 +922,7 @@
                                             없습니다.</td>
                                     </tr>
                                 </table>
-                                <table class="cpoint-table">
 
-
-                                </table>
 
                                 <br>
 
@@ -1080,9 +1089,34 @@
                                             class="bgColer2" @click="fnPageMove2('next')">
                                             >
                                         </a>
+                            </div>
+
+
+                            <div v-if="activeTab === 'subscribe'" class="cpoint-page">
+                                <table class="cpoint-table">
+                                    <tr>
+                                        <th class="cpoint-header" style="text-align: center;">멤버쉽 내용</th>
+                                        <th class="cpoint-header" style="text-align: center;">구독 날짜</th>
+                                        <th class="cpoint-header" style="text-align: center;">만료 날짜</th>
+                                    </tr>
+                                    <tr v-for="item in membership">
+                                        <td style="text-align: center;">{{item.membershipType}}</td>
+                                        <td style="text-align: center;">{{item.renewalDate}}</td>
+                                        <td style="text-align: center;">{{item.expirationDate}}</td>
+
+                                    </tr>
+                                    <tr v-if="membership.length == 0">
+                                        <td colspan="3" style="text-align: center; padding-top : 20px;"> 멤버쉽 구독 내역이
+                                            없습니다.</td>
+                                    </tr>
+
+
+                                </table>
 
 
                             </div>
+
+
                             <div v-if="activeTab === 'donation'" class="comment-page">
                                 <div class="page-container">
                                     <div class="page-title"> 후원 내역 페이지</div>
@@ -1561,7 +1595,8 @@
                             success: function (data) {
                                 console.log("데이타 카운트", data.count);
                                 if (data.count > 0) {
-                                    self.ship = data.ship;
+                                    self.membership = data.ship;
+                                    console.log("ㅅ쉽", self.membership);
                                     self.membershipYn = "Y";
                                 } else {
                                     self.membershipYn = "N";

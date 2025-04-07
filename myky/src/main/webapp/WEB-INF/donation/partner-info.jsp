@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="partner-page">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,8 @@
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 	<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b11d0cfc04c4c20450d241190fb11da0"></script> -->
+    <link rel="stylesheet" type="text/css" href="/css/partner/partner.css" />
+
     <script>
         function loadKakaoMapScript() {
             if (window.kakao && window.kakao.maps) {
@@ -29,145 +31,18 @@
     </script>
 
     <style>
-    .partner-container {max-width: 1280px;margin: 0 auto;padding: 20px;}
-    .partner-list {padding: 20px;text-align: center;}
-    .partner-list__title {font-size: 24px;margin-bottom: 40px;}
-    .partner-grid {display: grid;grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));gap: 15px;}
-    .partner-card {background: #fffcfa;padding: 15px;border-radius: 10px;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);text-align: left;}
-    .partner-name {font-size: 18px;font-weight: bold;margin-bottom: 5px;}
-    .partner-address, .partner-phone, .partner-hours, .partner-holiday {font-size: 14px;color: #555;}
-    .map-modal {position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.5);display: flex;align-items: center;justify-content: center;z-index: 999;}
-    .map-container {background: #fff;border-radius: 12px;overflow: hidden;width: 80%;max-width: 500px;position: relative;padding-top: 40px;}
-    .map-close-button {position: absolute;top: 10px;right: 10px;width: 35px;height: 35px;background: white;color: black;font-size: 24px;border: 2px solid #ccc;border-radius: 50%;cursor: pointer;display: flex;align-items: center;justify-content: center;z-index: 1000;box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);}
-    .map-close-button:hover {background: #dadada;border-color: #575757;color: #575757;}
-    .map-button {margin-top: 10px;padding: 6px 12px;background: #FF8C42;color: white;border: none;border-radius: 6px;cursor: pointer;}
-    .map-button:hover {background: #e07b3e;}
-    .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 30px;
-}
-
-.pagination button {
-    background-color: #fff6f2;
-    border: 1px solid #ffcdb2;
-    color: #d46a3d;
-    padding: 8px 14px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-}
-
-.pagination button:hover:not(:disabled) {
-    background-color: #ffe4d3;
-    border-color: #ffa878;
-    color: #b4552a;
-}
-
-.pagination button.active {
-    background-color: #FF8C42;
-    color: white;
-    font-weight: bold;
-    border-color: #ff8c42;
-    box-shadow: 0 2px 6px rgba(255, 140, 66, 0.4);
-}
-
-.pagination button:disabled {
-    background-color: #f5f5f5;
-    color: #aaa;
-    border-color: #ddd;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-.partner-website a {
-    text-decoration: none;
-    color: #FF8C42;
-    font-weight: bold;
-}
-.partner-website a:hover {
-    color: #e07b3e;
-}
-.no-result {
-    margin-top: 30px;
-    font-size: 16px;
-    color: #888;
-}
-.category-buttons {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.category-buttons button {
-    margin: 5px;
-    padding: 8px 14px;
-    background-color: #FF8C42;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.category-buttons button:hover {
-    background-color: #e07b3e;
-}
-
-.category-buttons button.active {
-    background-color: #d16d2e;
-    font-weight: bold;
-}
-
-.partner-search-input {
-    padding: 8px 14px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    width: 220px;
-    outline: none;
-    transition: border-color 0.3s;
-    flex-shrink: 0;
-}
-
-.partner-search-button {
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color: #FF8C42;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    flex-shrink: 0;
-    z-index: 2;
-}
-
-.partner-search-input:focus {
-    border-color: #FF8C42;
-}
-
-.partner-search-button:hover {
-    background-color: #e07b3e;
-}
+    
     </style>
 </head>
-<body>
+<body class="partner-body">
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
  
-
 
     <div id="app" class="partner-container">
         <div class="partner-list">
             <h2 class="partner-list__title">제휴처 소개</h2>
-            <div>
-                <input type="text" v-model="searchKeyword" @keyup.enter="fnPartnerSearch" class="partner-search-input" placeholder="검색어 입력..." />
-                <button @click="fnPartnerSearch" class="partner-search-button">검색</button>
-            </div>
+            <input type="text" v-model="searchKeyword" @keyup.enter="fnPartnerSearch" class="partner-search-input" placeholder="검색어 입력..." />
+            <button @click="fnPartnerSearch" class="partner-search-button">검색</button>
             <div class="category-buttons">
                 <button @click="filterByCategory(null)">전체</button>
                 <button @click="filterByCategory(1)" :class="{ active: categoryCode === 1 }">숙소</button>
@@ -191,7 +66,7 @@
             <div class="no-result" v-else>
                 😿 검색 결과가 없습니다.
             </div>
-            <div class="pagination">
+            <div class="partner-pagination">
                 <button @click="fnPageMove('prev')" :disabled="page === 1">이전</button>
                 <button @click="fnBlockMove('prev')" :disabled="pageBlocks[0] === 1">«</button>
           
@@ -207,7 +82,7 @@
             <div v-if="showingMap" class="map-modal" @click.self="closeMap">
                 <div class="map-container">
                     <button @click="closeMap" class="map-close-button">&times;</button>
-                    <div id="map" style="width:100%;height:300px;"></div>
+                    <div id="partner-map" style="width:100%;height:350px;"></div>
                 </div>
             </div>
         </div>
@@ -307,7 +182,7 @@
                 showMap(partner) {
                     this.showingMap = true;
                     this.$nextTick(() => {
-                        const container = document.getElementById("map");
+                        const container = document.getElementById("partner-map");
                         const options = {
                         center: new kakao.maps.LatLng(partner.NY, partner.NX),
                         level: 3
