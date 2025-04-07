@@ -20,7 +20,7 @@ public interface BoardMapper {
 
 	int selectBoardCnt(HashMap<String, Object> map);
 
-	List<board> selectBoard(HashMap<String, Object> map);
+	board selectBoard(HashMap<String, Object> map);
 
 	void insertBoard(HashMap<String, Object> map);
 
