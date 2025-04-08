@@ -19,7 +19,7 @@
 
     <div id="app" class="cartContainer">
         <h2>장바구니</h2>
-        <table class="cartTable">
+        <table class="cartTable" v-if="cartItems.length > 0">
             <thead>
                 <tr>
                     <th><input type="checkbox" @click="fnAllCheck" :checked="selectCheck.length === cartItems.length"></th>
@@ -53,46 +53,56 @@
                 </tr>
             </tbody>
         </table>
+        <div v-else>
+            <div class="empty-cart-message">🛒 장바구니에 담긴 상품이 없습니다.</div>
+        </div>
 
-        <h3>주문 상품</h3>
-        <table class="cartOrderTable">
-            <thead>
-                <tr>
-                    <th>상품 이미지</th>
-                    <th>상품명</th>
-                    <th>가격</th>
-                    <th>수량</th>
-                    <th>총 금액</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in selectCartItems" :key="item.productId">
-                    <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
-                    <td v-else><img src="/img/product/product update.png" width="50"></td>
-                    <td>{{ item.productName }}</td>
-                    <td v-if="isMembership">{{ getDiscountPrice(item) }} 원</td>
-                    <td v-else>{{ item.price }} 원</td>
-                    <td>{{ item.quantity }}</td>
-                    <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
-                    <td v-else>{{ (item.price * item.quantity) }} 원</td>
-                </tr>
-            </tbody>
-        </table>
+        <div v-if="selectCartItems.length > 0">
+            <h3>주문 상품</h3>
+            <table class="cartOrderTable">
+                <thead>
+                    <tr>
+                        <th>상품 이미지</th>
+                        <th>상품명</th>
+                        <th>가격</th>
+                        <th>수량</th>
+                        <th>총 금액</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in selectCartItems" :key="item.productId">
+                        <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
+                        <td v-else><img src="/img/product/product update.png" width="50"></td>
+                        <td>{{ item.productName }}</td>
+                        <td v-if="isMembership">{{ getDiscountPrice(item) }} 원</td>
+                        <td v-else>{{ item.price }} 원</td>
+                        <td>{{ item.quantity }}</td>
+                        <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
+                        <td v-else>{{ (item.price * item.quantity) }} 원</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <h4 v-if="totalPrice < shippingFreeMinimum">
-            <span>배송비 : {{ formattedShippingFee }} 원 </span>
-        </h4>
-        <h4 v-else>
-            <span>배송비 : 무료 ! </span>
-        </h4>
-        <p>({{ shippingFreeMinimum.toLocaleString() }}원 이상 무료배송)</p>
-        <h2 v-if="totalPrice < shippingFreeMinimum">
-            <span>총 결제 금액: {{ formattedFinalPrice }} 원</span>
-        </h2>
-        <h2 v-else>
-            <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
-        </h2>
-        <button class="cartOrderBtn" @click="orderItems">주문하기</button>
+        <div v-if="selectCartItems.length > 0">
+            <h4 v-if="totalPrice < shippingFreeMinimum">
+                <span>배송비 : {{ formattedShippingFee }} 원 </span>
+            </h4>
+            <h4 v-else>
+                <span>배송비 : 무료 ! </span>
+            </h4>
+            <p>({{ shippingFreeMinimum.toLocaleString() }}원 이상 무료배송)</p>
+            <h2 v-if="totalPrice < shippingFreeMinimum">
+                <span>총 결제 금액: {{ formattedFinalPrice }} 원</span>
+            </h2>
+            <h2 v-else>
+                <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
+            </h2>
+            <button class="cartOrderBtn" @click="orderItems">주문하기</button>
+        </div>
+        <div v-else>
+            <button class="cartOrderBtn" @click="goToProductPage">쇼핑하러 가기</button>
+        </div>
     </div>
 
 
@@ -323,6 +333,9 @@
                             }
                         }
                     });
+                },
+                goToProductPage(){
+                    window.location.href = "/product/list.do";
                 }
             },
             mounted() {
