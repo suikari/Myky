@@ -99,10 +99,7 @@
 			refund_reason = #{reason},
 			refund_reason_detail = #{reasonDetail},
 			refund_request_date = sysdate
-		where order_id = #{orderId} and product_id in
-		<foreach item="productId" collection="productIds" open="(" separator="," close=")">
-			#{productId}
-		</foreach>
+		where order_detail_id = #{orderDetailId}
 	
 	</update>
 
@@ -117,6 +114,15 @@
 			updated_at = sysdate
 		where order_id = #{orderId} and user_id = #{userId}
 	
+	</update>
+	
+	<update id="decreaseQuantity" parameterType="hashmap">
+	
+		update order_details
+		set quantity = quantity - #{splitQuantity},
+			price = price - #{price}
+		where order_detail_id = #{orderDetailId}
+		
 	</update>
 	
 	<delete id="deleteCartProduct" parameterType="hashmap">
@@ -179,6 +185,20 @@
     	SELECT * FROM DUAL	
 	</insert>
 	
+	<insert id="insertPartialRefund" parameterType="hashmap">
+	
+		insert into order_details (
+			order_detail_id, product_id, quantity, price, order_id,
+		    refund_status, refund_request_date, refund_reason, refund_reason_detail
+		)
+		select
+		    order_details_seq.nextval, product_id, #{splitQuantity}, #{price}, order_id,
+		    #{refundStatus}, sysdate, #{reason}, #{reasonDetail}
+		from order_details
+		where order_detail_id = #{orderDetailId}
+		
+	</insert>
+	
 	<select id="findCart" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	   
 	    select cart_id from cart where user_id = #{userId}
@@ -193,6 +213,12 @@
 		join product p on ci.product_id = p.product_id
 		where c.cart_id = #{cartId} and ci.product_id = #{productId}
 	
+	</select>
+	
+	<select id="findTotalQuantity" resultType="int">
+	    
+	    select quantity from order_details where order_detail_id = #{orderDetailId}
+	    
 	</select>
 	
 	<select id="selectOrderInfo" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
@@ -219,7 +245,7 @@
 	
 	<select id="selectAllOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	   
-	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.product_id, od.quantity, od.price, od.refund_status
+	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.order_detail_id, od.product_id, od.quantity, od.price, od.refund_status
 	    from orders o
 	    join order_details od on o.order_id = od.order_id
 	    join (
@@ -228,9 +254,18 @@
 		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
 		) p on od.product_id = p.product_id
 	    where o.user_id = #{userId} and o.ordered_at between #{startDate} and TO_DATE('' || #{endDate} || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
-	    <if test="orderStatus != null and orderStatus != 'all'">
-		    and o.order_status = #{orderStatus}
-	    </if>
+	    <if test="orderStatuses != null and orderStatuses.size() > 0">
+			and o.order_status in 
+			<foreach collection="orderStatuses" item="status" open="(" separator="," close=")">
+				#{status}
+			</foreach>
+		</if>
+	    <if test="refundStatuses != null and refundStatuses.size() > 0">
+		    and od.refund_status in
+		    <foreach collection="refundStatuses" item="status" open="(" separator="," close=")">
+		        #{status}
+		    </foreach>
+		</if>
 	    order by o.ordered_at desc
 	
 	</select>

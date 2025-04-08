@@ -212,6 +212,23 @@ public class CartController {
 	public String allOrderList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		if(map.get("refundStatuses") != null) {
+			String json = map.get("refundStatuses").toString(); 
+			ObjectMapper mapper = new ObjectMapper();
+			List<Object> refundStatuses = mapper.readValue(json, new TypeReference<List<Object>>(){});
+			map.put("refundStatuses", refundStatuses);
+		} 
+		
+		if(map.get("orderStatuses") != null) {
+			String json = map.get("orderStatuses").toString(); 
+			ObjectMapper mapper = new ObjectMapper();
+			List<Object> orderStatuses = mapper.readValue(json, new TypeReference<List<Object>>(){});
+			map.put("orderStatuses", orderStatuses);			
+		}
+		
+		System.out.println("00 >>>>>>>>>>>>>>>> "+map);
+		
 		resultMap = cartService.getAllOrderList(map);
 		return new Gson().toJson(resultMap);
 	}
@@ -242,6 +259,12 @@ public class CartController {
 	public String refund(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String json = map.get("selectedItems").toString(); 
+		ObjectMapper mapper = new ObjectMapper();
+		List<Object> selectedItems = mapper.readValue(json, new TypeReference<List<Object>>(){});
+		map.put("selectedItems", selectedItems);
+		
 		resultMap = cartService.editRefundStatus(map);
 		return new Gson().toJson(resultMap);
 	}
