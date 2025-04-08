@@ -93,11 +93,12 @@
 
 				<div class="icons">
 					<!-- 다이아 아이콘 (isMembership에 따라 색상 다르게) -->
-					<span @click="myMembership"
-						  :class="['icon', isMembership ? 'bi-gem mem_premium' : 'bi-gem mem_basic']">
-					</span>
-				
+					
 					<span @click="toggleSearch" class="icon bi-search"></span>
+					
+					<span @click="myPage" class="icon bi-person"></span>
+					
+					<span @click="myCart" class="icon bi-cart"></span>
 					
 					<!-- 알림 아이콘 -->
 					<span @click="showNotifications" class="icon bi-bell notification-icon">
@@ -128,10 +129,10 @@
 					    </li>
 					  </ul>
 					</div>
-
+					
+					<span v-show="membershipReady" @click="myMembership" class="icon" :class="isMembership ? 'bi-gem mem_premium' : 'bi-gem mem_basic'">
+					</span>
 						
-					<span @click="myPage" class="icon bi-person"></span>
-					<span @click="myCart" class="icon bi-cart"></span>
 				</div>
 
 			</header>
@@ -153,6 +154,7 @@
                         isMembership : false,
                         showNotificationPanel : false,
                 		notifications: [],
+                		membershipReady: false, 
 					};
 				},
 				computed: {
@@ -409,10 +411,35 @@
 					        console.error("❗ formatTime 에러:", e);
 					        return '';
 					      }
-				  }
+				  },
+				  fnMemberShipInfo() {
+                      var self = this;
+                      var nparmap = {
+                          userId: self.sessionId
+
+                      };
+                      console.log("파라", nparmap);
+                      $.ajax({
+                          url: "/user/memberShip.dox",
+                          dataType: "json",
+                          type: "POST",
+                          data: nparmap,
+                          success: function (data) {
+                              console.log("데이타 카운트", data.count);
+                              if (data.count > 0) {
+                                  self.isMembership = true;
+                                  self.membershipReady = true; 
+                              } else {
+                            	  self.isMembership = false;
+                            	  self.membershipReady = true;
+                              }
+
+                          }
+                      });
+                  },
 
 
-				},
+			},
 				mounted() {
 					let self = this;
 					self.fnMenuList();
@@ -421,6 +448,9 @@
 					
 					if (self.sessionId != '') {
 						self.fnNotiList();
+						self.fnMemberShipInfo();
+					} else {
+                  	  self.membershipReady = true;
 					}
 					//console.log(self.sessionId);
 					//console.log(self.sessionName);

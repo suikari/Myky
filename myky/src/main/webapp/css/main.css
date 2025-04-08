@@ -123,9 +123,16 @@
 		margin: 0 1px;
 		cursor: pointer;
 		transition: transform 0.2s ease, filter 0.3s ease;
-		display: inline-block;
+		  display: inline-flex;
+		  align-items: center;
+		  justify-content: center;
+		  vertical-align: middle;
+
 	}
 	
+	.bi-person {
+	  font-size: 26px !important;
+	}
 	.icons .icon:hover {
 		transform: scale(1.2);
 		filter: brightness(1.3);
