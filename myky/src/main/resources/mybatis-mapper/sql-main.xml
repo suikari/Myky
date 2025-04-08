@@ -25,7 +25,46 @@
 			
 	</select>
 	
+	<insert id="insertNotification" parameterType="hashmap">
+	  INSERT INTO notifications (
+	    id,
+	    read_yn,
+	    created_at
+	    <if test="message != null">, message</if>
+	    <if test="boardId != null">, board_id</if>
+	    <if test="vetBoardId != null">, vet_board_id</if>
+	    <if test="orderId != null">, order_id</if>
+	    <if test="qnaId != null">, qna_id</if>
+	  )
+	  VALUES (
+	    notifications_seq.NEXTVAL,
+	    'N',
+	    SYSDATE
+	    <if test="message != null">, #{message}</if>
+	    <if test="boardId != null">, #{boardId}</if>
+	    <if test="vetBoardId != null">, #{vetBoardId}</if>
+	    <if test="orderId != null">, #{orderId}</if>
+	    <if test="qnaId != null">, #{qnaId}</if>
+	  )
+	</insert>
+
+	<select id="selectNotificationList" parameterType="hashmap" resultType="teamgyodong.myky.Main.model.Notification">
+		
+			SELECT * FROM user_notifications 
+			WHERE user_id = #{userId}
+			ORDER BY created_at DESC
+			FETCH FIRST 6 ROWS ONLY
+	</select>
 	
+	<update id="updateNotification" parameterType="hashmap" >
+		UPDATE notifications
+		SET     		
+			read_Yn = 'Y'
+		WHERE id = #{id}
+		
+	</update>
+	
+
 
 
 </mapper>
