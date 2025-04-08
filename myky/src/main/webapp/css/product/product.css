@@ -332,7 +332,7 @@ main {
 	transform: translateY(-50%);
 }
 
-.swiper-button-prev:hover,
+.swiper-button-prev:hover,l
 .swiper-button-next:hover {
 	background-color: rgba(0, 0, 0, 0.7);
 }

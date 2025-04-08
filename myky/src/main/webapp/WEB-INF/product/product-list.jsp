@@ -52,6 +52,12 @@
                                     <a href="http://localhost:8081/product/view.do?productId=243" class="view-more">VIEW MORE ></a>
                                 </div>
                             </div>
+                            <div class="swiper-slide">
+                                <img src="../../img/product/Pro.banner/banner6.png" alt="배너6" />
+                                <div class="view-more-btn-wrapper">
+                                    <a href="/membership/main.do" class="view-more">VIEW MORE  ></a>
+                                </div>
+                            </div>
                         </div>
                         <!-- 버튼 -->
                         <div class="swiper-button-prev"></div>
