@@ -372,6 +372,7 @@
 								<th>아이디</th>
 	                            <th>가입일</th>
 	                            <th>종료일</th>
+	                            <th>후원여부</th>	      
 	                            <th>해제여부</th>	                          
 <!-- 	                        <th>관리</th> -->	    
                    	    </tr>
@@ -383,6 +384,11 @@
 	                            <td>{{ member.userId }}</td>
 								<td>{{ member.renewalDate }}</td>								
 	                            <td>{{ member.expirationDate }}</td>
+	                            <td>
+	                                <span :class="member.donationYn === 'N' ? 'status-inactive' : 'status-active'">
+	                                    {{ member.donationYn === 'N' ? '사용 전' : '사용 후' }}
+	                                </span>
+	                            </td>
 	                            <td>
 	                                <span :class="member.isCanceled === 'N' ? 'status-active' : 'status-inactive'">
 	                                    {{ member.isCanceled === 'N' ? '사용중' : '해제' }}

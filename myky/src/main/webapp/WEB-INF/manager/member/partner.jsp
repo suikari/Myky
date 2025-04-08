@@ -368,6 +368,7 @@
 	                <table class="table member-table">
 	                    <thead>
 	                        <tr>
+				                <th><input type="checkbox" @click="fnAllCheck" v-model="allChk" ></th>
 	                            <th>번호</th>
 	                            <th>시설명</th>
 	                            <th>주소</th>
@@ -379,7 +380,8 @@
 	                    </thead>
 	                    <tbody>
 	                    	<template v-for="(member, index) in members" >
-	                        <tr >
+	                        <tr >				                    
+	                        	<td><input type="checkbox" :value="member.partnerdetailId" v-model="selectList"></td>
 	                            <td>{{ index + 1 }}</td>
 	                            <td>{{ member.name }}</td>
 	                            <td>{{ member.address }}</td>
@@ -474,9 +476,18 @@
 						                
 					<div class="d-flex justify-content-between align-items-center mt-3">
 				    <!-- 생성 버튼 왼쪽에 배치 -->
-				    	<div>
+				    
+			    		<!-- 버튼 영역 -->
+					    <div class="d-flex gap-2 me-auto">
+					        <!-- 선택 삭제 버튼 -->
+					        <button class="btn btn-danger board-delete-btn" @click="fnDeleteSelected" :disabled="selectList.length === 0">
+					            선택 삭제
+					        </button>
 					        <button class="btn btn-success" @click="isCreating = !isCreating">생성</button>
+
 					    </div>
+						    
+
 					
 					    <!-- 페이지네이션 버튼 중앙에 배치 -->
 					    <div class="d-flex justify-content-center">
@@ -639,6 +650,10 @@
                 		    };
                 		    return categoryMap[code] || '기타';
                 	 	},
+						selectList : [],
+						allChk : false,
+
+
                      };
                  },
                 computed: {
@@ -762,8 +777,46 @@
                                 self.isCreating = false;          // 폼 닫기
                             }
                         });
-                    }
-                    
+                    },
+                    fnAllCheck : function() {
+                        let self = this;
+                        self.allChk = !self.allChk;
+                        
+                        //console.log("44",self.members);
+
+                        if(self.allChk){
+                            for (let i=0; i< self.members.length ; i++) {
+                                self.selectList.push(self.members[i].partnerdetailId);
+                                //console.log("22",self.selectList);
+                            }
+                        } else {
+                            self.selectList = [];
+                        }   
+                    },
+                    fnDeleteSelected : function(){
+                        let self = this;
+                        
+                        if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+                            return false;
+                        }
+                        
+        				var nparmap = {
+                            selectList : JSON.stringify(self.selectList),
+                            category : self.category,
+                        };
+        				$.ajax({
+        					url:"/admin/remove-partner-list.dox",
+        					dataType:"json",	
+        					type : "POST", 
+        					data : nparmap,
+        					success : function(data) { 
+        						console.log(data);
+                                alert(data.count + "건 삭제 완료!");
+                                self.page = 1;
+                                self.fnMainList();
+        					}
+        				});
+                    },
                     
                 	
                 },
