@@ -35,6 +35,7 @@
 		AND PHONE_NUMBER = #{phoneNumber}
         AND USERNAME = #{userName}
 		</if>
+		AND DELETE_YN != 'Y'
 	</select>
 	
 	<select id="selectNick" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">

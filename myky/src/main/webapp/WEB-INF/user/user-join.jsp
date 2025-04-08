@@ -9,158 +9,9 @@
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-
+		<link rel="stylesheet" href="/css/user/user.css" />
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f4f4;
-            }
-
-            .container {
-                width: 80%;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .label {
-                font-size: 16px;
-                font-weight: bold;
-                margin-bottom: 8px;
-                display: inline-block;
-            }
-
-            /* 아이디 섹션 */
-            .user-id-section {
-                margin-bottom: 20px;
-            }
-
-            .input-field {
-                width: 100%;
-                padding: 10px;
-                margin-top: 5px;
-                margin-bottom: 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 14px;
-            }
-
-            .btn-check {
-                padding: 8px 16px;
-                font-size: 14px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .btn-check:hover {
-                background-color: #45a049;
-            }
-
-            /* 비밀번호 섹션 */
-            .password-section,
-            .password-confirm-section,
-            .name-section,
-            .nickname-section,
-            .address-section,
-            .email-section,
-            .phone-section,
-            .birthdate-section,
-            .gender-section {
-                margin-bottom: 20px;
-            }
-
-            /* 전화번호 입력 섹션 */
-            .phone-section .phone-select,
-            .phone-section .phone-input {
-                display: inline-block;
-                width: 7%;
-                padding: 10px;
-                margin-top: 5px;
-                margin-bottom: 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 14px;
-            }
-
-            .btn-phone-check {
-                padding: 8px 16px;
-                font-size: 14px;
-                background-color: #FF5722;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .btn-phone-check:hover {
-                background-color: #e64a19;
-            }
-
-            /* 성별 라디오 버튼 */
-            .gender-section input[type="radio"] {
-                margin-right: 10px;
-            }
-
-            /* 정보 저장 버튼 */
-            .btn-submit {
-                padding: 12px 24px;
-                font-size: 16px;
-                background-color: #2196F3;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                width: 100%;
-            }
-
-            .btn-submit:hover {
-                background-color: #1976D2;
-            }
-
-            /* 주소 검색 버튼 */
-            .btn-address-search {
-                padding: 8px 16px;
-                font-size: 14px;
-                background-color: #FFC107;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .btn-address-search:hover {
-                background-color: #ff9800;
-            }
-
-            /* 모바일 스타일을 고려한 반응형 디자인 */
-            @media (max-width: 768px) {
-                .container {
-                    width: 90%;
-                    padding: 15px;
-                }
-
-                .input-field,
-                .btn-check,
-                .btn-submit,
-                .btn-phone-check,
-                .btn-address-search {
-                    width: 100%;
-                    box-sizing: border-box;
-                }
-
-                .phone-section .phone-select,
-                .phone-section .phone-input {
-                    width: 32%;
-                }
-            }
+           
         </style>
     </head>
 
@@ -168,99 +19,88 @@
         <jsp:include page="/WEB-INF/common/header.jsp" />
 
         <div id="app" class="container">
-            <div class="user-id-section">
-                <template v-if="!idFlg">
-                    <label for="userId" class="label">아이디 :</label>
-                    <input id="userId" class="input-field user-id" v-model="user.userId">
-                    <span><button class="btn-check" @click="fnIdChecked()">중복체크</button></span>
-                </template>
-                <template v-else>
-                    <label for="userId" class="label">아이디 :</label>
-                    <input id="userId" class="input-field user-id" v-model="user.userId" disabled>
-                </template>
-            </div>
-
-            <div class="password-section">
-                <label for="password" class="label">비밀번호 :</label>
-                <input id="password" class="input-field password" type="password" v-model="user.pwd">
-            </div>
-
-            <div class="password-confirm-section">
-                <label for="passwordCheck" class="label">비밀번호 확인 :</label>
-                <input id="passwordCheck" class="input-field password-check" type="password" v-model="user.pwdCheck">
-            </div>
-
-            <div class="name-section">
-                <label for="userName" class="label">이름 :</label>
-                <input id="userName" class="input-field name" v-model="user.userName">
-            </div>
-
-            <div class="nickname-section">
-                <template v-if="!nickFlg">
-                    <label for="nickName" class="label">닉네임 :</label>
-                    <input id="nickName" class="input-field nickname" v-model="user.nickName">
-                </template>
-                <template v-else>
-                    <label for="nickName" class="label">닉네임 :</label>
-                    <input id="nickName" class="input-field nickname" v-model="user.nickName" disabled>
-                </template>
-                <button class="btn-check" @click="fnNickChecked()">중복체크</button>
-            </div>
-
-            <div class="address-section">
-                <label for="address" class="label">주소 :</label>
-                <input id="address" class="input-field address" v-model="user.address" disabled>
-                <button class="btn-address-search" @click="fnSearchAddr()">주소검색</button>
-            </div>
-
-            <div class="email-section">
-                <template v-if="!emailFlg">
-                    <label for="email" class="label">이메일 :</label>
-                    <input id="email" class="input-field email" v-model="user.email" placeholder="이메일을 입력하세요" />
-                    <button @click="fnEmailChecked()">인증번호 받기</button>
-                </template>
-
-                <template v-else>
-                    <label for="email" class="label">이메일 :</label>
-                    <input id="email" class="input-field email" v-model="user.email" disabled>
-                </template>
-
-                <div v-if="showVerification">
-                    <input type="text" v-model="authCode" placeholder="인증번호 입력" />
-                    <button @click="verifyCode">인증 확인</button>
+            <div class="join-container">
+                <div class="section">
+                    <label class="label">아이디</label>
+                    <div class="inline-group">
+                        <input class="input-underline" v-model="user.userId" :disabled="idFlg">
+                        <button class="inline-btn" v-if="!idFlg" @click="fnIdChecked()">중복체크</button>
+                    </div>
                 </div>
 
-                <p v-if="message">{{ message }}</p>
+                <div class="section">
+                    <label class="label">비밀번호</label>
+                    <input class="input-underline" type="password" v-model="user.pwd">
+                </div>
 
+                <div class="section">
+                    <label class="label">비밀번호 확인</label>
+                    <input class="input-underline" type="password" v-model="user.pwdCheck">
+                </div>
 
+                <div class="section">
+                    <label class="label">이름</label>
+                    <input class="input-underline" v-model="user.userName">
+                </div>
+
+                <div class="section">
+                    <label class="label">닉네임</label>
+                    <div class="inline-group">
+                        <input class="input-underline" v-model="user.nickName" :disabled="nickFlg">
+                        <button class="inline-btn" v-if="!nickFlg" @click="fnNickChecked()">중복체크</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <label class="label">주소</label>
+                    <div class="inline-group">
+                        <input class="input-underline" v-model="user.address" disabled>
+                        <button class="inline-btn" @click="fnSearchAddr()">주소검색</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <label class="label">이메일</label>
+                    <div class="inline-group">
+                        <input class="input-underline" v-model="user.email" :disabled="emailFlg" placeholder="이메일 입력">
+                        <button class="inline-btn" v-if="!emailFlg" @click="fnEmailChecked()">인증번호</button>
+                    </div>
+                    <div class="inline-group" v-if="showVerification">
+                        <input class="input-underline" v-model="authCode" placeholder="인증번호 입력">
+                        <button class="inline-btn" @click="verifyCode">확인</button>
+                    </div>
+                    <p v-if="message" style="margin-top: 8px; color: #4a90e2;">{{ message }}</p>
+                </div>
+
+                <div class="section">
+                    <label class="label">연락처</label>
+                    <div class="inline-group">
+                        <select class="input-underline" v-model="selectNum">
+                            <option>010</option>
+                            <option>011</option>
+                            <option>017</option>
+                        </select>
+                        <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;">
+                        <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <label class="label">생년월일</label>
+                    <input class="input-underline" v-model="user.birthDate">
+                </div>
+
+                <div class="section">
+                    <label class="label">성별</label>
+                    <div class="radio-group">
+                        <label><input type="radio" v-model="user.gender" value="M"> 남성</label>
+                        <label><input type="radio" v-model="user.gender" value="F"> 여성</label>
+                        <label><input type="radio" v-model="user.gender" value="N"> 비공개</label>
+                    </div>
+                </div>
+
+                <button class="btn-submit" @click="fnJoin1()">회원가입</button>
             </div>
-
-            <div class="phone-section">
-                <label for="phone" class="label">연락처 :</label>
-                <select id="phone" class="input-field phone-select" v-model="selectNum">
-                    <option value="010">010</option>
-                    <option value="011">011</option>
-                    <option value="017">017</option>
-                </select>
-                <span>
-                    -<input class="phone-input" v-model="num1" style="width: 40px;">
-                    -<input class="phone-input" v-model="num2" style="width: 40px;">
-                </span>
-            </div>
-
-            <div class="birthdate-section">
-                <label for="birthDate" class="label">생년월일 :</label>
-                <input id="birthDate" class="input-field birthdate" v-model="user.birthDate">
-            </div>
-
-            <div class="gender-section">
-                <label class="label">성별:</label>
-                <input type="radio" name="gender" value="M" v-model="user.gender">남성
-                <input type="radio" name="gender" value="F" v-model="user.gender">여성
-                <input type="radio" name="gender" value="N" v-model="user.gender">비공개
-            </div>
-
-            <button class="btn-submit" @click="fnJoin1()">정보 저장</button>
         </div>
 
         <jsp:include page="/WEB-INF/common/footer.jsp" />
@@ -282,7 +122,7 @@
                     return {
                         user: { // 이렇게 맵으로 선언해서 한꺼번에 갖고 가기 쉽다
                             userId: "",
-                            userName:  "" || "${map.name}",
+                            userName: "" || "${map.name}",
                             pwd: "",
                             address: "",
                             nickName: "",
@@ -404,7 +244,7 @@
                             alert('아이디는 한글, 영문, 숫자만 사용할 수 있습니다.');
                             return;
                         }
-                        
+
                         var nparmap =
                         {
                             userId: self.user.userId,
@@ -481,7 +321,7 @@
                             alert('아이디는 한글, 영문, 숫자만 사용할 수 있습니다.');
                             return;
                         }
-                        
+
                         var nparmap =
                         {
                             userId: self.user.userId,
@@ -595,8 +435,8 @@
                 mounted() {
                     let self = this;
                     window.vueObj = this; //obj를 선언해야 주소가 들어간다
-                    if(self.user.email!=""){
-                        self.emailFlg=true;
+                    if (self.user.email != "") {
+                        self.emailFlg = true;
                     }
 
 
