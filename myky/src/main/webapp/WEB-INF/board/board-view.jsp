@@ -693,6 +693,7 @@
                             boardId: self.boardId,
                             userId: self.sessionId,
                             content: self.content,
+                            message : "게시글에 댓글이 등록되었습니다."
                         };
                         $.ajax({
                             url: "/board/CommentAdd.dox",

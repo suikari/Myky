@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
+import teamgyodong.myky.Main.mapper.MainMapper;
 import teamgyodong.myky.board.mapper.BoardMapper;
 import teamgyodong.myky.board.model.board;
 import teamgyodong.myky.board.model.boardFile;
@@ -25,6 +26,11 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired // 세션용(중요! 유저 로그인 관련!)
 	HttpSession session;
+	
+	@Autowired 
+	MainMapper mainMapper;
+	
+	
 	
 	@Override
 	//게시글 목록 출력
@@ -138,7 +144,9 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.insertComment(map);
-
+		
+		int Noticount = mainMapper.insertNotification(map);
+		
 		resultMap.put("result", "success");
 		return resultMap;
 	}
@@ -358,6 +366,7 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
+		int Noticount = mainMapper.insertNotification(map);
 	    int count = boardMapper.checkDuplicateVetAnswer(map);
 
 	    if (count > 0) {
@@ -393,7 +402,9 @@ public class BoardServiceImpl implements BoardService {
 	public HashMap<String, Object> vetBoardAnSelect(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-
+		
+		int Noticount = mainMapper.insertNotification(map);
+		
 		boardMapper.updateVetAnSelect(map);
 		boardMapper.updateVetBoardStats(map);
 		resultMap.put("result", "success");
@@ -416,5 +427,6 @@ public class BoardServiceImpl implements BoardService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	
 }
 	
