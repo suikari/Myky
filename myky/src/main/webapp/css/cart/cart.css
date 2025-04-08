@@ -8,6 +8,17 @@
 	text-align: center;
 }
 
+.empty-cart-message {
+	text-align: center;
+	font-size: 20px;
+	color: #666;
+	padding: 60px 0;
+	background-color: #f9f9f9;
+	border: 1px dashed #ccc;
+	border-radius: 8px;
+	margin-top: 20px;
+}
+
 .cartTable {
 	width: 100%;
 	border-collapse: collapse;
@@ -567,8 +578,32 @@
 	padding: 20px;
 	border-radius: 8px;
 	width: 500px;
+	max-height: 680px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 	text-align: center;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.exchange-return-popup-scroll-area {
+	flex: 1;
+	overflow-y: auto;
+	padding-right: 10px;
+
+	max-height: 540px;
+
+	scrollbar-width: thin;
+	scrollbar-color: #ccc transparent;
+}
+
+.exchange-return-popup-scroll-area::-webkit-scrollbar {
+	width: 6px;
+}
+
+.exchange-return-popup-scroll-area::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 6px;
 }
 
 .exchange-return-popup-container h3 {
@@ -588,8 +623,34 @@
 }
 
 .exchange-return-box {
-	padding: 5px;
-	margin: 5px 40px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 10px;
+	margin: 10px 20px;
+	text-align: left;
+	position: relative;
+	transition: background 0.3s ease;
+}
+
+.exchange-return-box:hover {
+	background: #f0f8ff;
+}
+
+.exchange-return-box select {
+	margin-top: 10px;
+	padding: 6px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	width: 100px;
+}
+
+.exchange-return-box label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 15px;
+	font-weight: 500;
 }
 
 .exchange-return-select {
@@ -655,9 +716,9 @@
 }
 
 .disabled-item {
-	color: gray;
+	color: #999;
 	text-decoration: line-through;
-	cursor: not-allowed;
+	pointer-events: none;
 }
 
 .highlight-order {

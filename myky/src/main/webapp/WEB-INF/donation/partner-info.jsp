@@ -56,7 +56,7 @@
                     <p class="partner-address">📍 {{ partner.address }}</p>
                     <p class="partner-phone">📞 {{ partner.phoneNumber }}</p>
                     <p v-if="partner.websiteUrl"  class="partner-website">
-                        🔗 <a :href="partner.websiteUrl" target="_blank">웹사이트 방문</a>
+                        🔗 <a :href="normalizedUrl(partner.websiteUrl)" target="_blank">웹사이트 방문</a>
                     </p>
                     <p class="partner-hours">🕒 운영시간: {{ partner.openingHours }}</p>
                     <p class="partner-holiday">🚫 휴무일: {{ partner.regularHoliday || '없음' }}</p>
@@ -173,6 +173,17 @@
                         this.page = (currentBlock + 1) * this.blockSize + 1;
                     }
                     this.fnPartnerInfo();
+                },
+                normalizedUrl(url) {
+                    if (!url) return '#';
+                    url = url.trim();
+                    if (url.startsWith('http://') || url.startsWith('https://')) {
+                    return url;
+                    }
+                    if (url.startsWith('www.')) {
+                    return 'https://' + url;
+                    }
+                    return 'https://' + url;
                 },
                 filterByCategory(code) {
                     this.categoryCode = code;

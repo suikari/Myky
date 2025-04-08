@@ -25,6 +25,7 @@ public class cart {
 	private int discount;
 	
 	private String orderId;
+	private String orderDetailId;
 	private String orderStatus;
 	private String orderedAt;
 	private String receiverName;

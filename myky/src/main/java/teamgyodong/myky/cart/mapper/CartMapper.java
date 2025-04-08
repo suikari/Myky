@@ -57,4 +57,10 @@ public interface CartMapper {
 
 	int getPartnerCount(HashMap<String, Object> map);
 
+	int findTotalQuantity(int i);
+
+	void decreaseQuantity(Map<String, Object> item);
+
+	void insertPartialRefund(HashMap<String, Object> map);
+
 }

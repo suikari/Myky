@@ -302,13 +302,35 @@ public class CartServiceImpl implements CartService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		try {
-			String productIdsJson = (String) map.get("product");
-			List<String> productIds = objectMapper.readValue(productIdsJson, List.class);
+			System.out.println("00 >>>>>>>>>>>>>>>>>>> "+map.get("selectedItems"));
+			// 
 			
-			map.put("productIds", productIds);
+			List<Map<String, Object>> selectedItems = (List<Map<String, Object>>) map.get("selectedItems");
 			
-			cartMapper.updateRefundStatus(map);
+			for (Map<String, Object> item : selectedItems) {
+	            int orderDetailId = Integer.parseInt(item.get("orderDetailId").toString());;
+	            
+	            int price = Integer.parseInt(item.get("price").toString());;
+	            
+	            int splitQuantity = Integer.parseInt(item.get("quantity").toString());
+	            int totalQuantity = cartMapper.findTotalQuantity(orderDetailId);
+	            
+	            System.out.println("11 >>>>>>>>>>>>>>> "+totalQuantity);
 
+	            if (splitQuantity == totalQuantity) {
+	            	map.put("orderDetailId", orderDetailId);
+	            	// 수량이 전체 수량이면 상태만 업데이트
+	            	cartMapper.updateRefundStatus(map);
+	            } else {
+	            	map.put("orderDetailId", orderDetailId);
+	            	map.put("splitQuantity", splitQuantity);
+	            	map.put("price", price);
+	                // 부분 수량은 새로운 레코드 insert 및 기존 수량 감소
+	            	cartMapper.decreaseQuantity(map);
+	                cartMapper.insertPartialRefund(map);
+	            }
+	        }
+			
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

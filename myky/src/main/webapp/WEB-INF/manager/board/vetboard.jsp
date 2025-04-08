@@ -372,12 +372,12 @@ ber {
 			                    <tr v-for="(comment, index) in boardList" >
 			                    	<td><input type="checkbox" :value="comment.commentId" v-model="selectList"></td>
 			                        <td class="text-center">{{ index + 1 }}</td>
-			                        <td><a @click="fnView(comment.boardId,comment.category)" class="board-title">{{ comment.title  }}</a></td>
+			                        <td><a @click="fnView(comment.vetBoardId,comment.category)" class="board-title">{{ comment.title  }}</a></td>
 			                        <td class="text-center">{{ comment.userId }}</td>
 			                        <td class="text-center">{{ comment.updatedAt }}</td>
 			                        <td>
 		                                <span :class="comment.isAccepted === 'N' ? 'status-inactive' : 'status-active'">
-		                                    {{ comment.isDeleted === 'N' ? '채택 전' : '채택 완료' }}
+		                                    {{ comment.isAccepted === 'N' ? '채택 전' : '채택 완료' }}
 		                                </span>
 	                           		</td>
 			                        <td>
@@ -505,7 +505,7 @@ ber {
                     fnView(boardId, category) {
                         let self = this;
                         localStorage.setItem("page", self.page);
-                        location.href="/board/view.do?boardId=" + boardId + "&category="+ category;
+                        location.href="/board/vetBoardView.do?vetBoardId=" + boardId ;
                     },
                     fnPage(num) {
                         this.page = num;

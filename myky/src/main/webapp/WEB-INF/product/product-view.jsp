@@ -764,7 +764,6 @@
                     //장바구니
                     fnAddCart() {
                         const self = this;
-                        // const priceToAdd = self.userInfo.membershipFlg === 'Y' ? self.discountedPrice : self.info.price;
                         if (!self.sessionId || !self.userInfo || !self.userInfo.userId) {
                             alert("로그인 후 이용해주세요.");
                             location.href = "/user/login.do";
