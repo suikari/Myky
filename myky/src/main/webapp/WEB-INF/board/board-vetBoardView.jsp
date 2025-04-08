@@ -151,7 +151,7 @@
                     </template>
                 
                     <template v-if="(vetList.vetId == answer.vetId) && info.isAccepted === 'N' && answer.isDeleted == 'N'">  
-                        <button class="fb-cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)">수정</button>
+                        <button class="fb-cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)" v-if="showEdit !== answer.reviewId">수정</button>
                         <template v-if="(showEdit == answer.reviewId) && info.isAccepted === 'N'">
                             <div class="fb-editor-box">
                                 <!-- 🖋 Quill 에디터 [수정]-->
@@ -340,6 +340,8 @@
                             vetBoardId: self.info.vetBoardId,
                             reviewText : self.reviewText,
                             vetId : self.vetList.vetId,
+                            message : "게시글에 답변이 등록되었습니다."
+
                         };
                         console.log("s",self.vetList.vetId);
                         $.ajax({
@@ -389,6 +391,8 @@
                             comments : self.comments,
                             vetBoardId : self.vetBoardId,
                             createdAt : self.createdAt,
+                            message : "답변이 채택되었습니다."
+
                         };
                         console.log("userId",userId);
                         let pointAdd = {
@@ -492,6 +496,7 @@
                     },
                     fnCancle : function(){
                         let self = this;
+                        self.showEdit = null;
                         alert("취소되었습니다.");
                         return;
                     },

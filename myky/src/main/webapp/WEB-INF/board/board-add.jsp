@@ -93,15 +93,7 @@
                                     location.href="/board/boardList.do";
                                 }
                                 alert("저장되었습니다.");
-                                // info가 null인 경우
-                                if (!data.info) {
-                                    alert("잘못된 접근입니다.");
-                                    location.href = "/board/list.do?category=" + self.category;
-                                    return;
-                                }
                                 
-                                self.info = data.info;
-                                self.fileList = data.fileList;
                                 self.fnQuill();
 
 
@@ -158,7 +150,7 @@
                         alert("관리자만 접속 가능합니다.");
                         location.href="/board/list.do?category="+self.category;
                     }
-                	var quill = new Quill('#editor', {
+                	var quill = new Quill('#fb-editor', {
                     theme: 'snow',
                     modules: {
                         toolbar: [

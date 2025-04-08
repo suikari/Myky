@@ -27,34 +27,38 @@
         <div class="fb-section-headerDown">
             게시글 내용을 작성합니다.
         </div>
-        
         <hr class="fb-custom-hr">
 
+        <div class="fb-content-wrap">
         <div class="fb-title-label">
             <div>TITLE</div>
         </div>
-        <div class="fb-title-input">
-            <input v-model="title">
-        </div>
-        <div class="fb-title-label">POINT</div>
+            <div class="fb-title-input">
+                <input v-model="title">
+            </div>
+            <div class="fb-title-label">POINT</div>
             <div class="fb-point-input">
                 <div class="fb-point-box">
                     <span class="fb-point-unit2">보유포인트</span>
                     <input v-model="usedPoint" class="fb-point-place fb-point-clear-input"
-                    :placeholder="currentPoint.currentPoint" @input="fnCheck" >
+                    v-bind:placeholder="currentPoint.currentPoint" @input="fnCheck" @focus="isUsed = false">
                     <span class="fb-point-unit">P</span>
-                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click=" usedPoint = 0 "><img src="../img/freeBoard/close.png"></button>
-
+                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click="usedPoint = 0"><img src="../img/freeBoard/close.png"></button>
+                    
                 </div>
+                <button class="fb-fill-btn" @click="usedPoint = currentPoint.currentPoint">
+                    전액입력
+                </button>
                 <button class="fb-point-button" :class="{ 'fb-point-button-active': isUsed }" @click="fnUsePoint">사용</button>
             </div>
             <div class="fb-title-label">CONTENT</div>
             <div>
                 <div id="fb-editor" style="height: 300px;"></div>
             </div>
-        <div class="fb-buttonStyle">
-            <button class="fb-button" @click="fnSave">저장</button>
-            <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+            <div class="fb-buttonStyle">
+                <button class="fb-button" @click="fnSave">저장</button>
+                <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+            </div>
         </div>
     </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
@@ -155,7 +159,7 @@
                     fnCheck : function (){
                         let self = this;
                         self.usedPoint = self.usedPoint.replace(/[^0-9]/g,'');
-
+                        self.isUsed = false;
                     },
                     getPoints : function(){
                         let self = this;
