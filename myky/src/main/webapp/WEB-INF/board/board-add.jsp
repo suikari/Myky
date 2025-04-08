@@ -42,8 +42,8 @@
                     <input type="file" id="file1" name="file1" multiple>
                 </div>
                 <div class="fb-title-label">CONTENT</div>
-                <div>
-                    <div id="fb-editor" style="height: 300px;"></div>
+                <div class="fb-editor-boxBig">
+                    <div id="fb-editor" style="height: 1000px;"></div>
                 </div>
                 <div class="fb-buttonStyle">
                     <button class="fb-button" @click="fnSave">저장</button>
@@ -90,10 +90,10 @@
 				    	    success : function(data) { 
                                 if(data.result != 'success'){
                                     alert("잘못된 주소입니다.");
-                                    location.href="/board/boardList.do";
+                                    location.href="/board/list.do?category="+self.category;
                                 }
                                 alert("저장되었습니다.");
-                                
+                                location.href="/board/list.do?category="+self.category;
                                 self.fnQuill();
 
 

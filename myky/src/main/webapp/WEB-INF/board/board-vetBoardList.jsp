@@ -83,7 +83,7 @@
                 <div class="fb-a">
                     <!-- 이전 페이지 버튼 -->
                     <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
-                        <i class="fb-page-number"> < </i>
+                        <i class="bi bi-chevron-left"></i>
                     </a>
         
                     <!-- 페이지 번호 -->
@@ -115,7 +115,7 @@
     
                     <!-- 다음 페이지 버튼 -->
                     <a class="fb-page-number" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
-                        <i class="bi bi-chevron-right"> > </i>
+                        <i class="bi bi-chevron-right"></i>
                     </a>
                 </div>
             <button class="fb-button" @click="fnAdd" v-if="sessionId">글쓰기</button>     

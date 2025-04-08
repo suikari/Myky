@@ -200,19 +200,33 @@
 /* 에디터 박스 */
 #fb-editor {
     background-color: #ffffff;
-    border: 3px solid #202060;
     border-radius: 12px;
     padding: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     font-family: 'Nanum Gothic', sans-serif;
     font-size: 16px;
     line-height: 1.6;
-	margin-top: 30px;
+	margin-top: 5px;
     width: 100%;
 	max-width: 1280px;
+	height: 1000px;
     transition: border-color 0.3s;
 }
-
+.answer2{
+	height: 200px !important;
+	margin-bottom: 20px;
+}
+.fb-editor-box-answer{
+    border: 2px solid #202060;
+    border-radius: 10px;
+    padding: 16px;
+	height: 600px;
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto; 
+	margin-bottom: 5px;
+    box-sizing: border-box;	
+}
 #fb-editor .ql-editor:focus {
     outline: none;
     border-color: #fca311 !important;
@@ -237,8 +251,13 @@
 /* 버튼 스타일 */
 .fb-buttonStyle {
     margin-top: 50px;
+	text-align: center;
 }
-
+.fb-buttonMargin{
+	text-align: center;
+	margin: 30px;
+	
+}
 .fb-button {
     padding: 10px 20px;
     font-size: 14px;
@@ -248,6 +267,7 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
+	text-align: center;
     transition: background-color 0.3s ease;
 }
 
@@ -365,8 +385,10 @@ background-color: #ccf2f4;
     margin-right: 10px;
 }
 .fb-answer-nickname2 {
+	border-right: #fca311;
+	margin-top: 5px;
     font-weight: bold;
-    color: #202060;
+    color: #fca311;
     margin-right: 10px; 
 }
 
@@ -397,7 +419,7 @@ background-color: #ccf2f4;
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	width: 800px;
+	width: 1000px;
 	background-color: #202060;
 	color: #fca311;
 	border: none;
@@ -405,6 +427,10 @@ background-color: #ccf2f4;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	margin : auto;
+}
+.answer.comments{
+	border-radius: 6px;
+	border: 2px solid #202060;
 }
 
 .rating-label {
@@ -437,6 +463,28 @@ background-color: #ccf2f4;
 .fb-content-wrap {
 	width: 90%;
 	max-width: 1000px;
+}
+
+
+.fb-editor-boxBig {
+    border: 2px solid #202060;
+    border-radius: 10px;
+    padding: 16px;
+	height: 1100px;
+	width: 100%;
+	max-width: 1000px; /* 🔽 줄였습니다 */
+	margin: 0 auto; 
+	margin-bottom: 5px;
+    box-sizing: border-box;	
+}
+.fb-editor-boxBigAdd{
+    border: 2px solid #202060;
+    border-radius: 10px;
+    padding: 16px;
+	height: 600px;
+	margin: 0 auto; 
+	margin-bottom: 5px;
+    box-sizing: border-box;
 }
 .fb-editor-box {
     background-color: #f9f9f9;
@@ -475,7 +523,7 @@ background-color: #ccf2f4;
 
 .fb-answer-box {
     background-color: #f6f8fa;
-    border: 1px solid #d1d5da;
+    border: 2px solid #202060;
     border-radius: 10px;
     padding: 16px;
     margin: 20px 0;
@@ -486,6 +534,7 @@ background-color: #ccf2f4;
     max-width: 1000px;
     flex-direction: column;
 }
+
 .fb-choice-button {
     margin-top: 10px;
     align-self: flex-end;
@@ -679,12 +728,19 @@ background-color: #ccf2f4;
     width: 100%;
     max-width: 1000px;
 }
+
+.fb-view-boxContent img {
+	max-width: 80%;
+	
+}
+
 #fb-viewPage .fb-view-files {
     margin-top: 10px;
     width: 100%;
     max-width: 1000px;
     text-align: center;
     align-items: center;
+	
 }
 
 #fb-viewPage .fb-file-link {
@@ -699,11 +755,12 @@ background-color: #ccf2f4;
 .fb-view-files {
     margin-bottom: 20px;
     color: #202060;
-    border: 1px solid #202060;
+    border: 2px solid #202060;
     border-radius: 6px;
     padding: 15px;
     text-align: center;
     align-items: center;
+	font-weight: bold;
 }
 #fb-viewPage .fb-file-link:hover {
     color: #fca311;
@@ -711,8 +768,8 @@ background-color: #ccf2f4;
 
 .fb-search-wrapper {
     width: 90%;
-    margin: 20px auto;
-    display: flex;
+    margin: auto;
+	display: flex;
     justify-content: flex-end;
     align-items: center;
     flex-wrap: wrap;
@@ -723,6 +780,7 @@ background-color: #ccf2f4;
     align-items: center;
     gap: 8px;
     margin: 3px;
+	margin-bottom: 30px;
 }
 .fb-search-left select,
 .fb-search-left input,
@@ -784,14 +842,15 @@ background-color: #ccf2f4;
     max-width: 1280px;
 	align-items: center;
 	margin : auto;
+	margin-bottom : 20px;
 
 }
 .fb-cmtCountColor {
     color: #fca311;
 }
 
-/*수의사게시판*/
 
+/*수의사게시판*/
 
 .fb-table-wrapper {
     background-color: #fff;
@@ -800,6 +859,7 @@ background-color: #ccf2f4;
     overflow: hidden;
 	border-spacing: 0;
 	margin: auto;
+	margin-top: 20px;
 	width: 90%;
 	max-width: 1280px;
 	text-align: center;
@@ -813,10 +873,10 @@ background-color: #ccf2f4;
 }
 .fb-table-vet{
 	margin: auto;
+	margin-top: 20px;
 	max-width: 1280px;
 	width: 90%;
 	border: none;
-	margin-bottom: 30px;
 }
 .fb-table-th {
     background-color: #202060;
@@ -855,12 +915,11 @@ background-color: #ccf2f4;
     color: #202060;
     font-weight: bold;
     text-decoration: none;
+	margin-top: 20px;
 }
 
 .fb-a {
 	margin: 25px;
-
-	
 }
 
 .fb-page-number {
@@ -975,3 +1034,165 @@ tr.faq-td.faq-odd td {
     background-color: #fca311;
 	color: #202060;
 }
+.fb-cmt2button {
+    margin-right: 10px;
+    color: #888;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.likeButton2 {
+    width: 40px;
+    height: 40px;
+}
+
+.likeButton {
+    background-color: white;
+    border: none;
+    color: #202060;
+    cursor: pointer;
+}
+
+.like-button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.FileDownload {
+    color: #202060;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.FileDownload:hover {
+    color: #fca311;
+}
+.fb-cmtButton {
+     padding: 5px 10px;
+     font-size: 14px;
+     font-weight: bold;
+     background-color: #202060;
+     color: #fca311;
+     border-radius: 6px;
+     cursor: pointer;
+     width: fit-content;
+     margin-inline-end: auto;
+     border: none;
+ }
+
+ .fb-cmtButtonBox {
+     border-radius: 6px;
+     max-width: 1000px;
+     margin-top: 20px;
+     margin-bottom: 5px;
+	 padding: 10px;
+     border: 2px solid #202060;
+ }
+
+ .fb-cmtButton2 {
+     padding: 5px 10px;
+     font-size: 14px;
+     font-weight: bold;
+     background-color: #c0c0c0;
+     color: #353535;
+     border-radius: 6px;
+     cursor: pointer;
+     width: fit-content;
+     margin-inline-end: auto;
+     border: none;
+     margin: 1px;
+ }
+
+ .fb-cmtInput {
+     max-width: 400px;
+     width: 100%;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     padding: 8px;
+ }
+
+ .fb-cmtTextBox {
+     border-radius: 6px;
+     border: 1px solid #f7f7f8;
+     background-color: #f5f5f5;
+     max-width: 1000px;
+     width: 100%;
+     margin: 5px;
+     padding: 5px;
+     margin-bottom: 5px;
+ }
+					 
+ .fb-link-container {
+    position: relative;
+    display: inline-block;
+}
+
+ .fb-link-container:hover .fb-preview-image {
+	display : block;
+ }
+ 
+
+
+.fb-preview-image {
+    display: none;
+    position: absolute;
+    top: -19px;
+    left: 250px;
+    width: 150px;
+    height: auto;
+    border: 1px solid #ededed;
+    background-color: white;
+    padding: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+.fb-cmt2button {
+       margin-right: 10px;
+       color: #888;
+       font-size: 15px;
+       cursor: pointer;
+   }
+   
+   .likeButton2 {
+      width: 40px;
+      height: 40px;
+  }
+
+  .likeButton {
+      background-color: white;
+      border: none;
+      color: #202060;
+      cursor: pointer;
+  }
+
+  .like-button-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 20px;
+  }
+  .fb-profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+  }
+  .fb-comment-box {
+    display: flex;
+    justify-content: space-between; /* 왼쪽-오른쪽 정렬 */
+    align-items: center;
+    padding: 8px 12px;
+  }
+
+  .fb-profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 12px;
+  }
