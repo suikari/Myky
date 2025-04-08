@@ -66,7 +66,7 @@
             <tr>
                 <th>사용할 포인트</th>
                 <td>
-                    <input type="text" ref="usedPoint" v-model="usedPoint" @input="validatePoints" placeholder="사용할 적립금 입력">
+                    <input type="text" ref="usedPoint" v-model="usedPoint" @keyup.enter="applyPoints" @input="validatePoints" placeholder="사용할 적립금 입력">
                     <button @click="useAllPoints">전체 사용</button>
                     <button @click="applyPoints">적용</button>
                 </td>
