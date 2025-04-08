@@ -29,29 +29,31 @@
                 게시글 내용을 수정합니다.
             </div>
             <hr class="fb-custom-hr">
+            <div class="fb-content-wrap">
 
-            <div class="fb-title-label">TITLE</div>
-            <div class="fb-title-input">
-                <input v-model="info.title">
-            </div>
-            <div class="fb-title-inputImg">
-                <input type="file" id="file1" name="file1" multiple>
-            </div>
-            <div class="fb-title-label">CONTENT</div>
-            <div>
-                <div id="editor" style="height: 300px;"></div>
-            </div>
-            <div class="fb-view-label">첨부파일</div>
-                <div class="fb-view-files">
+                <div class="fb-title-label">TITLE</div>
+                <div class="fb-title-input">
+                    <input v-model="info.title">
+                </div>
+                <div class="fb-title-inputImg">
+                    <input type="file" id="file1" name="file1" multiple>
+                </div>
+                <div class="fb-title-label">CONTENT</div>
+                <div class="fb-editor-boxBig">
+                    <div id="fb-editor" style="height: 1000px;"></div>
+                </div>
+                <div class="fb-view-label">첨부파일</div>
+                <div class="fb-view-files"> 
                     <div v-for="item in fileList" :key="reload">
                         <div class="fb-link-container">
                             <span class="fb-FileDownload">{{item.fileName}}</span>
                             <span class="fb-FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb)</span>
-                                <button class="fb-buttonStyle" @click="fnRemove(item.fileId)">삭제</button>
+                            <button class="fb-button" @click="fnRemove(item.fileId)">삭제</button>
                             <img :src="item.filePath" :alt="item.fileName" class="fb-preview-image">
                         </div>
                     </div>
                 </div>
+            </div>
             <div>
                 <button class="fb-button fb-buttonStyle" @click="fnEdit">저장</button>
                 <button class="fb-button fb-buttonStyle" @click="fnBack(info)">뒤로가기</button>
@@ -173,7 +175,7 @@
                     },
                     fnQuill() {
                         let self = this;
-                        var quill = new Quill('#editor', {
+                        var quill = new Quill('#fb-editor', {
                             theme: 'snow',
                             modules: {
                                 toolbar: [

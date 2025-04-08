@@ -7,264 +7,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>자유게시판</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+        <link rel="stylesheet" href="/css/board/board.css"/>
 
         <style>
-            #viewPage {
-                max-width: 1000px;
-                margin: 40px auto;
-                padding: 40px;
-                background-color: #fff;
-                border-radius: 10px;
-                font-family: 'Noto Sans KR', sans-serif;
-            }
-
-            #viewPage .view-header {
-                font-size: 36px;
-                font-weight: bold;
-                color: #202060;
-                margin-bottom: 10px;
-            }
-
-            #viewPage .view-sub {
-                color: #333;
-                font-weight: bold;
-                font-size: 16px;
-                margin-bottom: 30px;
-            }
-
-            #viewPage .view-label {
-                font-size: 25px;
-                font-weight: bold;
-                color: #202060;
-                margin-top: 40px;
-                margin-bottom: 10px;
-                max-width: 1000px;
-                align-items: center;
-            }
-
-            .view-labelContent {
-                height: 500px;
-                text-align: center;
-                align-items: center;
-            }
-
-            #viewPage .view-box {
-                border: 2px solid #202060;
-                font-weight: bold;
-                border-radius: 6px;
-                padding: 15px;
-                background-color: #fdfdfd;
-                font-size: 16px;
-                line-height: 1.8;
-                color: #333;
-                word-break: break-word;
-                white-space: pre-wrap;
-                align-items: center;
-            }
-
-            .view-boxContent {
-                border: 1px solid #202060;
-                border-radius: 6px;
-                padding: 15px;
-                background-color: #fdfdfd;
-                font-size: 16px;
-                line-height: 1.8;
-                color: #333;
-                word-break: break-word;
-                white-space: pre-wrap;
-                min-height: 500px;
-                text-align: center;
-                align-items: center;
-            }
-
-            #viewPage .view-files {
-                margin-top: 10px;
-                width: 100%;
-                max-width: 1000px;
-                text-align: center;
-                align-items: center;
-            }
-
-            #viewPage .file-link {
-                color: #202060;
-                font-weight: bold;
-                text-decoration: none;
-                margin-right: 10px;
-                display: inline-block;
-                align-items: center;
-                text-align: center;
-            }
-
-            .view-files {
-                margin-bottom: 20px;
-                color: #202060;
-                border: 1px solid #202060;
-                border-radius: 6px;
-                padding: 15px;
-                text-align: center;
-                align-items: center;
-            }
-
-            #viewPage .file-link:hover {
-                color: #fca311;
-            }
-
-            .custom-hr {
-                width: 1000px;
-                max-width: 100%;
-                border: none;
-                border-top: 1px solid #ccc;
-                margin-top: 10px;
-                margin-bottom: 40px;
-                width: 100%;
-
-                max-width: 1000px;
-            }
-
-            .button {
-                padding: 10px 20px;
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #202060;
-                color: #fca311;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                width: fit-content;
-            }
-
-            .cmtButton {
-                padding: 5px 10px;
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #202060;
-                color: #fca311;
-                border-radius: 6px;
-                cursor: pointer;
-                width: fit-content;
-                margin-inline-end: auto;
-                border: none;
-            }
-
-            .cmtButtonBox {
-                border-radius: 6px;
-                max-width: 1000px;
-                margin-top: 20px;
-                margin-bottom: 5px;
-                /* border : none; */
-                border: 1px solid #202060;
-            }
-
-            .cmtButton2 {
-                padding: 5px 10px;
-                font-size: 14px;
-                font-weight: bold;
-                background-color: #c0c0c0;
-                color: #353535;
-                border-radius: 6px;
-                cursor: pointer;
-                width: fit-content;
-                margin-inline-end: auto;
-                border: none;
-                margin: 1px;
-            }
-
-            .cmtInput {
-                max-width: 400px;
-                width: 100%;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                padding: 8px;
-            }
-
-            .cmtTextBox {
-                border-radius: 6px;
-                border: 1px solid #f7f7f8;
-                background-color: #f5f5f5;
-                max-width: 1000px;
-                width: 100%;
-                margin: 5px;
-                padding: 5px;
-                margin-bottom: 5px;
-            }
-
-            .Button:hover {
-                background-color: #fca311;
-                color: #202060;
-            }
-
-            .FileDownload {
-                color: #202060;
-                text-decoration: none;
-                font-weight: bold;
-            }
-
-            .FileDownload:hover {
-                color: #fca311;
-            }
-
-            .buttonMargin {
-                margin-top: 30px;
-                margin-bottom: 30px;
-            }
-
-            .link-container {
-                position: relative;
-                display: inline-block;
-            }
-
-            .preview-image {
-                display: none;
-                position: absolute;
-                top: -19px;
-                left: 250px;
-                width: 150px;
-                height: auto;
-                border: 1px solid #ededed;
-                background-color: white;
-                padding: 5px;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-                z-index: 100;
-            }
-
-            .link-container:hover .preview-image {
-                display: block;
-            }
-
-            .view-boxContent img {
-                max-width: 70%;
-                height: auto;
-                display: block;
-                margin: 10px auto;
-                border-radius: 6px;
-            }
-
-            .cmt2button {
-                margin-right: 10px;
-                color: #888;
-                font-size: 15px;
-                cursor: pointer;
-            }
-
-            .likeButton2 {
-                width: 40px;
-                height: 40px;
-            }
-
-            .likeButton {
-                background-color: white;
-                border: none;
-                color: #202060;
-                cursor: pointer;
-            }
-
-            .like-button-wrapper {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 20px;
-                gap: 20px;
-            }
+           
         </style>
 
     </head>
@@ -272,37 +18,40 @@
     <body>
         <jsp:include page="../common/header.jsp" />
 
-        <div id="app" class="container">
-            <div id="viewPage">
+        <div id="fb-app" class="fb-container">
 
-                <div class="view-header" v-if="category == 'F'">
+            <div id="fb-viewPage">
+                <div class="fb-section-header" v-if="category == 'F'">
                     VIEW
                 </div>
-                <div class="view-header" v-if="category == 'A'">
+                <div class="fb-section-header" v-if="category == 'A'">
                     NOTICE VIEW
                 </div>
-                <div class="view-sub" v-if="category == 'F'">
+                <div class="fb-section-headerDown" v-if="category == 'F'">
                     여러분의 이야기를 들려주세요.
                 </div>
-                <div class="view-sub" v-if="category == 'A'">
+                <div class="fb-section-headerDown" v-if="category == 'A'">
                     새 소식을 알려드립니다<div class="f"></div>
                 </div>
-                <hr class="custom-hr">
-                <div class="view-label">
+                <hr class="fb-custom-hr">
+
+                <div class="fb-title-label">
                     TITLE
                 </div>
-                <div class="view-box">
+                <div class="fb-view-box">
                     <a style="font-size:20px">{{info.title}}</a>
-                    <!-- 날짜 표시 여기 넣기 -->
-                    <div style="color: #fca311;">작성자: {{info.nickName}}</div>
-                    <div style="font-size: 13px; color: #888; margin-top: 10px; margin-bottom: 0px;">
-                        작성일: ( {{ info.updatedTime }} ) 조회수: ( {{info.cnt}} )
+
+                    <div class="fb-author-box">
+                        <div class="fb-author-label">작성자: {{info.nickName}}</div>
+                        <div class="fb-meta">
+                            <span class="fb-date">🕒 {{info.createdAt}}</span>
+                            <span class="fb-views">|  조회수 {{info.cnt}}</span>
+                        </div>
                     </div>
                 </div>
+                <div class="fb-title-label">CONTENT</div>
+                <div class="fb-view-boxContent" v-html="info.content"></div>
 
-
-                <div class="view-label">CONTENT</div>
-                <div class="view-boxContent" v-html="info.content"></div>
                 <!-- 좋아요, 싫어요 버튼 -->
                 <div class="like-button-wrapper">
                     <template v-if="likeStatus">
@@ -331,14 +80,16 @@
                         </button>
                     </template>
                 </div>
-                <div class="view-label">첨부파일</div>
-                <div class="view-files">
-                    <div v-for="item in fileList">
-                        <div class="link-container">
-                            <a :href="item.filePath" download class="FileDownload">{{item.fileName}}
-                                <span class="FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb) </span></a>
-                            <div v-if="isImageFile(item.fileName)">
-                                <img :src="item.filePath" :alt="item.fileName" class="preview-image">
+                <div v-if="fileList.length > 0">
+                    <div class="fb-title-label">첨부파일</div>
+                    <div class="fb-view-files">
+                        <div v-for="item in fileList">
+                            <div class="fb-link-container">
+                                <div  @click="fnDownload(item.filePath, item.fileName, item.fileSize)" class="FileDownload">
+                                    <span class="fb-FileDownload"> {{ item.fileName }} ({{ Math.ceil(item.fileSize/1024)}} kb) </span></div>
+                                <div v-if="isImageFile(item.fileName)">
+                                    <img :src="item.filePath" :alt="item.fileName" class="fb-preview-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -350,17 +101,17 @@
                     <table>
                         <tr v-if="cmtList.commentId != null">
                             <div v-for="item in cmtList" :key="item.commentId">
-                                <div class="cmtTextBox">
+                                <div class="fb-cmtTextBox">
 
                                     <!-- 수정 중인 경우 -->
                                     <div v-if="editCommentId == item.commentId">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
-                                        <input v-model="editContent" class="cmtInput" />
+                                        <input v-model="editContent" class="fb-cmtInput" />
 
                                         <div style="display: flex; gap: 5px;">
-                                            <button class="cmtButton2"
+                                            <button class="fb-cmtButton2"
                                                 @click="fnCommentUpdate(item.commentId)">저장</button>
-                                            <button class="cmtButton2" @click="editCommentId = ''">취소</button>
+                                            <button class="fb-cmtButton2" @click="editCommentId = ''">취소</button>
                                         </div>
                                     </div>
                                     <!-- 일반 댓글 보기 -->
@@ -388,15 +139,15 @@
 
                                         <!-- 답글 -->
                                         <div v-if="sessionId">
-                                            <a class="cmt2button" @click="fnReply(item.commentId)">답글 달기</a>
+                                            <a class="fb-cmt2button" @click="fnReply(item.commentId)">답글 달기</a>
 
                                             <!-- 수정/삭제 -->
                                             <template v-if="item.isDeleted == 'N'">
                                                 <template v-if="sessionId == item.userId">
-                                                        <button class="cmtButton2" @click="fnCommentEdit(item)">수정</button>
+                                                        <button class="fb-cmtButton2" @click="fnCommentEdit(item)">수정</button>
                                                 </template>
                                                 <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
-                                                    <button class="cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                                    <button class="fb-cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
                                                 </template>
                                             </template>
                                         </div>
@@ -406,9 +157,9 @@
 
                                 <!-- 대댓글 입력창 -->
                                 <div v-if="replyFormId === item.commentId" style="margin-left: 30px;">
-                                    <input class="cmtInput" v-model="replyContent" placeholder="대댓글 입력" />
-                                    <button class="cmtButton2" @click="fnReplySave(item.commentId)">등록</button>
-                                    <button class="cmtButton2" @click="replyFormId = ''">취소</button>
+                                    <input class="fb-cmtInput" v-model="replyContent" placeholder="대댓글 입력" />
+                                    <button class="fb-cmtButton2" @click="fnReplySave(item.commentId)">등록</button>
+                                    <button class="fb-cmtButton2" @click="replyFormId = ''">취소</button>
                                 </div>
 
                                 <!-- 대댓글 반복 -->
@@ -417,8 +168,8 @@
                                     <div v-if="editCommentId === reply.commentId">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                         <input v-model="editContent" />
-                                        <button class="cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
-                                        <button class="cmtButton2" @click="editCommentId = ''">취소</button>
+                                        <button class="fb-cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
+                                        <button class="fb-cmtButton2" @click="editCommentId = ''">취소</button>
                                     </div>
                                     <div v-else>
                                         <div v-if="reply.isDeleted == 'Y'">
@@ -431,10 +182,10 @@
                                                 style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
                                                 <span>{{ reply.updatedTime }}</span>
                                                 <template v-if="sessionId === reply.userId">
-                                                    <button class="cmtButton2" @click="fnCommentEdit(reply)">수정</button>
+                                                    <button class="fb-cmtButton2" @click="fnCommentEdit(reply)">수정</button>
                                                 </template>
                                                 <template v-if="sessionId === reply.userId || sessionRole === 'ADMIN'">
-                                                    <button class="cmtButton2" @click="fnCommentRemove(reply.commentId)">❌</button>
+                                                    <button class="fb-cmtButton2" @click="fnCommentRemove(reply.commentId)">❌</button>
                                                 </template>
                                             </div>
                                         </div>
@@ -443,27 +194,27 @@
                         </tr>
                     </table>
 
-                    <table class="cmtButtonBox" v-if="sessionId">
+                    <table class="fb-cmtButtonBox" v-if="sessionId">
                         <tr>
                             <th style="margin-right: 10px;"> 댓글 </th>
                             <td>
                                 <textarea style="width: 430px" v-model="content" cols="60" rows="5"></textarea>
                             </td>
                             <td>
-                                <button class="button" @click="fnCommentSave">저장</button>
+                                <button class="fb-button" @click="fnCommentSave">저장</button>
                             </td>
                         </tr>
                     </table>
                 </div>
 
-                <div class="buttonMargin" style="display: flex; gap: 5px;">
+                <div class="fb-buttonMargin">
                     <template v-if="sessionId == info.userId">
-                        <button class="button" @click="fnEdit()">수정</button>
+                        <button class="fb-button" @click="fnEdit()">수정</button>
                     </template>
                     <template v-if="sessionId == info.userId || sessionRole == 'ADMIN'">    
-                        <button class="button" @click="fnRemove()">삭제</button>
+                        <button class="fb-button" @click="fnRemove()">삭제</button>
                     </template>
-                    <button class="button" @click="fnBack(info)">뒤로가기</button>
+                    <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
                 </div>
             </div>
         </div>
@@ -822,7 +573,18 @@
                         });
 
                     },
-
+                    fnDownload(filePath, fileName, fileSize) {
+                        const confirmMsg = fileName + " ( " + Math.ceil(fileSize/1024) +  "KB) 파일을 다운로드하시겠습니까?";
+                        if (confirm(confirmMsg)) {
+                        // 다운로드를 강제로 트리거
+                        const link = document.createElement('a');
+                        link.href = filePath;
+                        link.download = fileName;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        }
+                    },
 
                 },
                 mounted() {
@@ -836,6 +598,6 @@
                 }
             });
 
-            app.mount("#app");
+            app.mount("#fb-app");
         });
     </script>

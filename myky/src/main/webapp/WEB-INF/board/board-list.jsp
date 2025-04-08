@@ -59,7 +59,7 @@
                     <template v-if="item.isDeleted == 'N'">
                         <td>{{item.boardId}}</td>
                         <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}
-                            <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="cmtCountColor">({{item.commentCount}})</span>
+                            <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="fb-cmtCountColor">({{item.commentCount}})</span>
                         </a></td>
                         <td>{{item.nickName}}</td>
                         <td>{{item.createdAt.substring(0, 10)}}</td>
@@ -74,7 +74,7 @@
                 <div class="fb-a">
                     <!-- 이전 페이지 버튼 -->
                     <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
-                        <i class="fb-page-number"> < </i>
+                        <i class="bi bi-chevron-left"></i>
                     </a>
         
                     <!-- 페이지 번호 -->
@@ -106,7 +106,7 @@
         
                     <!-- 다음 페이지 버튼 -->
                     <a class="fb-page-number" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
-                        <i class="bi bi-chevron-right"> > </i>
+                        <i class="bi bi-chevron-right"></i>
                     </a>
                 </div>
 
