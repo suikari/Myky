@@ -12,141 +12,106 @@
         <script src="js/swiper8.js"></script>
 
         <style>
-            /**/
-            .content {
-                flex: 1;
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: 'Segoe UI', sans-serif;
+                background: #fffdfc;
+                overflow-x: hidden;
+                /* ✅ 좌우 스크롤 방지 */
+            }
+
+            main {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding: 20px;
             }
 
-            .slider-wrapper {
-                position: relative;
-                width: 400px;
-                overflow: hidden;
-                border-radius: 10px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .slider-container {
-                display: flex;
-                transition: transform 0.5s ease-in-out;
-            }
-
-            .slide {
-                flex: 0 0 100%;
-            }
-
-            .slide-img {
+            .swiper,
+            .swiper.hero-banner {
                 width: 100%;
-                height: 200px;
-                object-fit: cover;
-                border-radius: 10px;
-            }
-
-            .prev-btn,
-            .next-btn {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background: rgba(0, 0, 0, 0.5);
-                color: white;
-                border: none;
-                padding: 10px;
-                cursor: pointer;
-                border-radius: 50%;
-            }
-
-            .prev-btn {
-                left: 10px;
-            }
-
-            .next-btn {
-                right: 10px;
-            }
-
-            .indicators {
-                position: absolute;
-                bottom: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                display: flex;
-                gap: 5px;
-            }
-
-            .indicator {
-                width: 10px;
-                height: 10px;
-                background: #ccc;
-                border-radius: 50%;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-
-            .indicator.active {
-                background: white;
-            }
-
-            .section-grid {
-                width: 100%;
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px;
-                margin-top: 20px;
-                max-width: 1000px;
-            }
-
-            .grid-item {
-                padding: 20px;
-                text-align: center;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .best-products {
-                width: 100%;
-                max-width: 1024px;
+                /* ✅ 100vw → 100% 로 수정 */
+                max-width: 100%;
+                height: 380px;
                 margin-top: 30px;
-                padding: 40px;
-                text-align: center;
-                font-size: 1.2em;
-                font-weight: bold;
-                background: #fff;
-                border-radius: 8px;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+                padding: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            /* 배너 안쪽 이미지 영역 */
+            .swiper-slide img {
+                width: 100%;
+                height: 380px;
+                object-fit: cover;
+                border-radius: 0;
+                display: block;
+                /* ✅ inline-block 이면 간격 생김 */
+            }
+
+            .swiper-wrapper {
+                width: 100% !important;
+                display: flex;
+            }
+
+            .swiper-slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            /* 하단 그라데이션 효과 */
+            .swiper.hero-banner::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 60px;
+                width: 100%;
+                background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fffdfc 100%);
+                z-index: 2;
+            }
+
+            .swiper-slide {
+                width: 100% !important;
+                /* 한 슬라이드가 전체 너비 차지 */
+                margin: 0 !important;
+                /* 가운데 정렬 방지 */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+                height: 100%;
+                border-radius: 0;
+                /* 필요시 */
+            }
+
+            .swiper-slide img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                border-radius: 12px;
+                display: block;
             }
 
             .shortcut-grid {
                 display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                /* 2x2 그리드 */
-                gap: 10px;
-                /* 아이콘 간격 */
-                width: 200px;
-                /* 원하는 크기로 조정 */
-                margin: 20px auto;
-                /* 가운데 정렬 */
+                grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
+                max-width: 1024px;
+                margin: 40px auto 30px;
+                justify-content: center;
             }
 
             .shortcut-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                background: #f5f5f5;
-                border-radius: 10px;
-                padding: 15px;
+                background: #fff;
+                border-radius: 16px;
+                padding: 20px 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
                 transition: transform 0.2s ease-in-out;
-            }
-
-
-
-            .shortcut-item:hover {
-                transform: scale(1.1);
-                /* 마우스 호버 시 확대 */
             }
 
             .shortcut-item a {
@@ -157,66 +122,69 @@
                 color: #333;
             }
 
+            .shortcut-item:hover {
+                transform: scale(1.05);
+            }
+
             .shortcut-item img {
-                width: 50px;
-                /* 아이콘 크기 */
-                height: 50px;
-                margin-bottom: 5px;
+                width: 64px;
+                height: 64px;
+                margin-bottom: 12px;
             }
 
             .shortcut-item span {
-                font-size: 14px;
-                font-weight: bold;
+                font-size: 20px;
+                font-weight: 600;
+                color: #333;
             }
 
-
-
-            .board-container {
-                width: 300px;
-
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 10px;
-                margin: 10px;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .board-div {
-                height: 190px;
-                /* 스크롤이 필요한 높이 설정 */
-                overflow-y: auto;
-                /* 세로 스크롤 활성화 */
-            }
-
-
-            .board-title {
-                font-size: 18px;
-                font-weight: bold;
-                margin-bottom: 10px;
-                text-align: center;
+            .info-section {
+                display: flex;
+                justify-content: center;
+                gap: 40px;
+                max-width: 1024px;
+                margin-bottom: 50px;
+                flex-wrap: wrap;
             }
 
             .post-item {
-                padding: 8px;
+                padding: 10px 0;
                 border-bottom: 1px solid #eee;
+                font-size: 14px;
+                color: #333;
                 cursor: pointer;
             }
 
             .post-item:hover {
-                background-color: #f9f9f9;
+                background-color: #fafafa;
             }
 
             .post-content {
-                font-size: 14px;
-                color: #666;
+                font-size: 13px;
+                color: #777;
             }
 
-            .product_img {
+            .scroll {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .scroll::-webkit-scrollbar {
+                display: none;
+            }
+
+            .best-products {
                 width: 100%;
-                height: 100%;
+                max-width: 1280px;
+                margin-top: 30px;
+                padding: 40px;
+                text-align: center;
+                font-size: 1.2em;
+                font-weight: bold;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
             }
-
-            /**/
 
             .best-product-container {
                 width: 100%;
@@ -240,7 +208,6 @@
 
             .product-card {
                 width: calc(20% - 35px);
-                /* 5개 기준 */
                 min-width: 150px;
                 border: 1px solid #ddd;
                 border-radius: 8px;
@@ -249,27 +216,147 @@
                 box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
             }
 
-            .product-image {
+            .product-image img {
                 width: 100%;
                 height: 120px;
-                background-color: #f0f0f0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 14px;
-                color: #777;
-                margin-bottom: 10px;
+                object-fit: cover;
+                border-radius: 6px;
+                margin-bottom: 8px;
             }
 
             .product-name {
-                font-size: 16px;
+                font-size: 15px;
                 font-weight: bold;
                 margin-bottom: 5px;
             }
 
             .product-price {
                 font-size: 14px;
-                color: #333;
+                color: #555;
+            }
+
+            .section-title {
+                font-size: 22px;
+                font-weight: bold;
+                margin: 40px auto 20px;
+                text-align: center;
+            }
+
+            .board-container {
+                width: 380px;
+                min-height: 300px;
+                background: #fff;
+                padding: 24px;
+                border-radius: 12px;
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+            }
+
+            .board-div {
+                max-height: 220px;
+                overflow-y: auto;
+            }
+
+            .board-header {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 12px;
+                gap: 8px;
+            }
+
+            .board-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .board-title-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+
+            .board-more {
+                font-size: 13px;
+                color: #888;
+                text-decoration: none;
+            }
+
+            .board-more:hover {
+                text-decoration: underline;
+            }
+
+            .badge {
+                background: #ff6b6b;
+                color: white;
+                font-size: 10px;
+                padding: 2px 4px;
+                border-radius: 4px;
+                margin-right: 6px;
+            }
+
+            .section-subtitle {
+                font-size: 22px;
+                font-weight: bold;
+                text-align: center;
+                margin: 40px auto 20px;
+                color: #444;
+            }
+
+            .board-container.notice {
+                background: #f0f7ff;
+                border-top: 4px solid #339af0;
+            }
+
+            .board-container.donation {
+                background: #fff8f0;
+                border-top: 4px solid #ffa94d;
+            }
+
+            .shelter-preview {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+                margin-bottom: 50px;
+            }
+
+            .shelter-card {
+                width: 250px;
+                background: #fff;
+                border-radius: 12px;
+                padding: 15px;
+                text-align: center;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .shelter-card img {
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+
+            .shelter-name {
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            .shelter-detail {
+                font-size: 14px;
+                color: #777;
+                margin: 5px 0 10px;
+            }
+
+            .shelter-card button {
+                padding: 6px 12px;
+                font-size: 14px;
+                border: none;
+                background-color: #f0932b;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
             }
 
             .navigation {
@@ -292,37 +379,24 @@
                 cursor: not-allowed;
             }
 
-            @media (max-width: 600px) {
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none !important;
+            }
+
+            @media (max-width: 1024px) {
                 .product-card {
-                    width: calc(50% - 10px);
-                    /* 작은 화면에서는 2개씩 */
+                    width: calc(33.33% - 16px);
+                    /* 태블릿: 3개씩 */
                 }
             }
 
-
-
-
-            /* Swiper 컨테이너 기본 설정 */
-            .swiper {
-                width: 100%;
-                height: 400px;
-                /* 필요에 따라 높이 조절 */
+            @media (max-width: 768px) {
+                .product-card {
+                    width: calc(50% - 16px);
+                    /* 모바일: 2개씩 */
+                }
             }
-
-            /* Swiper 내부 슬라이드 설정 */
-            .swiper-slide {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 20px;
-                background: #ddd;
-                /* 배경색 (테스트용) */
-                width: 100% !important;
-                /* 자동으로 조절되도록 설정 */
-            }
-
-
-
 
             .scroll {
                 -ms-overflow-style: none;
@@ -350,8 +424,8 @@
 
             <main class="content">
 
-                <!-- Vue에서 렌더링할 Swiper 영역 -->
-                <div ref="swiperContainer" class="swiper">
+                <!-- ✅ 배너 -->
+                <div ref="swiperContainer" class="swiper hero-banner">
                     <div class="swiper-wrapper">
                         <img v-for="img in slides" :src="img" class="swiper-slide" />
                     </div>
@@ -360,64 +434,82 @@
                     <div class="swiper-button-prev"></div>
                 </div>
 
-                <section class="section-grid">
-                    <section class="shortcut-grid">
-                        <div class="shortcut-item">
-                            <a href="/partner/list.do">
-                                <img src="img/quick/menu_black.png" alt="아이콘1">
-                                <span>병원찾기</span>
-                            </a>
-                        </div>
-                        <div class="shortcut-item">
-                            <a href="/product/list.do">
-                                <img src="img/quick/menu_white.png" alt="아이콘2">
-                                <span>물품구매</span>
-                            </a>
-                        </div>
-                        <div class="shortcut-item">
-                            <a href="/center.do">
-                                <img src="img/quick/menu.png" alt="아이콘3">
-                                <span>후원하기</span>
-                            </a>
-                        </div>
-                        <div class="shortcut-item">
-                            <a href="/cart/list.do">
-                                <img src="img/quick/menu_toggle.png" alt="아이콘4">
-                                <span>주문조회</span>
-                            </a>
-                        </div>
-                    </section>
+                <!-- ✅ 아이콘 4개 -->
+                <section class="shortcut-grid">
+                    <div class="shortcut-item">
+                        <a href="/partner/list.do">
+                            <img src="img/quick/vet.png" alt="병원찾기" />
+                            <span>병원찾기</span>
+                        </a>
+                    </div>
+                    <div class="shortcut-item">
+                        <a href="/product/list.do">
+                            <img src="img/quick/pet-shop.png" alt="물품구매" />
+                            <span>물품구매</span>
+                        </a>
+                    </div>
+                    <div class="shortcut-item">
+                        <a href="/center.do">
+                            <img src="img/quick/donation.png" alt="후원하기" />
+                            <span>후원하기</span>
+                        </a>
+                    </div>
+                    <div class="shortcut-item">
+                        <a href="/cart/list.do">
+                            <img src="img/quick/manifest.png" alt="주문조회" />
+                            <span>주문조회</span>
+                        </a>
+                    </div>
+                </section>
 
-                    <div class="board-container">
-                        <div class="board-title">공지사항</div>
+                <!-- ✅ 공지사항 & 후원내역 -->
+                <section class="info-section">
+                    <!-- 공지사항 -->
+                    <div class="board-container notice">
+                        <div class="board-title-wrapper">
+                            <div class="board-header">
+                                <img src="img/quick/advertisement.png" class="board-icon" alt="공지">
+                                <div class="board-title">공지사항</div>
+                            </div>
+                            <a href="/board/list.do" class="board-more">더보기</a>
+                        </div>
                         <div class="board-div">
                             <div v-for="post in freeposts" @click="fnView(post.boardId)" class="post-item">
-                                <div>{{ post.title }}</div>
+                                <div>
+                                    <span class="badge" v-if="post.new">NEW</span>
+                                    {{ post.title }}
+                                </div>
                                 <div class="post-content">{{ post.createdAt }}</div>
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="board-container">
-                        <div class="board-title">후원내역</div>
+
+                    <!-- 후원내역 -->
+                    <div class="board-container donation">
+                        <div class="board-title-wrapper">
+                            <div class="board-header">
+                                <img src="img/quick/charity.png" class="board-icon" alt="후원">
+                                <div class="board-title">후원내역</div>
+                            </div>
+                            <!-- <a href="/donation/list.do" class="board-more">더보기</a> -->
+                        </div>
                         <div class="board-div scroll" id="scrollBox">
                             <div v-for="post in donations" class="post-item">
                                 <div>
-                                <span  v-if="post.anonymousYn == 'N' ">{{ post.nickName }} </span>
-                                <span  v-if="post.anonymousYn == 'Y' "> 익명 </span>
-                                
-                                  님이 {{ post.centerName }} 에 </div>
+                                    <span v-if="post.anonymousYn == 'N'">{{ post.nickName }}</span>
+                                    <span v-if="post.anonymousYn == 'Y'">익명</span>
+                                    님이 {{ post.centerName }} 에
+                                </div>
                                 <div class="post-content">{{ post.amount }} 원을 후원 해주셨습니다.</div>
                                 <div class="post-content">{{ post.donationDate }}</div>
                             </div>
                         </div>
                     </div>
 
-
-
                 </section>
 
+                <!-- ✅ 베스트 상품 -->
                 <section class="best-products">
                     <div class="best-product-container">
                         <div class="best-product-title">베스트 상품</div>
@@ -427,11 +519,11 @@
                                 <div class="product-image">
                                     <template v-if="product.filePath">
                                         <img class="product_img" :src="product.filePath" :alt="product.fileName"
-                                            @click="fnPView(product.productId)">
+                                            @click="fnPView(product.productId)" />
                                     </template>
                                     <template v-else>
                                         <img class="product_img" src="../../img/product/product update.png" alt="이미지 없음"
-                                            @click="fnPView(product.productId)">
+                                            @click="fnPView(product.productId)" />
                                     </template>
                                 </div>
                                 <div class="product-name">{{ product.productName }}</div>
@@ -447,20 +539,21 @@
                     </div>
                 </section>
 
+                <!-- ✅ 신상품 -->
                 <section class="best-products">
                     <div class="best-product-container">
                         <div class="best-product-title">신규 상품</div>
                         <div class="product-list">
-                            <div v-for="product in  getDisplayedProducts(productsN, currentPageNew)"
+                            <div v-for="product in getDisplayedProducts(productsN, currentPageNew)"
                                 class="product-card">
                                 <div class="product-image">
                                     <template v-if="product.filePath">
                                         <img class="product_img" :src="product.filePath" :alt="product.fileName"
-                                            @click="fnPView(product.productId)">
+                                            @click="fnPView(product.productId)" />
                                     </template>
                                     <template v-else>
                                         <img class="product_img" src="../../img/product/product update.png" alt="이미지 없음"
-                                            @click="fnPView(product.productId)">
+                                            @click="fnPView(product.productId)" />
                                     </template>
                                 </div>
                                 <div class="product-name">{{ product.productName }}</div>
@@ -476,8 +569,19 @@
                     </div>
                 </section>
 
+                <!-- ✅ 보호소 소개 -->
+                <!-- <section>
+                    <div class="section-title">보호소 소개</div>
+                    <div class="shelter-preview">
+                        <div class="shelter-card" v-for="shelter in shelters" :key="shelter.name">
+                            <img :src="shelter.image" alt="shelter">
+                            <div class="shelter-name">{{ shelter.name }}</div>
+                            <div class="shelter-detail">{{ shelter.location }}</div>
+                            <button @click="goToCenter">보러가기</button>
+                        </div>
+                    </div>
+                </section> -->
             </main>
-
         </div>
 
 
@@ -496,9 +600,11 @@
                     return {
                         alertMessage: "${alertMessage}" || "",
                         slides: [
-                            'img/banner/banner1.PNG',
-                            'img/banner/banner2.PNG',
-                            'img/banner/banner3.PNG'
+                            'img/banner/M.banner1.png',
+                            'img/banner/M.banner2.png',
+                            'img/banner/M.banner4.png',
+                            'img/banner/M.banner5.png',
+                            'img/banner/M.banner6.png'
                         ],
                         freeposts: [],
                         donations: [],
@@ -658,8 +764,8 @@
                                 delay: 3000,
                                 disableOnInteraction: false, // 사용자가 버튼을 눌러도 자동 재생 유지
                             },
-                            slidesPerView: "auto", // 자동 너비 조절
-                            spaceBetween: 10, // 슬라이드 간격
+                            slidesPerView: 1, // 자동 너비 조절
+                            spaceBetween: 0, // 슬라이드 간격
                             pagination: {
                                 el: ".swiper-pagination",
                                 clickable: true,
@@ -689,10 +795,6 @@
                         alert(self.alertMessage);
 
                     }
-                    
-
-
-
                 }
             });
 
