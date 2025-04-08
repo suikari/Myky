@@ -254,6 +254,17 @@
 		AND CATEGORY = #{category}
 	</delete>
 
+
+	<delete id="deletePartnerList" parameterType="hashmap">
+		delete partner_detail
+		WHERE partner_detail_id IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+
+
 	<delete id="deleteBoardCmtList" parameterType="hashmap">
 		UPDATE FREE_BOARD_COMMENT
 		SET IS_DELETED = 'Y'

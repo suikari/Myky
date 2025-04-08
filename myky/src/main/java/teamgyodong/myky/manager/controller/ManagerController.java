@@ -206,6 +206,23 @@ public class ManagerController {
 	}
 	
 	// 게시글 여러개 삭제
+	@RequestMapping(value = "/admin/remove-partner-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removePartnerList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String json = map.get("selectList").toString(); 
+		ObjectMapper mapper = new ObjectMapper();
+		List<Object> list = mapper.readValue(json, new TypeReference<List<Object>>(){});
+		map.put("list", list);
+		System.out.println(list);
+		
+		resultMap = managerService.deletePartnerList(map);
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/updateUser.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String updateUser(Model model, @RequestParam HashMap<String, Object> map) throws Exception {

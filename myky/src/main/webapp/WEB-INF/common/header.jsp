@@ -114,7 +114,7 @@
 					      v-for="n in sortedNotifications"
 					      :key="n.id"
 					      :class="['notification-item', n.readYn === 'Y' ? 'read' : 'unread']"
-					      @click="ReadNotifications(n.id)"
+					      @click="ReadNotifications(n)"
 					    >
 					      <div class="noti-content">
 					        <span class="noti-message">{{ n.message }}</span>
@@ -367,10 +367,10 @@
 					showNotifications() {
 						this.showNotificationPanel = !this.showNotificationPanel;
 					},
-					ReadNotifications(id) {
+					ReadNotifications(item) {
 						let self = this;
 						var nparmap = {
-								id: id,
+								id: item.id,
 						};
 						
 						$.ajax({
@@ -380,6 +380,14 @@
 							data: nparmap,
 							success: function (data) {
 								//console.log("12322",data);
+								
+								  if (item.boardId) {
+								    location.href = '/board/view.do?boardId='+ item.boardId;
+								  } else if (item.vetBoardId) {
+								    location.href = '/board/vetBoardView.do?vetBoardId='+ item.vetBoardId;
+								  } else if (item.orderId) {
+									location.href = '/order/orderList.do?orderId='+ item.orderId;
+								  }
 								self.fnNotiList();
 							}
 						});

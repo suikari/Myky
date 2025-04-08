@@ -80,7 +80,8 @@ public interface ManagerMapper {
 	int deleteBoardList(HashMap<String, Object> map);
 	int deleteBoardCmtList(HashMap<String, Object> map);
 	int deleteProductImg(HashMap<String, Object> map);
-
+	int deletePartnerList(HashMap<String, Object> map);
+	
 	
 	int insertVet(HashMap<String, Object> map);
 	int insertProduct(HashMap<String, Object> map);
