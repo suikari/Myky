@@ -105,7 +105,7 @@
 	</select>
 	
 	<select id="getPartnerList" parameterType="hashmap" resultType="teamgyodong.myky.partner.model.partnerdetail">
-		  select * from partner_detail
+	select * from partner_detail
 		where 1=1
 		<if test="searchKeyword != null and searchKeyword != ''">
 			and (name like '%' || #{searchKeyword} || '%'
