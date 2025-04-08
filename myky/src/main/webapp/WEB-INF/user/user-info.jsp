@@ -8,159 +8,9 @@
         <title>유저 정보</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-
+		<link rel="stylesheet" href="/css/user/user.css" />
         <style>
-            /* 전체 컨테이너 */
-            .user-info-container {
-                max-width: 600px;
-                margin: 30px auto;
-                padding: 20px;
-                border-radius: 10px;
-                background: #f9f9f9;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
 
-            /* 프로필 컨테이너 작업 */
-
-            .profile-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                /* 가운데 정렬 */
-                margin-right: 15px;
-            }
-
-            .profile-pic {
-                width: 150px;
-                height: 150px;
-                background: gray;
-                border-radius: 100%;
-            }
-
-            .profile-container button {
-                margin-top: 10px;
-                padding: 5px 10px;
-                border: none;
-                background: #007bff;
-                color: white;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-
-            .profile-container button:hover {
-                background: #0056b3;
-            }
-
-            /* 개별 항목 스타일 */
-            .user-info-box {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 12px;
-                border-bottom: 1px solid #ddd;
-            }
-
-            .user-info-box2 {
-                display: flex;
-                align-items: center;
-                justify-content: left;
-                padding: 12px;
-                gap: 10px;
-                border-bottom: 1px solid #ddd;
-            }
-
-            /* 라벨 (항목 제목) 스타일 */
-            .user-info-label {
-                font-weight: bold;
-                color: #333;
-            }
-
-            /* 값 (텍스트 데이터) 스타일 */
-            .user-info-value {
-                color: #666;
-            }
-
-            /* 입력 필드 스타일 */
-            .user-info-input {
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                width: 60%;
-            }
-
-            /* 작은 입력 필드 (전화번호) */
-            .user-info-input.small {
-                width: 75px;
-                text-align: left;
-            }
-
-            /* 버튼 스타일 */
-            .user-info-btn {
-                background: #4CAF50;
-                color: white;
-                border: none;
-                padding: 8px 12px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
-
-            .user-info-btn:hover {
-                background: #45a049;
-            }
-
-            /* 취소 버튼 (빨간색) */
-            .user-info-btn.cancel {
-                background: #f44336;
-            }
-
-            .user-info-btn.cancel:hover {
-                background: #d32f2f;
-            }
-
-            /* 버튼 그룹 정렬 */
-            .user-info-btn-group {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 20px;
-            }
-
-            /* 왼쪽 버튼 그룹 */
-            .user-info-btn-group-left {
-                display: flex;
-                gap: 10px;
-                /* 버튼 간격 */
-            }
-
-            /* 오른쪽 버튼 (뒤로) */
-            .user-info-btn-group-right {
-                margin-left: auto;
-                /* 자동 마진으로 오른쪽 정렬 */
-            }
-
-            /* 파일 업로드 버튼 감추기 */
-            .file-upload input[type="file"] {
-                display: none;
-            }
-
-            /* 사용자 정의 업로드 버튼 스타일 */
-            .custom-file-label {
-                display: inline-block;
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-                text-align: center;
-                transition: background-color 0.3s;
-            }
-
-            /* 마우스 호버 효과 */
-            .custom-file-label:hover {
-                background-color: #45a049;
-            }
         </style>
     </head>
 
@@ -169,204 +19,199 @@
 
 
 
-        <div id="app" class="user-info-container">
-            <template v-if="editFlg==false">
-                <div class="user-info-box">
-                    <div class="user-info-label">유저아이디 :</div>
-                    <div class="user-info-value">{{user.userId}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">이름 :</div>
-                    <div class="user-info-value">{{user.userName}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">닉네임 :</div>
-                    <div class="user-info-value">{{user.nickName}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">이메일 :</div>
-                    <div class="user-info-value">{{user.email}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">생년월일 :</div>
-                    <div class="user-info-value">{{user.birthDate}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">연락처 :</div>
-                    <div class="user-info-value">{{user.phoneNumber}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">주소 :</div>
-                    <div class="user-info-value">{{user.address}}</div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">성별 :</div>
-                    <div class="user-info-value">
-                        <span v-if="user.gender == 'M'">남자</span>
-                        <span v-if="user.gender == 'F'">여자</span>
-                        <span v-if="user.gender == 'N'">비공개</span>
+        <div id="app">
+            <div class="user-info-container">
+                <template v-if="editFlg==false">
+                    <div class="user-info-box">
+                        <div class="user-info-label">유저아이디 :</div>
+                        <div class="user-info-value">{{user.userId}}</div>
                     </div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">SNS 수신동의 :</div>
-                    <div class="user-info-value">
-                        <span v-if="user.phoneYn == 'Y'">수신</span>
-                        <span v-else>미수신</span>
+                    <div class="user-info-box">
+                        <div class="user-info-label">이름 :</div>
+                        <div class="user-info-value">{{user.userName}}</div>
                     </div>
-                </div>
-                <div class="user-info-box">
-                    <div class="user-info-label">이메일 수신동의 :</div>
-                    <div class="user-info-value">
-                        <span v-if="user.emailYn == 'Y'">수신</span>
-                        <span v-else>미수신</span>
+                    <div class="user-info-box">
+                        <div class="user-info-label">닉네임 :</div>
+                        <div class="user-info-value">{{user.nickName}}</div>
                     </div>
-                </div>
-                <div class="user-info-btn-group">
-                    <!-- 왼쪽 버튼 그룹 -->
-                    <div class="user-info-btn-group-left">
-                        <button class="user-info-btn" @click="fnEdit()">정보 수정</button>
-                        <button class="user-info-btn" @click="fnPwd()">비밀번호 변경</button>
+                    <div class="user-info-box">
+                        <div class="user-info-label">이메일 :</div>
+                        <div class="user-info-value">{{user.email}}</div>
+                    </div>
+                    <div class="user-info-box">
+                        <div class="user-info-label">생년월일 :</div>
+                        <div class="user-info-value">{{user.birthDate}}</div>
+                    </div>
+                    <div class="user-info-box">
+                        <div class="user-info-label">연락처 :</div>
+                        <div class="user-info-value">{{user.phoneNumber}}</div>
+                    </div>
+                    <div class="user-info-box">
+                        <div class="user-info-label">주소 :</div>
+                        <div class="user-info-value">{{user.address}}</div>
+                    </div>
+                    <div class="user-info-box">
+                        <div class="user-info-label">성별 :</div>
+                        <div class="user-info-value">
+                            <span v-if="user.gender == 'M'">남자</span>
+                            <span v-if="user.gender == 'F'">여자</span>
+                            <span v-if="user.gender == 'N'">비공개</span>
+                        </div>
+                    </div>
+                    <div class="user-info-box">
+                        <div class="user-info-label">SNS 수신:</div>
+                        <div class="user-info-value">
+                            <span v-if="user.phoneYn == 'Y'">동의</span>
+                            <span v-else>미동의</span>
+                        </div>
+                    </div>
+                    <div class="user-info-box">
+                        <div class="user-info-label">이메일 수신:</div>
+                        <div class="user-info-value">
+                            <span v-if="user.emailYn == 'Y'">동의</span>
+                            <span v-else>미동의</span>
+                        </div>
+                    </div>
+                    <div class="user-info-btn-group">
+                        <!-- 왼쪽 버튼 그룹 -->
+                        <div class="user-info-btn-group-left">
+                            <button class="user-info-btn" @click="fnEdit()">정보 수정</button>
+                            <button class="user-info-btn" @click="fnPwd()">비밀번호 변경</button>
+                        </div>
+
+                        <!-- 오른쪽 버튼 (뒤로) -->
+                        <div class="user-info-btn-group-right">
+                            <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
+                        </div>
+                </template>
+
+
+
+                <!-- 수정 칸 -->
+                <template v-else>
+                    <br>
+                    <div class="profile-container">
+                        <template v-if="!picFlg">
+                            <img :src="user.profileImage" alt="" class="profile-pic">
+                        </template>
+                        <template v-else>
+                            <img :src="this.previewImage" alt="" class="profile-pic">
+                        </template>
                     </div>
 
-                    <!-- 오른쪽 버튼 (뒤로) -->
-                    <div class="user-info-btn-group-right">
+                    <div class="profile-btn-group">
+                        <div class="file-upload">
+                            <input type="file" id="file1" name="file1" accept=".jpg, .png" @change="uploadImage">
+                            <label for="file1" class="custom-file-label">프로필 업로드</label>
+                        </div>
+                        <label @click="fnDeletePic()" class="custom-file-label">프로필 사진 삭제</label>
+                    </div>
+
+
+
+                    <div class="user-info-box2">
+                        <div class="user-info-label">이름 :</div>
+                        <input type="text" v-model="user.userName" class="user-info-input">
+                    </div>
+
+                    <div class="user-info-box">
+                        <div class="user-info-label">닉네임 :</div>
+                        <template v-if="!nickFlg">
+                            <input type="text" v-model="user.nickName" class="user-info-input" disabled>
+                            <button class="user-info-btn" @click="fnEditNick()">닉네임 변경</button>
+                        </template>
+                        <template v-else>
+                            <input type="text" v-model="user.nickName" class="user-info-input">
+                            <button class="user-info-btn" @click="fnNickChecked()">저장</button>
+                            <button class="user-info-btn cancel" @click="fnExitNick()">취소</button>
+                        </template>
+                    </div>
+
+
+                    <div class="user-info-box2">
+
+                        <template v-if="emailFlg">
+                            <label for="email" class="user-info-label">이메일 :</label>
+                            <input id="email" class="user-info-input" v-model="user.email" disabled>
+                            <button class="user-info-btn" @click="sendEmailEdit()">이메일 수정</button>
+                        </template>
+
+                        <template v-else>
+                            <label for="email" class="user-info-label">이메일 :</label>
+                            <input id="email" class="user-info-input" v-model="user.email" placeholder="이메일을 입력하세요"
+                                class="user-info-input" />
+                            <button class="user-info-btn" @click="fnEmailChecked">인증번호 받기</button>
+                            <button class="user-info-btn" @click="sendEmailCancel()">인증 취소</button>
+                        </template>
+                    </div>
+
+                    <div v-if="showVerification" class="user-info-box2">
+                        <label for="email" class="user-info-label">인증번호:</label>
+                        <input id="email" v-model="authCode" placeholder="인증번호 입력" class="user-info-input" />
+                        <button class="user-info-btn" @click="verifyCode">인증 확인</button>
+                    </div>
+
+                    <div class="user-info-box2">
+                        <div class="user-info-label">생년월일 :</div>
+                        <input type="text" v-model="user.birthDate" class="user-info-input">
+                    </div>
+
+                    <div class="user-info-box2">
+                        <div class="user-info-label">연락처 :</div>
+                        <template v-if="!phoneFlg">
+                            <div class="user-info-value">{{user.phoneNumber}}</div>
+                            <button class="user-info-btn" @click="fnEditPhone()">연락처 변경</button>
+                        </template>
+                        <template v-else>
+                            <select v-model="selectNum" class="user-info-input small">
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                                <option value="017">017</option>
+                            </select>
+                            <input v-model="num1" class="user-info-input small">
+                            <input v-model="num2" class="user-info-input small">
+                            <button class="user-info-btn" @click="phoneSave()">변경</button>
+                            <button class="user-info-btn cancel" @click="fnExitPhone()">취소</button>
+                        </template>
+                    </div>
+
+                    <div class="user-info-box">
+                        <div class="user-info-label">주소 :</div>
+                        <input type="text" v-model="user.address" class="user-info-input" disabled>
+                        <button class="user-info-btn" @click="fnSearchAddr()">주소검색</button>
+                    </div>
+
+                    <div class="user-info-box">
+                        <div class="user-info-label">성별 :</div>
+                        <div class="user-info-value">
+                            <input type="radio" name="gender" value="M" v-model="user.gender"> 남성
+                            <input type="radio" name="gender" value="F" v-model="user.gender"> 여성
+                            <input type="radio" name="gender" value="N" v-model="user.gender"> 비공개
+                        </div>
+                    </div>
+
+                    <div class="user-info-box">
+                        <div class="user-info-label">SNS 수신 :</div>
+                        <div class="user-info-value">
+                            <input type="radio" name="sns" value="Y" v-model="user.phoneYn"> 동의
+                            <input type="radio" name="sns" value="N" v-model="user.phoneYn"> 미동의
+                        </div>
+                    </div>
+
+                    <div class="user-info-box">
+                        <div class="user-info-label">이메일 수신 :</div>
+                        <div class="user-info-value">
+                            <input type="radio" name="email" value="Y" v-model="user.emailYn"> 동의
+                            <input type="radio" name="email" value="N" v-model="user.emailYn"> 미동의
+                        </div>
+                    </div>
+
+                    <div class="user-info-btn-group">
+                        <button class="user-info-btn" @click="fnSave()">저장</button>
                         <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
                     </div>
-            </template>
-
-
-
-            <!-- 수정 칸 -->
-            <template v-else>
-                <br>
-                <div class="profile-container">
-                    <template v-if="!picFlg">
-                        <img :src="user.profileImage" alt="" class="profile-pic">
-                    </template>
-                    <template v-else>
-                        <img :src="this.previewImage" alt="" class="profile-pic">
-                    </template>
-                </div>
-
-                <div class="file-upload">
-                    <input type="file" id="file1" name="file1" accept=".jpg, .png" @change="uploadImage">
-                    <label for="file1" class="custom-file-label">프로필 업로드</label>
-                </div>
-                <div>
-                    <button class="custom-file-label" @click="fnDeletePic()">프로필 사진 삭제</button>
-                </div>
-
-
-
-                <div class="user-info-box2">
-                    <div class="user-info-label">이름 :</div>
-                    <input type="text" v-model="user.userName" class="user-info-input">
-                </div>
-
-                <div class="user-info-box">
-                    <div class="user-info-label">닉네임 :</div>
-                    <template v-if="!nickFlg">
-                        <input type="text" v-model="user.nickName" class="user-info-input" disabled>
-                        <button class="user-info-btn" @click="fnEditNick()">닉네임 변경</button>
-                    </template>
-                    <template v-else>
-                        <input type="text" v-model="user.nickName" class="user-info-input">
-                        <button class="user-info-btn" @click="fnNickChecked()">저장</button>
-                        <button class="user-info-btn cancel" @click="fnExitNick()">취소</button>
-                    </template>
-                </div>
-
-                <!-- <div class="user-info-box2">
-                    <div class="user-info-label">이메일 :</div>
-                    <input type="text" v-model="user.email" class="user-info-input">
-                    <button @click="sendEmailAuth">인증번호 받기</button>
-                </div> -->
-
-                <div class="user-info-box2">
-
-                    <template v-if="emailFlg">
-                        <label for="email" class="user-info-label">이메일 :</label>
-                        <input id="email" class="user-info-input" v-model="user.email" disabled>
-                        <button class="user-info-btn" @click="sendEmailEdit()">이메일 수정</button>
-                    </template>
-
-                    <template v-else>
-                        <label for="email" class="user-info-label">이메일 :</label>
-                        <input id="email" class="user-info-input" v-model="user.email" placeholder="이메일을 입력하세요"
-                            class="user-info-input" />
-                        <button class="user-info-btn" @click="fnEmailChecked">인증번호 받기</button>
-                        <button class="user-info-btn" @click="sendEmailCancel()">인증 취소</button>
-                    </template>
-                </div>
-
-                <div v-if="showVerification" class="user-info-box2">
-                    <label for="email" class="user-info-label">인증번호:</label>
-                    <input id="email" v-model="authCode" placeholder="인증번호 입력" class="user-info-input" />
-                    <button class="user-info-btn" @click="verifyCode">인증 확인</button>
-                </div>
-
-                <div class="user-info-box2">
-                    <div class="user-info-label">생년월일 :</div>
-                    <input type="text" v-model="user.birthDate" class="user-info-input">
-                </div>
-
-                <div class="user-info-box2">
-                    <div class="user-info-label">연락처 :</div>
-                    <template v-if="!phoneFlg">
-                        <div class="user-info-value">{{user.phoneNumber}}</div>
-                        <button class="user-info-btn" @click="fnEditPhone()">연락처 변경</button>
-                    </template>
-                    <template v-else>
-                        <select v-model="selectNum" class="user-info-input small">
-                            <option value="010">010</option>
-                            <option value="011">011</option>
-                            <option value="017">017</option>
-                        </select>
-                        <input v-model="num1" class="user-info-input small">
-                        <input v-model="num2" class="user-info-input small">
-                        <button class="user-info-btn" @click="phoneSave()">변경</button>
-                        <button class="user-info-btn cancel" @click="fnExitPhone()">취소</button>
-                    </template>
-                </div>
-
-                <div class="user-info-box">
-                    <div class="user-info-label">주소 :</div>
-                    <input type="text" v-model="user.address" class="user-info-input" disabled>
-                    <button class="user-info-btn" @click="fnSearchAddr()">주소검색</button>
-                </div>
-
-                <div class="user-info-box">
-                    <div class="user-info-label">성별 :</div>
-                    <div class="user-info-value">
-                        <input type="radio" name="gender" value="M" v-model="user.gender"> 남성
-                        <input type="radio" name="gender" value="F" v-model="user.gender"> 여성
-                        <input type="radio" name="gender" value="N" v-model="user.gender"> 비공개
-                    </div>
-                </div>
-
-                <div class="user-info-box">
-                    <div class="user-info-label">SNS 수신동의 :</div>
-                    <div class="user-info-value">
-                        <input type="radio" name="sns" value="Y" v-model="user.phoneYn"> 수신
-                        <input type="radio" name="sns" value="N" v-model="user.phoneYn"> 미수신
-                    </div>
-                </div>
-
-                <div class="user-info-box">
-                    <div class="user-info-label">이메일 수신동의 :</div>
-                    <div class="user-info-value">
-                        <input type="radio" name="email" value="Y" v-model="user.emailYn"> 수신
-                        <input type="radio" name="email" value="N" v-model="user.emailYn"> 미수신
-                    </div>
-                </div>
-
-                <div class="user-info-btn-group">
-                    <button class="user-info-btn" @click="fnSave()">저장</button>
-                    <button class="user-info-btn cancel" @click="fnExit()">뒤로</button>
-                </div>
-            </template>
-
-
+                </template>
+            </div>
         </div>
 
 
@@ -663,7 +508,7 @@
                         }
 
                     },
-                    
+
                     fnEmailChecked: function () {
                         var self = this;
                         if (!self.user.email) {

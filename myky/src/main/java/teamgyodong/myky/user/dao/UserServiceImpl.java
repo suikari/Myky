@@ -315,7 +315,7 @@ public class UserServiceImpl implements UserService {
 		public HashMap<String, Object> searchMemberShip(HashMap<String, Object> map) {
 			HashMap<String, Object> resultMap = new HashMap<>();
 		    List<Membership> ship = userMapper.selectMembershipId(map); // map 안에 "email"이 들어있어야 함
-		    int count = ship != null ? 1 : 0;
+		    int count = (ship != null && !ship.isEmpty()) ? ship.size() : 0;
 		    if (count != 0) {
 			    resultMap.put("count", count); 
 			    resultMap.put("ship", ship); 
