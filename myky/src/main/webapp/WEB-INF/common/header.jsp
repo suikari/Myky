@@ -17,9 +17,19 @@
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+		
 		<link rel="stylesheet" type="text/css" href="/css/main.css" />
+		
 		<style>
 
+			.diamond.premium {
+				color: gold;
+			}
+			
+			.diamond.basic {
+				color: gray;
+			}
 
 		</style>
 	</head>
@@ -82,10 +92,46 @@
 				</nav>
 
 				<div class="icons">
-					<span @click="myMembership" class="icon">💎</span>
-					<span @click="toggleSearch" class="search-icon">🔍</span>
-					<span @click="myPage" class="icon">👤</span>
-					<span @click="myCart" class="icon">🛒</span>
+					<!-- 다이아 아이콘 (isMembership에 따라 색상 다르게) -->
+					<span @click="myMembership"
+						  :class="['icon', isMembership ? 'bi-gem mem_premium' : 'bi-gem mem_basic']">
+					</span>
+				
+					<span @click="toggleSearch" class="icon bi-search"></span>
+					
+					<!-- 알림 아이콘 -->
+					<span @click="showNotifications" class="icon bi-bell notification-icon">
+					  <span v-if="unreadCount > 0" class="noti-badge">{{ unreadCount }}</span>
+					</span>
+					
+					<!-- 알림 드롭다운 -->
+					<div v-show="showNotificationPanel" class="notification-dropdown">
+					  <p>🔔 알림</p>
+					
+					  <ul class="notification-list">
+					    <li
+					      v-for="n in sortedNotifications"
+					      :key="n.id"
+					      :class="['notification-item', n.readYn === 'Y' ? 'read' : 'unread']"
+					      @click="ReadNotifications(n.id)"
+					    >
+					      <div class="noti-content">
+					        <span class="noti-message">{{ n.message }}</span>
+					        <span class="noti-time">{{ formatTime(n.createdAt) }}</span>
+					      </div>
+					    </li>
+					
+					    <li v-if="sortedNotifications.length === 0" class="notification-item read">
+					      <div class="noti-content">
+					        <span class="noti-message">새 알림이 없습니다.</span>
+					      </div>
+					    </li>
+					  </ul>
+					</div>
+
+						
+					<span @click="myPage" class="icon bi-person"></span>
+					<span @click="myCart" class="icon bi-cart"></span>
 				</div>
 
 			</header>
@@ -103,8 +149,20 @@
 						showSearch: false,
 						searchQuery: '',
 					    googleInfo: [],
-                        email: ""
+                        email: "",
+                        isMembership : false,
+                        showNotificationPanel : false,
+                		notifications: [],
 					};
+				},
+				computed: {
+					sortedNotifications() {
+						// 읽지 않은 알림을 먼저 정렬
+						return this.notifications.slice().sort((a, b) => a.readYn - b.readYn);
+					},
+					unreadCount() {
+					    return this.notifications.filter(n => n.readYn === 'N').length;
+					}
 				},
 				methods: {
 					fnMenuList() {
@@ -168,6 +226,25 @@
 
 						});
 					},
+					fnNotiList() {
+
+						var self = this;
+						var nparmap = {userId : self.sessionId };
+
+						$.ajax({
+							url: "/Notification.dox",
+							dataType: "json",
+							type: "POST",
+							data: nparmap,
+							success: function (data) {
+								console.log("132", data);
+								self.notifications = data.list;
+
+							}
+
+						});
+					},
+					
 					fnLogin() {
 						//window.location.href = "/user/login.do";
 						//window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname);
@@ -284,7 +361,55 @@
 
 							}
 						});
-					}
+					},
+					showNotifications() {
+						this.showNotificationPanel = !this.showNotificationPanel;
+					},
+					ReadNotifications(id) {
+						let self = this;
+						var nparmap = {
+								id: id,
+						};
+						
+						$.ajax({
+							url: "/updateNoti.dox",
+							dataType: "json",
+							type: "POST",
+							data: nparmap,
+							success: function (data) {
+								//console.log("12322",data);
+								self.fnNotiList();
+							}
+						});
+							
+						
+						
+					},
+					formatTime(dateStr) {
+					      try {
+					        const target = new Date(dateStr.replace(' ', 'T'));
+
+					        if (isNaN(target.getTime())) {
+					          console.warn("❗ 유효하지 않은 날짜:", dateStr);
+					          return '';
+					        }
+
+					        const now = new Date();
+					        const diffSec = Math.floor((now - target) / 1000);
+
+					        if (diffSec < 60) return '방금 전';
+					        
+					        if (diffSec < 3600) return Math.floor(diffSec / 60)  + '분 전';
+					        
+					        if (diffSec < 86400) return Math.floor(diffSec / 3600) + '시간 전';
+					        
+					        return Math.floor(diffSec / 86400)+'일 전';
+					        
+					      } catch (e) {
+					        console.error("❗ formatTime 에러:", e);
+					        return '';
+					      }
+				  }
 
 
 				},
@@ -293,7 +418,10 @@
 					self.fnMenuList();
 					self.fnSearchList();
 					self.fnGoogle();
-
+					
+					if (self.sessionId != '') {
+						self.fnNotiList();
+					}
 					//console.log(self.sessionId);
 					//console.log(self.sessionName);
 					//console.log(self.sessionRole);

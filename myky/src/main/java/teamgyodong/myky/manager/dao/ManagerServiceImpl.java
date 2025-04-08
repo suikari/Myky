@@ -38,9 +38,10 @@ import teamgyodong.myky.manager.model.orderdetail;
 public class ManagerServiceImpl implements ManagerService {
 
 	@Autowired
-	
 	ManagerMapper managerMapper;
 	
+	@Autowired
+	MainMapper mainMapper;
 	
 	@Override
 	public HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map) {
@@ -607,10 +608,13 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
+
 		try {
 			int count = managerMapper.updateOrderDetail(map);
-
-			resultMap.put("count", count);
+			int Noticount = mainMapper.insertNotification(map);
+			
+			resultMap.put("count", count);			
+			resultMap.put("Noticount", Noticount);
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -742,8 +746,11 @@ public class ManagerServiceImpl implements ManagerService {
 		
 		try {
 			int count = managerMapper.UpdateAdminQna(map);
-
+			int Noticount = mainMapper.insertNotification(map);
+			
 			resultMap.put("count", count);
+			resultMap.put("Noticount", Noticount);
+
 			resultMap.put("result", "success");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
