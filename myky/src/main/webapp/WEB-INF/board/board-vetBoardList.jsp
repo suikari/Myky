@@ -10,234 +10,23 @@
 	<link rel="stylesheet" href="/css/board/board.css"/>
     
     <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        #app {
-            padding-bottom: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        /* 공지사항 제목 */
-        .section-header {
-            /* background-color: #202060; */
-            color: #202060;
-            font-weight: bold;
-            height: 70px;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            display: flex;
-            align-items: left; /* 세로 중앙 정렬 */
-            justify-content: left; /* 가로 중앙 정렬 */
-            font-size: 40px;
-            margin-top: 80px;
-            width: 100%;
-            max-width: 1000px;
-        } 
-        .section-headerDown {
-            color: #333;
-            font-weight: bold;
-            text-align: left;
-            margin-top: -10px;
-            width: 100%;
-            max-width: 1000px;
-        }
-        .search-wrapper {
-            width: 90%;
-            margin: 20px auto;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .search-left,
-        .search-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 3px;
-        }
-        .search-left select,
-        .search-left input,
-        .search-left button,
-        .search-right select {
-            height: 38px;
-            font-size: 14px;
-            border-radius: 6px;
-            padding: 0 12px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        .search-left input {
-            width: 220px;
-            background-color: #f0f0f0;
-            border: 2px solid #202060;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-        .search-left input:focus {
-            background-color: #fff;
-            border-color: #fca311;
-        }
-        .search-left button {
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .search-left button:hover {
-            background-color: #fca311;
-            color: #202060;
-        }
-        .table-wrapper {
-            width: 90%;
-            margin: 30px auto;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-        }
-        th {
-            background-color: #202060;
-            color: #fca311;
-            padding: 12px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-        td {
-            padding: 12px;
-            font-size: 14px;
-            color: #333;
-            background-color: #fafafa;
-        }
-        tr:nth-child(even) td {
-            background-color: #f0f0f0;
-        }
-        a {
-            color: #202060;
-            font-weight: bold;
-            text-decoration: none;
-            margin: 0 6px;
-        }
-        a:hover {
-            color: #fca311;
-            text-decoration: underline;
-        }
-        button.button {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: #202060;
-            color: #fca311;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-        button.button:hover {
-            background-color: #fca311;
-            color: #202060;
-        }
-        .buttonMargin{
-            margin-bottom: 100px;
-        }
-        div {
-            text-align: center;
-        }
-        span {
-            margin: 0 4px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #202060;
-        }
-        span.current-page {
-            color: #fca311;
-            text-decoration: underline;
-            cursor: default;
-        }
-        span:hover {
-            text-decoration: underline;
-        }
-        .custom-hr {
-            width: 1000px;
-            max-width: 100%;
-            border: none;
-            border-top: 1px solid #ccc;
-            margin-top: 10px;
-            margin-bottom: 70px;
-            width: 100%;
-        }
-        .setCss {
-            width: 100%;
-            max-width: 1000px;
 
-        }
-        .cmtCountColor {
-            color: #fca311;
-        }
-        .acceptButtonN {
-            color: #fca311;
-            font-weight: bold;
-            background-color: #202060;
-            border-radius: 6px;
-            width: 100px;
-            height: 30px;
-            text-align: center;
-        }
-        .acceptButtonY {
-            color: #202060;
-            font-weight: bold;
-            background-color: #fca311;
-            border-radius: 6px;
-            width: 100px;
-            height: 30px;
-            text-align: center;
-        }
-        span {
-            margin: 0 4px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #202060;
-        }
-        span.current-page {
-            color: #fca311;
-            text-decoration: underline;
-            cursor: default;
-        }
-        span:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
-    <div id="app" class="container">
+    <div id="fb-app" class="fb-container fb-a">
 
-        <div class="section-header">
+        <div class="fb-section-header">
             수의사 게시판
         </div>
-        <div class="section-headerDown">
+        <div class="fb-section-headerDown">
             질문과 답
         </div>    
-        <div class="setCss"></div>
-        <hr class="custom-hr">
-            <div class="search-wrapper">
-                <div class="search-right">
+        <div class="fb-setCss"></div>
+        <hr class="fb-custom-hr">
+            <div class="fb-search-wrapper">
+                <div class="fb-search-right">
                     <select v-model="pageSize" @change="fnBoardSearch">
                         <option value="5">5개씩</option>
                         <option value="10">10개씩</option>
@@ -245,7 +34,7 @@
                         <option value="20">20개씩</option>
                     </select>
                 </div>
-                <div class="search-left">
+                <div class="fb-search-left">
                     <select v-model="searchOption">
                         <option value="all">전체</option>
                         <option value="title">제목</option>
@@ -256,43 +45,45 @@
                     <button @click="fnBoardSearch">검색</button>
                 </div>
             </div>
-            <table class="table-wrapper">
-                <tr>
+        <div class="fb-table-vet">
+            <table class="fb-table-wrapper fb-table">
+                <tr class="fb-table-th">
                     <th>번호</th>
-                    <th>제목</th>
+                    <th style="width: 350px;">제목</th>
                     <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
-                    <th>포인트</th>
+                    <th style="width: 100px;">포인트</th>
                     <th>답변</th>
+                    <th>조회수</th>
+                    <th style="width: 50px;">작성일</th>
                     <th>채택</th>
                 </tr>
-                <tr v-for="(item, index) in list">
+                <tr v-for="(item, index) in list" class="fb-table-td fb-tr">
                     <template v-if="item.isDeleted == 'N'">
                         <td>{{item.vetBoardId}}</td>
                         <td><a href="javascript:;" @click="fnView(item.vetBoardId)">{{item.title}}</a></td>
                         <td>{{item.nickName}}</td>
-                        <td>{{item.createdAt}}</td>
-                        <td>{{item.cnt}}</td>
                         <td>{{item.points}}</td>
-                        <td class="cmtCountColor">
+                        <td style="color: #fca311; font-weight: bold;">
                             <template v-if="parseInt(item.commentCount) > 0">
-                              ({{ item.commentCount }})
+                                ({{ item.commentCount }})
                             </template>
-                          </td>
+                        </td>
+                        <td>{{item.cnt}}</td>
+                        <td>{{item.createdAt.substring(0, 10)}}</td>
                         <td>
-                            <div class="acceptButtonN" v-if="item.isAccepted == 'N'">채택 전</div>
-                            <div class="acceptButtonY" v-if="item.isAccepted == 'Y'">채택완료</div>
+                            <div class="fb-acceptButtonN" v-if="item.isAccepted == 'N'">채택 전</div>
+                            <div class="fb-acceptButtonY" v-if="item.isAccepted == 'Y'">채택완료</div>
                         </td>
                     </template>
                 </tr>
             </table>
+        </div>
 
                 <!-- 페이지네이션 버튼 -->
-                <div>
+                <div class="fb-a">
                     <!-- 이전 페이지 버튼 -->
                     <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('prev')" v-if="page != 1">
-                        <i class="bi bi-chevron-left"> < </i>
+                        <i class="fb-page-number"> < </i>
                     </a>
         
                     <!-- 페이지 번호 -->
@@ -309,26 +100,25 @@
                             <span v-if="num >= page - 2 && num <= page + 2" 
                                 href="javascript:;"  
                                 @click="fnPage(num)" 
-                                class="btn btn-outline-secondary board-page-btn" 
-                                :class="{ 'current-page': page === num }">
+                                class="fb-page-number" 
+                                :class="{ 'fb-current-page': page === num }">
                                 {{ num }}
                             </span>
                         
                             <a v-if="num === index && page < index - 2" 
                                 href="javascript:;"  
                                 @click="fnPage(index)" 
-                                class="btn btn-outline-secondary board-page-btn">
+                                class="fb-page-number">
                                 ...
                             </a>
                     </template>
     
                     <!-- 다음 페이지 버튼 -->
-                    <a class="btn btn-outline-secondary board-page-btn prev-next-btn" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
+                    <a class="fb-page-number" href="javascript:;" @click="fnPageMove('next')" v-if="index > 0 && page != index">
                         <i class="bi bi-chevron-right"> > </i>
                     </a>
-
                 </div>
-            <button class="button" @click="fnAdd" v-if="sessionId">글쓰기</button>
+            <button class="fb-button" @click="fnAdd" v-if="sessionId">글쓰기</button>     
     </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
@@ -454,6 +244,6 @@
                 }
             });
 
-            app.mount("#app");
+            app.mount("#fb-app");
         });
     </script>

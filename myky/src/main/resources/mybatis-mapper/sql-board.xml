@@ -33,7 +33,7 @@
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
 			</if>
 			<if test="searchOption != null and searchOption == 'userId2'">
-                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+                AND (F.USER_ID = #{keyword} 
                 AND F.TITLE LIKE '%' || #{keyword2} || '%')
             </if>
             <if test="menu != null and menu != ''">
@@ -71,7 +71,7 @@
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
 			</if>
 			<if test="searchOption != null and searchOption == 'userId2'">
-                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
+                AND (F.USER_ID = #{keyword} 
                 AND F.TITLE LIKE '%' || #{keyword2} || '%')
             </if>
             <if test="menu != null and menu != ''">
@@ -258,6 +258,10 @@
 			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
 			</if>
+			<if test="searchOption != null and searchOption == 'userId2'">
+                AND (F.USER_ID = #{keyword} 
+                AND F.TITLE LIKE '%' || #{keyword2} || '%')
+            </if>
 		    AND IS_DELETED = 'N'
 		    
 		ORDER BY 
@@ -284,6 +288,10 @@
 			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
 		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
 			</if>
+			<if test="searchOption != null and searchOption == 'userId2'">
+                AND (F.USER_ID = #{keyword} 
+                AND F.TITLE LIKE '%' || #{keyword2} || '%')
+            </if>
 		    AND F.IS_DELETED = 'N'
 	</select>
 	
