@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import teamgyodong.myky.Main.mapper.MainMapper;
 import teamgyodong.myky.Main.model.Category;
+import teamgyodong.myky.Main.model.Notification;
 import teamgyodong.myky.donation.mapper.DonationMapper;
 import teamgyodong.myky.donation.model.donation;
 import teamgyodong.myky.manager.model.Visit;
@@ -84,4 +85,41 @@ public class MainServiceImpl implements MainService {
 		
 		return resultMap;
 	}
+	
+	@Override
+	public HashMap<String, Object> selectNotificationList(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			List<Notification> list = mainMapper.selectNotificationList(map);
+
+			resultMap.put("list", list);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	@Override
+	public HashMap<String, Object> updateNotification(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = mainMapper.updateNotification(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 }

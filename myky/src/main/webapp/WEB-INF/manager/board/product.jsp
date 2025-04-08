@@ -723,6 +723,9 @@
                     },
                     fnSave() {
                     	var self = this;
+                    	
+                    	self.editData.message = "상품 문의 답변 등록";
+                    	
                     	var nparmap = self.editData;
                     	$.ajax({
                     		url: "/admin/UpdateAdminQna.dox",

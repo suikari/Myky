@@ -683,10 +683,12 @@ const app = Vue.createApp({
         fnOrderDetailSave() {
             var self = this;
             var params = {
+            		orderId        : self.editData.orderId,
             		orderDetailId  : self.updateOrderDetailId,
             		productId      : self.updateproductId,
             		trackingNumber : self.editData.trackingNumber,
-            		refundStatus   : self.editData.refundStatus     		
+            		refundStatus   : self.editData.refundStatus,
+            		message        : '주문 상세상품 정보 변경',
             };
             
             console.log('123',"");
