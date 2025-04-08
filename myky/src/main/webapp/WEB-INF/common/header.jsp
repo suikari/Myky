@@ -91,7 +91,7 @@
 					</div>
 				</nav>
 
-				<div class="icons">
+				<div v-show="membershipReady" class="icons">
 					<!-- 다이아 아이콘 (isMembership에 따라 색상 다르게) -->
 					
 					<span @click="toggleSearch" class="icon bi-search"></span>
@@ -130,7 +130,7 @@
 					  </ul>
 					</div>
 					
-					<span v-show="membershipReady" @click="myMembership" class="icon" :class="isMembership ? 'bi-gem mem_premium' : 'bi-gem mem_basic'">
+					<span  @click="myMembership" class="icon" :class="isMembership ? 'bi-gem mem_premium' : 'bi-gem mem_basic'">
 					</span>
 						
 				</div>
