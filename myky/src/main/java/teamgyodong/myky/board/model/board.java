@@ -23,11 +23,11 @@ public class board {
 	private String commentCount;
 	private String updatedTime;
 	private String nickName;
+	private String accepted;
 	
 	//FQA 메뉴
 	private String menu;
 	
-	private String accepted;
 	
 	
 }

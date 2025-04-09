@@ -25,7 +25,14 @@ public class vetBoard {
 	private String commentCount;
 	private String cnt;
 	
+	//point DB
 	private String currentPoint;
+	
+	//users DB
+	private String profileImg;
+	
+	
+	
 	
     // ✅ 추가
     private List<comment> replies;

@@ -8,8 +8,8 @@
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <!-- Quill CDN -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <link rel="stylesheet" href="/css/board/board.css"/>
     
 
@@ -70,8 +70,8 @@
                 <!-- 답변 출력 전체 -->
                 <div v-for="answer in answerList" class="fb-answer-box">
                     <!-- 채택된 답변 -->
-                    <div v-if="answer.comments">
-                        <div class="fb-accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                    <div v-if="answer.comments" class="fb-accepted-answer">
+                        <div class="fb-accepted-header">
                             질문자 채택
                         </div>
                         
@@ -79,46 +79,68 @@
                         <div class="star-rating">
                             <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= answer.rating }">★</span>
                         </div>
-                        <div class="fb-answer-nickname2">{{info.nickName}}</div>
+                        <div class="fb-answer-meta-container">
+                            <img :src="userInfo.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                                alt="프로필 이미지"
+                                class="fb-top-profile-img2">
+                            <div class="fb-answer-nickname2">{{info.nickName}}
+
+                                <div class="underline-animated underline-text fb-answer-comments">{{ answer.comments }}</div>
+
+                            </div>
+                        </div>
                         <div class="fb-answer-header">
                             <div class="fb-answer-meta">{{ answer.createdAt }}</div>
                         </div>
                         <!-- 후기 -->
-                        <div class="fb-answer-comments">
-                            <span class="underline-animated underline-text">{{ answer.comments }}</span>
-                        </div>
 
                         <!-- 답변 작성자 정보 -->
-                        <div class="fb-answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
-                        <div class="fb-answer-header">
+                        <div class="fb-top-profile">
+                            <img :src="answer.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                                alt="프로필 이미지"
+                                class="fb-top-profile-img">
+                            
+                            <div class="fb-top-profile-info">
+                            <div class="fb-info-box">
+                                <div class="fb-profile-name" style="font-size: 20px; color: #fca311;">{{ answer.vetName }}</div>                            
+                                <span class="fb-profile-badges" style="font-size: 15px;">{{answer.affiliatedHospital}}</span >
+                                <span class="fb-badge orange">{{answer.eMail}}</span >
+                            </div>
                             <div class="fb-answer-meta">{{ answer.createdAt }}</div>
+                            <div class="fb-profile-desc">
+                                2021 IT/테크 분야 지식인 · IT/인터넷업 · 인스타그램 1위, SNS 1위, 인터넷 1위 분야에서 활동
+                              </div>
+                            </div>
                         </div>
-                    <div>
-                    <div class="fb-comment-box">
-                        <img :src="userInfo.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
-                        alt="프로필 이미지"
-                        class="fb-profile-img">
-                    </div>
-                    </div>
-
                         <!-- 본문 -->
-                        <span class="underline-animated underline-text fb-answer-comments">
-                            <div v-html="answer.reviewText"></div>
-                        </span>
+
+                            <div v-html="answer.reviewText" class="quill-output"></div>
+
                     </div>
 
                     <!-- 답변 출력/채택 전 -->
                     <div v-else>
-                        <div class="fb-answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
                         <div class="fb-answer-header">
-                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
+                            
                         </div>
-                        <div>
-                            <img :src="userInfo.profileImage || '/img/default-profile.png'"
+                        <div class="fb-top-profile">
+                            <img :src="answer.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
                             alt="프로필 이미지"
-                            class="fb-profile-img">
+                            class="fb-top-profile-img">
+                            
+                            <div class="fb-top-profile-info">
+                            <div class="fb-info-box">
+                                <div class="fb-profile-name" style="font-size: 20px; color: #fca311;">{{ answer.vetName }}</div>                            
+                                <span class="fb-profile-badges" style="font-size: 15px;">{{answer.affiliatedHospital}}</span >
+                                <span class="fb-badge orange">{{answer.eMail}}</span >
+                            </div>
+                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
+                            <div class="fb-profile-desc">
+                                2021 IT/테크 분야 지식인 · IT/인터넷업 · 인스타그램 1위, SNS 1위, 인터넷 1위 분야에서 활동
+                              </div>
+                            </div>
                         </div>
-                        <div v-if="answer.isDeleted == 'N'" v-html="answer.reviewText"></div>
+                        <div class="quill-output" v-if="answer.isDeleted == 'N'" v-html="answer.reviewText"></div>
                         <div v-if="answer.isDeleted == 'Y'" > 삭제된 답변입니다 </div>
                     </div>
 
@@ -132,23 +154,23 @@
 
                         <!-- 채택 UI (showChoice === 현재 답변) -->
                         <template v-if="showChoice === answer.reviewId">
-                            <div class="fb-accepted-answer-box" style="border: 2px solid #fca311; border-radius: 10px; padding: 15px; margin: 10px 0; background-color: #f0f8ff;">
+                            <div class="fb-accepted-answer-box">
                                 
                                 <!-- 라벨 -->
-                                <div class="fb-accepted-header" style="font-size: 18px; font-weight: bold; color: #202060;">
+                                <div class="fb-accepted-header">
                                 질문자 채택
                                 </div>
 
                                 <!-- 별점 UI -->
                                 <div class="form-group star-rating" style="margin-top: 15px;">
-                                <label class="rating-label" for="rating" style="font-weight: bold; color:#fca311;"></label>
+                                <label class="rating-label" for="rating" style="color:#fca311;"></label>
                                     <div class="stars" style="font-size: 20px;">
                                         <span v-for="star in 5" :key="star" class="star" :class="{ active: star <= rating }" @click="rating = star" style="cursor: pointer;">★</span>
                                     </div>
                                 </div>
 
                                 <!-- 후기 입력 -->
-                                <input v-model="comments" placeholder="후기를 작성해주세요" style="width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc;" />
+                                <input v-model="comments" class="answer-commentsInput" placeholder="후기를 작성해주세요" ref="reviewInput" />
 
                                 <!-- 기존 댓글 표시 -->
                                 <div>{{ answer.comments }}</div>
@@ -383,6 +405,19 @@
                         self.showChoice = choiceId;
                         self.reviewId = choiceId;
                         console.log("✅ 채택 선택됨: ", choiceId); // 확인용
+                        this.$nextTick(() => {
+                        // document로 특정 요소 선택
+                            const inputElement = document.querySelector('.answer-commentsInput'); // v-model 바인딩된 입력란
+
+                            if (inputElement) {
+                            inputElement.focus();  // 포커스 주기
+                            inputElement.scrollIntoView({
+                                behavior: 'smooth',  // 부드러운 스크롤
+                                block: 'center'      // 요소를 화면 중앙에 맞추기
+                                });
+                            }
+                        });
+
                     },
                     fnAnSelect : function(userId){
                         let self = this;
