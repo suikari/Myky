@@ -86,18 +86,13 @@
                     	    xaxis: { 
                     	        categories: this.salesData.map(item => item.productName),
                     	        labels: {
-                    	            rotate: 0, // 가로 정렬
                     	            style: {
-                    	                whiteSpace: 'break-spaces', // 자동 줄바꿈
-                    	                fontSize: window.innerWidth < 600 ? '10px' : '12px' // 화면 크기에 따라 폰트 크기 조정
+                    	              whiteSpace: 'normal', // 자동 줄바꿈 허용
+                    	              fontSize: window.innerWidth < 600 ? '10px' : '12px'
                     	            },
-                    	            formatter: function(value) {
-                    	                return window.innerWidth < 600 && value.length > 6 
-                    	                    ? value.substring(0, 6) + "..." 
-                    	                    : (value.length > 6 ? value.substring(0, 6) + "..." : value);
-                    	                // 화면 작으면 6자 제한, 크면 10자 제한
-                    	            },
-                    	            hideOverlappingLabels: true // 너무 많으면 자동 숨김
+                    	            rotate: -45, // 좁은 화면일수록 기울여서 겹침 방지
+                    	            hideOverlappingLabels: true, // 너무 많으면 자동 숨김
+
                     	        }
                     	    },
                     	    responsive: [{
@@ -109,12 +104,13 @@
                     	        }
                     	    }]
                     };
+                    
                     if (this.chartInstance) {
-                        this.chartInstance.updateOptions(options);
-                    } else {
-                        this.chartInstance = new ApexCharts(document.querySelector("#salesChart"), options);
-                        this.chartInstance.render();
+                        this.chartInstance.destroy();
                     }
+                    this.chartInstance = new ApexCharts(document.querySelector("#salesChart"), options);
+                    this.chartInstance.render();
+                    
                 },
                 getFormattedDate(date) {
                     const offset = date.getTimezoneOffset();
