@@ -14,7 +14,7 @@
 }
 
 .product-link:hover {
-    color: #ff6600;
+    color: #ffbc7b;
     text-decoration: underline;
 }
 
@@ -62,13 +62,18 @@
 .cartOrderBtn {
 	width: 100%;
 	padding: 10px;
-	background: #FF8C42;
+	background: #ffbc7b;
 	color: white;
 	font-size: 16px;
 	border: none;
 	cursor: pointer;
 	margin-top: 20px;
 	margin-bottom: 100px;
+	transition: background 0.3s;
+}
+
+.cartOrderBtn:hover {
+	background: #FF7500;
 }
 
 .cartOrderTable {
@@ -161,18 +166,18 @@
 .payBtn {
 	width: 100%;
 	padding: 12px;
-	background: #FF8C42;
+	background: #ffbc7b;
 	color: white;
 	font-size: 16px;
 	border: none;
 	cursor: pointer;
-	margin-top: 20px;
+	margin-top: 50px;
 	border-radius: 5px;
 	transition: background 0.3s;
 }
 
 .payBtn:hover {
-	background: #e07b3e;
+	background: #FF7500;
 }
 
 .discountTable {
@@ -217,7 +222,7 @@
 .discountTable button {
 	padding: 6px 10px;
 	border: none;
-	background-color: #FF8C42;
+	background-color: #ffbc7b;
 	color: white;
 	border-radius: 5px;
 	cursor: pointer;
@@ -227,7 +232,7 @@
 }
 
 .discountTable button:hover {
-	background-color: #e07b3e;
+	background-color: #FF7500;
 }
 
 .order-complete {
@@ -309,12 +314,12 @@
 }
 
 .order-complete__button.main {
-	background: #FF8C42;
+	background: #ffbc7b;
 	color: white;
 }
 
 .order-complete__button.history {
-	background: #FF8C42;
+	background: #ffbc7b;
 	color: white;
 }
 
@@ -338,11 +343,43 @@
 	margin: 50px;
 }
 
+.empty-order {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-order__emoji {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.empty-order__text {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+.empty-order__link {
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: #ffbc7b;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.empty-order__link:hover {
+    background-color: #FF7500;
+}
+
 .order-history {
 	background: #ffffff;
 	padding: 30px;
 	border-radius: 10px;
 	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+	margin-bottom: 100px;
 }
 
 .order-history__filter {
@@ -354,7 +391,7 @@
 }
 
 .order-history__button {
-	background: #ffaf7d;
+	background: #ffbc7b;
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -365,7 +402,7 @@
 }
 
 .order-history__button:hover {
-	background: #f1a373;
+	background: #FF7500;
 	transform: scale(1.05);
 }
 
@@ -384,7 +421,7 @@
 
 .order-history__input:focus,
 .order-history__select:focus {
-	border-color: #FF8C42;
+	border-color: #FF7500;
 	outline: none;
 }
 
@@ -405,7 +442,7 @@
 }
 
 .order-history__table th {
-	background-color: #ffaf7d;
+	background-color: #ffbc7b;
 	color: white;
 	font-weight: bold;
 }
@@ -419,7 +456,7 @@
 }
 
 .order-history__details-button {
-	background-color: #ffbc93;
+	background-color: #ffbc7b;
 	color: white;
 	border: none;
 	padding: 8px 16px;
@@ -430,7 +467,7 @@
 }
 
 .order-history__details-button:hover {
-	background-color: #f1a373;
+	background-color: #FF7500;
 }
 
 .order-history__details {
@@ -460,7 +497,7 @@
 }
 
 .order-history__details-table th {
-	background-color: #fff0e4;
+	background-color: #ffbc7b;
 	font-weight: normal;
 	color: #333;
 }
@@ -509,7 +546,7 @@
 }
 
 .order-button {
-	background-color: #ffaf7d;
+	background-color: #ffbc7b;
 	color: white;
 	padding: 8px 12px;
 	border: none;
@@ -520,7 +557,7 @@
 }
 
 .order-button:hover {
-	background-color: #f1a373;
+	background-color: #FF7500;
 }
 
 .add-to-cart-button {
@@ -538,7 +575,7 @@
 }
 
 .added-to-cart {
-	background-color: #ffaf7d !important;
+	background-color: #ffbc7b !important;
 	color: white !important;
 	border: 1px solid #ccc !important;
 }
@@ -548,7 +585,7 @@
 	top: 50%;
 	left: 50%;
 	transform: translateX(-50%);
-	background-color: rgba(255, 194, 154, 0.9);
+	background-color: #ffbc7b;
 	color: white;
 	padding: 10px 20px;
 	border-radius: 5px;
@@ -687,7 +724,7 @@
 	background: #f8f8f8;
 	padding: 10px;
 	margin: 15px auto;
-	border-left: 4px solid #ff6600;
+	border-left: 4px solid #ffbc7b;
 	font-size: 14px;
 	text-align: left;
 }
@@ -700,7 +737,7 @@
 }
 
 .exchange-return-submit {
-	background: #007aff;
+	background: #ffbc7b;
 	color: white;
 	border: none;
 	padding: 10px;
@@ -734,7 +771,7 @@
 
 .highlight-order {
 	background-color: #fff;
-	border: 2px solid #fbc02d;
+	border: 2px solid #FF7500;
 	border-radius: 5px;
 	transition: all 0.3s ease;
 }

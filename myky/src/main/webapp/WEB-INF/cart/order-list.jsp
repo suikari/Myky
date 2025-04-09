@@ -44,6 +44,11 @@
                 </div>
                 
                 <!-- 주문 내역 테이블 -->
+                <div v-if="isEmptyOrderList" class="empty-order">
+                    <div class="empty-order__emoji">📦</div>
+                    <p class="empty-order__text">주문하신 내역이 없습니다.</p>
+                    <a href="/product/list.do" class="empty-order__link">상품 둘러보기</a>
+                </div>
                 <div v-for="(ordersByOrderId, date) in groupedOrders" :key="date">
                     <div class="order-date">{{ date }}</div>
                     <div v-for="(orders, orderId) in ordersByOrderId" :key="orderId" :id="'order-' + orderId">
@@ -158,7 +163,7 @@
                                             </table>
                                             <div v-if="cartMessage" class="cart-message">{{ cartMessage }}</div>
                                             <div v-if="determineShippingStatus(orders) == '주문접수'">
-                                                <button @click="cancelOrder(orderId)" class="order-button">주문취소</button>
+                                                <button @click="cancelOrder(orders,orderId)" class="order-button">주문취소</button>
                                                 <button @click="toggleEditMode(orders[0])" class="order-button">배송정보수정</button>
                                             </div>
                                             <div v-if="hasDeliveredProduct(orders)">
@@ -311,6 +316,8 @@
 
                         console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:",groupedByDate);
                     return groupedByDate;
+                },isEmptyOrderList() {
+                    return Object.keys(this.groupedOrders).length === 0;
                 },
                 determineShippingStatus() {
                     return (orderItems) => {
@@ -556,9 +563,20 @@
                     let day = ('0' + date.getDate()).slice(-2);
                     return year + "-" + month + "-" + day;
                 },
-                cancelOrder(orderId) {
+                cancelOrder(orders,orderId) {
                     let self = this;
-                    console.log("취소할 주문 번호 >>> ",orderId);
+                    console.log("취소할 주문 번호 >>> ",orderId, "/// 주문목록 >>> ",orders);
+
+                    const invalidStatuses = ['shipped', 'delivered', 'exchange', 'exchanged', 'return', 'returned'];
+                    const hasInvalidStatus = orders.some(order =>
+                        invalidStatuses.includes(order.refundStatus)
+                    );
+
+                    if (hasInvalidStatus) {
+                        alert("배송이 시작된 상품 또는 교환/반품 중인 상품이 포함되어 있어 주문을 취소할 수 없습니다.");
+                        return;
+                    }
+                    
                     if(confirm("정말 해당 주문을 취소하시겠습니까?")){
                         let params = {
                             userId: self.userInfo.userId, 
