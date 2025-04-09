@@ -270,15 +270,19 @@ public class BoardController {
 				
 		return new Gson().toJson(resultMap);
 	}
+	
 	//대댓글
-	@PostMapping("/board/ReplyAdd.dox")
+	@RequestMapping(value = "/board/ReplyAdd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public Map<String, Object> addReply(@RequestParam Map<String, Object> map) {
-	    Map<String, Object> result = new HashMap<>();
-	    boardService.insertReply(map);
-	    result.put("status", "success");
-	    return result;
+	public String addReply(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+				
+				
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = boardService.insertReply(map);
+				
+		return new Gson().toJson(resultMap);
 	}
+	
 	//좋아요 싫어요 버튼 값 가져오기
 	@RequestMapping(value = "/board/likeStatus.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody

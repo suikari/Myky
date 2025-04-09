@@ -33,17 +33,17 @@
             <div class="fb-title-label">POINT</div>
             <div class="fb-point-input">
                 <div class="fb-point-box">
-                    <span class="fb-point-unit2">보유포인트</span>
+                    <span class="fb-point-unit2"> {{ usedPoint != '' ? '사용포인트' : '보유포인트' }} </span>
                     <input v-model="usedPoint" class="fb-point-place fb-point-clear-input"
                     v-bind:placeholder="currentPoint.currentPoint" @input="fnCheck" @focus="isUsed = false">
                     <span class="fb-point-unit">P</span>
-                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click="usedPoint = 0"><img src="../img/freeBoard/close.png"></button>
+                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click="usedPoint = ''"><img src="../img/freeBoard/close.png"></button>
                     
                 </div>
                 <button class="fb-fill-btn" @click="usedPoint = currentPoint.currentPoint">
                     전액입력
                 </button>
-                <button class="fb-point-button" :class="{ 'fb-point-button-active': isUsed }" @click="fnUsePoint">사용</button>
+                <!-- <button class="fb-point-button" :class="{ 'fb-point-button-active': isUsed }" @click="fnUsePoint">사용</button> -->
             </div>
             <div class="fb-title-label">
                 <div>TITLE</div>
@@ -79,7 +79,7 @@
                        selectPoint : "",
                        point : "",
                        currentPoint : "",
-                       usedPoint : "",
+                       usedPoint : '',
                        remark : "수의사 상담 point 차감",
                        isUsed: false,
                     };
