@@ -60,7 +60,7 @@
                         </div>
                         <div v-show="showAnsw" class="fb-editor-box">
                                 <!--  Quill 에디터 -->
-                            <div id="fb-editor" class="fb-quill-editor"></div>
+                            <div id="fb-editor" class="fb-editor answer2"></div>
                             <!--  등록 버튼 영역 -->
                             <button class="fb-cmtButton" @click="fnSaveReply">등록</button>
                         </div>
@@ -91,8 +91,15 @@
                         <!-- 답변 작성자 정보 -->
                         <div class="fb-answer-nickname"><span>수의사</span>  {{ answer.vetNickname }} ({{ answer.vetName }})</div>
                         <div class="fb-answer-header">
-                        <div class="fb-answer-meta">{{ answer.createdAt }}</div>
+                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
                         </div>
+                    <div>
+                    <div class="fb-comment-box">
+                        <img :src="userInfo.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                        alt="프로필 이미지"
+                        class="fb-profile-img">
+                    </div>
+                    </div>
 
                         <!-- 본문 -->
                         <span class="underline-animated underline-text fb-answer-comments">
@@ -105,6 +112,11 @@
                         <div class="fb-answer-nickname">{{ answer.vetNickname }} ( {{ answer.vetName }} )</div>
                         <div class="fb-answer-header">
                             <div class="fb-answer-meta">{{ answer.createdAt }}</div>
+                        </div>
+                        <div>
+                            <img :src="userInfo.profileImage || '/img/default-profile.png'"
+                            alt="프로필 이미지"
+                            class="fb-profile-img">
                         </div>
                         <div v-if="answer.isDeleted == 'N'" v-html="answer.reviewText"></div>
                         <div v-if="answer.isDeleted == 'Y'" > 삭제된 답변입니다 </div>
@@ -174,12 +186,12 @@
                   
                 <div class="fb-footer-buttons">
                     <template v-if="sessionId == info.userId && info.isAccepted === 'N'">
-                        <button class="fb-cmtButton" @click="fnEdit()">수정</button>
+                        <button class="fb-button" @click="fnEdit()">수정</button>
                     </template>
                     <template v-if="(sessionId == info.userId || sessionRole == 'ADMIN') && info.isAccepted == 'N'">
-                        <button class="fb-cmtButton" @click="fnRemove()">삭제</button>
+                        <button class="fb-button" @click="fnRemove()">삭제</button>
                     </template>
-                        <button class="fb-cmtButton" @click="fnBack(info)">뒤로가기</button>
+                        <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
                 </div>
                 
             </div>
@@ -222,7 +234,7 @@
                         remark : "수의사 상담 point 적립",
                         isSelected : false,
                         quillEdit: null, // ← 여기!
-
+                        userInfo : {},
                     };
                 },
                 computed: {
@@ -503,6 +515,24 @@
                     fnCancelChoice() {
                         this.showChoice = null;
                     },
+                    fnUserInfo : function(){
+                        let self = this;
+                        
+                        var nparmap = {
+                            userId : self.sessionId
+                        };
+                        
+                        $.ajax({
+                            url: "/user/info.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                self.userInfo = data.user;
+                                console.log("user",data.user);
+                            }
+                        });
+                    },
                     editorEdit : function(contents) {
                         let self = this;
                        
@@ -545,6 +575,10 @@
                     self.fnVetInfo();
                     self.fnView();
                     self.getCurrent();
+
+
+                    self.fnUserInfo();
+
                     var quill = new Quill('#fb-editor', {
                     theme: 'snow',
                     modules: {

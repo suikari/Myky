@@ -8,29 +8,9 @@
         <title>consent page</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-
+		<link rel="stylesheet" href="/css/user/user.css" />
         <style>
-            .container {
-                width: 600px;
-                margin: 50px auto;
-            }
 
-            .clb {
-                font-size: 16px;
-                color: #4a90e2;
-                padding: 10px 20px;
-                border-radius: 5px;
-                margin-right: 10px;
-                border: 1px solid #4a90e2;
-                transition: all 0.3s ease;
-            }
-
-            /* 링크 버튼 hover 효과 */
-            .clb:hover {
-                background-color: #4a90e2;
-                color: white;
-                border-color: #4a90e2;
-            }
         </style>
     </head>
 
@@ -39,8 +19,8 @@
 
 
 
-        <div id="app" class="container">
-            <h1 style="text-align: center;">회원 가입</h1>
+        <div id="app" class="con-container">
+            <h1 style="text-align: center;">🐾 멍냥꽁냥 회원 가입</h1>
             <br>
             <br>
             <div style="font-size: 24px;">전체 동의 <input type="checkbox" id="" @click="fnAllCheck()"></div>

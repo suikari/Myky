@@ -46,22 +46,22 @@
                 padding: 10px;
                 width: 80%;
                 border: 1px solid #ccc;
-                border-radius: 5px;
+                border-radius: 25px;
             }
 
             button {
-                background: #007bff;
+                background: #2b50aa;
                 color: white;
                 border: none;
                 padding: 10px 15px;
                 margin: 5px;
-                border-radius: 5px;
+                border-radius: 25px;
                 cursor: pointer;
                 transition: 0.3s;
             }
 
             button:hover {
-                background: #0056b3;
+                background: #1f3f8f;
             }
 
             button:nth-child(2) {

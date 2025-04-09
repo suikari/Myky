@@ -5,102 +5,103 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vue3 레이아웃 예제</title>
+        <title>마이페이지</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 
         <style>
             body {
-                font-family: Arial, sans-serif;
+                font-family: 'Noto Sans KR', Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color: #f8f8f8;
+                background-color: #f0f0f0;
             }
 
             .mypage-container {
                 width: 80%;
-                margin: 20px auto;
-                background: white;
-                padding: 20px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
+                margin: 30px auto;
+                background: #fff;
+                padding: 30px;
+                box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 16px;
             }
 
+            /* 유저 정보 영역 */
             .user-info {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                padding: 20px;
+                gap: 20px;
+                padding-bottom: 20px;
                 border-bottom: 1px solid #ddd;
             }
 
-            .user-details {
-                flex-grow: 1;
-                padding-left: 20px;
-            }
-
-            .user-rank-mark img {
-                width: 60px;
-                height: 60px;
-            }
-
             .profile-pic {
-                width: 150px;
-                height: 150px;
-                background: gray;
-                border-radius: 100%;
+                width: 120px;
+                height: 120px;
+                background: #ddd;
+                border-radius: 50%;
+                object-fit: cover;
             }
 
-            /* summary 전체 컨테이너 */
+            /* 유저 이름, 배지 */
+            .user-details h2 {
+                margin: 0 0 10px;
+                font-size: 20px;
+                color: #333;
+            }
+
+            .badge {
+                font-size: 14px;
+                padding: 5px 10px;
+                border-radius: 12px;
+                display: inline-block;
+            }
+
+            .badge-yes {
+                background-color: #ccc;
+                color: #222;
+            }
+
+            .badge-no {
+                background-color: #eee;
+                color: #555;
+            }
+
+            /* 요약 정보 */
             .summary {
                 display: flex;
                 justify-content: space-between;
-                gap: 30px;
-                margin: 30px 0;
-                padding: 10px;
+                gap: 20px;
+                margin-top: 30px;
             }
 
-            /* 공통 summary item 박스 */
             .summary-item {
                 flex: 1;
-                padding: 40px 20px;
+                background-color: #f7f7f7;
+                border: 1px solid #e0e0e0;
+                padding: 25px 20px;
+                border-radius: 12px;
                 text-align: center;
-                border-radius: 20px;
-                color: #fff;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .summary-item:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .summary-title {
+                font-size: 16px;
+                color: #666;
+                margin-bottom: 8px;
+                font-weight: 500;
+            }
+
+            .summary-value {
                 font-size: 22px;
                 font-weight: 700;
-                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                line-height: 2;
-                letter-spacing: 0.8px;
-            }
-
-            /* 호버 효과 */
-            .summary-item:hover {
-                transform: translateY(-7px);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-            }
-
-            /* 아이콘 부분 강조 */
-            .summary-item::first-line {
-                font-size: 25px;
-            }
-
-
-            /* 개별 항목 배경 */
-            .point-box {
-                background: linear-gradient(135deg, #FFD700, #ffa600de);
-                /* 금색 → 주황 */
-            }
-
-            .coupon-box {
-                background: linear-gradient(135deg, #8A2BE2, #DA70D6);
-                /* 진보라 → 라일락 */
-            }
-
-            .order-box {
-                background: linear-gradient(135deg, #00BFFF, #1E90FF);
-                /* 시원한 파랑톤 */
+                color: #333;
             }
 
             .main-content {
@@ -110,10 +111,44 @@
 
             .sidebar {
                 width: 25%;
-                background: #f1f1f1;
+                background: #f9f9f9;
                 padding: 20px;
                 border-radius: 10px;
+                font-family: 'Noto Sans KR', sans-serif;
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar h3 {
+                font-size: 16px;
+                color: #333;
+                margin-bottom: 10px;
+                font-weight: 600;
+            }
+
+            .tab-menu {
+                margin-bottom: 20px;
+            }
+
+            .tab-item {
+                padding: 10px 15px;
+                border-radius: 25px;
+                margin-bottom: 8px;
+                font-size: 14px;
+                color: #444;
+                background-color: transparent;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            .tab-item:hover {
+                background-color: #e0e0e0;
+                color: #111;
                 cursor: pointer;
+            }
+
+            .tab-item.active {
+                background-color: #d0d0d0;
+                color: white;
+                font-weight: 600;
             }
 
             .sidebar ul {
@@ -122,8 +157,23 @@
             }
 
             .sidebar ul li {
-                padding: 10px 0;
+                padding: 10px 15px;
+                border-radius: 25px;
+                font-size: 14px;
+                margin-bottom: 6px;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            .sidebar ul li:hover {
+                background-color: #e0e0e0;
+                color: #000;
                 cursor: pointer;
+            }
+
+            .sidebar ul li a {
+                color: inherit;
+                text-decoration: none;
+                display: block;
             }
 
             .order-status {
@@ -239,70 +289,126 @@
                 /* 링크의 색상 제거 */
             }
 
-            /* 미니 게시판 테이블 */
+            .board-page {
+                font-family: 'Arial', sans-serif;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                max-width: 1000px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+            /* 게시판 테이블 */
             .board-table {
                 width: 100%;
                 border-collapse: collapse;
                 margin: 20px 0;
                 font-family: Arial, sans-serif;
-
             }
 
-            /* 테이블 헤더 스타일 */
             .board-table th {
-                background-color: #4CAF50;
+                background-color: #f4a261;
                 color: white;
-                padding: 10px;
+                padding: 12px 15px;
                 text-align: center;
                 font-size: 16px;
             }
 
-            /* 테이블 데이터 셀 스타일 */
             .board-table td {
-                padding: 10px;
+                padding: 12px 15px;
                 text-align: center;
                 border-bottom: 1px solid #ddd;
-
+                color: #333;
+                font-size: 14px;
             }
 
-            /* 호버 효과 - 각 셀에 마우스를 올렸을 때 */
             .board-table tr:hover {
                 background-color: #f1f1f1;
             }
 
-            /* 삭제되지 않은 항목만 보여주는 조건 스타일 */
             .board-table tr[style*="display: none"] {
                 display: none;
             }
 
-            /* 제목 링크 스타일 */
             .board-table a {
                 color: #333;
                 text-decoration: none;
             }
 
             .board-table a:hover {
-                color: #4CAF50;
+                color: #f4a261;
                 text-decoration: underline;
             }
 
-            /* 테이블의 번호, 제목, 작성일, 조회수 칼럼 간격 */
-            .board-table th,
-            .board-table td {
-                padding: 12px 15px;
-            }
-
-            /* 작성일 칼럼의 날짜 포맷에 맞춰 정렬 */
-            .board-table td:nth-child(3) {
-                text-align: center;
-            }
-
-            /* 번호 컬럼 중앙 정렬 */
+            .board-table td:nth-child(3),
             .board-table td:nth-child(1) {
                 text-align: center;
             }
 
-            /* 반응형 스타일 (작은 화면에서 테이블이 잘 보이도록 조정) */
+            /* 검색 입력, 셀렉트박스 */
+            .board-page select,
+            .board-page input {
+                margin: 10px 5px 20px 0;
+                padding: 6px 10px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                font-size: 14px;
+            }
+
+            /* 게시글 없음 안내 */
+            .board-page h2 {
+                color: #999;
+                font-weight: normal;
+                margin-top: 20px;
+            }
+
+            .board-page button {
+                margin-top: 10px;
+                padding: 8px 16px;
+                background-color: #f4a261;
+                border: none;
+                border-radius: 6px;
+                color: white;
+                cursor: pointer;
+            }
+
+            .board-page button:hover {
+                background-color: #f4a261;
+            }
+
+            /* 페이징 스타일 */
+            .pagination {
+                padding: 5px 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 50px;
+                gap: 8px;
+            }
+
+            .pagination a {
+                padding: 5px 10px;
+                background-color: #eee;
+                color: #333;
+                text-decoration: none;
+                border-radius: 6px;
+                font-size: 14px;
+                transition: 0.2s;
+            }
+
+            .pagination a:hover {
+                background-color: #ccc;
+            }
+
+            .pagination .bgColer {
+                padding: 5px 10px;
+                border-radius: 6px;
+                background-color: #f4a261;
+                color: white;
+            }
+
+            /* 반응형 */
             @media (max-width: 768px) {
                 .board-table {
                     font-size: 14px;
@@ -312,7 +418,64 @@
                 .board-table td {
                     padding: 8px;
                 }
+
+                .board-page select,
+                .board-page input {
+                    width: 100%;
+                    margin: 5px 0;
+                }
+
+                .pagination {
+                    flex-wrap: wrap;
+                    gap: 4px;
+                }
             }
+
+            /* 검색 인풋과 셀렉트 공통 스타일 */
+            .board-page .board-controls {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 20px;
+                align-items: center;
+            }
+
+            .board-page select,
+            .board-page input[type="text"],
+            .board-page input[type="search"] {
+                padding: 10px 14px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 14px;
+                background-color: #fff;
+                transition: border-color 0.2s, box-shadow 0.2s;
+                outline: none;
+                min-width: 180px;
+            }
+
+            .board-page select:focus,
+            .board-page input[type="text"]:focus,
+            .board-page input[type="search"]:focus {
+                border-color: #f4a261;
+                box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+            }
+
+            /* 반응형 처리 */
+            @media (max-width: 768px) {
+                .board-page .board-controls {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .board-page select,
+                .board-page input[type="text"],
+                .board-page input[type="search"] {
+                    width: 100%;
+                }
+            }
+
+
+
 
             .comment-page {
                 font-family: 'Arial', sans-serif;
@@ -320,6 +483,33 @@
                 padding: 20px;
                 background-color: #f9f9f9;
                 border-radius: 8px;
+            }
+
+            /* 검색 입력창 스타일 */
+            .comment-controls {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 20px;
+                align-items: center;
+            }
+
+            .comment-page input[type="text"],
+            .comment-page input[type="search"] {
+                padding: 10px 14px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 14px;
+                background-color: #fff;
+                transition: border-color 0.2s, box-shadow 0.2s;
+                outline: none;
+                min-width: 200px;
+            }
+
+            .comment-page input[type="text"]:focus,
+            .comment-page input[type="search"]:focus {
+                border-color: #4CAF50;
+                box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
             }
 
             /* 테이블 스타일 */
@@ -330,18 +520,19 @@
             }
 
             .comment-table-header {
-                background-color: #4CAF50;
+                background-color: #f4a261;
                 color: white;
-                text-align: left;
+                text-align: center;
                 font-weight: bold;
             }
 
             .comment-table-column {
                 padding: 12px 20px;
-                text-align: left;
+                text-align: center;
             }
 
             .comment-table-row {
+                text-align: center;
                 border-bottom: 1px solid #ddd;
             }
 
@@ -382,16 +573,22 @@
                 padding-left: 10px;
             }
 
-            /* 기본 링크 스타일 */
-            #index2,
-            #index {
+            /* 페이지네이션 */
+            .comment-pagination {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 30px;
+                gap: 6px;
+            }
+
+            a#index2 {
                 text-decoration: none;
                 font-size: 14px;
                 padding: 5px 10px;
                 cursor: pointer;
             }
 
-            /* "bgColer2" 클래스: 기본 배경색 */
             .bgColer2 {
                 background-color: #f0f0f0;
                 color: #333;
@@ -400,51 +597,32 @@
                 transition: background-color 0.3s ease, color 0.3s ease;
             }
 
-            /* "bgColer" 클래스: 선택된 항목 스타일 */
             .bgColer {
-                background-color: #007bff;
+                background-color: #f4a261;
                 color: white;
                 border-radius: 3px;
                 padding: 5px 10px;
             }
 
-            /* 페이지네이션 왼쪽과 오른쪽 화살표 */
-            a#prev,
-            a#next {
-                font-size: 16px;
-                font-weight: bold;
-                margin: 0 5px;
-            }
-
-            /* 페이지가 선택된 상태일 때 */
-            .bgColer {
-                background-color: #007bff;
-                /* 선택된 페이지는 파란색 */
-                color: white;
-                /* 글자는 흰색 */
-            }
-
-            /* 페이지가 선택되지 않은 상태일 때 */
-            .bgColer2 {
-                background-color: #f0f0f0;
-                /* 비선택 페이지는 회색 */
-                color: #333;
-                /* 글자는 검정색 */
-            }
-
-            /* "next", "prev" 화살표 hover 효과 */
+            a#index2:hover,
             a#prev:hover,
             a#next:hover {
-                background-color: #007bff;
+                background-color: #ccc;
                 color: white;
             }
 
-            /* 페이지 번호 호버 효과 */
-            a#index2:hover {
-                background-color: #007bff;
-                color: white;
-            }
+            /* 반응형 */
+            @media (max-width: 768px) {
+                .comment-controls {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
 
+                .comment-page input[type="text"],
+                .comment-page input[type="search"] {
+                    width: 100%;
+                }
+            }
 
             /* 전체 페이지 배경 */
             .page-container {
@@ -599,7 +777,7 @@
                 font-weight: bold;
                 color: #333;
                 margin-bottom: 10px;
-                border-bottom: 2px solid #0078d4;
+                border-bottom: 2px solid #f4a261;
                 padding-bottom: 5px;
             }
 
@@ -612,6 +790,7 @@
 
             /* 테이블 스타일 */
             .cpoint-table {
+                border-radius: 12px;
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 10px;
@@ -619,7 +798,7 @@
 
             /* 테이블 헤더 스타일 */
             .cpoint-header {
-                background-color: #0078d4;
+                background-color: #f4a261;
                 color: white;
                 padding: 10px;
                 text-align: left;
@@ -643,6 +822,27 @@
                 background-color: #f1f1f1;
             }
 
+            .cpoint-pagination {
+                margin-top: 30px;
+                text-align: center;
+            }
+
+            .cpoint-pagination a {
+                display: inline-block;
+                padding: 8px 14px;
+                background-color: #f4a261;
+                color: #fff;
+                border-radius: 6px;
+                margin: 0 5px;
+                font-size: 14px;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .cpoint-pagination a:hover {
+                background-color: #e76f51;
+            }
+
             .coupon-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -658,8 +858,10 @@
             }
 
             .coupon {
-                /* background: linear-gradient(135deg, #ff9a9e, #fad0c4); */
+                position: relative;
+                /* 배경 로고 위치 기준 */
                 background: linear-gradient(135deg, #FF5722, #ffe000c4);
+                /* 기존 그라데이션 */
                 border-radius: 12px;
                 padding: 16px;
                 color: #ffffff;
@@ -668,6 +870,25 @@
                 width: 300px;
                 flex: none;
                 margin: 10px;
+                overflow: hidden;
+                /* 배경 이미지 넘침 방지 */
+                z-index: 1;
+            }
+
+            /* 배경 로고 이미지 */
+            .coupon-bg-logo {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 250px;
+                /* 적절히 조절 가능 */
+                height: auto;
+                transform: translate(-5%, -5%);
+                opacity: 0.80;
+                /* 흐릿하게 */
+                z-index: 0;
+                pointer-events: none;
+                /* 사용자 클릭 방해 방지 */
             }
 
             .coupon-non {
@@ -730,7 +951,7 @@
             }
 
             .badge-yes {
-                background-color: #4caf50;
+                background-color: #f4a261;
                 /* 초록색 */
                 color: white;
             }
@@ -776,27 +997,22 @@
 
 
                     <div class="summary">
-                        <div class="summary-item point-box">
-                            💸
-                            현재 포인트
-                            {{ formattedAmount(point.currentPoint) }}P 💰
+                        <div class="summary-item">
+                            <div class="summary-title">현재 포인트</div>
+                            <div class="summary-value">{{ formattedAmount(point.currentPoint) }}P</div>
                         </div>
-                        <div class="summary-item coupon-box">
-                            🎟
-                            쿠폰
-                            {{ couponCnt }} 개 ✨
+                        <div class="summary-item">
+                            <div class="summary-title">보유 쿠폰</div>
+                            <div class="summary-value">{{ couponCnt }}개</div>
                         </div>
-                        <div class="summary-item order-box">
-                            📦
-                            주문 수
-                            {{ orderAllCnt }} 회 🚚
+                        <div class="summary-item">
+                            <div class="summary-title">총 주문 수</div>
+                            <div class="summary-value">{{ orderAllCnt }}회</div>
                         </div>
                     </div>
 
                     <div class="main-content">
                         <aside class="sidebar">
-
-                            <!-- 재원 코딩 -->
                             <ul>
                                 <div class="tab-menu">
                                     <h3>나의 쇼핑 정보</h3>
@@ -807,7 +1023,6 @@
                                     </div>
                                 </div>
                             </ul>
-                            <!-- 재원 코딩 -->
                             <hr>
                             <ul>
                                 <div class="tab-menu">
@@ -926,12 +1141,16 @@
 
                                 <br>
 
-                                <a v-if="page3 != 1" id="pointIndex" href="javascript:;" class="bgColer2"
-                                    @click="fnPageMove3('pvev')">
-                                    < </a>
-                                        <a v-if="pointIndex > 1 && page3 != pointIndex" id="pointIndex"
-                                            href="javascript:;" class="bgColer2" @click="fnPageMove3('next')">
-                                            > </a>
+                                <div class="cpoint-pagination">
+                                    <a v-if="page3 != 1" href="javascript:;" class="bgColer2"
+                                        @click="fnPageMove3('pvev')">
+                                        &lt;
+                                    </a>
+                                    <a v-if="pointIndex > 1 && page3 != pointIndex" href="javascript:;" class="bgColer2"
+                                        @click="fnPageMove3('next')">
+                                        &gt;
+                                    </a>
+                                </div>
 
                             </div>
 
@@ -940,14 +1159,19 @@
                                 <div class="coupon-container">
                                     <div v-for="item in couponList">
                                         <div class="coupon">
+                                            <!-- 배경 이미지 추가 -->
+                                            <img src="../../img/logo.png" alt="logo" class="coupon-bg-logo">
+
                                             <ul class="coupon-list">
                                                 <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
                                                 <li class="coupon-item coupon-discount">-{{item.discountRate}}% SALES
                                                 </li>
                                                 <li class="coupon-item coupon-condition">
-                                                    {{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능</li>
-                                                <li class="coupon-item coupon-limit">최대
-                                                    {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인</li>
+                                                    {{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능
+                                                </li>
+                                                <li class="coupon-item coupon-limit">
+                                                    최대 {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인
+                                                </li>
                                                 <li class="coupon-item coupon-info">발급 일 : {{item.createdAt}}</li>
                                                 <li class="coupon-item coupon-info">유효 기간: {{item.expirationDate}} 까지
                                                 </li>
@@ -1012,26 +1236,25 @@
                                     </template>
 
                                 </table>
-                                <div>
-                                    <br>
-                                    <a v-if="page != 1" id="index" href="javascript:;" class="bgColer2"
-                                        @click="fnPageMove('pvev')">
-                                        < </a>
-                                            <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
-                                                <span v-if="page == num" class="bgColer">{{num}}</span>
-                                                <span v-else class="bgColer2">{{num}}</span>
-                                            </a>
-                                            <a v-if="index > 1 && page != index" id="index" href="javascript:;"
-                                                class="bgColer2" @click="fnPageMove('next')">
-                                                >
-                                            </a>
+                                <div class="pagination">
+                                    <a v-if="page != 1" href="javascript:;" @click="fnPageMove('pvev')">&lt;</a>
+                                    <a v-for="num in index" :key="num" href="javascript:;" @click="fnPage(num)">
+                                        <span :class="page === num ? 'bgColer' : ''">{{ num }}</span>
+                                    </a>
+                                    <a v-if="index > 1 && page != index" href="javascript:;"
+                                        @click="fnPageMove('next')">&gt;</a>
                                 </div>
                             </div>
+
+
 
                             <div v-if="activeTab === 'comment'" class="comment-page">
 
                                 <h3>작성한 댓글 수 : 총 <span style="color: red;">{{commCnt}} </span>개</h3>
-                                <input v-model="commKeyword" placeholder="검색어" @input="fnSeachComm('')">
+                                <div class="comment-controls">
+                                    <input v-model="commKeyword" type="text" placeholder="댓글 검색어를 입력하세요"
+                                        @input="fnSeachComm('')">
+                                </div>
                                 <table class="comment-table" v-if="commCnt!=null">
                                     <thead>
                                         <tr class="comment-table-header">
@@ -1077,18 +1300,19 @@
                                     </tbody>
                                 </table>
                                 <br>
-                                <a v-if="page2 != 1" id="index2" href="javascript:;" class="bgColer2"
-                                    @click="fnPageMove2('pvev')">
-                                    < </a>
-                                        <a id="index2" href="javascript:;" v-for="num2 in index2"
-                                            @click="fnCommPage(num2)">
-                                            <span v-if="page2 == num2" class="bgColer">{{num2}}</span>
-                                            <span v-else class="bgColer2">{{num2}}</span>
-                                        </a>
-                                        <a v-if="index2 > 1 && page2 != index2" id="index2" href="javascript:;"
-                                            class="bgColer2" @click="fnPageMove2('next')">
-                                            >
-                                        </a>
+
+
+
+                                <div class="comment-pagination">
+                                    <a v-if="page2 != 1" id="index2" href="javascript:;" class="bgColer2"
+                                        @click="fnPageMove2('pvev')">&lt;</a>
+                                    <a id="index2" href="javascript:;" v-for="num2 in index2" @click="fnCommPage(num2)">
+                                        <span v-if="page2 == num2" class="bgColer">{{num2}}</span>
+                                        <span v-else class="bgColer2">{{num2}}</span>
+                                    </a>
+                                    <a v-if="index2 > 1 && page2 != index2" id="index2" href="javascript:;"
+                                        class="bgColer2" @click="fnPageMove2('next')">&gt;</a>
+                                </div>
                             </div>
 
 
@@ -1099,7 +1323,9 @@
                                         <th class="cpoint-header" style="text-align: center;">구독 날짜</th>
                                         <th class="cpoint-header" style="text-align: center;">만료 날짜</th>
                                     </tr>
+
                                     <tr v-for="item in membership">
+                                        <br>
                                         <td style="text-align: center;">{{item.membershipType}}</td>
                                         <td style="text-align: center;">{{item.renewalDate}}</td>
                                         <td style="text-align: center;">{{item.expirationDate}}</td>
@@ -1253,7 +1479,7 @@
                             { orderStatus: 'cancel', orderCount: '0' }
                         ],
                         orderAllCnt: "",
-                        membership: {},
+                        membership: [],
                         membershipYn: "",
                         paramsTab: "${map.paramsTab}"
 
@@ -1315,8 +1541,14 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
-                                self.point = data.point
+                                console.log('대한', data.point);
+                                if (data.point == null || data.point == undefined) {
+                                    self.point.currentPoint = 0;
+                                    console.log('대한2', self.point);
+                                } else {
+                                    self.point = data.point;
+                                }
+
                             }
                         });
                     },
@@ -1619,6 +1851,44 @@
                         location.href = "/product/view.do?productId=" + self.productId;
                     },
 
+                    fnMyVetBoardList() {
+                        let self = this;
+                        let nparmap = {
+                            searchOption: "userId",
+                            keyword: self.userId,
+                            userId: self.userId,
+                            page: 1,
+                            pageSize: 10,
+                            // orderKey: self.orderKey,
+                            // orderType: self.orderType,
+                            // content : self.content
+                        };
+                        console.log('파라메타', nparmap);
+
+                        $.ajax({
+                            url: "/board/vetBoardList.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                if (data.result != 'success') {
+                                    alert("잘못된 주소입니다.");
+                                    // location.href="/board/vetBoardList.do";
+                                }
+                                self.list = data.vetBoard;
+                                console.log("self.nickName", data.nickName);
+                                console.log("vetBoard list:", data.vetBoard);
+
+                                if (data.count && data.count.cnt !== undefined) {
+                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                } else {
+                                    self.index = 0;
+                                    console.warn("count 정보 없음!", data);
+                                }
+                            }
+                        });
+                    }
+
 
 
                     // //수의사 정보 공유
@@ -1650,12 +1920,13 @@
                         alert("로그인 후 이용가능한 서비스입니다.");
                         location.href = "/main.do";
                     }
+                    self.fnMemberShipInfo();
                     self.fnInfo2();
                     self.fnPoint();
                     self.fnCoupon();
                     self.fnOrderList();
-                    self.fnMemberShipInfo();
                     self.fnGetTab();
+                    self.fnMyVetBoardList();
                     // self.fnVetInfo();
                     window.vueObj = this;
 

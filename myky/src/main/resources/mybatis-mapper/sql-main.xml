@@ -35,6 +35,8 @@
 	    <if test="vetBoardId != null">, vet_board_id</if>
 	    <if test="orderId != null">, order_id</if>
 	    <if test="qnaId != null">, qna_id</if>
+	    <if test="parentCommentId != null">, parent_comment_id</if>
+   		<if test="reviewId != null">, review_id</if>
 	  )
 	  VALUES (
 	    notifications_seq.NEXTVAL,
@@ -45,6 +47,8 @@
 	    <if test="vetBoardId != null">, #{vetBoardId}</if>
 	    <if test="orderId != null">, #{orderId}</if>
 	    <if test="qnaId != null">, #{qnaId}</if>
+	    <if test="parentCommentId != null">, #{parentCommentId}</if>
+	    <if test="reviewId != null">, #{reviewId}</if>	    
 	  )
 	</insert>
 

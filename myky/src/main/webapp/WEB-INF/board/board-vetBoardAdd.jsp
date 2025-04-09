@@ -30,12 +30,6 @@
         <hr class="fb-custom-hr">
 
         <div class="fb-content-wrap">
-        <div class="fb-title-label">
-            <div>TITLE</div>
-        </div>
-            <div class="fb-title-input">
-                <input v-model="title">
-            </div>
             <div class="fb-title-label">POINT</div>
             <div class="fb-point-input">
                 <div class="fb-point-box">
@@ -51,9 +45,15 @@
                 </button>
                 <button class="fb-point-button" :class="{ 'fb-point-button-active': isUsed }" @click="fnUsePoint">사용</button>
             </div>
+            <div class="fb-title-label">
+                <div>TITLE</div>
+            </div>
+                <div class="fb-title-input">
+                    <input v-model="title">
+                </div>
             <div class="fb-title-label">CONTENT</div>
-            <div>
-                <div id="fb-editor" style="height: 300px;"></div>
+            <div class="fb-editor-boxBigAdd">
+                <div id="fb-editor" style="height: 500px;"></div>
             </div>
             <div class="fb-buttonStyle">
                 <button class="fb-button" @click="fnSave">저장</button>

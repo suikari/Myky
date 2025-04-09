@@ -32,8 +32,7 @@
                 width: 100%;
                 /* ✅ 100vw → 100% 로 수정 */
                 max-width: 100%;
-                height: 380px;
-                margin-top: 30px;
+                height: 500px;
                 padding: 0;
                 border-radius: 0;
                 box-shadow: none;
@@ -600,11 +599,11 @@
                     return {
                         alertMessage: "${alertMessage}" || "",
                         slides: [
-                            'img/banner/M.banner1.png',
+                            'img/banner/M.banner1-1.png',
                             'img/banner/M.banner2.png',
-                            'img/banner/M.banner4.png',
-                            'img/banner/M.banner5.png',
-                            'img/banner/M.banner6.png'
+                            'img/banner/M.banner4-1.png',
+                            'img/banner/M.banner5-1.png',
+                            'img/banner/M.banner6-1.png'
                         ],
                         freeposts: [],
                         donations: [],
