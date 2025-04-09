@@ -34,21 +34,29 @@
             <tbody>
                 <tr v-for="(item, index) in cartItems" :key="item.productId">
                     <td><input type="checkbox" v-model="selectCheck" :value="item.productId" @change="fnCheckYn(item)"></td>
-                    <td v-if="item.filepath"><img :src="item.filepath" width="50"></td>
-                    <td v-else><img src="/img/product/product update.png" width="50"></td>
-                    <td>{{ item.productName }}</td>
-                    <td v-if="isMembership">
-                        <div><del>{{ item.price }} 원</del></div>
-                        <div><strong>{{ getDiscountPrice(item) }} 원</strong></div>
+                    <td v-if="item.filepath">
+                        <a :href="'/product/view.do?productId=' + item.productId">
+                            <img :src="item.filepath" width="50">
+                        </a>
                     </td>
-                    <td v-else>{{ item.price }} 원</td>
+                    <td v-else><img src="/img/product/product update.png" width="50"></td>
+                    <td>
+                        <a :href="'/product/view.do?productId=' + item.productId" class="product-link">
+                            {{ item.productName }}
+                        </a>
+                    </td>
+                    <td v-if="isMembership">
+                        <div><del>{{ formatPrice(item.price) }} 원</del></div>
+                        <div><strong>{{ formatPrice(getDiscountPrice(item)) }} 원</strong></div>
+                    </td>
+                    <td v-else>{{ formatPrice(item.price) }} 원</td>
                     <td>
                         <button class="quantityBtn" @click="updateQuantity(index, -1)">-</button>
                         {{ item.quantity }}
                         <button class="quantityBtn" @click="updateQuantity(index, 1)">+</button>
                     </td>
-                    <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
-                    <td v-else>{{ (item.price * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ formatPrice(getDiscountPrice(item) * item.quantity) }} 원</td>
+                    <td v-else>{{ formatPrice(item.price * item.quantity) }} 원</td>
                     <td><button class="removeBtn" @click="removeItem(index)">삭제</button></td>
                 </tr>
             </tbody>
@@ -74,11 +82,11 @@
                         <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
                         <td v-else><img src="/img/product/product update.png" width="50"></td>
                         <td>{{ item.productName }}</td>
-                        <td v-if="isMembership">{{ getDiscountPrice(item) }} 원</td>
-                        <td v-else>{{ item.price }} 원</td>
+                        <td v-if="isMembership">{{ formatPrice(getDiscountPrice(item)) }} 원</td>
+                        <td v-else>{{ formatPrice(item.price) }} 원</td>
                         <td>{{ item.quantity }}</td>
-                        <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
-                        <td v-else>{{ (item.price * item.quantity) }} 원</td>
+                        <td v-if="isMembership">{{ formatPrice(getDiscountPrice(item) * item.quantity) }} 원</td>
+                        <td v-else>{{ formatPrice(item.price * item.quantity) }} 원</td>
                     </tr>
                 </tbody>
             </table>
@@ -91,7 +99,7 @@
             <h4 v-else>
                 <span>배송비 : 무료 ! </span>
             </h4>
-            <p>({{ shippingFreeMinimum.toLocaleString() }}원 이상 무료배송)</p>
+            <p>({{ formatPrice(shippingFreeMinimum) }}원 이상 무료배송)</p>
             <h2 v-if="totalPrice < shippingFreeMinimum">
                 <span>총 결제 금액: {{ formattedFinalPrice }} 원</span>
             </h2>
@@ -136,7 +144,7 @@
                     return this.totalPrice >= this.shippingFreeMinimum ? this.totalPrice : parseInt(this.totalPrice) + parseInt(this.shippingFee);
                 },
                 formattedShippingFee() {
-                    return this.totalPrice >= this.shippingFreeMinimum ? "0" : this.shippingFee.toLocaleString();
+                    return this.totalPrice >= this.shippingFreeMinimum ? "0" : parseInt(this.shippingFee).toLocaleString();
                 },
                 formattedTotalPrice() {
                     return this.totalPrice.toLocaleString();
@@ -208,10 +216,13 @@
                         success : function(data) { 
                             console.log("cartCheckList >>> ", data.checkList);
                             self.selectCartItems = data.checkList;
-                            self.shippingFee = self.selectCartItems[0].shippingFee;
-                            console.log(self.shippingFee);
-                            self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
-                            console.log(self.shippingFreeMinimum);
+                            if (self.selectCartItems.length > 0) {
+                                self.shippingFee = self.selectCartItems[0].shippingFee;
+                                self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
+                            }
+
+                            console.log("shippingFee:", self.shippingFee);
+                            console.log("shippingFreeMinimum:", self.shippingFreeMinimum);
                             
                         }
                     });
@@ -341,6 +352,10 @@
                             }
                         }
                     });
+                },
+                formatPrice(value) {
+                    if (typeof value !== "number") return parseInt(value).toLocaleString();
+                    return value.toLocaleString();
                 },
                 goToProductPage(){
                     window.location.href = "/product/list.do";
