@@ -373,6 +373,7 @@
 				                    <th><input type="checkbox" @click="fnAllCheck" v-model="allChk" ></th>
 				                    <th class="board-th">번호</th>
 				                    <th class="board-th">제목</th>
+				                    <th class="board-th">ID</th>
 				                    <th class="board-th">작성자</th>
 				                    <th class="board-th">작성일</th>
 				                    <th class="board-th">조회수</th>
@@ -388,6 +389,7 @@
 				                        <a @click="fnView(post.boardId)" class="board-title">{{ post.title }}</a>
 				                    </td>
 				                    <td class="board-td">{{ post.userId }}</td>
+				                    <td class="board-td">{{ post.nickName }}</td>
 				                    <td class="board-td">{{ post.createdAt }}</td>
 				                    <td class="board-td">{{ post.cnt }}</td>
 				                    <td>

@@ -165,6 +165,16 @@
 		<if  test="productId != null and productId != ''">
 			 AND P.PRODUCT_ID = #{productId}
 		</if>
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (R.TITLE LIKE '%' || #{keyword} || '%'
+			OR R.USER_ID LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND R.TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'userId'">
+			AND R.USER_ID LIKE '%' || #{keyword} || '%'
+		</if>
 		ORDER BY CREATED_AT DESC
     	OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
@@ -176,6 +186,16 @@
 	    WHERE 1=1
 		<if  test="productId != null and productId != ''">
 			 AND PRODUCT_ID = #{productId}
+		</if>
+				<if test="searchOption != null and searchOption == 'all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+			OR USER_ID LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'userId'">
+			AND USER_ID LIKE '%' || #{keyword} || '%'
 		</if>
 	    	AND DELETE_YN != 'Y'
 	</select>
@@ -202,6 +222,20 @@
 		<if  test="productId != null and productId != ''">
 			 AND PRODUCT_ID = #{productId}
 		</if>
+				<if  test="productId != null and productId != ''">
+			 AND PRODUCT_ID = #{productId}
+		</if>
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+			OR USER_ID LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'userId'">
+			AND USER_ID LIKE '%' || #{keyword} || '%'
+		</if>
+
 	    ORDER BY QNA_ID DESC
 	    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
@@ -213,6 +247,16 @@
 	      WHERE 1=1
 		<if  test="productId != null and productId != ''">
 			 AND PRODUCT_ID = #{productId}
+		</if>
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+			OR USER_ID LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'userId'">
+			AND USER_ID LIKE '%' || #{keyword} || '%'
 		</if>
 	</select>
 	

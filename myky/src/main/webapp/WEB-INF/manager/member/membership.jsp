@@ -349,7 +349,7 @@
 						    <div class="col-auto">
 						        <select v-model="searchOption" class="form-select">
 						            <option value="all">전체</option>
-						            <option value="title">제목</option>
+						            <option value="type">등록개월</option>
 						            <option value="userId">작성자</option>
 						        </select>
 						    </div>
@@ -497,7 +497,7 @@
 				            userName : '',
 				            DeleteYn : '',
 				        },
-	                    searchOption: 'userId',
+	                    searchOption: 'all',
 	                    page: 1,
 	                    pageSize: 5,
 	                    keyword: '',

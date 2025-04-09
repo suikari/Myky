@@ -117,6 +117,8 @@
                 <h2>통계</h2>
 
 	            <div class="date-picker-container">
+	            	<input id="date-picker" class="date-picker" style="display:none;"/>
+	            	
 	                <label for="year">연도:</label>
 	                <select id="year" v-model="selectedYear" @change="fnList">
 	                    <option v-for="year in years" :value="year">{{ year }}</option>
@@ -129,8 +131,9 @@
 	                
 	                <label for="time">시간 :</label>
 	                <select id="time" v-model="selectedTime" @change="fnList">
-	                    <option v-for="time in times" :value="time">{{ time }}</option>
-	                </select>
+					    <option value="">전체</option>
+					    <option v-for="time in times" :value="time">{{ time }}시</option>
+					</select>
 	            </div>
 	            
                 <div class="card">
@@ -184,7 +187,7 @@
                          selectedTime: "",
                          years: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i),
                          months: Array.from({ length: 12 }, (_, i) => i + 1),
-                         times: Array.from({ length: 24 }, (_, i) => i + 1),
+                         times: Array.from({ length: 24 }, (_, i) => i),  // 0~23
                          optionsP: { series: [], chart: { width: 380, type: 'pie' }, labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }] },
                          optionsB: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } },
                          optionsBD: { series: [{ data: [] }], chart: { type: 'bar', height: 350 }, plotOptions: { bar: { borderRadius: 4, horizontal: true } }, dataLabels: { enabled: false }, xaxis: { categories: [] } },
@@ -246,11 +249,9 @@
 					             }
 
 					             // ✅ 차트 업데이트 (데이터 로딩 후 실행)
-					             setTimeout(() => {
 					                 self.updateChart("pie", self.optionsP);
 					                 self.updateChart("bar", self.optionsB);
 					                 self.updateChart("bar2", self.optionsBD);
-					             }, 100); // 약간의 지연을 줘서 데이터가 반영되도록 함                                
                             }
 
                         });
@@ -258,30 +259,32 @@
                         
 
                     },
-					updateChart(chartKey, options) {
-					    if (this.chartInstances[chartKey]) {
-					        // 데이터가 있는지 확인
-					        let hasData = options.series && options.series.length > 0 && options.series.some(s => s.data && s.data.length > 0);
+                    updateChart(chartKey, options) {
+                        // 1. 차트가 존재하면 완전히 제거
+                        if (this.chartInstances[chartKey]) {
+                            this.chartInstances[chartKey].destroy();
+                            this.chartInstances[chartKey] = null;
+                        }
 
-					        if (hasData) {
-					            // 데이터가 있으면 차트 렌더링
-					            this.chartInstances[chartKey].updateSeries(options.series);
-					            this.chartInstances[chartKey].updateOptions({ xaxis: options.xaxis || {} });
-					        } else {
-					            // 데이터가 없으면 "검색 결과가 없습니다." 메시지 표시
-					            this.chartInstances[chartKey].destroy();
-					            this.chartInstances[chartKey] = null;
-					        }
-					    } else {
-					        // 차트 인스턴스가 없다면 새로 생성
-					        let chartElementId = chartKey === "pie" ? "#chart_per" 
-					                                               : chartKey === "bar" ? "#chart_bar" 
-					                                               : "#chart_bar2";
+                        // 2. nextTick 사용: DOM이 완전히 렌더링된 후 차트 생성
+                        this.$nextTick(() => {
+                            let chartElementId =
+                                chartKey === "pie"
+                                    ? "#chart_per"
+                                    : chartKey === "bar"
+                                    ? "#chart_bar"
+                                    : "#chart_bar2";
 
-					        this.chartInstances[chartKey] = new ApexCharts(document.querySelector(chartElementId), options);
-					        this.chartInstances[chartKey].render();
-					    }
-					}    	
+                            // 3. 차트 엘리먼트가 존재할 때만 새로 생성
+                            const el = document.querySelector(chartElementId);
+                            if (el) {
+                                this.chartInstances[chartKey] = new ApexCharts(el, options);
+                                this.chartInstances[chartKey].render();
+                            } else {
+                                console.warn("차트 DOM이 없습니다:", chartElementId);
+                            }
+                        });
+                    } 	
                 	
                 },
                 mounted() {
