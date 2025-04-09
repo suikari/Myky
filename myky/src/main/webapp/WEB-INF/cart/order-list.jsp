@@ -158,7 +158,7 @@
                                             </table>
                                             <div v-if="cartMessage" class="cart-message">{{ cartMessage }}</div>
                                             <div v-if="determineShippingStatus(orders) == '주문접수'">
-                                                <button @click="cancelOrder(orderId)" class="order-button">주문취소</button>
+                                                <button @click="cancelOrder(orders,orderId)" class="order-button">주문취소</button>
                                                 <button @click="toggleEditMode(orders[0])" class="order-button">배송정보수정</button>
                                             </div>
                                             <div v-if="hasDeliveredProduct(orders)">
@@ -556,9 +556,20 @@
                     let day = ('0' + date.getDate()).slice(-2);
                     return year + "-" + month + "-" + day;
                 },
-                cancelOrder(orderId) {
+                cancelOrder(orders,orderId) {
                     let self = this;
-                    console.log("취소할 주문 번호 >>> ",orderId);
+                    console.log("취소할 주문 번호 >>> ",orderId, "/// 주문목록 >>> ",orders);
+
+                    const invalidStatuses = ['shipped', 'delivered', 'exchange', 'exchanged', 'return', 'returned'];
+                    const hasInvalidStatus = orders.some(order =>
+                        invalidStatuses.includes(order.refundStatus)
+                    );
+
+                    if (hasInvalidStatus) {
+                        alert("배송이 시작된 상품 또는 교환/반품 중인 상품이 포함되어 있어 주문을 취소할 수 없습니다.");
+                        return;
+                    }
+                    
                     if(confirm("정말 해당 주문을 취소하시겠습니까?")){
                         let params = {
                             userId: self.userInfo.userId, 
