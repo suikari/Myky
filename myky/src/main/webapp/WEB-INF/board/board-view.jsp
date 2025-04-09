@@ -56,26 +56,26 @@
                 <div class="like-button-wrapper">
                     <template v-if="likeStatus">
                         <button @click="likeButton('like','M')" class="likeButton">
-                            <img src="../img/buttonImg/smileClick.png" class="likeButton2" alt="좋아요" />
+                            <img src="../img/buttonImg/heart.png" class="likeButton2" alt="좋아요" />
                             <span>{{ info.likes }}</span>
                         </button>
                     </template>
                     <template v-else>
                         <button @click="likeButton('like','P')" class="likeButton">
-                            <img src="../img/buttonImg/smilenon.png" class="likeButton2" alt="좋아요" />
+                            <img src="../img/buttonImg/nonheart.png" class="likeButton2" alt="좋아요" />
                             <span>{{ info.likes }}</span>
                         </button>
                     </template>
 
                     <template v-if="dislikeStatus">
                         <button @click="likeButton('dislike','M')" class="likeButton">
-                            <img src="../img/buttonImg/dislikeClick.png" class="likeButton2" alt="싫어요" />
+                            <img src="../img/buttonImg/broken-heart.png" class="likeButton2" alt="싫어요" />
                             <span>{{ info.dislikes }}</span>
                         </button>
                     </template>
                     <template v-else>
                         <button @click="likeButton('dislike','P')" class="likeButton">
-                            <img src="../img/buttonImg/dislikenon.png" class="likeButton2" alt="싫어요" />
+                            <img src="../img/buttonImg/broken-nonheart.png" class="likeButton2" alt="싫어요" />
                             <span>{{ info.dislikes }}</span>
                         </button>
                     </template>
@@ -152,7 +152,6 @@
                                             </template>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <!-- 대댓글 입력창 -->
@@ -167,13 +166,13 @@
                                     style="margin-left: 30px;">
                                     <div v-if="editCommentId === reply.commentId">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
-                                        <input v-model="editContent" />
+                                        <input class="fb-cmtInput" v-model="editContent"/>
                                         <button class="fb-cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
                                         <button class="fb-cmtButton2" @click="editCommentId = ''">취소</button>
                                     </div>
                                     <div v-else>
                                         <div v-if="reply.isDeleted == 'Y'">
-                                            <div style="margin-bottom: 10px;">삭제된 댓글입니다.</div>
+                                            <div style="margin: 20px;">삭제된 댓글입니다.</div>
                                         </div>
                                         <div v-else>
                                             <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
@@ -182,7 +181,7 @@
                                                 style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
                                                 <span>{{ reply.updatedTime }}</span>
                                                 <template v-if="sessionId === reply.userId">
-                                                    <button class="fb-cmtButton2" @click="fnCommentEdit(reply)">수정</button>
+                                                    <button class="fb-cmtButton2" @click="fnCommentEdit(reply) ">수정</button>
                                                 </template>
                                                 <template v-if="sessionId === reply.userId || sessionRole === 'ADMIN'">
                                                     <button class="fb-cmtButton2" @click="fnCommentRemove(reply.commentId)">❌</button>
@@ -191,21 +190,21 @@
                                         </div>
                                     </div>
                                 </div>
-                        </tr>
-                    </table>
-
-                    <table class="fb-cmtButtonBox" v-if="sessionId">
-                        <tr>
-                            <th style="margin-right: 10px;"> 댓글 </th>
-                            <td>
-                                <textarea style="width: 430px" v-model="content" cols="60" rows="5"></textarea>
-                            </td>
-                            <td>
-                                <button class="fb-button" @click="fnCommentSave">저장</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                            </tr>
+                        </table>
+                            <table class="fb-cmtButtonBox" v-if="sessionId">
+                                <div></div>
+                                <th class="replyNickName"> {{nickName}} </th>
+                                <td class="reply-input-cell">
+                                    <div class="reply-box">
+                                        <textarea class="clean-textarea" v-model="content" cols="60" rows="5" placeholder="답글을 입력하세요"></textarea>
+                                        <div class="reply-button-cell">
+                                            <button class="fb-buttonReply" @click="fnCommentSave">저장</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </table>
+                    </div>
 
                 <div class="fb-buttonMargin">
                     <template v-if="sessionId == info.userId">
@@ -272,7 +271,6 @@
                         editReplyContent: "",
                         updatedTime: "",
                         createdTime: "",
-
                         likeStatus: false,  // 좋아요 상태
                         dislikeStatus: false,  // 싫어요 상태
                         status: "",
@@ -312,6 +310,7 @@
                                 self.info = data.info
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
+                                self.nickName = data.info.nickName;
                             }
                         });
                         self.fnlikestatus();
@@ -471,7 +470,8 @@
                             boardId: self.boardId,
                             userId: self.sessionId,
                             content: self.replyContent,
-                            parentCommentId: parentCommentId
+                            parentCommentId: parentCommentId,
+                            message : "대댓글이 등록되었습니다."
                         };
                         $.ajax({
                             url: "/board/ReplyAdd.dox",

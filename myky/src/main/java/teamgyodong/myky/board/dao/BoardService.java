@@ -29,7 +29,7 @@ public interface BoardService {
 
 	HashMap<String, Object> boardRemoveFile(HashMap<String, Object> map);
 
-	void insertReply(Map<String, Object> map);
+	HashMap<String, Object> insertReply(HashMap<String, Object> map);
 
 	HashMap<String, Object> selectLikeButton(HashMap<String, Object> map);
 

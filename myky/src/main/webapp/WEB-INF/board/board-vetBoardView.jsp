@@ -58,7 +58,7 @@
                         <div @click="showEditor" v-if=" (vetList.vetId && info.userId != sessionId) && info.isAccepted === 'N'">
                             <div class="fb-answerButton">답변하기</div>
                         </div>
-                        <div v-show="showAnsw" class="fb-editor-box">
+                        <div v-show="showAnsw" class="fb-editor-box-an">
                                 <!--  Quill 에디터 -->
                             <div id="fb-editor" class="fb-editor answer2"></div>
                             <!--  등록 버튼 영역 -->
@@ -80,17 +80,16 @@
                             <span v-for="n in 5" :key="n" class="star" :class="{ active: n <= answer.rating }">★</span>
                         </div>
                         <div class="fb-answer-meta-container">
-                            <img :src="userInfo.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                            <img :src="info.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
                                 alt="프로필 이미지"
                                 class="fb-top-profile-img2">
-                            <div class="fb-answer-nickname2">{{info.nickName}}
-
+                            <div class="fb-answer-meta-text">
+                                <div class="fb-answer-nickname2">{{info.nickName}}</div>
+                                <div class="fb-answer-header">
+                                    <div class="fb-answer-meta">{{ answer.createdAt }}</div>
+                                </div>
                                 <div class="underline-animated underline-text fb-answer-comments">{{ answer.comments }}</div>
-
                             </div>
-                        </div>
-                        <div class="fb-answer-header">
-                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
                         </div>
                         <!-- 후기 -->
 
@@ -101,15 +100,24 @@
                                 class="fb-top-profile-img">
                             
                             <div class="fb-top-profile-info">
-                            <div class="fb-info-box">
-                                <div class="fb-profile-name" style="font-size: 20px; color: #fca311;">{{ answer.vetName }}</div>                            
-                                <span class="fb-profile-badges" style="font-size: 15px;">{{answer.affiliatedHospital}}</span >
-                                <span class="fb-badge orange">{{answer.eMail}}</span >
-                            </div>
-                            <div class="fb-answer-meta">{{ answer.createdAt }}</div>
-                            <div class="fb-profile-desc">
-                                2021 IT/테크 분야 지식인 · IT/인터넷업 · 인스타그램 1위, SNS 1위, 인터넷 1위 분야에서 활동
-                              </div>
+                                <div class="fb-info-box">
+                                    <div class="fb-profile-name" style="font-size: 20px; color: #fca311;">{{ answer.vetName }}</div>                            
+                                    <span class="fb-profile-badges" style="font-size: 15px;">{{answer.affiliatedHospital}}</span >
+                                    <span class="fb-badge orange">{{answer.eMail}}</span >
+                                </div>
+                                <!-- 수의사별 별점 표시 -->
+                                <div v-if="answer.vetAnswerdetail" class="vet-rating">
+                                    {{ answer.vetAnswerdetail.length }}건 채택
+                                
+                                    <!-- 별점 표시 -->
+                                    <div class="star-rating">
+                                        <span v-for="n in 5" :key="n" class="star"
+                                              :class="{ active: n <= getAverageRating(answer) }">★</span>
+                                    </div>
+                                
+                                    <div class="average-rating">평균 평점: {{ getAverageRating(answer) }} </div>
+                                </div>
+                            
                             </div>
                         </div>
                         <!-- 본문 -->
@@ -125,8 +133,8 @@
                         </div>
                         <div class="fb-top-profile">
                             <img :src="answer.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
-                            alt="프로필 이미지"
-                            class="fb-top-profile-img">
+                                alt="프로필 이미지"
+                                class="fb-top-profile-img">
                             
                             <div class="fb-top-profile-info">
                             <div class="fb-info-box">
@@ -135,9 +143,16 @@
                                 <span class="fb-badge orange">{{answer.eMail}}</span >
                             </div>
                             <div class="fb-answer-meta">{{ answer.createdAt }}</div>
-                            <div class="fb-profile-desc">
-                                2021 IT/테크 분야 지식인 · IT/인터넷업 · 인스타그램 1위, SNS 1위, 인터넷 1위 분야에서 활동
-                              </div>
+                                <div v-if="answer.vetAnswerdetail" class="vet-rating">
+                                    {{ answer.vetAnswerdetail.length }}건 채택
+                                
+                                    <!-- 별점 표시 -->
+                                    <div class="star-rating">
+                                        <span v-for="n in 5" :key="n" class="star"
+                                                :class="{ active: n <= getAverageRating(answer) }">★</span>
+                                    </div>
+                                    <div class="average-rating">평균 평점: {{ getAverageRating(answer) }} </div>
+                                </div>
                             </div>
                         </div>
                         <div class="quill-output" v-if="answer.isDeleted == 'N'" v-html="answer.reviewText"></div>
@@ -201,7 +216,7 @@
                         <button class="fb-cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
                     </template>
                     
-                    <template v-if="isDeleted == 'Y'">
+                    <template v-if="answer.isDeleted == 'Y'">
                         <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
                     </template>
                 </div>
@@ -257,6 +272,7 @@
                         isSelected : false,
                         quillEdit: null, // ← 여기!
                         userInfo : {},
+                        vetRatings : {},
                     };
                 },
                 computed: {
@@ -277,7 +293,7 @@
 				        var nparmap = {
                             vetBoardId : self.vetBoardId,
                             option: "View",
-                            category : self.category,
+                            vetId : self.vetId
                         };
 				        $.ajax({
 				        	url:"/board/vetBoardView.dox",
@@ -291,8 +307,8 @@
                                 }
                                 self.info = data.info;
                                 self.answerList = data.answerList;
-                                console.log("fnView",data);
-				        	}
+
+				        	},
 				        });
                     },
                     getCurrent : function(){
@@ -396,6 +412,7 @@
                             }
                         });
                     },
+                
                     showEditor : function() {
                         let self = this;
                         self.showAnsw = !self.showAnsw;
@@ -602,6 +619,16 @@
 
 
                     },
+                    getAverageRating(answer) {
+                        const details = answer.vetAnswerdetail || [];
+                        const validRatings = details.map(item => Number(item.rating)).filter(r => !isNaN(r) && r > 0);
+
+                        if (validRatings.length === 0) return 0;
+
+                        const total = validRatings.reduce((sum, r) => sum + r, 0);
+                        return (total / validRatings.length).toFixed(1);
+                    },
+
                 },
                 mounted() {
                     let self = this;

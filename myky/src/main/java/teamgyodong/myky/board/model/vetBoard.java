@@ -29,7 +29,7 @@ public class vetBoard {
 	private String currentPoint;
 	
 	//users DB
-	private String profileImg;
+	private String profileImage;
 	
 	
 	
