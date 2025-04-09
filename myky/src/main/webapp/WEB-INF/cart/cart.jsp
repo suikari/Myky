@@ -22,7 +22,7 @@
         <table class="cartTable" v-if="cartItems.length > 0">
             <thead>
                 <tr>
-                    <th><input type="checkbox" @click="fnAllCheck" :checked="selectCheck.length === cartItems.length"></th>
+                    <th><input type="checkbox" id="allCheck" ref="allCheck" @click="fnAllCheck" :checked="selectCheck.length === cartItems.length"></th>
                     <th>상품 이미지</th>
                     <th>상품명</th>
                     <th>가격</th>
@@ -184,6 +184,14 @@
                             .filter(item => item.checkYn === "Y")
                             .map(item => item.productId);
                             console.log(self.selectCheck);
+
+                            self.$nextTick(() => {
+                                self.fnAllCheck({
+                                    target: {
+                                        checked: true
+                                    }
+                                });
+                            });
                         }
                     });
                 },
