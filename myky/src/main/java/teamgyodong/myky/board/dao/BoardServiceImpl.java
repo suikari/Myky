@@ -16,6 +16,8 @@ import teamgyodong.myky.board.model.boardLikeLog;
 import teamgyodong.myky.board.model.comment;
 import teamgyodong.myky.board.model.vetAnswer;
 import teamgyodong.myky.board.model.vetBoard;
+import teamgyodong.myky.manager.model.order;
+import teamgyodong.myky.manager.model.orderdetail;
 
 
 @Service
@@ -197,8 +199,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 	@Override
 	//대댓글 구현
-	public void insertReply(Map<String, Object> map) {
+	public  HashMap<String, Object> insertReply(HashMap<String, Object> map) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
 	    boardMapper.insertReply(map);
+	    int num = mainMapper.insertNotification(map);
+		
+	    resultMap.put("result", "success");
+		resultMap.put("num", "num");
+
+	    return resultMap;
 	}
 	@Override
 	//좋아요 버튼 기록 출력 (userId)
@@ -313,12 +323,21 @@ public class BoardServiceImpl implements BoardService {
 		try {
 			vetBoard vetboard = boardMapper.selectVetBoard(map);
 			List<vetAnswer> answerList = boardMapper.selectVetAnList(map);
-			
+			//List<vetAnswer> vetRatings = boardMapper.selectVetRating(map);
+
+						
+		    for (vetAnswer detail : answerList) {
+		        map.put("vetId", detail.getVetId()); // 댓글 ID → 대댓글 검색용
+		        List<vetAnswer> replies = boardMapper.selectVetRating(map);
+		        detail.setVetAnswerdetail(replies); // 💥 replies를 comment 객체에 직접 세팅
+		    }
+
 			if(vetboard != null) {
 				resultMap.put("result", "success");			
 			}else {
 				resultMap.put("result", "fail");
 			}
+			
 			resultMap.put("info", vetboard);
 			resultMap.put("answerList", answerList);
 

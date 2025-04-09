@@ -149,7 +149,6 @@
                 v-model="orderInfo.customMessage" placeholder="배송 요청사항 입력">
 
             <button class="payBtn" @click="submitOrderCheck">결제하기</button>
-            <button class="payBtn" @click="test">주문완료페이지테스트</button>
         </div>
     </div>
 

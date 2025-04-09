@@ -48,7 +48,7 @@ public interface BoardMapper {
 
 	int deleteFile(HashMap<String, Object> map);
 
-	void insertReply(Map<String, Object> map);
+	void insertReply(HashMap<String, Object> map);
 	
 	List<comment> selectParentCmtList(HashMap<String, Object> map);
 
@@ -87,6 +87,8 @@ public interface BoardMapper {
 	int checkDuplicateVetAnswer(HashMap<String, Object> map);
 
 	void updateVetBoardStats(HashMap<String, Object> map);
+
+	List<vetAnswer> selectVetRating(HashMap<String, Object> map);
 
 
 	

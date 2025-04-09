@@ -355,8 +355,8 @@
                     <div class="col-auto">
                         <select v-model="searchOption" class="form-select">
                             <option value="all">전체</option>
-                            <option value="orderId">주문번호</option>
-                            <option value="userId">사용자 ID</option>
+                            <option value="phone">연락처</option>
+                            <option value="userId">ID</option>
                         </select>
                     </div>
                     <div class="col">
@@ -373,6 +373,7 @@
                             <th>주문번호</th>
                             <th>구매자 ID</th>
                             <th>총 가격</th>
+                            <th>연락처 </th>
                             <th>주문 상태</th>
                             <th>주문일</th>
                             <th>관리</th>
@@ -384,6 +385,7 @@
                                 <td @click="toggleDetails(order.orderId)">{{ order.orderId }}</td>
                                 <td @click="toggleDetails(order.orderId)">{{ order.userId }}</td>
                                 <td @click="toggleDetails(order.orderId)">{{ order.totalPrice }}</td>
+                                <td @click="toggleDetails(order.orderId)">{{ order.receiverPhone }}</td>
                                 <td @click="toggleDetails(order.orderId)">
                                     <span class="status-received" :class="getStatusClass(order.orderStatus)">
 							            {{ getStatusLabel(order.orderStatus) }}
@@ -397,7 +399,7 @@
                             
                             <!-- 토글되는 수정 입력란 -->
 							<tr v-if="updateOrderId === order.orderId">
-							    <td colspan="8">
+							    <td colspan="7">
 							        <div class="edit-form d-flex flex-column gap-3 p-3 border rounded">
 							            <!-- 첫 번째 줄: 상품명, 상품코드, 가격 -->
 							            <div class="d-flex flex-wrap gap-3">
@@ -431,9 +433,8 @@
 							
                             <!-- 주문 상세 토글 -->
                             <tr v-if="selectedOrderId === order.orderId">
-                                <td colspan="6">
+                                <td colspan="7">
                                     <div class="edit-form p-3 border rounded">
-                                        <h5>주문 상세</h5>
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -454,7 +455,10 @@
 													</td>
                                                     <td>{{ product.productName }}</td>
                                                     <td>
-												        <span :class="getStatusClass(product.refundStatus)">
+	                                                    <span v-if="order.orderStatus=='cancel' || order.orderStatus=='canceled'  "  class="status-received" :class="getStatusClass(order.orderStatus)">
+												            {{ getStatusLabel(order.orderStatus) }}
+												        </span>												        
+												        <span v-else :class="getStatusClass(product.refundStatus)">
 												            {{ getStatusLabel(product.refundStatus) }}
 												        </span>
 					                           		</td>
@@ -537,7 +541,7 @@ const app = Vue.createApp({
             index: 0,
             orders: [],
             selectedOrderId: null,
-            searchOption: 'orderId',
+            searchOption: 'all',
             page: 1,
             pageSize: 10,
             keyword: '',
@@ -551,8 +555,10 @@ const app = Vue.createApp({
         fnMainList() {
             var self = this;
             var params = {
+                    searchOption: self.searchOption,
                     page: (self.page - 1) * self.pageSize,
                     pageSize: self.pageSize,
+                    keyword: self.keyword,
             };
             $.ajax({
                 url: "/admin/selectOrderList.dox",

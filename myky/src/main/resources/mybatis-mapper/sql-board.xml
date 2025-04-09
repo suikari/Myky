@@ -404,6 +404,12 @@
 	      AND VET_BOARD_ID = #{vetBoardId}
 	</select>
 	
+	<select id="selectVetRating" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetAnswer">
+		SELECT *
+		FROM VET_ANSWER
+		WHERE VET_ID = #{vetId} AND COMMENTS IS NOT NULL
+	</select>
+	
 	
 </mapper>
 

@@ -172,32 +172,6 @@
                 display: none;
             }
 
-            .best-products {
-                width: 100%;
-                max-width: 1280px;
-                margin-top: 30px;
-                padding: 40px;
-                text-align: center;
-                font-size: 1.2em;
-                font-weight: bold;
-                background: #fff;
-                border-radius: 8px;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .best-product-container {
-                width: 100%;
-                max-width: 1280px;
-                margin: 20px auto;
-                text-align: center;
-            }
-
-            .best-product-title {
-                font-size: 20px;
-                font-weight: bold;
-                margin-bottom: 15px;
-            }
-
             .product-list {
                 display: flex;
                 gap: 10px;
@@ -206,30 +180,104 @@
             }
 
             .product-card {
-                width: calc(20% - 35px);
+                width: calc(20% - 25px);
                 min-width: 150px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
+                height: 230px;
+                flex-direction: column;
+                background: #fff;
+                border-radius: 12px;
                 padding: 10px;
+                position: relative;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+                transition: transform 0.2s, box-shadow 0.2s;
                 text-align: center;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .product-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
             }
 
             .product-image img {
                 width: 100%;
-                height: 120px;
+                height: 150px;
                 object-fit: cover;
                 border-radius: 6px;
                 margin-bottom: 8px;
             }
 
             .product-name {
-                font-size: 15px;
-                font-weight: bold;
+                font-size: 12px;
+                font-weight: 600;
                 margin-bottom: 5px;
+                color: #333;
+                height: 40px;
+                line-height: 1.2;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .product-price {
+                font-size: 15px;
+                font-weight: bold;
+                color: black;
+            }
+
+            /* ✅ 베스트 + 신상품 나란히 배치 컨테이너 */
+            .product-pair-section {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                max-width: 1280px;
+                margin: 40px auto;
+                flex-wrap: wrap;
+                /* 반응형 대비 */
+            }
+
+            /* ✅ 개별 박스 공통 스타일 */
+            .product-box {
+                width: 48%;
+                background: #fff8f0;
+                border-radius: 12px;
+                padding: 30px 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+                box-sizing: border-box;
+            }
+
+            /* ✨ 신규 상품 박스 색상 */
+            .new-products {
+                background-color: #f0faff;
+            }
+
+            @media (max-width: 1024px) {
+                .product-pair-section {
+                    flex-direction: column;
+                }
+
+                .product-box {
+                    width: 100%;
+                }
+            }
+
+            .section-header {
+                text-align: center;
+                margin-top: 10px;
+                margin-bottom: 30px;
+            }
+
+            .section-header h2 {
+                font-size: 28px;
+                font-weight: bold;
+                color: #ff6f61;
+                margin-bottom: 10px;
+            }
+
+            .section-header p {
+                font-size: 14px;
+                color: #555;
+            }
+
+            .section-header p {
                 font-size: 14px;
                 color: #555;
             }
@@ -286,12 +334,15 @@
             }
 
             .badge {
-                background: #ff6b6b;
+                position: absolute;
+                top: 0px;
+                left: 5px;
+                background: #ff6f61;
                 color: white;
-                font-size: 10px;
-                padding: 2px 4px;
-                border-radius: 4px;
-                margin-right: 6px;
+                padding: 4px 8px;
+                font-size: 12px;
+                border-radius: 6px;
+                font-weight: bold;
             }
 
             .section-subtitle {
@@ -312,23 +363,55 @@
                 border-top: 4px solid #ffa94d;
             }
 
+            /* 신규 상품 색상 전용 배경 */
+            .new-products {
+                background-color: #f0faff;
+                /* 연한 하늘색 */
+            }
+
+            /* 신규 상품 제목 색상 */
+            .new-products .section-header h2 {
+                color: #339af0;
+            }
+
+            /* 신규 상품 전용 뱃지 */
+            .new-products .badge {
+                background-color: #339af0;
+                /* 파란색 계열 */
+                color: white;
+                font-weight: bold;
+                font-size: 12px;
+                position: absolute;
+                top: 0px;
+                left: 5px;
+                padding: 4px 8px;
+                border-radius: 6px;
+            }
+
             .navigation {
-                margin-top: 15px;
+                margin-top: 30px;
+                display: flex;
+                justify-content: center;
+                gap: 20px;
             }
 
             .nav-button {
-                padding: 8px 15px;
-                font-size: 14px;
-                border: none;
-                background-color: #007bff;
+                background-color: #ff6f61;
                 color: white;
-                border-radius: 5px;
+                border: none;
+                padding: 10px 20px;
+                font-weight: bold;
+                border-radius: 8px;
                 cursor: pointer;
-                margin: 0 5px;
+                transition: background-color 0.3s ease;
+            }
+
+            .nav-button:hover:not(:disabled) {
+                background-color: #ff3e2e;
             }
 
             .nav-button:disabled {
-                background-color: #ccc;
+                opacity: 0.5;
                 cursor: not-allowed;
             }
 
@@ -492,25 +575,25 @@
 
                 </section>
 
-                <!-- ✅ 베스트 상품 -->
-                <section class="best-products">
-                    <div class="best-product-container">
-                        <div class="best-product-title">베스트 상품</div>
+                <!-- ✅ 베스트 + 신상품 좌우 배치 -->
+                <section class="product-pair-section">
+                    <!-- 🔥 베스트 상품 -->
+                    <div class="product-box">
+                        <div class="section-header">
+                            <h2>🔥 베스트 상품</h2>
+                            <p>가장 인기 있는 반려동물 용품을 소개합니다</p>
+                        </div>
                         <div class="product-list">
                             <div v-for="product in getDisplayedProducts(products, currentPageBest)"
                                 class="product-card">
-                                <div class="product-image">
-                                    <template v-if="product.filePath">
-                                        <img class="product_img" :src="product.filePath" :alt="product.fileName"
-                                            @click="fnPView(product.productId)" />
-                                    </template>
-                                    <template v-else>
-                                        <img class="product_img" src="../../img/product/product update.png" alt="이미지 없음"
-                                            @click="fnPView(product.productId)" />
-                                    </template>
+                                <div class="badge">BEST</div>
+                                <div class="product-image" @click="fnPView(product.productId)">
+                                    <img class="product_img"
+                                        :src="product.filePath || '../../img/product/product update.png'"
+                                        :alt="product.fileName || '이미지 없음'" />
                                 </div>
                                 <div class="product-name">{{ product.productName }}</div>
-                                <div class="product-price">{{ product.price }}원</div>
+                                <div class="product-price">{{ product.price.toLocaleString() }}원</div>
                             </div>
                         </div>
                         <div class="navigation">
@@ -520,27 +603,24 @@
                                 :disabled="currentPageBest >= maxPage(products)">다음</button>
                         </div>
                     </div>
-                </section>
 
-                <!-- ✅ 신상품 -->
-                <section class="best-products">
-                    <div class="best-product-container">
-                        <div class="best-product-title">신규 상품</div>
+                    <!-- ✨ 신상품 -->
+                    <div class="product-box new-products">
+                        <div class="section-header">
+                            <h2>✨ 신규 상품</h2>
+                            <p>따끈따끈! 막 들어온 반려동물 신상품을 만나보세요</p>
+                        </div>
                         <div class="product-list">
                             <div v-for="product in getDisplayedProducts(productsN, currentPageNew)"
                                 class="product-card">
-                                <div class="product-image">
-                                    <template v-if="product.filePath">
-                                        <img class="product_img" :src="product.filePath" :alt="product.fileName"
-                                            @click="fnPView(product.productId)" />
-                                    </template>
-                                    <template v-else>
-                                        <img class="product_img" src="../../img/product/product update.png" alt="이미지 없음"
-                                            @click="fnPView(product.productId)" />
-                                    </template>
+                                <div class="badge">NEW</div>
+                                <div class="product-image" @click="fnPView(product.productId)">
+                                    <img class="product_img"
+                                        :src="product.filePath || '../../img/product/product update.png'"
+                                        :alt="product.fileName || '이미지 없음'" />
                                 </div>
                                 <div class="product-name">{{ product.productName }}</div>
-                                <div class="product-price">{{ product.price }}원</div>
+                                <div class="product-price">{{ product.price.toLocaleString() }}원</div>
                             </div>
                         </div>
                         <div class="navigation">
@@ -552,18 +632,7 @@
                     </div>
                 </section>
 
-                <!-- ✅ 보호소 소개 -->
-                <!-- <section>
-                    <div class="section-title">보호소 소개</div>
-                    <div class="shelter-preview">
-                        <div class="shelter-card" v-for="shelter in shelters" :key="shelter.name">
-                            <img :src="shelter.image" alt="shelter">
-                            <div class="shelter-name">{{ shelter.name }}</div>
-                            <div class="shelter-detail">{{ shelter.location }}</div>
-                            <button @click="goToCenter">보러가기</button>
-                        </div>
-                    </div>
-                </section> -->
+
             </main>
         </div>
 
@@ -659,7 +728,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                //console.log(data);
                                 self.products = data.list;
 
                             }
@@ -711,50 +779,50 @@
                             data: nparmap,
                             success: function (kakaodata) {
                                 console.log(kakaodata);
-                                console.log("334",kakaodata.kakao_account.email);
-                                 
+                                console.log("334", kakaodata.kakao_account.email);
+
                                 if (kakaodata.kakao_account && kakaodata.kakao_account.email) {
-                                	 nparmap = {
-             								email: kakaodata.kakao_account.email        							
-             						};
-                                     
-             						$.ajax({
-             							url: "/user/socialEmail.dox", // 얘한테 요청함 'controller'에게 요청
-             							dataType: "json",
-             							type: "POST",
-             							data: nparmap,
-             							success: function (data) {
-             								console.log(data);
+                                    nparmap = {
+                                        email: kakaodata.kakao_account.email
+                                    };
 
-             								if((data.result == "fail1")){
-             									return;
-             								} else {
-             									if (data.count > 0) {
-             										alert(data.user.userName + "님 환영해요!");
-             										location.href = "/main.do";
-             									} else {
-             										console.log("구글 카운트:", data.count);
-             										if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
-             											//sessionStorage.setItem("socialLoginConfirmed", "true"); 
-             											//location.href = "/user/consent.do";
+                                    $.ajax({
+                                        url: "/user/socialEmail.dox", // 얘한테 요청함 'controller'에게 요청
+                                        dataType: "json",
+                                        type: "POST",
+                                        data: nparmap,
+                                        success: function (data) {
+                                            console.log(data);
 
-             											pageChange("/user/consent.do", {email : kakaodata.kakao_account.email , name : kakaodata.kakao_account.profile.nickname});
-             											
-             										}
-             									}
-             								}
+                                            if ((data.result == "fail1")) {
+                                                return;
+                                            } else {
+                                                if (data.count > 0) {
+                                                    alert(data.user.userName + "님 환영해요!");
+                                                    location.href = "/main.do";
+                                                } else {
+                                                    console.log("구글 카운트:", data.count);
+                                                    if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
+                                                        //sessionStorage.setItem("socialLoginConfirmed", "true"); 
+                                                        //location.href = "/user/consent.do";
 
-             							}
-             						});
+                                                        pageChange("/user/consent.do", { email: kakaodata.kakao_account.email, name: kakaodata.kakao_account.profile.nickname });
+
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                    });
                                 } else {
-										alert("로그인 실패 (이메일동의 필요)");
- 										location.href = "/main.do";
+                                    alert("로그인 실패 (이메일동의 필요)");
+                                    location.href = "/main.do";
                                 }
-                               
+
                             }
                         });
                     },
-                    
+
                     fnView(boardId) {
                         location.href = "/board/view.do?category=A&boardId=" + boardId;
                     },

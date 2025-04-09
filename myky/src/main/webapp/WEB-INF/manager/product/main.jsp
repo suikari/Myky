@@ -348,8 +348,9 @@
 						    <div class="col-auto">
 						        <select v-model="searchOption" class="form-select">
 						            <option value="all">전체</option>
-						            <option value="title">제목</option>
-						            <option value="userId">작성자</option>
+						            <option value="title">제품명</option>
+						            <option value="category">카테고리</option>
+						            <option value="code">상품코드</option>
 						        </select>
 						    </div>
 						
@@ -526,7 +527,7 @@
 				        editData: {
 
 				        },
-	                    searchOption: 'userId',
+	                    searchOption: 'all',
 	                    page: 1,
 	                    pageSize: 10,
 	                    keyword: '',

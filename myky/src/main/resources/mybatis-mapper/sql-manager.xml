@@ -403,10 +403,25 @@
 		from membership
 		Where expiration_date >= sysdate) m 
         on u.user_id = m.user_id
-        Where 1=1
-	    <if test="searchOption != null and searchOption == 'userId'">
-	        AND u.USER_ID LIKE '%' || #{keyword} || '%'
+        Where 1=1		
+		<if test="searchOption != null and searchOption == 'all'">
+	        AND (u.user_id LIKE '%' || #{keyword} || '%' 
+			OR u.username LIKE '%' || #{keyword} || '%'
+			OR u.email LIKE '%' || #{keyword} || '%'
+			OR u.address LIKE '%' || #{keyword} || '%')
 	    </if>
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND u.user_id LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'name'">
+	        AND u.username LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'eamil'">
+	        AND u.email LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'address'">
+	        AND u.address LIKE '%' || #{keyword} || '%'
+	    </if>			
 		ORDER BY U.CREATED_AT DESC
 		<if test="page != null and pageSize != null" >
 		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -425,9 +440,24 @@
 		Where expiration_date >= sysdate) m 
         on u.user_id = m.user_id
         Where 1=1
-	    <if test="searchOption != null and searchOption == 'userId'">
-	        AND u.USER_ID LIKE '%' || #{keyword} || '%'
+		<if test="searchOption != null and searchOption == 'all'">
+	        AND (u.user_id LIKE '%' || #{keyword} || '%' 
+			OR u.username LIKE '%' || #{keyword} || '%'
+			OR u.email LIKE '%' || #{keyword} || '%'
+			OR u.address LIKE '%' || #{keyword} || '%')
 	    </if>
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND u.user_id LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'name'">
+	        AND u.username LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'eamil'">
+	        AND u.email LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'address'">
+	        AND u.address LIKE '%' || #{keyword} || '%'
+	    </if>	
 
 	</select>
 	
@@ -472,13 +502,22 @@
 
 
 	<select id="selectAllMembershipList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mMembership">
-	
+	    
+    	
+
 		SELECT *
 		FROM membership
 		Where 1=1
-	 	<if test="searchOption != null and searchOption == 'userId'">
-	        AND NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
-	    </if>   
+		<if test="searchOption != null and searchOption == 'all'">
+	        AND (user_id LIKE '%' || #{keyword} || '%' 
+			OR membership_type LIKE '%' || #{keyword} || '%')
+	    </if>
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND user_id LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'type'">
+	        AND membership_type LIKE '%' || #{keyword} || '%'
+	    </if>  
 	     ORDER BY renewal_date DESC
 		<if test="page != null and pageSize != null" >
 		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -492,9 +531,16 @@
 		SELECT COUNT(*)
         from membership 
         Where 1=1
-	    <if test="searchOption != null and searchOption == 'userId'">
-	        AND  NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+		<if test="searchOption != null and searchOption == 'all'">
+	        AND (user_id LIKE '%' || #{keyword} || '%' 
+			OR membership_type LIKE '%' || #{keyword} || '%')
 	    </if>
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND user_id LIKE '%' || #{keyword} || '%'
+	    </if>
+	    <if test="searchOption != null and searchOption == 'type'">
+	        AND membership_type LIKE '%' || #{keyword} || '%'
+	    </if>  
 	    
 	</select>
 	
@@ -503,6 +549,20 @@
 		SELECT *
 		FROM Product
 		Where 1=1
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (product_name LIKE '%' || #{keyword} || '%'
+			OR CATEGORY_ID LIKE '%' || #{keyword} || '%'
+			OR PRODUCT_CODE LIKE '%' || #{keyword} || '%' )
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND product_name LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'category'">
+			AND CATEGORY_ID LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'code'">
+			AND PRODUCT_CODE LIKE '%' || #{keyword} || '%'
+		</if>
 	    ORDER BY REGISTRATION_DATE DESC
 		<if test="page != null and pageSize != null" >
 		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -516,7 +576,20 @@
 		SELECT COUNT(*)
         from Product 
         Where 1=1
-	    
+	    <if test="searchOption != null and searchOption == 'all'">
+			AND (product_name LIKE '%' || #{keyword} || '%'
+			OR CATEGORY_ID LIKE '%' || #{keyword} || '%'
+			OR PRODUCT_CODE LIKE '%' || #{keyword} || '%' )
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND product_name LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'category'">
+			AND CATEGORY_ID LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'code'">
+			AND PRODUCT_CODE LIKE '%' || #{keyword} || '%'
+		</if>
 	</select>
 	
 	
@@ -692,23 +765,16 @@
 		    *
 		FROM orders 
 		WHERE 1=1
-		    <if test="searchOption != null and searchOption == 'all'">
-		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
-		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
-		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
-		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
-		    </if>
-		    <if test="searchOption != null and searchOption == 'title'">
-		        AND F.TITLE LIKE '%' || #{keyword} || '%'
-		    </if>
-		 	<if test="searchOption != null and searchOption == 'userId'">
-			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
-		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
-			</if>
-			<if test="searchOption != null and searchOption == 'userId2'">
-                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
-                AND F.TITLE LIKE '%' || #{keyword2} || '%')
-            </if>
+		<if test="searchOption != null and searchOption == 'all'">
+			AND ( receiver_phone LIKE '%' || #{keyword} || '%' 
+					OR user_id LIKE '%' || #{keyword} || '%' )
+		</if>
+		<if test="searchOption != null and searchOption == 'phone'">
+			AND receiver_phone LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'userId'">
+			AND USER_ID LIKE '%' || #{keyword} || '%'
+		</if>
 		ORDER BY 
 		    order_id DESC
 		<if test="page != null and pageSize != null" >
@@ -721,23 +787,16 @@
 		SELECT COUNT(*)
 		FROM orders 
 		WHERE 1=1
-			<if test="searchOption != null and searchOption == 'all'">
-		        AND (F.TITLE LIKE '%' || #{keyword} || '%' 
-		        OR F.CONTENT LIKE '%' || #{keyword} || '%'
-		        OR U.NICKNAME LIKE '%' || #{keyword} || '%'
-		        OR F.USER_ID LIKE '%' || #{keyword} || '%')
-		    </if>
-		    <if test="searchOption != null and searchOption == 'title'">
-		        AND F.TITLE LIKE '%' || #{keyword} || '%'
-		    </if>
-		 	<if test="searchOption != null and searchOption == 'userId'">
-			    AND (F.USER_ID LIKE '%' || #{keyword} || '%'
-		        OR U.NICKNAME LIKE '%' || #{keyword} || '%')
-			</if>
-			<if test="searchOption != null and searchOption == 'userId2'">
-                AND (F.USER_ID LIKE '%' || #{keyword} || '%'
-                AND F.TITLE LIKE '%' || #{keyword2} || '%')
-            </if>
+		<if test="searchOption != null and searchOption == 'all'">
+			AND ( receiver_phone LIKE '%' || #{keyword} || '%' 
+					OR user_id LIKE '%' || #{keyword} || '%' )
+		</if>
+		<if test="searchOption != null and searchOption == 'phone'">
+			AND receiver_phone LIKE '%' || #{keyword} || '%'
+		</if>
+		<if test="searchOption != null and searchOption == 'userId'">
+			AND USER_ID LIKE '%' || #{keyword} || '%'
+		</if>
 	</select>
 	
     <select id="selectOrderDetailList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.orderdetail">
@@ -999,7 +1058,8 @@
 		WHERE QNA_ID = #{qnaId} 
 	 </update>
 
-	 </mapper>
+	 
+</mapper>
 
 
 
