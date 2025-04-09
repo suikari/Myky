@@ -2,6 +2,7 @@ package teamgyodong.myky.Main.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -28,6 +29,7 @@ public interface MainMapper {
 	
 	List<Category> selectCategoryList(HashMap<String, Object> map);
 	List<Notification> selectNotificationList(HashMap<String, Object> map);
+	void selectTermsContent(Map<String, Object> map);
 
 	
 	
