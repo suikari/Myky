@@ -26,13 +26,22 @@
                 border-radius: 16px;
             }
 
+
+            .profile-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 40px;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 20px;
+            }
+
             /* 유저 정보 영역 */
+
             .user-info {
                 display: flex;
                 align-items: center;
                 gap: 20px;
-                padding-bottom: 20px;
-                border-bottom: 1px solid #ddd;
             }
 
             .profile-pic {
@@ -70,13 +79,15 @@
             /* 요약 정보 */
             .summary {
                 display: flex;
-                justify-content: space-between;
                 gap: 20px;
-                margin-top: 30px;
+                flex-wrap: wrap;
+                /* 작은 화면 대응 */
+                justify-content: flex-start;
             }
 
             .summary-item {
-                flex: 1;
+                flex: 0 0 130px;
+                /* 고정 너비 설정 (원하는 크기로 조정 가능) */
                 background-color: #f7f7f7;
                 border: 1px solid #e0e0e0;
                 padding: 25px 20px;
@@ -84,11 +95,15 @@
                 text-align: center;
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
+                min-width: 130px;
+                /* 줄어들지 않게 최소 너비도 설정 */
             }
 
             .summary-item:hover {
                 transform: translateY(-4px);
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                background-color: #f3eded;
+                border: 1px solid #f4a261;
             }
 
             .summary-title {
@@ -111,7 +126,7 @@
 
             .sidebar {
                 width: 25%;
-                background: #f9f9f9;
+                background: #f9e2c1;
                 padding: 20px;
                 border-radius: 10px;
                 font-family: 'Noto Sans KR', sans-serif;
@@ -140,13 +155,13 @@
             }
 
             .tab-item:hover {
-                background-color: #e0e0e0;
-                color: #111;
+                background-color: #fbb276;
+                color: white;
                 cursor: pointer;
             }
 
             .tab-item.active {
-                background-color: #d0d0d0;
+                background-color: #f4a261;
                 color: white;
                 font-weight: 600;
             }
@@ -847,6 +862,8 @@
                 flex-wrap: wrap;
                 gap: 16px;
                 justify-content: center;
+                background-color: #f6f5f5;
+                border-radius: 8px;
             }
 
             .coupon {
@@ -875,8 +892,8 @@
                 width: 200px;
                 /* 적절히 조절 가능 */
                 height: auto;
-                transform: translate(-3%, -3%);
-                opacity: 0.80;
+                transform: translate(-15%, -15%);
+                opacity: 0.40;
                 /* 흐릿하게 */
                 z-index: 0;
                 pointer-events: none;
@@ -962,38 +979,39 @@
         <div id="app" class="container">
             <template v-if="userId!=''">
                 <div class="mypage-container">
-                    <div class="user-info">
-                        <img :src="user.profileImage" alt="" class="profile-pic">
-                        <div class="user-details">
-                            <h2>안녕하세요, {{user.userName}}님!</h2>
-                            <template v-if="membershipYn === 'Y'">
-                                <span class="badge badge-yes">
-                                    ⭐ 멤버십 회원
-                                </span>
+                    <div class="profile-wrapper">
+                        <div class="user-info">
+                            <template v-if="user.profileImage!=null">
+                                <img :src="user.profileImage" alt="" class="profile-pic">
                             </template>
                             <template v-else>
-                                <span class="badge badge-no">
-                                    🛈 일반 회원
-                                </span>
+                                <img src="/img/userProfile/Default-Profile-Picture.jpg" alt="프로필 이미지"
+                                    class="profile-pic">
                             </template>
+                            <div class="user-details">
+                                <h2>안녕하세요, {{user.userName}}님!</h2>
+                                <template v-if="membershipYn === 'Y'">
+                                    <span class="badge badge-yes">⭐ 멤버십 회원</span>
+                                </template>
+                                <template v-else>
+                                    <span class="badge badge-no">🛈 일반 회원</span>
+                                </template>
+                            </div>
                         </div>
 
-
-                    </div>
-
-
-                    <div class="summary">
-                        <div class="summary-item">
-                            <div class="summary-title">현재 포인트</div>
-                            <div class="summary-value">{{ formattedAmount(point.currentPoint) }}P</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-title">보유 쿠폰</div>
-                            <div class="summary-value">{{ couponCnt }}개</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="summary-title">총 주문 수</div>
-                            <div class="summary-value">{{ orderAllCnt }}회</div>
+                        <div class="summary">
+                            <div class="summary-item">
+                                <div class="summary-title">현재 포인트</div>
+                                <div class="summary-value">{{ formattedAmount(point.currentPoint) }}P</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-title">보유 쿠폰</div>
+                                <div class="summary-value">{{ couponCnt }}개</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-title">총 주문 수</div>
+                                <div class="summary-value">{{ orderAllCnt }}회</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1144,7 +1162,7 @@
                                     <div v-for="item in couponList">
                                         <div class="coupon">
                                             <!-- 배경 이미지 추가 -->
-                                            <img src="../../img/logo.png" alt="logo" class="coupon-bg-logo">
+                                            <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo" class="coupon-bg-logo">
 
                                             <ul class="coupon-list">
                                                 <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
@@ -1255,9 +1273,11 @@
                                     <template v-if="vetCnt.cnt!=0">
                                         <tr v-for="item in vetBoardList">
                                             <template v-if="item.isDeleted == 'N'">
-                                                <td><a href="javascript:;" @click="fnVetView(item.vetBoardId)">{{item.vetBoardId}}</a></td>
-                                                <td>{{item.title}}<span class="cmtCountColor"
-                                                        v-if="parseInt(item.commentCount) > 0">({{item.commentCount}})</span>
+                                                <td>{{item.vetBoardId}}</a></td>
+                                                <td><a href="javascript:;"
+                                                        @click="fnVetView(item.vetBoardId)">{{item.title}}<span
+                                                            class="cmtCountColor"
+                                                            v-if="parseInt(item.commentCount) > 0">({{item.commentCount}})</span></a>
                                                 </td>
                                                 <td>{{item.points}}</td>
 
@@ -1384,7 +1404,7 @@
                             <div v-if="activeTab === 'subscribe'" class="cpoint-page">
                                 <table class="cpoint-table">
                                     <tr>
-                                        <th class="cpoint-header" style="text-align: center;">멤버쉽 내용</th>
+                                        <th class="cpoint-header" style="text-align: center;">멤버십 내용</th>
                                         <th class="cpoint-header" style="text-align: center;">구독 날짜</th>
                                         <th class="cpoint-header" style="text-align: center;">만료 날짜</th>
                                     </tr>
@@ -1397,7 +1417,7 @@
 
                                     </tr>
                                     <tr v-if="membership.length == 0">
-                                        <td colspan="3" style="text-align: center; padding-top : 20px;"> 멤버쉽 구독 내역이
+                                        <td colspan="3" style="text-align: center; padding-top : 20px;"> 멤버십 구독 내역이
                                             없습니다.</td>
                                     </tr>
 
@@ -1721,14 +1741,11 @@
                         location.href = "/board/view.do?boardId=" + boardId + "&category=" + self.category;
                     },
 
-                    // fnView(boardId, commentId) {
-                    //     let self = this;
-                    //     if (commentId == null) {
-                    //         commentId = ""
-                    //     }
-                    //     localStorage.setItem("page", self.page);
-                    //     location.href = "/board/vetBoardView.do?vetBoardId=" + boardId + "&category=" + self.category;
-                    // },
+                    fnVetView(vetBoardId) {
+                        let self = this;
+                        localStorage.setItem("page", self.page);
+                        location.href = "/board/vetBoardView.do?vetBoardId=" + vetBoardId;
+                    },
 
                     fnSeachComm(commend) {
                         var self = this;
