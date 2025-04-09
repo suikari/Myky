@@ -69,7 +69,24 @@
 	</update>
 	
 
-
+	<select id="selectTermsContent" parameterType="hashmap" resultType="teamgyodong.myky.membership.model.Membership">
+    SELECT * FROM (
+        SELECT TERM_ID,
+               TITLE,
+               CONTENT,
+               REQUIRED_YN,
+               DISPLAY_ORDER,
+               CATEGORY
+        FROM TOTAL_TERMS
+        <where>
+            <if test="category != null and category != ''">
+                CATEGORY = #{category}
+            </if>
+        </where>
+        ORDER BY DISPLAY_ORDER ASC
+    )
+    WHERE ROWNUM = 1
+</select>
 
 </mapper>
 

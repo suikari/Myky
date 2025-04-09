@@ -580,88 +580,99 @@ console.log("병원 수:", this.hoslist.length);
         return;
     }
 
-    this.selectedCategoryCode = Number(categoryCode); // 숫자 고정
+    this.selectedCategoryCode = Number(categoryCode);
     this.clearPartnerMarkers();
     this.currentView = 'partner';
 
-    // 👉 먼저 필터링
     this.filteredPartnerlist = this.partnerlist.filter(
         partner => partner.categoryCode === this.selectedCategoryCode
     );
 
-    if (this.filteredPartnerlist.length === 0) {
-        console.log("🚫 해당 카테고리에 대한 제휴사가 없습니다.");
-    } else {
-        console.log("✅ 필터링된 제휴사 목록:", this.filteredPartnerlist);
-    }
-
-    // 👉 즐겨찾기 포함해서 마커 표시!
-    this.displayPartnerPlaces(this.filteredPartnerlist, { includeFavorites: true });
+    this.displayPartnerPlaces(this.filteredPartnerlist, {
+        includeFavorites: true
+    });
 }
+
 
 
 
 ,
 
-displayPartnerPlaces(partnerlist, options = { includeFavorites: false, clear: true }) {
+displayPartnerPlaces(partnerlist, options = { includeFavorites: true, clear: true }) {
     if (options.clear) {
-        this.clearPartnerMarkers(); // 기존 마커 제거
+        this.clearPartnerMarkers();
     }
 
     this.visiblePartnerList = partnerlist;
     this.lastDisplayedPartnerList = partnerlist;
     this.currentView = 'partner';
 
-    const favoritePartnerIds = new Set(this.favoritesList.map(fav => Number(fav.partnerdetailId)));
+    const favoriteIds = new Set(this.favoritesList.map(fav => fav.partnerdetailId));
 
-    const getMarkerImage = (categoryCode, isFavorite) => {
-        if (isFavorite) return "../img/partner/star.png";
+    const getCategoryImg = (categoryCode) => {
         switch (categoryCode) {
-            case 1: return "../img/partner/11.png";
-            case 2: return "../img/partner/food.png";
-            case 3: return "../img/partner/22.png";
-            case 4: return "../img/partner/44.png";
-            default: return "../img/partner/logo.png";
+            case 1: return "/img/partner/11.png";
+            case 2: return "/img/partner/food.png";
+            case 3: return "/img/partner/22.png";
+            case 4: return "/img/partner/44.png";
+            default: return "/img/partner/logo.png";
         }
     };
 
+    const markersToShow = [];
+
     partnerlist.forEach(partner => {
-        if (!partner.NY || !partner.NX) return;
+    if (!partner.NY || !partner.NX) return;
 
-        const isFavorite = favoritePartnerIds.has(Number(partner.partnerdetailId));
-        
-        // ⭐ 즐겨찾기면 일반 마커 생략
-        if (!options.includeFavorites && isFavorite) return;
+    const isFavorite = favoriteIds.has(partner.partnerdetailId);
 
-        const position = new kakao.maps.LatLng(partner.NY, partner.NX);
-        const imageSrc = getMarkerImage(partner.categoryCode, isFavorite);
-        const markerImage = new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(42, 42));
-
+    if (isFavorite) {
         const marker = new kakao.maps.Marker({
-            position,
-            image: markerImage,
-            map: this.map
+            position: new kakao.maps.LatLng(partner.NY, partner.NX),
+            image: new kakao.maps.MarkerImage(
+                "/img/partner/star.png",
+                new kakao.maps.Size(42, 42)
+            )
         });
 
         marker.partnerdetailId = partner.partnerdetailId;
-
+        marker.setMap(this.map);
         kakao.maps.event.addListener(marker, "click", () => {
             this.showInfoWindowForCategory(marker, partner);
         });
 
-        // ⭐ 별마커는 따로 관리, 나머지는 일반 마커에 넣기
-        if (isFavorite) {
-            this.favoriteMarkers.push(marker);
-        } else {
-            this.partnerMarkers.push(marker);
-        }
-    });
+        this.favoriteMarkers.push(marker);
+        markersToShow.push(marker); // ✅ 추가
+    } else {
+        const marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(partner.NY, partner.NX),
+            image: new kakao.maps.MarkerImage(
+                getCategoryImg(partner.categoryCode),
+                new kakao.maps.Size(42, 42)
+            )
+        });
 
-    if (partnerlist.length > 0) {
-        const center = new kakao.maps.LatLng(partnerlist[0].NY, partnerlist[0].NX);
-        this.map.setCenter(center);
+        marker.partnerdetailId = partner.partnerdetailId;
+        marker.setMap(this.map);
+        kakao.maps.event.addListener(marker, "click", () => {
+            this.showInfoWindowForCategory(marker, partner);
+        });
+
+        this.partnerMarkers.push(marker);
+        markersToShow.push(marker); // ✅ 추가
     }
-},
+});
+
+    // ✅ 마커가 있다면 첫 번째 위치로 지도 이동!
+    if (markersToShow.length > 0) {
+        const firstMarker = markersToShow[0];
+        this.map.setCenter(firstMarker.getPosition());
+    } else {
+        console.log("🚫 표시할 제휴사 마커가 없습니다.");
+    }
+}
+
+,
 
         // 제휴사 마커만 삭제
         clearPartnerMarkers() {
@@ -801,7 +812,9 @@ displayPartnerPlaces(partnerlist, options = { includeFavorites: false, clear: tr
         //     // }
         // }
         
-                    self.addMarkers();
+        if (self.currentView === 'hospital') {
+    self.addMarkers();
+}
                     // ✅ hoslist가 존재할 경우에만 showAllHospitals 호출
                     if (self.hoslist.length > 0) {
                         console.log("📢 showAllHospitals() 호출 직전!");
@@ -1235,54 +1248,66 @@ if (partnerResults.length > 0) {
 
         // 📌 마커 추가 함수 (병원 리스트로 마커 업데이트)
         addMarkers() {
-        if (this.isFavoritesVisible) {
-            console.log("⏳ 즐겨찾기 목록이 열려 있어서 일반 마커 추가 안 함!");
-            return;
+    if (this.isFavoritesVisible) {
+        console.log("⏳ 즐겨찾기 목록이 열려 있어서 일반 마커 추가 안 함!");
+        return;
+    }
+
+    this.clearMarkers(); // 병원 마커 제거
+    this.clearFavoriteMarkers(); // 즐겨찾기 마커 제거
+
+    // ❗ 현재 뷰가 'partner'면 제휴사 마커는 유지!
+    if (this.currentView !== 'partner') {
+        console.log("🧹 병원 마커 갱신용 clearPartnerMarkers 실행");
+        this.clearPartnerMarkers();
+    } else {
+        console.log("🛑 currentView가 partner라서 clearPartnerMarkers 안 함");
+    }
+
+    this.currentView = 'hospital';
+
+    if (this.hoslist.length === 0) return;
+
+    const favoritePositions = new Map();
+    this.favoritesList.forEach(fav => {
+        favoritePositions.set(fav.NY + "," + fav.NX, fav);
+    });
+
+    this.hoslist.forEach(hospital => {
+        const positionKey = hospital.NY + "," + hospital.NX;
+        const position = new kakao.maps.LatLng(hospital.NY, hospital.NX);
+        let marker;
+
+        if (favoritePositions.has(positionKey)) {
+            const favoriteMarkerImage = new kakao.maps.MarkerImage(
+                '/img/partner/star.png',
+                new kakao.maps.Size(40, 40),
+                { offset: new kakao.maps.Point(20, 40) }
+            );
+            marker = new kakao.maps.Marker({
+                position,
+                title: hospital.hosName,
+                image: favoriteMarkerImage
+            });
+            this.favoriteMarkers.push(marker);
+        } else {
+            marker = new kakao.maps.Marker({
+                position,
+                title: hospital.hosName
+            });
+            this.markers.push(marker);
         }
 
-        this.clearMarkers(); // 일반 마커 제거
-        //this.clearPartnerMarkers(); // 제휴사 마커 제거
-        this.clearFavoriteMarkers(); // ⭐ 추가: 즐겨찾기 마커도 초기화
-        this.currentView = 'hospital';
-
-        if (this.hoslist.length === 0) return;
-
-        const favoritePositions = new Map();
-        this.favoritesList.forEach(fav => {
-            favoritePositions.set(fav.NY + "," + fav.NX, fav);
+        marker.setMap(this.map);
+        kakao.maps.event.addListener(marker, "click", () => {
+            this.showInfoWindowForSelect(marker, hospital);
         });
+    });
+}
 
-        this.hoslist.forEach(hospital => {
-            const positionKey = hospital.NY + "," + hospital.NX;
-            const position = new kakao.maps.LatLng(hospital.NY, hospital.NX);
-            let marker;
 
-            if (favoritePositions.has(positionKey)) {
-                const favoriteMarkerImage = new kakao.maps.MarkerImage(
-                    '/img/partner/star.png',
-                    new kakao.maps.Size(40, 40),
-                    { offset: new kakao.maps.Point(20, 40) }
-                );
-                marker = new kakao.maps.Marker({
-                    position,
-                    title: hospital.hosName,
-                    image: favoriteMarkerImage
-                });
-                this.favoriteMarkers.push(marker);
-            } else {
-                marker = new kakao.maps.Marker({
-                    position,
-                    title: hospital.hosName
-                });
-                this.markers.push(marker);
-            }
 
-            marker.setMap(this.map);
-            kakao.maps.event.addListener(marker, "click", () => {
-                this.showInfoWindowForSelect(marker, hospital);
-            });
-        });
-    },
+,
 
 
     clearMarkers() {
@@ -1393,30 +1418,25 @@ if (partnerResults.length > 0) {
         this.clearMarkers();
         this.clearPartnerMarkers();
         this.addHospitalMarkers();
-        this.addPartnerMarkers(); // 즐겨찾기 마커 추가
+        this.addPartnerMarkers(); // 즐겨찾기용 마커
     } else {
-        this.clearFavoriteMarkers(); // 즐겨찾기 마커 제거
-        this.addMarkers(); // 병원 마커 복원
+        this.clearFavoriteMarkers();
 
-        // ✅ 제휴사 카테고리 복원
-        if (this.selectedCategoryCode) {
-            const filtered = this.partnerlist.filter(
-                p => p.categoryCode === Number(this.selectedCategoryCode)
-            );
-            if (filtered.length > 0) {
-                console.log("🎯 복원할 제휴사 리스트:", filtered);
-                this.displayPartnerPlaces(filtered, {
-                    includeFavorites: false,
-                    clear: true
-                });
-            } else {
-                console.warn("🚫 선택된 카테고리 복원 실패: 제휴사 없음");
-            }
+        // 병원 지역 선택이 안 돼 있으면 마커 표시 안 함
+        if (this.hoslist.length > 0) {
+            this.addMarkers(); // 병원 마커 다시 표시
         } else {
-            console.warn("❌ 복원 실패: selectedCategoryCode 없음");
+            console.log("📭 병원 리스트가 없어서 마커 추가 안 함!");
+        }
+
+        // 선택된 제휴사 카테고리가 있으면 다시 표시
+        if (this.selectedCategoryCode) {
+            this.filterByCategory(this.selectedCategoryCode);
         }
     }
 }
+
+
 
 ,
 

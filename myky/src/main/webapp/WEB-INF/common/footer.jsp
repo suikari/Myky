@@ -189,12 +189,13 @@
     <div id="footer" class="footer">
 		<div class="footer-top">
 			<div class="footer-top-inner">
-				<nav class="footer-nav">
-				  <a href="#">회사 소개</a>
-				  <a href="">이용약관</a>
-				  <a href="#"><strong>개인정보처리방침</strong></a>
-				  <a href="#">이용안내</a>
-				</nav>
+				<div id="footer-nav" class="footer-nav">
+                    <a href="#" @click.prevent="goToTermsPage('intro')">회사 소개</a>
+                    <a href="#" @click.prevent="goToTermsPage('service')">이용약관</a>
+                    <a href="#" @click.prevent="goToTermsPage('privacy')"><strong>개인정보처리방침</strong></a>
+                    <a href="#" @click.prevent="goToTermsPage('guide')">이용안내</a>
+                  </div>
+                                 
 			  </div>
 			  
 		  </div>
@@ -233,46 +234,44 @@
     
     <script>
         const footer = Vue.createApp({
-            data() {
-                return {
-                    company: {
-                        name: '주식회사 멍냥꽁냥',
-                        ceo: '이 율',
-                        phone: '070-1234-5678',
-                        address: '인천광역시 부평구 부평동 534-48 상록스테이션타워 7층',
-                        registrationNumber: '101-20-012345',
-                        email: 'tester@naver.com'
-                    }
-                };
+          data() {
+            return {
+              company: {
+                name: '주식회사 멍냥꽁냥',
+                ceo: '이 율',
+                phone: '070-1234-5678',
+                address: '인천광역시 부평구 부평동 534-48 상록스테이션타워 7층',
+                registrationNumber: '101-20-012345',
+                email: 'tester@naver.com'
+              },
+              termsList: [
+                { type: 'intro', label: '회사 소개' },
+                { type: 'terms', label: '이용약관' },
+                { type: 'privacy', label: '개인정보처리방침' },
+                { type: 'guide', label: '이용안내' }
+              ]
+            };
+          },
+          methods: {
+            goToTermsPage(type) {
+              if (type === 'intro') return; // 회사소개는 클릭만 되고 이동 X
+              window.location.href = "/common/termsList.do?type=" + type;
             },
-			methods: {
-				scrollToTop() {
-				    window.scrollTo({ top: 0, behavior: 'smooth' });
-				},
-			},
-			mounted() {
-				let self = this;
-				const scrollBtn = document.querySelector('.scroll-top-btn');
-
-				window.addEventListener('scroll', () => {
-				    if (window.scrollY > 200) {
-				        scrollBtn.classList.add('show');
-				    } else {
-				        scrollBtn.classList.remove('show');
-				    }
-				});
-
-			}
-			
+            scrollToTop() {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          },
+          mounted() {
+            const scrollBtn = document.querySelector('.scroll-top-btn');
+            window.addEventListener('scroll', () => {
+              if (window.scrollY > 200) {
+                scrollBtn.classList.add('show');
+              } else {
+                scrollBtn.classList.remove('show');
+              }
+            });
+          }
         });
-        
+      
         footer.mount('#footer');
-		
-
-
-
-		
-    </script>
-</body>
-</html>
-
+      </script>

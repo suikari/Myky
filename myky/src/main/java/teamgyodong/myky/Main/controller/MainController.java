@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +52,16 @@ public class MainController {
         return "index";
     }
 	
+	@RequestMapping("/common/termsList.do")
+	public String termsList(@RequestParam("type") String type, Model model) throws Exception {
+		HashMap<String, Object> param = new HashMap<>();
+	    param.put("category", type);
+
+	    HashMap<String, Object> content = mainService.selectTermsContent(param);
+	    model.addAttribute("content", content); // JSP에서 사용 가능
+
+	    return "common/termsList";
+	}
 	
     @RequestMapping("/member/logout.do") 
     public String login(HttpSession session, Model model) throws Exception{
