@@ -593,12 +593,6 @@ body {
 	font-weight: bold;
 }
 
-.remove-btn {
-	background: none;
-	border: none;
-	font-size: 18px;
-	cursor: pointer;
-}
 
 .price-display {
 	font-size: 18px;
@@ -720,7 +714,7 @@ body {
 	margin: 40px auto;
 	max-width: 1000px;
 	box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 .vip-subtitle {
@@ -810,7 +804,7 @@ body {
 	text-align: center;
 	color: #333;
 	box-shadow: 0 0 12px rgba(255, 204, 0, 0.2);
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 .shipping-warning-section .vip-subtitle {
@@ -1015,13 +1009,11 @@ body {
 	color: #000;
 	font-weight: bold;
 	border-top: 2px solid #000;
-	cursor: pointer;
 }
 
 .tab-content {
 	padding: 30px;
 	min-height: 200px;
-	cursor: pointer;
 }
 
 /* 상품 후기 영역 */
@@ -1580,7 +1572,6 @@ h2 {
 
 .star-rating .star {
 	font-size: 24px;
-	cursor: pointer;
 	color: #eee;
 	transition: color 0.2s;
 	user-select: none;
@@ -1680,7 +1671,6 @@ h2 {
 
 .star-rating .star {
 	font-size: 24px;
-	cursor: pointer;
 	color: #eee;
 	transition: color 0.2s;
 	user-select: none;

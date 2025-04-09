@@ -25,37 +25,36 @@
                             <div class="swiper-slide">
                                 <img src="../../img/product/Pro.banner/banner1.png" alt="배너1" />
                                 <div class="view-more-btn-wrapper">
-                                    <a href="http://localhost:8081/product/view.do?productId=23" class="view-more">VIEW MORE ></a>
+                                    <a href="http://localhost:8081/product/view.do?productId=23" class="view-more">VIEW
+                                        MORE ></a>
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <img src="../../img/product/Pro.banner/banner2.png" alt="배너2" />
                                 <div class="view-more-btn-wrapper">
-                                    <a href="http://localhost:8081/product/view.do?productId=10" class="view-more">VIEW MORE ></a>
+                                    <a href="http://localhost:8081/product/view.do?productId=10" class="view-more">VIEW
+                                        MORE ></a>
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <img src="../../img/product/Pro.banner/banner3.png" alt="배너3" />
                                 <div class="view-more-btn-wrapper">
-                                    <a href="http://localhost:8081/product/view.do?productId=241" class="view-more">VIEW MORE ></a>
+                                    <a href="http://localhost:8081/product/view.do?productId=241" class="view-more">VIEW
+                                        MORE ></a>
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <img src="../../img/product/Pro.banner/banner4.png" alt="배너4" />
                                 <div class="view-more-btn-wrapper">
-                                    <a href="http://localhost:8081/product/view.do?productId=24" class="view-more">VIEW MORE ></a>
+                                    <a href="http://localhost:8081/product/view.do?productId=24" class="view-more">VIEW
+                                        MORE ></a>
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <img src="../../img/product/Pro.banner/banner5.png" alt="배너5" />
                                 <div class="view-more-btn-wrapper">
-                                    <a href="http://localhost:8081/product/view.do?productId=243" class="view-more">VIEW MORE ></a>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="../../img/product/Pro.banner/banner6.png" alt="배너6" />
-                                <div class="view-more-btn-wrapper">
-                                    <a href="/membership/main.do" class="view-more">VIEW MORE  ></a>
+                                    <a href="http://localhost:8081/product/view.do?productId=243" class="view-more">VIEW
+                                        MORE ></a>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +123,8 @@
 
                 <!-- 페이지네이션 버튼 중앙에 배치 -->
                 <div class="pagination">
-                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')"> < </a>
+                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')">
+                        < </a>
                             <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
                                 :class="{ active: page === num }">
                                 <span v-if="page == num">{{ num }}</span>
@@ -294,6 +294,12 @@
                     },
                     fnAddCart(productId) {
                         const self = this;
+
+                        if (!self.sessionId || self.sessionId === "") {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         const item = self.list.find(p => p.productId === productId);
                         if (!item) {
                             alert("상품 정보를 불러올 수 없습니다.");
@@ -333,7 +339,12 @@
                         });
                     }, fnAddBuy(productId) {
                         const self = this;
-
+                        
+                        if (!self.sessionId || self.sessionId === "") {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
                         const item = self.list.find(p => p.productId === productId);
                         if (!item) {
                             alert("상품 정보를 불러올 수 없습니다.");
