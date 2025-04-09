@@ -8,7 +8,7 @@
         <title>마이페이지</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-
+        <link rel="stylesheet" href="/css/user/user.css" />
         <style>
             body {
                 font-family: 'Noto Sans KR', Arial, sans-serif;
@@ -377,6 +377,10 @@
                 background-color: #f4a261;
             }
 
+            .cmtCountColor {
+                color: #007bff;
+            }
+
             /* 페이징 스타일 */
             .pagination {
                 padding: 5px 10px;
@@ -431,8 +435,8 @@
                 }
             }
 
-            /* 검색 인풋과 셀렉트 공통 스타일 */
-            .board-page .board-controls {
+            /* 인풋과 셀렉트 공통 스타일 */
+            .board-page {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 12px;
@@ -462,7 +466,7 @@
 
             /* 반응형 처리 */
             @media (max-width: 768px) {
-                .board-page .board-controls {
+                .board-page {
                     flex-direction: column;
                     align-items: stretch;
                 }
@@ -474,6 +478,62 @@
                 }
             }
 
+            .board-controls {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin: 15px 0 25px;
+                align-items: center;
+            }
+
+            .board-controls select,
+            .board-controls input[type="text"] {
+                padding: 10px 14px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                font-size: 14px;
+                background-color: #fff;
+                transition: border-color 0.2s, box-shadow 0.2s;
+                outline: none;
+                min-width: 180px;
+            }
+
+            .board-controls select:focus,
+            .board-controls input[type="text"]:focus {
+                border-color: #f4a261;
+                box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+            }
+
+            /* 반응형 대응 */
+            @media (max-width: 768px) {
+                .board-controls {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .board-controls select,
+                .board-controls input[type="text"] {
+                    width: 100%;
+                }
+            }
+
+            /* 게시글 작성 버튼 */
+            .btn-board-write {
+                background-color: #f4a261;
+                color: #fff;
+                padding: 10px 20px;
+                font-size: 15px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-board-write:hover {
+                background-color: #e98b3e;
+                /* 조금 더 진한 오렌지 */
+            }
 
 
 
@@ -483,33 +543,6 @@
                 padding: 20px;
                 background-color: #f9f9f9;
                 border-radius: 8px;
-            }
-
-            /* 검색 입력창 스타일 */
-            .comment-controls {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 12px;
-                margin-bottom: 20px;
-                align-items: center;
-            }
-
-            .comment-page input[type="text"],
-            .comment-page input[type="search"] {
-                padding: 10px 14px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                font-size: 14px;
-                background-color: #fff;
-                transition: border-color 0.2s, box-shadow 0.2s;
-                outline: none;
-                min-width: 200px;
-            }
-
-            .comment-page input[type="text"]:focus,
-            .comment-page input[type="search"]:focus {
-                border-color: #4CAF50;
-                box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
             }
 
             /* 테이블 스타일 */
@@ -532,8 +565,8 @@
             }
 
             .comment-table-row {
-                text-align: center;
                 border-bottom: 1px solid #ddd;
+                text-align: center;
             }
 
             .comment-table-row:hover {
@@ -573,56 +606,15 @@
                 padding-left: 10px;
             }
 
-            /* 페이지네이션 */
-            .comment-pagination {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 30px;
-                gap: 6px;
-            }
-
-            a#index2 {
+            /* 기본 링크 스타일 */
+            #index2,
+            #index {
                 text-decoration: none;
                 font-size: 14px;
                 padding: 5px 10px;
                 cursor: pointer;
             }
 
-            .bgColer2 {
-                background-color: #f0f0f0;
-                color: #333;
-                border-radius: 3px;
-                padding: 5px 10px;
-                transition: background-color 0.3s ease, color 0.3s ease;
-            }
-
-            .bgColer {
-                background-color: #f4a261;
-                color: white;
-                border-radius: 3px;
-                padding: 5px 10px;
-            }
-
-            a#index2:hover,
-            a#prev:hover,
-            a#next:hover {
-                background-color: #ccc;
-                color: white;
-            }
-
-            /* 반응형 */
-            @media (max-width: 768px) {
-                .comment-controls {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-
-                .comment-page input[type="text"],
-                .comment-page input[type="search"] {
-                    width: 100%;
-                }
-            }
 
             /* 전체 페이지 배경 */
             .page-container {
@@ -867,7 +859,7 @@
                 color: #ffffff;
                 font-family: 'Arial', sans-serif;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                width: 300px;
+                width: 250px;
                 flex: none;
                 margin: 10px;
                 overflow: hidden;
@@ -880,10 +872,10 @@
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                width: 250px;
+                width: 200px;
                 /* 적절히 조절 가능 */
                 height: auto;
-                transform: translate(-5%, -5%);
+                transform: translate(-3%, -3%);
                 opacity: 0.80;
                 /* 흐릿하게 */
                 z-index: 0;
@@ -985,12 +977,6 @@
                                 </span>
                             </template>
                         </div>
-
-                        <!-- <div class="user-rank-mark" style="font-size: 72px;">
-
-                            <span v-if="membershipYn === 'Y'">👑</span>
-                            <span v-else>👤</span>
-                        </div> -->
 
 
                     </div>
@@ -1109,9 +1095,7 @@
                                     </table>
                                 </div>
 
-                                <!-- <div class="order-list">
-                                    <p>주문 내역이 없습니다.</p>
-                                </div> -->
+
                             </span>
 
                             <div v-if="activeTab === 'point'" class="cpoint-page">
@@ -1190,13 +1174,14 @@
 
                             <div v-if="activeTab === 'board'" class="comment-page">
                                 <h3>작성한 게시글 수 : 총 <span style="color: red;">{{boardCnt.cnt}} </span>개</h3>
-                                <div>
-                                    <select v-model="pageSize" @change="fnMyBoardList('')">
-                                        <option value="5">5개</option>
-                                        <option value="10">10개</option>
-                                    </select>
-                                    <input v-model="keyword2" placeholder="검색어" @input="fnMyBoardList('')">
 
+                                <div class="board-controls">
+                                    <select v-model="pageSize" @change="fnMyBoardList('')">
+                                        <option value="5">게시글 5개</option>
+                                        <option value="10">게시글 10개</option>
+                                    </select>
+                                    <input v-model="keyword2" type="text" placeholder="검색어를 입력하세요"
+                                        @input="fnMyBoardList('')">
                                 </div>
                                 <table class="board-table">
                                     <tr>
@@ -1222,7 +1207,7 @@
                                         <tr>
                                             <td colspan="4">
                                                 <h2>작성된 게시글이 없습니다. </h2>
-                                                <button @click=fnBoardList()>게시글 작성하기</button>
+                                                <button @click="fnBoardList()" class="btn-board-write">게시판 이동</button>
                                             </td>
                                         </tr>
                                     </template>
@@ -1236,7 +1221,7 @@
                                     </template>
 
                                 </table>
-                                <div class="pagination">
+                                <div class="cpoint-pagination">
                                     <a v-if="page != 1" href="javascript:;" @click="fnPageMove('pvev')">&lt;</a>
                                     <a v-for="num in index" :key="num" href="javascript:;" @click="fnPage(num)">
                                         <span :class="page === num ? 'bgColer' : ''">{{ num }}</span>
@@ -1246,12 +1231,91 @@
                                 </div>
                             </div>
 
+                            <div v-if="activeTab === 'vetBoard'" class="comment-page">
+                                <h3>작성한 문의글 수 : 총 <span style="color: red;">{{boardCnt.cnt}} </span>개</h3>
+
+                                <div class="board-controls">
+                                    <select v-model="vetPageSize" @change="fnMyVetBoardList('')">
+                                        <option value="5">문의글 5개</option>
+                                        <option value="10">문의글 10개</option>
+                                    </select>
+                                    <input v-model="keyword2" type="text" placeholder="검색어를 입력하세요"
+                                        @input="fnMyVetBoardList('')">
+                                </div>
+                                <table class="board-table">
+                                    <tr>
+                                        <th>게시판 번호</th>
+                                        <th>제목(댓글)</th>
+                                        <th>포인트</th>
+                                        <th>채택 여부</th>
+                                        <th>조회수</th>
+                                        <th>작성 날짜</th>
+                                    </tr>
+
+                                    <template v-if="vetCnt.cnt!=0">
+                                        <tr v-for="item in vetBoardList">
+                                            <template v-if="item.isDeleted == 'N'">
+                                                <td><a href="javascript:;" @click="fnVetView(item.vetBoardId)">{{item.vetBoardId}}</a></td>
+                                                <td>{{item.title}}<span class="cmtCountColor"
+                                                        v-if="parseInt(item.commentCount) > 0">({{item.commentCount}})</span>
+                                                </td>
+                                                <td>{{item.points}}</td>
+
+                                                <td>
+                                                    <template v-if="item.isAccepted=='Y'">
+                                                        <span class="badge badge-yes">
+                                                            채택 완
+                                                        </span>
+                                                    </template>
+                                                    <template v-else>
+                                                        <span class="badge badge-no">문의 중</span>
+                                                    </template>
+
+                                                </td>
+                                                <td>{{item.cnt}}</td>
+                                                <td>{{item.createdAt}}</td>
+                                            </template>
+                                        </tr>
+                                    </template>
+                                    <template v-if="vetCnt.cnt == 0  && keyword2 === '' ">
+                                        <tr>
+                                            <td colspan="6">
+                                                <h2>작성된 문의글이 없습니다. </h2>
+                                                <button @click="fnVetBoardList()" class="btn-board-write">게시판
+                                                    이동</button>
+                                            </td>
+                                        </tr>
+                                    </template>
+
+                                    <template v-else-if="vetCnt.cnt == 0 ">
+                                        <tr>
+                                            <td colspan="6">
+                                                <h2> 검색된 문의글이 없습니다.</h2>
+                                            </td>
+                                        </tr>
+                                    </template>
+
+                                </table>
+
+                                <div class="cpoint-pagination">
+                                    <a v-if="vetPage != 1" href="javascript:;" @click="fnVetPageMove('pvev')">&lt;</a>
+                                    <a v-for="vetNum in vetIndex" :key="vetNum" href="javascript:;"
+                                        @click="fnVetPage(vetNum)">
+                                        <span :class="vetPage === vetNum ? 'bgColer' : ''">{{ vetNum }}</span>
+                                    </a>
+                                    <a v-if="vetIndex > 1 && vetPage != vetIndex" href="javascript:;"
+                                        @click="fnVetPageMove('next')">&gt;</a>
+                                </div>
+                            </div>
+
+
+
 
 
                             <div v-if="activeTab === 'comment'" class="comment-page">
 
                                 <h3>작성한 댓글 수 : 총 <span style="color: red;">{{commCnt}} </span>개</h3>
-                                <div class="comment-controls">
+                                <div class="board-controls">
                                     <input v-model="commKeyword" type="text" placeholder="댓글 검색어를 입력하세요"
                                         @input="fnSeachComm('')">
                                 </div>
@@ -1281,18 +1345,19 @@
                                             </tr>
                                         </template>
                                         <template v-if="commCnt == 0  && commKeyword === '' ">
-                                            <tr>
+                                            <tr class="comment-table-row">
                                                 <td colspan="4">
-                                                    <h2>작성된 댓글이 없습니다. </h2>
-                                                    <button @click=fnBoardList()>댓글 작성하기</button>
+                                                    <h3>작성된 댓글이 없습니다. </h3>
+                                                    <button @click="fnBoardList()" class="btn-board-write">게시판
+                                                        이동</button>
                                                 </td>
                                             </tr>
                                         </template>
 
                                         <template v-if="commCnt == 0 && commKeyword != ''">
-                                            <tr>
+                                            <tr class="comment-table-row">
                                                 <td colspan="4">
-                                                    <h2>검색된 댓글이 없습니다. </h2>
+                                                    <h3>검색된 댓글이 없습니다. </h3>
                                                 </td>
                                             </tr>
                                         </template>
@@ -1303,7 +1368,7 @@
 
 
 
-                                <div class="comment-pagination">
+                                <div class="cpoint-pagination">
                                     <a v-if="page2 != 1" id="index2" href="javascript:;" class="bgColer2"
                                         @click="fnPageMove2('pvev')">&lt;</a>
                                     <a id="index2" href="javascript:;" v-for="num2 in index2" @click="fnCommPage(num2)">
@@ -1439,6 +1504,7 @@
                         tabs2: [
                             { id: 'board', label: '게시글 내역' },
                             { id: 'comment', label: '댓글 내역' },
+                            { id: 'vetBoard', label: '수의사 문의 내역' },
                             { id: 'subscribe', label: '구독 내역' },
                             { id: 'donation', label: '후원금 내역' }
                         ],
@@ -1470,7 +1536,7 @@
                         pageSize4: 10,
                         page4: 1,
                         couponList: [],
-                        couponCnt: 0,
+                        couponCnt: 1,
                         orderList: [],
                         orderCnt: [
                             { orderStatus: 'shipped', orderCount: '0' },
@@ -1481,7 +1547,12 @@
                         orderAllCnt: "",
                         membership: [],
                         membershipYn: "",
-                        paramsTab: "${map.paramsTab}"
+                        paramsTab: "${map.paramsTab}",
+                        vetBoardList: [],
+                        vetIndex: 0,
+                        vetPage: 1,
+                        vetPageSize: 5,
+                        vetCnt: 0
 
 
 
@@ -1544,7 +1615,6 @@
                                 console.log('대한', data.point);
                                 if (data.point == null || data.point == undefined) {
                                     self.point.currentPoint = 0;
-                                    console.log('대한2', self.point);
                                 } else {
                                     self.point = data.point;
                                 }
@@ -1570,6 +1640,10 @@
 
                         if (tabId == 'donation') {
                             self.fnDonaInfo('C');
+                        }
+
+                        if (tabId == 'vetBoard') {
+                            self.fnMyVetBoardList('C');
                         }
 
                         self.activeTab = tabId;
@@ -1608,15 +1682,13 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("board", data);
+                                console.log(data);
                                 self.board = data.board;
                                 self.boardCnt = data.count;
-                                console.log('test', self.boardCnt.cnt);
                                 if (data.count && data.count.cnt !== undefined) { // 율 코드 문의하기
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                 } else {
                                     self.index = 0;
-                                    console.warn("count 정보 없음!", data);
                                 }
 
                             }
@@ -1648,6 +1720,15 @@
                         localStorage.setItem("page", self.page);
                         location.href = "/board/view.do?boardId=" + boardId + "&category=" + self.category;
                     },
+
+                    // fnView(boardId, commentId) {
+                    //     let self = this;
+                    //     if (commentId == null) {
+                    //         commentId = ""
+                    //     }
+                    //     localStorage.setItem("page", self.page);
+                    //     location.href = "/board/vetBoardView.do?vetBoardId=" + boardId + "&category=" + self.category;
+                    // },
 
                     fnSeachComm(commend) {
                         var self = this;
@@ -1695,8 +1776,29 @@
                         self.fnSeachComm('');
                     },
 
+                    fnVetPage: function (vetNum) {
+                        let self = this;
+                        self.vetPage = vetNum;
+                        self.fnMyVetBoardList('');
+                    },
+
+                    fnVetPageMove: function (direction) {
+                        let self = this;
+                        if (direction == "next") {
+                            self.vetPage++;
+                        } else {
+                            self.vetPage--;
+
+                        }
+                        self.fnMyVetBoardList('');
+                    },
+
                     fnBoardList() {
                         location.href = "/board/list.do"
+                    },
+
+                    fnVetBoardList() {
+                        location.href = "/board/vetBoardList.do"
                     },
 
                     fnDonaInfo(commend) {
@@ -1851,17 +1953,19 @@
                         location.href = "/product/view.do?productId=" + self.productId;
                     },
 
-                    fnMyVetBoardList() {
+                    fnMyVetBoardList(commend) {
                         let self = this;
+                        if (commend == 'C') {
+                            self.keyword2 = '';
+                            self.vetPage = 1;
+                        }
                         let nparmap = {
-                            searchOption: "userId",
+                            searchOption: "userId2",
                             keyword: self.userId,
+                            keyword2: self.keyword2,
                             userId: self.userId,
-                            page: 1,
-                            pageSize: 10,
-                            // orderKey: self.orderKey,
-                            // orderType: self.orderType,
-                            // content : self.content
+                            pageSize: self.vetPageSize,
+                            page: (self.vetPage - 1) * self.pageSize // 페이지 시작점
                         };
                         console.log('파라메타', nparmap);
 
@@ -1871,18 +1975,19 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
+                                console.log("데이타타", data);
                                 if (data.result != 'success') {
                                     alert("잘못된 주소입니다.");
                                     // location.href="/board/vetBoardList.do";
                                 }
-                                self.list = data.vetBoard;
-                                console.log("self.nickName", data.nickName);
+                                self.vetBoardList = data.vetBoard;
                                 console.log("vetBoard list:", data.vetBoard);
-
                                 if (data.count && data.count.cnt !== undefined) {
-                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                    self.vetIndex = Math.ceil(data.count.cnt / self.vetPageSize);
+                                    self.vetCnt = data.count;
+                                    data.count.cnt
                                 } else {
-                                    self.index = 0;
+                                    self.vetIndex = 0;
                                     console.warn("count 정보 없음!", data);
                                 }
                             }
