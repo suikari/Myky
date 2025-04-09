@@ -57,7 +57,7 @@
 }
 
 .donation-summary-buttons button {
-	background-color: #FFBC7B;
+	background-color: #ffbc7b;
 	color: #fff;
 	padding: 10px 20px;
 	border: none;
@@ -68,7 +68,7 @@
 }
 
 .donation-summary-buttons button:hover {
-	background-color: #FFA145;
+	background-color: #FF7500;
 }
 
 div.sparkle-star,
@@ -122,7 +122,7 @@ div.sparkle-star>div {
 
 .centerImg {
 	width: 100%;
-	height: 180px;
+	height: 280px;
 	object-fit: cover;
 	border-radius: 10px;
 }
@@ -147,7 +147,7 @@ div .donationBtn {
 	margin-top: 10px;
 	margin-right: 10px;
 	padding: 8px 15px;
-	background-color: #FFBC7B;
+	background-color: #ffbc7b;
 	color: white;
 	text-decoration: none;
 	border-radius: 5px;
@@ -157,7 +157,7 @@ div .donationBtn {
 }
 
 div .donationBtn:hover {
-	background-color: #FFA145;
+	background-color: #FF7500;
 }
 
 .donationBody {
@@ -197,7 +197,7 @@ div .donationBtn:hover {
 #donationSections section {
 	text-align: left;
 	padding: 20px;
-	border-bottom: 1px dotted #FFA145;
+	border-bottom: 1px dotted #ffbc7b;
 }
 
 .donationSectionTitle {
@@ -240,7 +240,7 @@ div .donationBtn:hover {
 .donationTable th {
 	width: 200px;
 	padding: 30px 0;
-	background: #FFBC7B;
+	background: #ffbc7b;
 	font-weight: bold;
 	text-align: center;
 }
@@ -262,10 +262,10 @@ div .donationBtn:hover {
 }
 
 .donateAmountBtn.selected {
-	background: #FFBC7B;
+	background: #ffbc7b;
 	color: white;
 	font-weight: bold;
-	border: 1px solid #FF8C42;
+	border: 1px solid #FF7500;
 }
 
 .customAmountInput {
@@ -285,7 +285,7 @@ div .donationBtn:hover {
 .donationButton {
 	width: 30%;
 	padding: 10px;
-	background: #FFBC7B;
+	background: #ffbc7b;
 	color: white;
 	font-size: 16px;
 	border: none;
@@ -295,7 +295,7 @@ div .donationBtn:hover {
 }
 
 .donationButton:hover {
-	background: #FFA145;
+	background: #FF7500;
 }
 
 .donationMessage {
@@ -347,9 +347,9 @@ div .donationBtn:hover {
 }
 
 .point-btn:hover {
-	background: #FFBC7B;
+	background: #ffbc7b;
 	color: white;
-	border: 1px solid #FFA145;
+	border: 1px solid #FF7500;
 	font-weight: bold;
 }
 
@@ -362,7 +362,7 @@ div .donationBtn:hover {
 
 .point-remaining {
 	font-size: 14px;
-	color: #FF8C42;
+	color: #FF7500;
 	font-weight: bold;
 	margin-left: 5px;
 }

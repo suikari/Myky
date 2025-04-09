@@ -44,6 +44,11 @@
                 </div>
                 
                 <!-- 주문 내역 테이블 -->
+                <div v-if="isEmptyOrderList" class="empty-order">
+                    <div class="empty-order__emoji">📦</div>
+                    <p class="empty-order__text">주문하신 내역이 없습니다.</p>
+                    <a href="/product/list.do" class="empty-order__link">상품 둘러보기</a>
+                </div>
                 <div v-for="(ordersByOrderId, date) in groupedOrders" :key="date">
                     <div class="order-date">{{ date }}</div>
                     <div v-for="(orders, orderId) in ordersByOrderId" :key="orderId" :id="'order-' + orderId">
@@ -311,6 +316,8 @@
 
                         console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:",groupedByDate);
                     return groupedByDate;
+                },isEmptyOrderList() {
+                    return Object.keys(this.groupedOrders).length === 0;
                 },
                 determineShippingStatus() {
                     return (orderItems) => {
