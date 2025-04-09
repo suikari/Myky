@@ -394,7 +394,7 @@
 	                            </td>
 	                            <td>
 	                                <button class="btn-edit me-2"  @click="fnEdit(member.vetNumber)">수정</button>
-	                                <button class="btn-delete">삭제</button>
+	                                <button @click="fnDelete(member.vetNumber)" class="btn-delete">삭제</button>
 	                            </td>
 	                        </tr>
 	                        
@@ -652,6 +652,28 @@
                     			//console.log("main",data);
                     			alert("수정 완료");
                             	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
+                				self.fnMainList();
+                    		}
+                    	});
+                    },
+                    fnDelete ( vetNumber ) {
+                    	var self = this;
+                    	
+                        if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+                            return false;
+                        }
+                        
+                    	var nparmap = {
+                    			vetNumber : vetNumber,
+                    	};
+                    	$.ajax({
+                    		url: "/admin/deleteVet.dox",
+                    		dataType: "json",
+                    		type: "POST",
+                    		data: nparmap,
+                    		success: function (data) {
+                    			//console.log("main",data);
+                    			alert("삭제 완료");
                 				self.fnMainList();
                     		}
                     	});

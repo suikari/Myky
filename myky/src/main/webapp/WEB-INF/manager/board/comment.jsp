@@ -361,7 +361,7 @@ ber {
 			            <table class="table table-hover comment-table">
 			                <thead>
 			                    <tr>
-							        <th style="width: 5%;" class="text-center"><input type="checkbox" @click="fnAllCheck" v-model="allChk"></th>
+							        <th style="width: 5%;" class=""><input type="checkbox" @click="fnAllCheck" v-model="allChk"></th>
 							        <th style="width: 7%;" class="text-center">번호</th>
 							        <th style="width: 15%;" class="text-center">게시글</th>
 							        <th style="width: 38%;">댓글 내용</th>

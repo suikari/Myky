@@ -769,7 +769,10 @@
 		VALUES(VETERINARIAN_SEQ.NEXTVAL, #{vetId}, #{vetName}, #{vetNickname},#{email}, #{phone}, #{hospital}, null, SYSDATE, null, '')
 	</insert>
 
-
+	<delete id="deleteVet" parameterType="hashmap" >
+		DELETE veterinarian
+		WHERE vet_number = #{vetNumber}
+	</delete>
 	
 	<insert id="insertPartnerDetail" parameterType="hashmap" useGeneratedKeys="true" keyColumn="partner_detail_id" keyProperty="partnerdetailId">
 		INSERT INTO partner_detail(partner_detail_id, name, address, phone_number, website_url, opening_hours, regular_holiday, category_code, nx, ny)
@@ -881,7 +884,6 @@
 		WHERE vet_number = #{vetNumber}
 	</update>
 	
-	
 	<update id="updateUser" parameterType="hashmap" >
 		UPDATE USERS
 		SET 
@@ -988,7 +990,6 @@
 		  AND product_id =   #{productId}
 	</update>	
 	
-	
 	 <!--QnA 글 수정-->
 	 <update id="UpdateAdminQna" parameterType="hashmap" >
 		UPDATE PRODUCT_QNA
@@ -997,8 +998,8 @@
 			ANSWERED_AT = SYSDATE			
 		WHERE QNA_ID = #{qnaId} 
 	 </update>
-	 
-</mapper>
+
+	 </mapper>
 
 
 

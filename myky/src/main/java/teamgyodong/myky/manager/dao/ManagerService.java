@@ -7,26 +7,23 @@ public interface ManagerService {
 	HashMap<String, Object> selectLogBrowserList(HashMap<String, Object> map);
 	HashMap<String, Object> selectLogFristJoinBuy(HashMap<String, Object> map);
 	HashMap<String, Object> selectMembershipVal(HashMap<String, Object> map);
+	HashMap<String, Object> selectMainList(HashMap<String, Object> map);
+	HashMap<String, Object> selectSearchRanking(HashMap<String, Object> map);
 
 	
-	
-	HashMap<String, Object> selectMainList(HashMap<String, Object> map);
 	
 	HashMap<String, Object> deleteBoardList(HashMap<String, Object> map);
 	HashMap<String, Object> deleteBoardCmtList(HashMap<String, Object> map);
 	HashMap<String, Object> deleteProductImg(HashMap<String, Object> map);
 	HashMap<String, Object> deletePartnerList(HashMap<String, Object> map);
+	
+	HashMap<String, Object> deleteVet(HashMap<String, Object> map);
 
 	
 	
 	
 	HashMap<String, Object> selectAllnotVetList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllCmtList(HashMap<String, Object> map);
-	
-	HashMap<String, Object> selectSearchRanking(HashMap<String, Object> map);
-	
-	
-	
 	HashMap<String, Object> selectAllUserList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllVetList(HashMap<String, Object> map);
 	HashMap<String, Object> selectAllMembershipList(HashMap<String, Object> map);

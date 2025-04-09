@@ -359,18 +359,18 @@ ber {
 			            <table class="table table-hover comment-table">
 			                <thead>
 			                    <tr>
-							        <th style="width: 5%;" class="text-center"><input type="checkbox" @click="fnAllCheck" v-model="allChk"></th>
-							        <th style="width: 7%;" class="text-center">번호</th>
-							        <th style="width: 15%;" class="text-center">게시글</th>
-							        <th style="width: 10%;" class="text-center">작성자</th>
-							        <th style="width: 15%;" class="text-center">작성일</th>
-							        <th style="width: 10%;" class="text-center">채택</th> 
+							        <th class=""><input type="checkbox" @click="fnAllCheck" v-model="allChk"></th>
+							        <th  class="text-center">번호</th>
+							        <th class="text-center">게시글</th>
+							        <th class="text-center">작성자</th>
+							        <th class="text-center">작성일</th>
+							        <th  class="text-center">채택</th> 
 							        <th style="width: 10%;" class="text-center">상태</th>  
 			                    </tr>
 			                </thead>
 			                <tbody>
 			                    <tr v-for="(comment, index) in boardList" >
-			                    	<td><input type="checkbox" :value="comment.commentId" v-model="selectList"></td>
+			                    	<td><input type="checkbox" :value="comment.vetBoardId" v-model="selectList"></td>
 			                        <td class="text-center">{{ index + 1 }}</td>
 			                        <td><a @click="fnView(comment.vetBoardId,comment.category)" class="board-title">{{ comment.title  }}</a></td>
 			                        <td class="text-center">{{ comment.userId }}</td>
@@ -531,9 +531,11 @@ ber {
                     fnAllCheck : function() {
                         let self = this;
                         self.allChk = !self.allChk;
+                        
+                        
                         if(self.allChk){
-                            for(let i=0; i<self.commentList.length; i++){
-                                self.selectList.push(self.commentList[i].commentId);
+                            for(let i=0; i<self.boardList.length; i++){
+                                self.selectList.push(self.boardList[i].vetBoardId);
                             }
                         } else {
                             self.selectList = [];
@@ -547,7 +549,7 @@ ber {
                             category : self.category,
                         };
         				$.ajax({
-        					url:"/admin/remove-cmt-list.dox",
+        					//url:"/admin/remove-cmt-list.dox",
         					dataType:"json",	
         					type : "POST", 
         					data : nparmap,

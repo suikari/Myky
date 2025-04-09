@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vue3 레이아웃 예제</title>
+        <title>멍냥꽁냥에 오신걸 환영합니다!</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
@@ -95,7 +95,7 @@
 
             .shortcut-grid {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(5, 1fr);
                 gap: 40px;
                 max-width: 1024px;
                 margin: 40px auto 30px;
@@ -187,7 +187,7 @@
 
             .best-product-container {
                 width: 100%;
-                max-width: 1000px;
+                max-width: 1280px;
                 margin: 20px auto;
                 text-align: center;
             }
@@ -312,52 +312,6 @@
                 border-top: 4px solid #ffa94d;
             }
 
-            .shelter-preview {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 20px;
-                margin-bottom: 50px;
-            }
-
-            .shelter-card {
-                width: 250px;
-                background: #fff;
-                border-radius: 12px;
-                padding: 15px;
-                text-align: center;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .shelter-card img {
-                width: 100%;
-                height: 160px;
-                object-fit: cover;
-                border-radius: 8px;
-                margin-bottom: 10px;
-            }
-
-            .shelter-name {
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            .shelter-detail {
-                font-size: 14px;
-                color: #777;
-                margin: 5px 0 10px;
-            }
-
-            .shelter-card button {
-                padding: 6px 12px;
-                font-size: 14px;
-                border: none;
-                background-color: #f0932b;
-                color: white;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
             .navigation {
                 margin-top: 15px;
             }
@@ -380,8 +334,24 @@
 
             .swiper-button-next,
             .swiper-button-prev {
-                display: none !important;
+                opacity: 0;
+                width: 80px;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                z-index: 10;
+                cursor: pointer;
             }
+
+            .swiper-button-next {
+                right: 0;
+            }
+
+            .swiper-button-prev {
+                left: 0;
+            }
+
+
 
             @media (max-width: 1024px) {
                 .product-card {
@@ -394,6 +364,14 @@
                 .product-card {
                     width: calc(50% - 16px);
                     /* 모바일: 2개씩 */
+                }
+            }
+
+            @media (max-width: 768px) {
+
+                .swiper-button-next,
+                .swiper-button-prev {
+                    display: none !important;
                 }
             }
 
@@ -443,8 +421,14 @@
                     </div>
                     <div class="shortcut-item">
                         <a href="/product/list.do">
-                            <img src="img/quick/pet-shop.png" alt="물품구매" />
-                            <span>물품구매</span>
+                            <img src="img/quick/pet-shop.png" alt="용품구매" />
+                            <span>용품구매</span>
+                        </a>
+                    </div>
+                    <div class="shortcut-item">
+                        <a href="/partner/info.do">
+                            <img src="img/quick/partner.png" alt="제휴사" />
+                            <span>제휴처 소개</span>
                         </a>
                     </div>
                     <div class="shortcut-item">
@@ -725,11 +709,52 @@
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
-                            success: function (data) {
-                                console.log(data);
+                            success: function (kakaodata) {
+                                console.log(kakaodata);
+                                console.log("334",kakaodata.kakao_account.email);
+                                 
+                                if (kakaodata.kakao_account && kakaodata.kakao_account.email) {
+                                	 nparmap = {
+             								email: kakaodata.kakao_account.email        							
+             						};
+                                     
+             						$.ajax({
+             							url: "/user/socialEmail.dox", // 얘한테 요청함 'controller'에게 요청
+             							dataType: "json",
+             							type: "POST",
+             							data: nparmap,
+             							success: function (data) {
+             								console.log(data);
+
+             								if((data.result == "fail1")){
+             									return;
+             								} else {
+             									if (data.count > 0) {
+             										alert(data.user.userName + "님 환영해요!");
+             										location.href = "/main.do";
+             									} else {
+             										console.log("구글 카운트:", data.count);
+             										if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
+             											//sessionStorage.setItem("socialLoginConfirmed", "true"); 
+             											//location.href = "/user/consent.do";
+
+             											pageChange("/user/consent.do", {email : kakaodata.kakao_account.email , name : kakaodata.kakao_account.profile.nickname});
+             											
+             										}
+             									}
+             								}
+
+             							}
+             						});
+                                } else {
+										alert("로그인 실패 (이메일동의 필요)");
+ 										location.href = "/main.do";
+                                }
+                               
                             }
                         });
                     },
+                    
                     fnView(boardId) {
                         location.href = "/board/view.do?category=A&boardId=" + boardId;
                     },

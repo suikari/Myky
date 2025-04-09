@@ -92,6 +92,15 @@ public class UserController {
 		return new Gson().toJson(resultMap); // json 형태로 바꿔서 리턴해주는 함수
 	}
     
+    //유저 로그인 주소
+    @RequestMapping("/naverCallback.do") 
+    public String naverCallback(Model model) throws Exception{
+		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+client_id+"&redirect_uri="+redirect_uri;
+        model.addAttribute("location", location);
+
+        return "user/naver/naverCallback"; 
+    }
+    
 	// 카카오 로그인 작동
 	@RequestMapping(value = "user/kakao.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
