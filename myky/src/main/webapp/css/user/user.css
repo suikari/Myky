@@ -1,7 +1,7 @@
 /* 로그인 박스 */
 .container {
-	min-height: 650px;
-
+	min-height: 100vh;
+	max-width: 1280px;
 }
 
 .login-container {

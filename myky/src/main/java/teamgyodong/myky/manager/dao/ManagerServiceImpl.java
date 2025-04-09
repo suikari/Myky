@@ -678,6 +678,24 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	@Override
+	public HashMap<String, Object> deleteVet(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.deleteVet(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
 	//게시글 상세보기
 	@Override
 	public HashMap<String, Object> selectAllOrderList(HashMap<String, Object> map) {

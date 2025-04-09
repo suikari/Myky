@@ -40,13 +40,13 @@
                     <td v-else><img src="/img/product/product update.png" width="50"></td>
                     <td>{{ item.productName }}</td>
                     <td v-if="isMembership">
-                        <div><del>{{ item.price }} 원</del></div>
-                        <div><strong>{{ getDiscountPrice(item) }} 원</strong></div>
+                        <div><del>{{ formatPrice(item.price) }} 원</del></div>
+                        <div><strong>{{ formatPrice(getDiscountPrice(item)) }} 원</strong></div>
                     </td>
-                    <td v-else>{{ item.price }} 원</td>
+                    <td v-else>{{ formatPrice(item.price) }} 원</td>
                     <td>{{ item.quantity }}</td>
-                    <td v-if="isMembership">{{ (getDiscountPrice(item) * item.quantity) }} 원</td>
-                    <td v-else>{{ (item.price * item.quantity) }} 원</td>
+                    <td v-if="isMembership">{{ formatPrice(getDiscountPrice(item) * item.quantity) }} 원</td>
+                    <td v-else>{{ formatPrice(item.price * item.quantity) }} 원</td>
                 </tr>
             </tbody>
         </table>
@@ -685,8 +685,9 @@
                         }
                     });
                 },
-                test:function(){
-                    pageChange("/order/orderComplete.do",{userId:"as879",orderId:100});
+                formatPrice(value) {
+                    if (typeof value !== "number") return parseInt(value).toLocaleString();
+                    return value.toLocaleString();
                 }
             },
             mounted() {

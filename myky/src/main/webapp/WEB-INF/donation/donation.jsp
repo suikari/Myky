@@ -80,14 +80,14 @@
                                 <td v-if="!isMembershipDonation">
                                     <div class="donateAmountContainer">
                                         <button type="button" class="donateAmountBtn"
-                                            :class="{'selected': donateAmount === 100}"
-                                            @click="selectAmount(100)">10,000원</button>
+                                            :class="{'selected': donateAmount === 10000}"
+                                            @click="selectAmount(10000)">10,000원</button>
                                         <button type="button" class="donateAmountBtn"
-                                            :class="{'selected': donateAmount === 300}"
-                                            @click="selectAmount(300)">30,000원</button>
+                                            :class="{'selected': donateAmount === 30000}"
+                                            @click="selectAmount(30000)">30,000원</button>
                                         <button type="button" class="donateAmountBtn"
-                                            :class="{'selected': donateAmount === 500}"
-                                            @click="selectAmount(500)">50,000원</button>
+                                            :class="{'selected': donateAmount === 50000}"
+                                            @click="selectAmount(50000)">50,000원</button>
                                         <input type="text" class="customAmountInput" v-model="customAmount"
                                             @input="formatCustomAmount" @focus="clearSelection"
                                             @blur="validateCustomAmount" @keyup.enter="validateCustomAmount"
@@ -111,7 +111,7 @@
                                         <button @click="useAllPoints" class="point-btn">전체 사용</button>
                                         <button @click="applyPoints" class="point-btn">적용</button>
                                     </span>
-                                    <span class="point-summary">{{ formattedDiscountPoint }} 포인트 사용</span>
+                                    <span class="point-summary"> ┖　{{ formattedDiscountPoint }} 포인트 사용</span>
                                     <div v-if="usedPoint != 0" class="point-remaining">포인트를 차감한 금액 {{ remainingAmount }} 원이 결제됩니다.</div>
                                 </td>
                             </tr>

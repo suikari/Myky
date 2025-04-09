@@ -50,12 +50,12 @@
                     <!-- 정상가 (할인 전 가격) -->
                     <div class="detail-product-info">
                         <p class="original-price" v-if="info.discount > 0">
-                            정상가: {{ info.price }}원
+                            정상가: {{ formatPrice(info.price) }}원
                         </p>
                         <!-- 멤버십 할인가 -->
                         <p class="discount-price">
                             멤버십 할인가:
-                            <strong>{{ discountedPrice}}원</strong>
+                            <strong>{{ formatPrice(discountedPrice)}}원</strong>
                             <span v-if="userInfo && userInfo.membershipFlg !== 'Y'"></span>
                         </p>
                     </div>
@@ -521,7 +521,6 @@
                     discountedPrice() {
                         return Math.floor(this.info.price * (1 - this.info.discount / 100));
                     },
-
                     categoryParts() {
                         if (!this.info.categoryId) return [];
                         return this.info.categoryId.split(',');
@@ -670,9 +669,16 @@
                     },
                     //리뷰 도움체크
                     markHelpful(reviewId) {
+                        const self = this;
+                        if (!self.sessionId || self.sessionId === "") {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = "/user/login.do";
+                            return;
+                        }
+
                         if (this.alreadyClicked[reviewId]) return;
 
-                        const self = this;
+
                         $.ajax({
                             url: "/product/reviewHelpCnt.dox",
                             type: "POST",
@@ -952,6 +958,11 @@
                             return;
                         }
                         location.href = "/membership/main.do";
+                    },
+                    formatPrice(value) {
+                        const num = Number(value);
+                        if (isNaN(num)) return '';
+                        return num.toLocaleString();
                     },
                 },
                 mounted() {

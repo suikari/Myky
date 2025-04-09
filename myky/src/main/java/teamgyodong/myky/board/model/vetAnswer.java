@@ -18,4 +18,12 @@ public class vetAnswer {
 	private String isDeleted;
 	private String userId;
 	
+//	users DB
+	private String profileImage;
+	
+// veterinarian DB
+	private String eMail;
+	private String phoneNumber;
+	private String affiliatedHospital;
+	
 }

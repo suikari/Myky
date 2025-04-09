@@ -389,7 +389,8 @@ background-color: #ccf2f4;
 	margin-top: 5px;
     font-weight: bold;
     color: #fca311;
-    margin-right: 10px; 
+    margin-right: 10px;
+	margin-bottom: 4px;
 }
 
 .fb-answer-meta {
@@ -432,6 +433,14 @@ background-color: #ccf2f4;
 	border-radius: 6px;
 	border: 2px solid #202060;
 }
+.answer-commentsInput{
+	width: 97%; 
+	padding: 10px; 
+	margin-top: 10px; 
+	border-radius: 5px; 
+	border: 1px solid #ccc;
+	transition: all 0.3s ease;
+}
 
 .rating-label {
     display: block;
@@ -445,7 +454,7 @@ background-color: #ccf2f4;
     display: inline-block;
 }
 .star-rating .stars {
-        display: inline-block;
+       display: inline-block;
 }
 
 .star-rating .star {
@@ -535,35 +544,6 @@ background-color: #ccf2f4;
     flex-direction: column;
 }
 
-.fb-choice-button {
-    margin-top: 10px;
-    align-self: flex-end;
-    background-color: #fca311;
-    color: #202060;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-inline-end: auto;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.fb-choice-button:hover {
-    background-color: #fca311;
-    color: #202060;
-}
-.fb-choiceSaveButton{
-    background-color: #202060;
-    color: #fca311;
-    padding: 10px 20px;
-    border-radius: 5px; 
-    border: none; 
-    cursor: pointer; 
-    margin-top: 10px;
-}
 .fb-answer-box.accepted {
     border: 3px solid #202060;
     border-radius: 10px;
@@ -629,25 +609,38 @@ background-color: #ccf2f4;
 
 /* 채택 버튼 */
 .fb-choice-button {
-    margin-top: 10px;
     align-self: flex-end;
     background-color: #fca311;
     color: #202060;
     border: none;
+	font-weight: bold;
     border-radius: 6px;
     padding: 6px 14px;
     cursor: pointer;
     font-size: 14px;
     margin-inline-end: auto;
     position: absolute;
-    right: 15px;
-    top: 50%;
+    right: 55px;
+    top: 18%;
     transform: translateY(-50%);
+	z-index: 10;
+}
+.fb-accepted-answer-box{
+	border: 2px solid #fca311; 
+	border-radius: 10px; 
+	padding: 15px; 
+	margin: 10px 0; 
+}
+.fb-accepted-header{
+	font-weight: bold;
+    color: #202060;
+    margin-bottom: 12px;
+    font-size: 18px;
 }
 
 .fb-choice-button:hover {
-    background-color: #fca311;
-    color: #202060;
+    background-color: #202060;
+    color: #fca311;
 }
 .fb-footer-buttons {
     display: flex;
@@ -659,6 +652,15 @@ background-color: #ccf2f4;
     margin-bottom: 100px;
 }
 
+.fb-choiceSaveButton{
+    background-color: #202060;
+    color: #fca311;
+    padding: 10px 20px;
+    border-radius: 5px; 
+    border: none; 
+    cursor: pointer; 
+    margin-top: 10px;
+}
 #fb-viewPage {
     max-width: 1000px;
     margin: 40px auto;
@@ -731,7 +733,6 @@ background-color: #ccf2f4;
 
 .fb-view-boxContent img {
 	max-width: 80%;
-	
 }
 
 #fb-viewPage .fb-view-files {
@@ -1175,24 +1176,194 @@ tr.faq-td.faq-odd td {
       margin-top: 20px;
       gap: 20px;
   }
-  .fb-profile-img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 8px;
-  }
-  .fb-comment-box {
+
+  .fb-top-profile {
     display: flex;
-    justify-content: space-between; /* 왼쪽-오른쪽 정렬 */
     align-items: center;
-    padding: 8px 12px;
+    background-color: rgb(192, 192, 192, 0.02);
+    border-radius: 16px;
+    padding: 20px 30px;
+    gap: 24px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 100%;
+	border: 2px solid #202060;
   }
 
-  .fb-profile-img {
-    width: 32px;
-    height: 32px;
+  /* 왼쪽 프로필 이미지 */
+  .fb-top-profile-img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    margin-left: 12px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+	border: 5px solid transparent;
+	border-image: radial-gradient(circle, #fca311 20%, transparent 20%) 1;
+  }
+
+  /* 오른쪽 정보 영역 */
+  .fb-top-profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+
+  /* 이름 */
+  .fb-profile-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #202060;
+    word-break: keep-all;
+  }
+
+  /* 뱃지 */
+  .fb-profile-badges {
+    margin-top: 6px;
+	color: #202060;
+	font-weight: bold;
+  }
+
+  .fb-badge {
+    display: inline-block;
+    color: #202060;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 12px;
+    margin-right: 6px;
+  }
+
+  .fb-badge.orange {
+    background-color: #202060;
+    color: rgb(223, 223, 223);
+	margin-left: 5px;
+  }
+
+  /* 설명 */
+  .fb-profile-desc {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+    max-width: 100%;
+    line-height: 1.5;
+  }
+  .fb-top-profile-img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  /* Quill 에디터로 작성된 텍스트 출력 박스 */
+  .quill-output {
+    max-width: 900px;
+	margin-top: 20px !important;
+	margin-bottom: 20px !important;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  /* 텍스트 */
+  .quill-output p {
+    margin-bottom: 16px;
+  }
+
+  /* 제목 */
+  .quill-output h1, .quill-output h2, .quill-output h3 {
+    color: #202060;
+    font-weight: bold;
+  }
+
+  /* 강조된 텍스트 (Bold) */
+  .quill-output b {
+    font-weight: bold;
+    color: #fca311;
+  }
+
+  /* 기울임 텍스트 (Italic) */
+  .quill-output i {
+    font-style: italic;
+    color: #555;
+  }
+
+  /* 링크 */
+  .quill-output a {
+    color: #fca311;
+    text-decoration: none;
+  }
+
+  .quill-output a:hover {
+    text-decoration: underline;
+  }
+
+  /* 목록 */
+  .quill-output ul, .quill-output ol {
+    margin-left: 20px;
+  }
+
+  .quill-output li {
+    margin-bottom: 8px;
+  }
+
+  /* 인용 */
+  .quill-output blockquote {
+    font-size: 14px;
+    font-style: italic;
+    border-left: 4px solid #fca311;
+    padding-left: 16px;
+    color: #666;
+    margin: 16px 0;
+  }
+
+  /* 이미지 */
+  .quill-output img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 16px;
+  }
+  
+  /* 스무디 */
+  
+  /* 포커스 시 효과 */
+  .answer-commentsInput:focus {
+    border-color: #fca311;
+    box-shadow: 0 0 10px rgba(252, 163, 17, 0.7); /* 포커스 시 부드러운 그림자 */
+    outline: none; /* 기본 outline을 제거 */
+  }
+  .fb-accepted-answer {
+      background-color: #ffffff;  /* 깨끗한 흰색 배경 */
+      border-radius: 8px;  /* 부드러운 둥근 모서리 */
+      padding: 18px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);  /* 자연스러운 그림자 */
+      border-left: 4px solid #fca311;  /* 채택된 답변 왼쪽에 세련된 색상 선 */
+      transition: all 0.3s ease;  /* 부드러운 트랜지션 */
+  }
+  /* 선택된 답변에 더 강한 강조가 필요하다면 */
+  .fb-accepted-answer.active {
+      border-left: 6px solid #fca311; /* 강조 색상 */
+      background-color: #f7f7f7; /* 배경 살짝 그레이로 */
+  }
+  /* 프로필 이미지와 닉네임 세로로 정렬 */
+  .fb-answer-meta-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+  }
+  /* 프로필 이미지 */
+  .fb-top-profile-img2 {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
   }

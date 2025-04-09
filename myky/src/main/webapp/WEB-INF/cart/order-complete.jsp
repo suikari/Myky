@@ -43,7 +43,7 @@
                         <td class="order-complete__td" v-else><img src="/img/product/product update.png" width="50"></td>
                         <td class="order-complete__td">{{ item.productName }}</td>
                         <td class="order-complete__td">{{ item.quantity }}</td>
-                        <td class="order-complete__td">{{ item.price }} 원</td>
+                        <td class="order-complete__td">{{ formatPrice(item.price) }} 원</td>
                     </tr>
                 </tbody>
             </table>
@@ -164,7 +164,11 @@
                             this.receiverPhone = phone.slice(0, 3)+"-"+phone.slice(3, 6)+"-"+phone.slice(6, 10);
                         }
                         
-                    }
+                    },
+                    formatPrice(value) {
+                        if (typeof value !== "number") return parseInt(value).toLocaleString();
+                        return value.toLocaleString();
+                    },
                 },
                 mounted() {
                     let self = this;

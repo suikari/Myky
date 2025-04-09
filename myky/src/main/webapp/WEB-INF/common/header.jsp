@@ -246,11 +246,16 @@
 
 						});
 					},
-					
 					fnLogin() {
-						//window.location.href = "/user/login.do";
-						//window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname);
-						window.location.href = "/user/login.do?redirect=" + encodeURIComponent(window.location.pathname + window.location.search);
+						const currentPath = window.location.pathname;
+
+						// 현재 페이지가 로그인 페이지일 경우, main.do로 이동
+						if (currentPath === "/user/login.do") {
+							window.location.href = "/user/login.do?redirect=/main.do";
+						} else {
+							// 그 외엔 원래의 리다이렉트 처리
+							window.location.href = "/user/login.do?redirect=" + encodeURIComponent(currentPath + window.location.search);
+						}
 					},
 					toggleSearch() {
 						this.showSearch = !this.showSearch;
