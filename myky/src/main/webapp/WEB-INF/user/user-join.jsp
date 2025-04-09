@@ -23,14 +23,14 @@
                 <div class="section">
                     <label class="label">아이디</label>
                     <div class="inline-group">
-                        <input class="input-underline" v-model="user.userId" :disabled="idFlg">
+                        <input class="input-underline" v-model="user.userId" :disabled="idFlg" placeholder="영문, 숫자 포함 4~16자.">
                         <button class="inline-btn" v-if="!idFlg" @click="fnIdChecked()">중복체크</button>
                     </div>
                 </div>
 
                 <div class="section">
                     <label class="label">비밀번호</label>
-                    <input class="input-underline" type="password" v-model="user.pwd">
+                    <input class="input-underline" type="password" v-model="user.pwd" placeholder="영문, 숫자, 특수문자 포함 8~20자 조합.">
                 </div>
 
                 <div class="section">
@@ -40,13 +40,13 @@
 
                 <div class="section">
                     <label class="label">이름</label>
-                    <input class="input-underline" v-model="user.userName">
+                    <input class="input-underline" v-model="user.userName" placeholder="한글 또는 영문 입력. EX)김철수,brianKim">
                 </div>
 
                 <div class="section">
                     <label class="label">닉네임</label>
                     <div class="inline-group">
-                        <input class="input-underline" v-model="user.nickName" :disabled="nickFlg">
+                        <input class="input-underline" v-model="user.nickName" :disabled="nickFlg" placeholder="한글,영문,숫자 포함 1~8자.">
                         <button class="inline-btn" v-if="!nickFlg" @click="fnNickChecked()">중복체크</button>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
 
                 <div class="section">
                     <label class="label">생년월일</label>
-                    <input class="input-underline" v-model="user.birthDate">
+                    <input class="input-underline" v-model="user.birthDate" placeholder="생년월일 8자리 혹은 미입력">
                 </div>
 
                 <div class="section">
@@ -130,9 +130,9 @@
                             birthDate: "",
                             gender: "M",
                             email: "" || "${map.email}",
-                            agreeYn: "${map.agree2}",
-                            phoneYn: "${map.agree3}",
-                            emailYn: "${map.agree4}"
+                            agreeYn: "${map.agreeList}",
+                            phoneYn: "${map.agreeSms}",
+                            emailYn: "${map.agreeEmail}"
                         },
                         selectNum: "010",
                         num1: "",
@@ -147,8 +147,9 @@
                         message: "",
                         emailPattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 유효성 검사 정규식
                         passwordPattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/,  // 정규식 적용
-                        nickPattern: /^[가-힣a-zA-Z0-9]+$/, // 닉네임 유효성 검사 정규식
-                        userNamePattern: /^[가-힣a-zA-Z]+$/
+                        nickPattern: /^(?![0-9]+$)[가-힣a-zA-Z0-9]+$/, // 닉네임 유효성 검사 정규식
+                        userNamePattern: /^[가-힣a-zA-Z]+$/,
+                        idPattern: /^(?!\d+$)[a-zA-Z\d]{4,16}$/
 
                     };
                 },
@@ -237,11 +238,11 @@
                     fnIdChecked: function () {
                         var self = this;
                         if (self.user.userId.length < 4 || self.user.userId.length > 16) {
-                            alert("아이디는 최소 4~16글짜로 입력바랍니다.");
+                            alert("아이디는 최소 4~16글자로 입력바랍니다.");
                             return;
                         }
-                        if (!self.nickPattern.test(self.user.userId)) {
-                            alert('아이디는 한글, 영문, 숫자만 사용할 수 있습니다.');
+                        if (!self.idPattern.test(self.user.userId)) {
+                            alert('아이디는 영문, 숫자 조합만 사용할 수 있습니다.');
                             return;
                         }
 
@@ -269,7 +270,7 @@
                     fnNickChecked: function () {
                         var self = this;
                         if (self.user.nickName.length > 8 || self.user.nickName == "") {
-                            alert("닉네임은 한글,영문 8글짜 이하로 입력가능합니다.");
+                            alert("닉네임은 한글,영문, 숫자 포함 8글자 이하로 입력가능합니다.");
                             return;
                         }
                         if (!self.nickPattern.test(self.user.nickName)) {
@@ -310,38 +311,6 @@
                         console.log(addrDetail);
                         console.log(engAddr);
                         console.log(zipNo);
-                    },
-                    fnIdChecked: function () {
-                        var self = this;
-                        if (self.user.userId.length < 4 || self.user.userId.length > 16) {
-                            alert("아이디는 최소 4~16글짜로 입력바랍니다.");
-                            return;
-                        }
-                        if (!self.nickPattern.test(self.user.userId)) {
-                            alert('아이디는 한글, 영문, 숫자만 사용할 수 있습니다.');
-                            return;
-                        }
-
-                        var nparmap =
-                        {
-                            userId: self.user.userId,
-                        }; // 유저아이디 하나만 보내기
-                        $.ajax({
-                            url: "/user/check.dox",
-                            dataType: "json",
-                            type: "POST",
-                            data: nparmap,
-                            success: function (data) {
-                                console.log(data);
-                                if (data.count == 0) {
-                                    alert("사용 가능한 아이디입니다");
-                                    self.idFlg = true;
-                                    self.user.userId.disabled = true;
-                                } else {
-                                    alert("중복된 아이디입니다");
-                                }
-                            }
-                        });
                     },
 
                     fnEmailChecked: function () {
@@ -438,6 +407,8 @@
                     if (self.user.email != "") {
                         self.emailFlg = true;
                     }
+
+
 
 
                 }

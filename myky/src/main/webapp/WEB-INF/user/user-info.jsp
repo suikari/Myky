@@ -8,7 +8,7 @@
         <title>유저 정보</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-		<link rel="stylesheet" href="/css/user/user.css" />
+        <link rel="stylesheet" href="/css/user/user.css" />
         <style>
 
         </style>
@@ -92,7 +92,13 @@
                     <br>
                     <div class="profile-container">
                         <template v-if="!picFlg">
-                            <img :src="user.profileImage" alt="" class="profile-pic">
+                            <span v-if="user.profileImage=='' ||user.profileImage==null">
+                                <img src="/img/userProfile/Default-Profile-Picture.jpg" alt="프로필 이미지"
+                                    class="profile-pic">
+                            </span>
+                            <span v-else>
+                                <img :src="user.profileImage" alt="" class="profile-pic">
+                            </span>
                         </template>
                         <template v-else>
                             <img :src="this.previewImage" alt="" class="profile-pic">
