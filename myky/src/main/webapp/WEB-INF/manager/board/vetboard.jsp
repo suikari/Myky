@@ -362,6 +362,7 @@ ber {
 							        <th class=""><input type="checkbox" @click="fnAllCheck" v-model="allChk"></th>
 							        <th  class="text-center">번호</th>
 							        <th class="text-center">게시글</th>
+							        <th class="text-center">ID</th>
 							        <th class="text-center">작성자</th>
 							        <th class="text-center">작성일</th>
 							        <th  class="text-center">채택</th> 
@@ -374,6 +375,7 @@ ber {
 			                        <td class="text-center">{{ index + 1 }}</td>
 			                        <td><a @click="fnView(comment.vetBoardId,comment.category)" class="board-title">{{ comment.title  }}</a></td>
 			                        <td class="text-center">{{ comment.userId }}</td>
+			                        <td class="text-center">{{ comment.nickName}}</td>
 			                        <td class="text-center">{{ comment.updatedAt }}</td>
 			                        <td>
 		                                <span :class="comment.isAccepted === 'N' ? 'status-inactive' : 'status-active'">
