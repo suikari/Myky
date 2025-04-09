@@ -33,11 +33,15 @@
 
 
 .footer-con {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end; /* 아래로 정렬 */
-    gap: 20px;
+  display: flex;
+  justify-content: space-between; /* 좌우로 최대로 벌어짐 */
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  gap: 0; /* 필요하다면 줄이기 */
 }
+
 
 
 .footer-logo {
@@ -45,20 +49,21 @@
 }
 
 .footer-nav {
+  font-family: 'NanumSquareRoundLight', sans-serif;
   display: flex;
   gap: 30px;
 }
 
 .footer-nav a {
   margin-right: 50px;	
-  color: #FFC107;;
+  color: #e8bb33;;
   text-decoration: none;
   font-weight: 500;
 }
 
 .footer-divider {
   border: none;
-  border-top: 2px solid #FFC107;
+  border-top: 2px solid #e8bb33;
   margin: 10px auto;
   width: 90%;
 }
@@ -75,10 +80,10 @@
   font-size: 14px;
 }
 
-.footer-section h4 {
+.footer-section{
   text-align: left;
   margin-bottom: 10px;
-  color: #fff;
+  color: #a80b0b;
 }
 
 .footer-section p {
@@ -101,7 +106,7 @@
     margin-left: -200px; /* 로고를 왼쪽으로 20px 이동 */
 }
 .sns-links img{
-	height: 40px; /* 로고의 높이를 조정 */
+	height: 37px; /* 로고의 높이를 조정 */
     width: auto; /* 비율을 유지하며 너비는 자동으로 조정 */
 }
 
@@ -110,28 +115,73 @@
     width: auto; /* 비율을 유지하며 너비는 자동으로 조정 */
 }
 
-.footer-left {
-    text-align: left;
-    position: relative;
-    left: -270px; /* 원하는 만큼 왼쪽으로 이동 */
-}
-.footer-main {
-	margin-bottom: 50px;
-    text-align: left;
-    flex-grow: 1; /* 남은 공간을 모두 차지하게 해서 가운데 배치 */
-    margin-left: 40px; /* 왼쪽 여백을 추가하여 오른쪽으로 이동 */
-}
+.footer-left,
+.footer-main,
 .footer-right {
-    text-align: right;
-    position: relative;
-    flex-shrink: 0; /* 오른쪽 정렬되도록 고정 */
-    right: -210px;
-	margin-bottom: 120px;
+  flex: 1; /* 각 영역이 같은 비율로 배치됨 */
+  min-width: 250px;
+}
+
+.footer-left {
+  flex: 1;
+  transform: translateX(-150px); /* 이전보다 더 왼쪽으로 이동 */
+  text-align: left;
+}
+
+.footer-main {
+  transform: translate(150px,45px);
+  text-align: left;       /* 내부 텍스트는 왼쪽 정렬 유지 */
+  flex-grow: 1;           /* 가운데 영역 채우기 */
+}
+
+.footer-right {
+  flex: 1;
+  text-align: right;
+  transform: translate(100px,25px);
 }
 
 
-.Support-title{
-	text-align: left;
+.Support-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e8bb33;
+    padding: 0;
+
+    text-align: left;
+}
+.Support-detail {
+    color: #dfe0e4;
+    font-size: 14px;
+    font-family: 'NanumSquareRoundLight', sans-serif;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+.company-detail strong {
+    font-size: 14px;
+    color: #e8bb33;
+}
+.company-detail {
+    line-height: 1.6;  /* 기본은 1.4~1.6 추천 */
+    white-space: nowrap; 
+    color: #dfe0e4;
+    font-size: 14px;
+    font-family: 'NanumSquareRoundLight', sans-serif;
+}
+.section-title {
+    font-size: 24px;
+    transform: translateX(-0px);
+    color: #e8bb33;
+    font-family: 'NanumSquareRoundLight', sans-serif;
+
+}
+.footer-company-title{
+    font-size: 24px;
+    font-weight: bold;
+    color: #e8bb33;
+}
+.scroll-top-btn{
+    background-color: #f1c338;
 }
     </style>
 </head>
@@ -141,7 +191,7 @@
 			<div class="footer-top-inner">
 				<nav class="footer-nav">
 				  <a href="#">회사 소개</a>
-				  <a href="#">이용약관</a>
+				  <a href="">이용약관</a>
 				  <a href="#"><strong>개인정보처리방침</strong></a>
 				  <a href="#">이용안내</a>
 				</nav>
@@ -153,23 +203,23 @@
 		
     	<div class="footer-con" >
 	        <div class="footer-left">
-	            <h2 class="footer-title">{{ company.name }}</h2>
+	            <div class="footer-company-title">{{ company.name }}</div>
 	            <div class="footer-company-info">
-	                <p class="company-detail"><strong>대표:</strong> {{ company.ceo }}</p>
-	                <p class="company-detail"><strong>대표전화:</strong> {{ company.phone }}</p>
-	                <p class="company-detail"><strong>주소:</strong> {{ company.address }}</p>
-	                <p class="company-detail"><strong>사업자 등록번호:</strong> {{ company.registrationNumber }}</p>
-	                <p class="company-detail"><strong>이메일:</strong> {{ company.email }}</p>
+	                <div class="company-detail"><strong>대표:</strong> {{ company.ceo }}</div>
+	                <div class="company-detail"><strong>대표전화:</strong> {{ company.phone }}</div>
+	                <div class="company-detail"><strong>주소:</strong> {{ company.address }}</div>
+	                <div class="company-detail"><strong>사업자 등록번호:</strong> {{ company.registrationNumber }}</div>
+	                <div class="company-detail"><strong>이메일:</strong> {{ company.email }}</div>
 	            </div>
 	        </div>
 	        <div class="footer-main">
-	            <h3 class="Support-title" style="color:#FFC107 ;">C/S CENTER</h3>
-	            <p>MON-FRI 10:00 - 17:00</p>
-	            <p>LUNCH 12:00 - 13:30</p>
-	            <p>SAT, SUN, HOLIDAY OFF</p>
+	            <div class="Support-title" >C/S CENTER</div>
+	            <div class="Support-detail">MON-FRI 10:00 - 17:00</div>
+	            <div class="Support-detail">LUNCH 12:00 - 13:30</div>
+	            <div class="Support-detail">SAT, SUN, HOLIDAY OFF</div>
 	        </div>
 			<div class="footer-right">
-				<h3 class="section-title" style="margin-left: 140px;">SNS SERVICE</h3>
+				<div class="section-title" style="margin-left: 140px;">SNS SERVICE</div>
 	            <div class="sns-links">
 	                <img src="/img/facebook.png" alt="Facebook" width="75">
 	                <img src="/img/instagram.png" alt="Instagram" width="80">
