@@ -33,6 +33,20 @@
         margin: 0 auto; /* 이미지가 페이지 중앙에 오도록 설정 */
     }
 
+    .bottom-image {
+        position: relative; /* 부모 div를 상대적으로 설정 */
+        display: flex;
+        justify-content: center;
+        align-items: center; /* 수직 중앙 정렬 */
+        width: 1280px; /* 고정 너비 */
+        height: 700px; /* 높이는 원하는 크기로 설정 */
+        background-image: url('/img/intro/intro3.jpg');
+        background-size: cover;
+        background-position: center;
+        margin: 0 auto; /* 이미지가 페이지 중앙에 오도록 설정 */
+        margin-bottom: 50px;
+    }
+
     .topintroTitle1 {
         transform: translate(-470px, -120px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
@@ -104,7 +118,7 @@
     }
 
     .topintroContent2 {
-        transform: translate(-290px, 50px);
+        transform: translate(-250px, 50px);
         position: absolute;
         color: white;
         font-size: 15px; /* 글씨 크기 설정 */
@@ -154,6 +168,18 @@
         text-align: center; /* 텍스트 가운데 정렬 */
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 그림자 효과 */
     }
+
+    .bottomContent{
+        font-weight: 450;
+        transform: translate(250px, -160px);
+        position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
+        color: #ffffff; /* 글씨 색 */
+        font-size: 18px; /* 글씨 크기 */
+        text-align: left; /* 텍스트 가운데 정렬 */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 그림자 효과 */
+        line-height: 1.6; /* 줄 간격 추가 */
+        
+    }
 </style>
 
         
@@ -173,6 +199,7 @@
                         <br>저희는 반려동물을 사랑하는 사람들을 위한 통합 플랫폼입니다.
                         <br>반려동물 용품 쇼핑부터 전문 수의사 상담, 그리고 내 주변 동물병원 검색까지!
                         <br>한 곳에서 모두 해결할 수 있는 편리한 서비스를 제공합니다.
+                        <br>또한 매출의 일부를 유기동물 보호소에 기부하여 모든 생명이 행복한 세상을 만들어갑니다.
                     </div>
                 </div>
                 <div class="middle-image">
@@ -199,6 +226,13 @@
                     </div>
                     <div class="middleintroContent4">
                         가까운 동물병원을 손쉽게 찾아, 위급한 순간에도 빠르게 대처할 수 있습니다.
+                    </div>
+                </div>
+                <div class="bottom-image">
+                    <div class="bottomContent">
+                        우리는 반려동물의 삶의 질 향상과 반려인의 편의, 
+                        <br>그리고 유기동물의 따뜻한 미래를 위해 끊임없이 고민하고 행동합니다.
+                        <br>멍냥꽁냥에서, 함께 따뜻한 발걸음을 시작해보세요.
                     </div>
                 </div>
             </div>
