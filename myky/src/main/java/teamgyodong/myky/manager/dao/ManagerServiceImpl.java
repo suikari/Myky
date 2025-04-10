@@ -795,4 +795,27 @@ public class ManagerServiceImpl implements ManagerService {
 		return resultMap;
 	}
 	
+	
+	
+	@Override
+	public HashMap<String, Object> deleteProduct(HashMap<String, Object> map) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		try {
+			int count = managerMapper.deleteProduct(map);
+
+			resultMap.put("count", count);
+			resultMap.put("result", "success");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			resultMap.put("result", "fail");			
+		}
+		
+		return resultMap;
+	}
+	
+	
+	
+	
 }
