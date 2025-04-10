@@ -42,8 +42,10 @@ import jakarta.servlet.http.HttpSession;
 import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.user.dao.UserService;
 
-
-
+// 멍냥꽁냥 인증메일
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Controller
 public class UserController {
@@ -406,38 +408,55 @@ public class UserController {
 
 
     // ✅ 이메일 인증 코드 전송
-    @PostMapping("/email/send-auth-code")
-    @ResponseBody
-    public Map<String, Object> sendAuthCode(@RequestBody Map<String, String> request, HttpSession session) {
-        String email = request.get("email");
-        Map<String, Object> response = new HashMap<>();
+	@PostMapping("/email/send-auth-code")
+	@ResponseBody
+	public Map<String, Object> sendAuthCode(@RequestBody Map<String, String> request, HttpSession session) {
+	    String email = request.get("email");
+	    Map<String, Object> response = new HashMap<>();
 
-        if (email == null || email.isEmpty()) {
-            response.put("success", false);
-            response.put("message", "이메일을 입력하세요.");
-            return response;
-        }
+	    if (email == null || email.isEmpty()) {
+	        response.put("success", false);
+	        response.put("message", "이메일을 입력하세요.");
+	        return response;
+	    }
 
-        String authCode = String.format("%06d", new Random().nextInt(1000000));
-        session.setAttribute("emailAuthCode", authCode);
-        session.setMaxInactiveInterval(5 * 60); // 5분 유지
+	    String authCode = String.format("%06d", new Random().nextInt(1000000));
+	    session.setAttribute("emailAuthCode", authCode);
+	    session.setMaxInactiveInterval(5 * 60); // 5분 유지
 
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(email);
-            message.setSubject("쇼핑몰 회원가입 이메일 인증 코드");
-            message.setText("인증 코드: " + authCode + "\n5분 안에 입력해 주세요.");
-            mailSender.send(message);
+	    try {
+	        MimeMessage mimeMessage = mailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            response.put("success", true);
-            response.put("message", "인증번호가 발송되었습니다.");
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "이메일 발송 실패: " + e.getMessage());
-        }
+	        helper.setTo(email);
+	        helper.setSubject(" 멍냥꽁냥 쇼핑몰 이메일 인증 코드 안내");
 
-        return response;
-    }
+	        String htmlContent = "<div style='font-family:Arial,sans-serif;padding:20px;border:1px solid #ccc;border-radius:10px;'>"
+	                + "<h2 style='color:#6C63FF;'>🐶 멍냥꽁냥 쇼핑몰 이메일 인증</h2>"
+	                + "<p>안녕하세요!🐾 멍냥꽁냥 쇼핑몰에 가입해 주셔서 감사합니다.</p>"
+	                + "<p style='font-size:18px;'>"
+	                + "아래 <strong style='color:#FF6F61;'>인증 코드</strong>를 입력해 주세요:"
+	                + "</p>"
+	                + "<div style='font-size:24px;font-weight:bold;background:#f4f4f4;padding:10px;border-radius:5px;width:fit-content;margin:10px;'>"
+	                + authCode + "</div>"
+	                + "<p style='color:#999;'>⏱️ 인증 코드는 <strong>5분</strong> 동안만 유효합니다.</p>"
+	                + "<br><p style='font-size:12px;color:#aaa;'>※ 본 메일은 발신 전용입니다.</p>"
+	                + "</div>";
+
+	        helper.setText(htmlContent, true);
+	        helper.setFrom(new InternetAddress("glodstone1@gmail.com", "멍냥꽁냥 쇼핑몰")); // 보내는 사람 이름 설정
+
+	        mailSender.send(mimeMessage);
+
+	        response.put("success", true);
+	        response.put("message", "인증번호가 발송되었습니다.");
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "이메일 발송 실패: " + e.getMessage());
+	    }
+
+	    return response;
+	}
 
     // ✅ 인증 코드 확인
     @PostMapping("/email/verify-auth-code")

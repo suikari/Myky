@@ -1,11 +1,13 @@
 .cartContainer {
 	max-width: 1280px;
-	margin: auto;
+	margin: 30px auto;
+	margin-bottom: 200px;
 	padding: 20px;
 }
 
 .cartContainer h2 {
 	text-align: center;
+	margin-bottom: 50px;
 }
 
 .product-link {
@@ -20,20 +22,22 @@
 
 .empty-cart-message {
 	text-align: center;
+	width: 80%;
 	font-size: 20px;
 	color: #666;
 	padding: 200px 0;
 	background-color: #f9f9f9;
 	border: 1px dashed #ccc;
-	border-radius: 8px;
-	margin-top: 20px;
+	border-radius: 6px;
+	margin: 20px auto;
 }
 
 .cartTable {
 	width: 100%;
 	border-collapse: collapse;
-	border-radius: 6px;
+	border: 1px solid #ddd;
 	margin-top: 20px;
+	color: #333;
 }
 
 .cartTable th,
@@ -45,13 +49,17 @@
 
 .cartTable th {
 	background: rgb(203, 235, 255);
+	color: #555;
 }
 
 .quantityBtn {
 	cursor: pointer;
+	width: 30px;
+	height: 30px;
 	border: 1px solid #ddd;
 	border-radius: 6px;
 	padding: 5px 10px;
+	margin : 10px;
 }
 
 .removeBtn {
@@ -64,15 +72,16 @@
 }
 
 .cartOrderBtn {
+	display: inline-block;
 	width: 400px;
-	padding: 20px;
+	padding: 15px;
 	background: rgb(110, 158, 255);
 	color: white;
 	font-size: 16px;
 	border: none;
 	border-radius: 6px;
 	cursor: pointer;
-	margin: 20px 450px;
+	margin: 20px auto;
 	transition: background 0.3s;
 }
 
@@ -84,6 +93,7 @@
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 20px;
+	color: #333;
 }
 
 .cartOrderTable th,
@@ -95,19 +105,24 @@
 
 .cartOrderTable th {
 	background: rgb(203, 235, 255);
+	color: #555;
 	font-weight: bold;
 }
 
 .ordercontainer {
 	max-width: 1280px;
-	margin: auto;
-	padding: 20px;
+	margin: 30px auto;
+	padding: 40px;
+}
+
+.ordercontainer h2 {
+	text-align: center;
 }
 
 .ordercontainer h2,
 .ordercontainer h3 {
-	text-align: center;
 	margin-bottom: 15px;
+	color: #333;
 }
 
 .orderTable {
@@ -121,11 +136,13 @@
 	padding: 12px;
 	border: 1px solid #ddd;
 	text-align: center;
+	color: #333;
 }
 
 .orderTable th {
 	background: rgb(203, 235, 255);
 	font-weight: bold;
+	color: #555;
 }
 
 .inputField {
@@ -133,8 +150,12 @@
 	padding: 10px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: 6px;
 	box-sizing: border-box;
+}
+
+.inputField.form-margin {
+	margin-right: 20px;
 }
 
 .inputField.short {
@@ -144,10 +165,31 @@
 
 .delivery-section {
 	border: 1px solid #ddd;
-	padding: 20px;
-	margin-top: 20px;
-	border-radius: 5px;
+	padding: 40px;
+	margin-top: 40px;
+	border-radius: 6px;
 	background: rgb(241, 247, 248);
+}
+
+.zipcodeBtn {
+	padding: 6px 10px;
+	border: none;
+	background-color: rgb(110, 158, 255);
+	color: white;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background 0.3s ease;
+	margin-left: 10px;
+}
+
+.zipcodeBtn:hover {
+	background-color : rgb(0, 80, 255);
+}
+
+.delivery-section h3 {
+	margin-top: 0;
+	margin-bottom: 30px;
 }
 
 .delivery-section label {
@@ -161,25 +203,30 @@
 	padding: 10px;
 	margin-top: 8px;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: 6px;
 	background: white;
 	cursor: pointer;
 }
 
-.payBtn {
-	width: 100%;
-	padding: 12px;
+.btnDisplay{
+	text-align: center;
+}
+
+.cartPayBtn {
+	display: inline-block;
+	width: 50%;
+	padding: 10px;
 	background: rgb(110, 158, 255);
 	color: white;
-	font-size: 16px;
+	font-size: 18px;
 	border: none;
 	cursor: pointer;
-	margin-top: 50px;
-	border-radius: 5px;
+	margin: 50px auto;
+	border-radius: 6px;
 	transition: background 0.3s;
 }
 
-.payBtn:hover {
+.cartPayBtn:hover {
 	background: rgb(0, 80, 255);
 }
 
@@ -190,6 +237,7 @@
 	font-size: 16px;
 	background-color: #fff;
 	overflow: hidden;
+	margin-bottom: 40px;
 }
 
 .discountTable th,
@@ -217,7 +265,7 @@
 	width: 120px;
 	padding: 6px;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: 6px;
 	font-size: 14px;
 	margin-right: 5px;
 }
@@ -227,7 +275,7 @@
 	border: none;
 	background-color: rgb(110, 158, 255);
 	color: white;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
 	font-size: 14px;
 	transition: background 0.3s ease;
@@ -239,77 +287,85 @@
 }
 
 .order-complete {
-	max-width: 800px;
-	margin: 50px auto;
-	padding: 20px;
-	border-radius: 10px;
+	max-width: 1280px;
+	margin: 10px auto 100px auto;
+	padding: 20px 40px 40px 40px;
+	border-radius: 6px;
 	background: #fff;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	text-align: center;
+	color: #333;
 }
 
 .order-complete__title {
-	font-size: 24px;
+	font-size: 30px;
 	font-weight: bold;
 	margin-bottom: 20px;
 	color: #333;
 }
 
 .order-complete__info {
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 	font-size: 16px;
-	color: #666;
+	color: #555;
 	text-align: left;
 }
 
 .order-complete__table {
 	width: 100%;
 	border-collapse: collapse;
+	border: 1px solid #ddd;
 	margin-bottom: 20px;
+	overflow: hidden;
 }
 
-.order-complete__th,
-.order-complete__td {
+.order-complete__table th,
+.order-complete__table td {
 	padding: 10px;
-	border-bottom: 1px solid #ddd;
+	border: 1px solid #ddd;
+	background-color:  rgb(248, 250, 250);
 	text-align: center;
 }
 
-.order-complete__th {
+.order-complete__table th {
 	background: rgb(203, 235, 255);
+	color: #555;
 	font-weight: bold;
 }
 
 .order-complete__td img {
-	border-radius: 5px;
+	border-radius: 6px;
 }
 
 .order-complete__shipping,
 .order-complete__points {
 	text-align: left;
-	padding: 15px;
-	border-radius: 8px;
-	background: rgb(241, 247, 248);
-	margin-bottom: 15px;
+	padding: 40px;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+	background: rgb(248, 250, 250);
+	color: #666;
+	margin: 30px 0;
 }
 
 .order-complete__shipping h3,
 .order-complete__points h3 {
 	font-size: 18px;
 	color: #444;
+	margin-top: 0;
 	margin-bottom: 10px;
 }
 
 .order-complete__buttons {
 	display: flex;
 	justify-content: center;
-	gap: 15px;
+	gap: 30px;
 	margin-top: 20px;
 }
 
 .order-complete__button {
-	padding: 12px 20px;
-	border-radius: 8px;
+	padding: 15px 40px;
+	border-radius: 6px;
 	font-size: 16px;
 	border: none;
 	cursor: pointer;
@@ -333,13 +389,13 @@
 
 .order-container {
 	max-width: 1280px;
-	margin: 0 auto;
-	padding: 20px;
+	margin: 30px auto;
+	padding: 40px;
 }
 
 .order-container h2 {
 	text-align: center;
-	margin: 50px;
+	margin: 20px 0 80px 0;
 }
 
 .empty-order {
@@ -348,14 +404,9 @@
     color: #666;
 }
 
-.empty-order__emoji {
-    font-size: 64px;
-    margin-bottom: 20px;
-}
-
 .empty-order__text {
     font-size: 18px;
-    margin-bottom: 16px;
+    margin-bottom: 50px;
 }
 
 .empty-order__link {
@@ -364,7 +415,7 @@
     background-color: rgb(110, 158, 255);
     color: #fff;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: bold;
     transition: background-color 0.3s;
 }
@@ -376,14 +427,12 @@
 .order-history {
 	background: #ffffff;
 	padding: 30px;
-	border-radius: 10px;
-	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 	margin-bottom: 100px;
 }
 
 .order-history__filter {
 	display: flex;
-	align-items: center;
+	justify-content: center;
 	gap: 15px;
 	margin-bottom: 20px;
 	flex-wrap: wrap;
@@ -394,7 +443,7 @@
 	color: white;
 	border: none;
 	padding: 10px 20px;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: background 0.3s, transform 0.2s;
 	font-size: 14px;
@@ -413,7 +462,7 @@
 .order-history__select {
 	padding: 8px 12px;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: 6px;
 	font-size: 14px;
 	transition: border-color 0.3s;
 }
@@ -430,8 +479,6 @@
 	margin-top: 20px;
 	margin-bottom: 35px;
 	background-color: #ffffff;
-	border-radius: 8px;
-	overflow: hidden;
 }
 
 .order-history__table th,
@@ -454,7 +501,7 @@
 
 .order-history__hr {
 	border: 2px solid #eee;
-	margin: 20px 0;
+	margin: 50px 0;
 }
 
 .order-history__details-button {
@@ -462,7 +509,7 @@
 	color: white;
 	border: none;
 	padding: 8px 16px;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: background 0.3s;
 	font-size: 14px;
@@ -475,7 +522,7 @@
 .order-history__details {
 	background-color: rgb(248, 250, 250);
 	padding: 20px;
-	border-radius: 8px;
+	border-radius: 6px;
 	text-align: left;
 	font-size: 14px;
 }
@@ -533,7 +580,7 @@
 	padding: 8px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
-	border-radius: 4px;
+	border-radius: 6px;
 	font-size: 14px;
 }
 
@@ -551,7 +598,7 @@
 	color: white;
 	padding: 8px 12px;
 	border: none;
-	border-radius: 4px;
+	border-radius: 6px;
 	cursor: pointer;
 	font-size: 14px;
 	margin: 5px 20px 5px 0;
@@ -566,7 +613,7 @@
 	color: black;
 	border: 1px solid #ccc;
 	padding: 5px 10px;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: all 0.3s ease;
 }
@@ -589,7 +636,7 @@
 	background-color: rgb(110, 158, 255);
 	color: white;
 	padding: 10px 20px;
-	border-radius: 5px;
+	border-radius: 6px;
 	font-size: 14px;
 	transition: opacity 0.5s ease-in-out;
 	opacity: 1;
@@ -625,10 +672,10 @@
 .exchange-return-popup-container {
 	background: #fff;
 	padding: 20px;
-	border-radius: 8px;
+	border-radius: 6px;
 	width: 500px;
 	max-height: 680px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -686,7 +733,7 @@
 .exchange-return-box select {
 	margin-top: 10px;
 	padding: 6px;
-	border-radius: 4px;
+	border-radius: 6px;
 	border: 1px solid #ccc;
 	width: 100px;
 }
@@ -704,7 +751,7 @@
 	padding: 8px;
 	margin-top: 5px;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: 6px;
 }
 
 .exchange-return-textarea {
@@ -712,7 +759,7 @@
 	height: 80px;
 	padding: 8px;
 	border: 1px solid #ccc;
-	border-radius: 5px;
+	border-radius: 6px;
 	resize: none;
 	margin-top: 5px;
 }
@@ -740,7 +787,7 @@
 	border: none;
 	padding: 10px;
 	width: 100%;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
 	margin-top: 10px;
 }
@@ -756,7 +803,7 @@
 	border: none;
 	padding: 10px;
 	width: 100%;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
 	margin-top: 5px;
 }
@@ -770,6 +817,10 @@
 .highlight-order {
 	background-color: #fff;
 	border: 2px solid rgb(255, 147, 0);
-	border-radius: 5px;
+	border-radius: 6px;
 	transition: all 0.3s ease;
+}
+
+[v-cloak] {
+  display: none;
 }

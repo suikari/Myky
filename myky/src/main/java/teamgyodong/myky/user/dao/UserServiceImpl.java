@@ -281,6 +281,7 @@ public class UserServiceImpl implements UserService {
 		        // 로그인 성공 처리
 		        session.setAttribute("sessionId", user.getUserId());
 		        session.setAttribute("sessionName", user.getUserName());
+		        session.setAttribute("sessionNickName", user.getNickName());
 		        session.setAttribute("sessionRole", user.getRole());
 		        session.setMaxInactiveInterval(60 * 60); // 1시간 유지
 

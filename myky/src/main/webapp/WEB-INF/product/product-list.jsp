@@ -83,7 +83,7 @@
                         </div>
                         <div class="sort-box">
                             <select v-model="sortOption" @change="fnChangeSort" class="sort-select">
-                                <option value="">:: 정렬방식 ::</option>
+                                
                                 <option value="high">높은가격</option>
                                 <option value="low">낮은가격</option>
                                 <option value="name">상품명</option>
@@ -161,7 +161,7 @@
                         page: 1,
                         isMember: true,
                         sessionRole: "${sessionRole}",
-                        sortOption: "",
+                        sortOption: "name",
                         totalCount: 0,
                         sort: "",
                         productList: [],
@@ -419,7 +419,7 @@
 
                     //localStorage에서 sortOption 가져오기(정렬 기준)
                     const savedSort = localStorage.getItem("sortOption");  //저장된 값을 꺼내기
-                    const sortOption = savedSort || params.get("sortOption") || ""; //없으면 기본값
+                    const sortOption = savedSort || params.get("sortOption") || "name"; //없으면 기본값
                     localStorage.removeItem("sortOption");
                     //localStorage에서 sortOption 가져오기(페이지 기준)
                     const page = Number(localStorage.getItem("page")) || 1;

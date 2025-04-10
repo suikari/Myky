@@ -668,6 +668,13 @@
                     },
                     fnCreate() {
                     	let self = this;
+
+						// 필수 값이 비어 있는지 확인
+						if (!self.newBoard.title || !self.newBoard.content || !self.sessionId || !self.category) {
+							alert("모든 필수 항목을 입력해주세요.");
+							return;
+						}
+
                         let nparmap =  {
                                 title : self.newBoard.title,
                                 content : self.newBoard.content,

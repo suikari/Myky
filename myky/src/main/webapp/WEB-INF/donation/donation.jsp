@@ -100,7 +100,7 @@
                             </tr>
                             <tr v-if="!isMembershipDonation" class="point-row">
                                 <th>보유 포인트</th>
-                                <td>{{ formattedUserPoints }} 원</td>
+                                <td>{{ formattedUserPoints }} P</td>
                             </tr>
                             <tr v-if="!isMembershipDonation" class="point-row">
                                 <th>사용 포인트</th>
@@ -111,7 +111,7 @@
                                         <button @click="useAllPoints" class="point-btn">전체 사용</button>
                                         <button @click="applyPoints" class="point-btn">적용</button>
                                     </span>
-                                    <span class="point-summary"> ┖　{{ formattedDiscountPoint }} 포인트 사용</span>
+                                    <span class="point-summary"> └　{{ formattedDiscountPoint }} 포인트 사용</span>
                                     <div v-if="usedPoint != 0" class="point-remaining">포인트를 차감한 금액 {{ remainingAmount }} 원이 결제됩니다.</div>
                                 </td>
                             </tr>

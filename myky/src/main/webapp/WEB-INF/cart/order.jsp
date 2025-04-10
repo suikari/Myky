@@ -61,7 +61,7 @@
             </tr>
             <tr>
                 <th>보유 포인트</th>
-                <td>{{ formattedUserPoints }} 원</td>
+                <td>{{ formattedUserPoints }} P</td>
             </tr>
             <tr>
                 <th>사용할 포인트</th>
@@ -77,7 +77,7 @@
             </tr>
             <tr>
                 <th>결제 후 적립되는 포인트</th>
-                <td>{{ formattedRewardPoints }}</td>
+                <td>{{ formattedRewardPoints }} P</td>
             </tr>
         </table>
 
@@ -101,12 +101,12 @@
             </div>
 
             <div>
-                <label>수령인: <input type="text" ref="receiverInput" class="inputField" v-model="orderInfo.receiver"
+                <label>수령인: <input type="text" ref="receiverInput" class="inputField short" v-model="orderInfo.receiver"
                         required></label><br>
                 <label>우편번호:
                     <input type="text" ref="zipcodeInput" class="inputField short" v-model="orderInfo.zipcode"
                         placeholder="우편번호" readonly>
-                    <button type="button" @click="searchAddress">우편번호 검색</button>
+                    <button class="zipcodeBtn" type="button" @click="searchAddress">우편번호 검색</button>
                 </label><br>
 
                 <label>기본 주소:
@@ -147,8 +147,9 @@
             </select>
             <input v-if="orderInfo.deliveryMessage === '직접 입력'" type="text" class="inputField"
                 v-model="orderInfo.customMessage" placeholder="배송 요청사항 입력">
-
-            <button class="payBtn" @click="submitOrderCheck">결제하기</button>
+        </div>
+        <div class="btnDisplay">
+            <button class="cartPayBtn" @click="submitOrderCheck">결제하기</button>
         </div>
     </div>
 

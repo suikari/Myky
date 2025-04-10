@@ -22,8 +22,8 @@
 
     <div id="app" class="order-body">
         <div class="order-container">
-            <h2>주문/배송조회</h2>
             <div class="order-history">
+                <h2>주문/배송조회</h2>
                 <!-- 주문 조회 필터 -->
                 <div class="order-history__filter">
                     <button @click="setDateRange(1)" class="order-history__button">최근 1개월</button>
@@ -44,8 +44,7 @@
                 </div>
                 
                 <!-- 주문 내역 테이블 -->
-                <div v-if="isEmptyOrderList" class="empty-order">
-                    <div class="empty-order__emoji">📦</div>
+                <div v-if="isEmptyOrderList" class="empty-order" v-cloak>
                     <p class="empty-order__text">주문하신 내역이 없습니다.</p>
                     <a href="/product/list.do" class="empty-order__link">상품 둘러보기</a>
                 </div>
@@ -183,7 +182,7 @@
             </div>
         </div>
         <!-- 교환/반품 접수 팝업 -->
-        <div class="exchange-return-popup-overlay" v-if="isPopupVisible">
+        <div class="exchange-return-popup-overlay" v-if="isPopupVisible" v-cloak>
             <div class="exchange-return-popup-container">
                 <h2>교환/반품 신청</h2>
                 
