@@ -59,14 +59,16 @@
                             <span v-if="userInfo && userInfo.membershipFlg !== 'Y'"></span>
                         </p>
                     </div>
-                    <p>
+                    <p class="product-avg-rating">
                         평균 별점 :
-                        <span class="star-rating">
-                            <span v-for="n in 5" :key="n" class="star" :class="getStarClass(n)"> ★ </span>
+                        <span class="stars-inline">
+                            <span v-for="n in 5" :key="n" class="star" :class="getStarClass(n)">★</span>
                         </span>
-                        <span v-if="averageRating > 0">({{ averageRating }} / 5)</span>
-                        <span v-else>별점 없음</span>
+                        <span v-if="averageRating > 0" class="rating-number"> ({{ averageRating }} / 5)</span>
+                        <span v-else class="rating-number">별점 없음</span>
                     </p>
+
+
                     <p>제조사 : {{ info.manufacturer }}</p>
                     <p>상품코드 : {{ info.productCode }}</p>
                     <p>배송비 : {{ info.shippingFee }}원</p>
@@ -79,37 +81,33 @@
                     <hr>
 
                     <div class="purchase-section">
-                        <!-- 수량 선택 화면 (선택 전만 보임) -->
-                        <div v-if="!isSelected" class="qty-box">
+                        <!-- 수량 조절 -->
+                        <div class="qty-box">
                             <span>수량</span>
                             <div class="qty-controller">
                                 <button @click="decreaseQty" class="qty-btn">-</button>
                                 <input type="text" :value="quantity" readonly class="qty-input" />
                                 <button @click="increaseQty" class="qty-btn">+</button>
                             </div>
-                            <button @click="confirmQuantity" class="select-btn">선택</button>
                         </div>
 
-                        <div v-if="isSelected">
-                            <div class="confirmed-box">
-                                <div class="confirmed-header">
-                                    <span class="product-name">{{ info.productName }}</span>
-                                    <button class="remove-btn" @click="cancelSelection">X</button>
-                                </div>
-                                <div class="qty-controller">
-                                    <button @click="decreaseQty" class="qty-btn">-</button>
-                                    <input type="text" :value="quantity" readonly class="qty-input" />
-                                    <button @click="increaseQty" class="qty-btn">+</button>
-                                </div>
-                            </div>
-                            <div class="price-display">
-                                <strong>총 결제 금액 : {{ formattedPrice }}원</strong>
-                            </div>
+                        <!-- ✅ 수량이 2개 이상일 때 줄 나눠서 정보 표시 -->
+                        <div class="price-info" v-if="quantity > 1">
+                            <p><strong>선택 수량:</strong> {{ quantity }}개</p>
+                            <p><strong>상품 단가:</strong> {{ formatPrice(priceToAdd) }}원</p>
+                            <p><strong>배송비:</strong> {{ isFreeShipping ? '무료' : formatPrice(shippingCost) + '원' }}</p>
+                            <p><strong>총 결제 금액:</strong> {{ formattedPrice }}원</p>
                         </div>
+
+
+                        <!-- 장바구니 / 구매 버튼 -->
                         <div class="action-buttons">
                             <button class="cart-btn" @click="fnAddCart()">장바구니</button>
                             <button class="buy-btn" @click="fnBuy()">구매하기</button>
                         </div>
+                    </div>
+
+
             </section>
             <hr style="margin-top: 70px;">
             <!-- 상세 설명 -->
@@ -260,6 +258,27 @@
                 </div>
                 <!-- 상품 리뷰 -->
                 <div v-else-if="activeTab === 'review'" class="review-section">
+                    <!-- ⭐ 리뷰 요약 통계 먼저 -->
+                    <div class="review-summary-box" v-if="tabs[1].cmtcount > 0">
+                        <div class="avg-score">
+                            <div class="score">{{ averageRating }}</div>
+                            <div class="stars">
+                                <span class="star-rating">
+                                    <span v-for="n in 5" :key="n" class="star" :class="getStarClass(n)">★</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="score-bars">
+                            <div v-for="i in [5, 4, 3, 2, 1]" :key="i" class="bar-row">
+                                <span class="label">{{ i }}점</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill" :style="{ width: getBarWidth(i) + '%' }"></div>
+                                </div>
+                                <span class="count">{{ scoreCounts[i] || 0 }}</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="review-header">
                         <h3>REVIEW</h3>
                         <div class="review-buttons">
@@ -484,6 +503,7 @@
                         reviewTotal: 0,
                         reviewPages: [],
                         deleteYn: "Y",
+                        allReviews: [], // 전체 리뷰 저장용
 
                         // 상품 문의..
                         qnaList: [],
@@ -550,6 +570,16 @@
                     },
                     priceToAdd() {
                         return this.userInfo.membershipFlg === 'Y' ? this.discountedPrice : this.info.price;
+                    },
+                    scoreCounts() {
+                        const counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }; // ✅ 0점 포함
+                        this.allReviews.forEach(r => {
+                            const rate = Number(r.rating);
+                            if (rate >= 0 && rate <= 5 && r.deleteYn !== 'Y') {
+                                counts[rate]++;
+                            }
+                        });
+                        return counts;
                     }
                 },
                 methods: {
@@ -640,26 +670,17 @@
                                 self.tabs[1].cmtcount = data.totalCount;
                                 self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
 
-                                // ⭐ 평균 별점 계산
-                                const validReviews = self.reviewList.filter(r => !isNaN(r.rating) && Number(r.rating) > 0 && r.deleteYn !== 'Y');
-                                const totalRating = validReviews.reduce((sum, r) => sum + Number(r.rating), 0);
-                                self.averageRating = validReviews.length > 0
-                                    ? (totalRating / validReviews.length).toFixed(1)
-                                    : 0;
                             }
                         });
                     },
                     //별점
                     getStarClass(index) {
-                        const rating = this.averageRating;
-                        if (rating >= index) {
-                            return "filled";
-                        } else if (rating >= index - 0.5) {
-                            return "half";
-                        } else {
-                            return "";
-                        }
+                        const rating = Number(this.averageRating);
+                        if (rating >= index) return "filled";
+                        if (rating >= index - 0.5) return "half";
+                        return "";
                     },
+
                     //리뷰 도움체크
                     markHelpful(reviewId) {
                         const self = this;
@@ -692,6 +713,7 @@
                     fnReviewPage(num) {
                         this.reviewPage = num;
                         this.fnReviewList();
+                        this.scrollToReviewSection();
                     },
                     fnReviewPageMove(direction) {
                         if (direction === 'prev' && this.reviewPage > 1) {
@@ -700,6 +722,16 @@
                             this.reviewPage++;
                         }
                         this.fnReviewList();
+                        this.scrollToReviewSection();
+                    },
+                    scrollToReviewSection() {
+                        this.$nextTick(() => {
+                            const section = document.querySelector(".review-section");
+                            if (section) {
+                                const offset = section.offsetTop - 100; // 필요에 따라 여백 조절
+                                window.scrollTo({ top: offset, behavior: "smooth" });
+                            }
+                        });
                     },
                     //상품 리뷰 글쓰기
                     fnReviewWtite: function () {
@@ -950,6 +982,39 @@
                         if (isNaN(num)) return '';
                         return num.toLocaleString();
                     },
+                    fnAllReviews() {
+                        const self = this;
+                        $.ajax({
+                            url: "/product/reviewList.dox",
+                            type: "POST",
+                            data: {
+                                productId: self.productId,
+                                page: 0,
+                                pageSize: 9999 // 충분히 큰 수
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                self.allReviews = data.reviewList;
+
+                                // 평균 평점 계산
+                                const valid = self.allReviews.filter(r =>
+                                    !isNaN(r.rating) && Number(r.rating) >= 0 && r.deleteYn !== 'Y'  // ✅ 0점 포함
+                                );
+
+                                const total = valid.reduce((sum, r) => sum + Number(r.rating), 0);
+                                self.averageRating = valid.length > 0
+                                    ? (total / valid.length).toFixed(1)
+                                    : 0;
+                            }
+                        });
+                    },
+                    getBarWidth(score) {
+                        const counts = this.scoreCounts;
+                        const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+                        const scoreNum = Number(score);
+                        if (total === 0 || isNaN(scoreNum)) return 0;
+                        return Math.round((counts[scoreNum] || 0) / total * 100);
+                    }
                 },
                 mounted() {
                     const params = new URLSearchParams(window.location.search);
@@ -964,6 +1029,7 @@
                     let self = this;
                     self.fnProduct();
                     self.fnReviewList();
+                    self.fnAllReviews();
                     self.fnUserInfo();
                     self.fnQnaList();
 

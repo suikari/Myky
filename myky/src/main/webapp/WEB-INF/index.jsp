@@ -371,7 +371,7 @@
 
             /* 신규 상품 전용 뱃지 */
             .new-products .badge {
-                background-color: #339af0;
+                background-color: rgb(89, 138, 240);
                 /* 파란색 계열 */
                 color: white;
                 font-weight: bold;
@@ -410,7 +410,7 @@
                 cursor: not-allowed;
             }
             .new-nav-button {
-                background-color: #339af0;
+                background-color: rgb(157, 186, 247);
                 color: white;
                 border: none;
                 padding: 10px 20px;
@@ -421,7 +421,7 @@
             }
 
             .new-nav-button:hover:not(:disabled) {
-                background-color: #0576d3;
+                background-color: rgb(89, 138, 240);
             }
 
             .new-nav-button:disabled {

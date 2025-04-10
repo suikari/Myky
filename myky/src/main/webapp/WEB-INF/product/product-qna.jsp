@@ -13,9 +13,10 @@
         <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
         <link rel="stylesheet" href="/css/product/product.css" />
         <style>
-            
+
         </style>
     </head>
+
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
         <div id="app" class="container">
@@ -65,6 +66,15 @@
                 methods: {
                     fnSave() {
                         var self = this;
+
+                        if (!self.title || self.title.trim() === "") {
+                            alert("제목을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.questionText || self.questionText.trim() === "" || self.questionText === "<p><br></p>") {
+                            alert("문의 내용을 입력해주세요.");
+                            return;
+                        }
                         var nparmap = {
                             title: self.title,
                             questionText: self.questionText,

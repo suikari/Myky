@@ -12,7 +12,7 @@
         <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
         <link rel="stylesheet" href="/css/product/product.css" />
         <style>
-            
+
         </style>
     </head>
 
@@ -62,7 +62,7 @@
                         productId: "",
                         title: "",
                         reviewText: "",
-                        rating: "",
+                        rating: 1,
                         reviewId: ""
                     }
                 },
@@ -72,6 +72,20 @@
                 methods: {
                     fnSave() {
                         var self = this;
+                        if (!self.rating || self.rating < 1 || self.rating > 5) {
+                            alert("별점을 1점 이상 선택해주세요.");
+                            return;
+                        }
+                        if (!self.title || self.title.trim() === "") {
+                            alert("제목을 입력해주세요.");
+                            return;
+                        }
+
+                        if (!self.reviewText || self.reviewText.trim() === "" || self.reviewText === "<p><br></p>") {
+                            alert("내용을 입력해주세요.");
+                            return;
+                        }
+
                         var nparmap = {
                             title: self.title,
                             reviewText: self.reviewText,

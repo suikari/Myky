@@ -32,7 +32,6 @@
                 <div v-for="term in termsList" :key="term.termId" class="term-box">
                     <label>
                         <input type="checkbox" v-model="agreeList[term.termId]">
-                        <!-- <i class="fas fa-file-alt"></i> -->
                         {{ term.requiredYn === 'Y' ? '[필수]' : '[선택]' }} {{ term.title }}
                     </label>
                     <div class="term-content" v-html="term.content"></div>
