@@ -103,7 +103,6 @@
                                         form.append( "file1",  $("#file1")[0].files[i]);
                                     }
                                     form.append( "boardId", data.boardId); // 임시 pk
-                                    console.log("1",data.boardId);
                                     self.upload(form); 
 
                                 } else {

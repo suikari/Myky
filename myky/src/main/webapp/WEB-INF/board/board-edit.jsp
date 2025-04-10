@@ -133,7 +133,6 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-				        		console.log(data);
                                 self.fileList = data.fileList;
                                 self.reload += 1; 
 				        	}
@@ -220,7 +219,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 alert("삭제되었습니다!");
                                 self.fnFileView();
                             }

@@ -45,7 +45,7 @@
 						<div class="search_box">
 							<input type="text" placeholder="검색어를 입력해주세요" v-model="searchQuery"
 								@keyup.enter="fnSearch('')" class="search-input" />
-							<button @click="fnSearch('')" class="search-button">🔍</button>
+							<button @click="fnSearch('')" class="search-button icon bi-search"> </button>
 						</div>
 						<div class="popular-search">
 							<h3 class="title">인기 검색어</h3>
@@ -59,25 +59,33 @@
 			</transition>
 
 			<div class="top-bar-main">
-				<div v-if="!sessionName" class="top-bar">
-					<a href="/user/consent.do">회원가입</a>
-					| <a @click="fnLogin"> 로그인</a>
-					| <a href="/board/list.do?category=A">공지사항</a>
-				</div>
+			  <div v-if="!sessionName" class="top-bar">
+			    <span class="top-bar-item"><a href="/user/consent.do">회원가입</a></span>
+			    <span class="divider"></span>
+			    <span class="top-bar-item"><a @click="fnLogin">로그인</a></span>
+			    <span class="divider"></span>
+			    <span class="top-bar-item"><a href="/board/list.do?category=A">공지사항</a></span>
+			  </div>
 
-				<div v-else class="top-bar">
-					<span>{{sessionName}} 님 환영합니다! </span>
-					 <a href="/order/orderList.do">주문조회</a>
-					| <a href="/board/list.do?category=A">공지사항</a>
-					<a v-if="sessionRole == 'ADMIN' " href="/manager/main.do">| 관리자콘솔</a>
-					| <a href="/member/logout.do">로그아웃</a>
-				</div>
+			  <div v-else class="top-bar">
+			    <span class="top-bar-item">{{sessionName}} 님 환영합니다!</span>
+			    <span class="divider"></span>
+			    <span class="top-bar-item"><a href="/order/orderList.do">주문조회</a></span>
+			    <!--<span class="divider"></span>
+			    <span class="top-bar-item"><a href="/board/list.do?category=A">공지사항</a></span>-->
+			    <span v-if="sessionRole == 'ADMIN'">
+			      <span class="divider"></span>
+			      <span class="top-bar-item"><a href="/manager/main.do">관리자콘솔</a></span>
+			    </span>
+			    <span class="divider"></span>
+			    <span class="top-bar-item"><a href="/member/logout.do">로그아웃</a></span>
+			  </div>
 			</div>
 
-			<header class="header">
-				<a href="/main.do"> <img class="logo" src="/img/logo.png" alt="로고"> </a>
-
-				<!-- 네비게이션 메뉴 -->
+			<div class="header">
+				<!--<a href="/main.do"> <img class="logo" src="/img/logo.png" alt="로고"> </a>-->
+				<span @click="fnhome" class="mainlogo">멍냥꽁냥</span>
+				
 				<nav class="menu">
 					<div class="dropdown" v-for="menu in categories">
 						<a v-if="menu.del == 'N'" :href="menu.menuUrl">{{ menu.categoryName }}</a>
@@ -91,6 +99,20 @@
 					</div>
 				</nav>
 
+<!--				<div v-if="!sessionName" class="top-bar">
+					<a href="/user/consent.do">회원가입</a>
+					| <a @click="fnLogin"> 로그인</a>
+					| <a href="/board/list.do?category=A">공지사항</a>
+				</div>
+
+				<div v-else class="top-bar">
+					<span>{{sessionName}} 님 환영합니다! </span>
+					 <a href="/order/orderList.do">주문조회</a>
+					| <a href="/board/list.do?category=A">공지사항</a>
+					<a v-if="sessionRole == 'ADMIN' " href="/manager/main.do">| 관리자콘솔</a>
+					| <a href="/member/logout.do">로그아웃</a>
+				</div>-->
+				
 				<div v-show="membershipReady" class="icons">
 					<!-- 다이아 아이콘 (isMembership에 따라 색상 다르게) -->
 					
@@ -135,7 +157,7 @@
 						
 				</div>
 
-			</header>
+			</div>
 		</div>
 
 		<script>
@@ -450,6 +472,10 @@
                           }
                       });
                   },
+				  fnhome (){
+
+					location.href="/main.do";
+				  }
 
 
 			},
