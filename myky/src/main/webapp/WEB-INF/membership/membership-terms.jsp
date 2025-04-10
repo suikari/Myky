@@ -22,7 +22,7 @@
 
         <!-- STEP 1: 약관 동의 -->
         <div class="step-box">
-            <h3>📄 아래 약관을 확인하고 동의해주세요</h3>
+            <h3>아래 약관을 확인하고 동의해주세요</h3>
             <div class="checkbox-group">
                 <label>
                     <input type="checkbox" v-model="allAgree" @change="toggleAll">
@@ -32,7 +32,7 @@
                 <div v-for="term in termsList" :key="term.termId" class="term-box">
                     <label>
                         <input type="checkbox" v-model="agreeList[term.termId]">
-                        <i class="fas fa-file-alt"></i>
+                        <!-- <i class="fas fa-file-alt"></i> -->
                         {{ term.requiredYn === 'Y' ? '[필수]' : '[선택]' }} {{ term.title }}
                     </label>
                     <div class="term-content" v-html="term.content"></div>
@@ -74,7 +74,6 @@
                             dataType: "json",
                             success(data) {
                                 if (data.list && Array.isArray(data.list)) {
-                                    console.log("M 카테고리 약관 리스트:", data.list); 
                                     self.termsList = data.list;
                                     data.list.forEach(term => {
                                         self.agreeList[term.termId] = false;

@@ -82,7 +82,6 @@
                             type : "POST", 
                             data : nparmap,
                             success : function(data) { 
-                                console.log(data);
                                 self.productId = data.info.productId,
                                 self.title = data.info.title,
                                 self.reviewText = data.info.reviewText,
@@ -107,7 +106,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("1",data);
                                 if (data.result == "success") {
                                     alert("수정 완료.");
 
@@ -120,11 +118,9 @@
                                         self.upload(form); 
                                     
                                 } else {
-                                    console.log("2", self.productId);
                                         location.href = "/product/view.do?productId=" +  self.productId;
                                 }
                             }else{
-                                console.log("3","3");
                                     location.href = "/product/view.do?productId=" +  self.productId;
                             }
                                 
@@ -141,7 +137,6 @@
                             contentType: false,
                             data: form,
                             success: function (response) {
-                                console.log("4","4");
                                 location.href = "/product/view.do?productId=" +  self.productId;
                             }
                         });

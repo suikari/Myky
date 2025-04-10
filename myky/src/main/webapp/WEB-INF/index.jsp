@@ -185,7 +185,7 @@
                 height: 230px;
                 flex-direction: column;
                 background: #fff;
-                border-radius: 12px;
+                border-radius: 6px;
                 padding: 10px;
                 position: relative;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -202,8 +202,10 @@
                 width: 100%;
                 height: 150px;
                 object-fit: cover;
+                box-shadow: 0px 3px 8px  rgb(244, 244, 244);
                 border-radius: 6px;
                 margin-bottom: 8px;
+
             }
 
             .product-name {
@@ -414,7 +416,25 @@
                 opacity: 0.5;
                 cursor: not-allowed;
             }
+            .new-nav-button {
+                background-color: #339af0;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-weight: bold;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
+            .new-nav-button:hover:not(:disabled) {
+                background-color: #0576d3;
+            }
+
+            .new-nav-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
             .swiper-button-next,
             .swiper-button-prev {
                 opacity: 0;
@@ -537,7 +557,7 @@
                                 <img src="img/quick/advertisement.png" class="board-icon" alt="공지">
                                 <div class="board-title">공지사항</div>
                             </div>
-                            <a href="/board/list.do" class="board-more">더보기</a>
+                            <a href="/board/list.do?category=A" class="board-more">더보기</a>
                         </div>
                         <div class="board-div">
                             <div v-for="post in freeposts" @click="fnView(post.boardId)" class="post-item">
@@ -624,9 +644,9 @@
                             </div>
                         </div>
                         <div class="navigation">
-                            <button class="nav-button" @click="prevPage('new')"
+                            <button class="new-nav-button" @click="prevPage('new')"
                                 :disabled="currentPageNew === 0">이전</button>
-                            <button class="nav-button" @click="nextPage('new')"
+                            <button class="new-nav-button" @click="nextPage('new')"
                                 :disabled="currentPageNew >= maxPage(productsN)">다음</button>
                         </div>
                     </div>

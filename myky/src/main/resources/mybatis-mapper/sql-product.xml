@@ -22,7 +22,8 @@
 		FROM PRODUCT P
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'
 		LEFT JOIN PRODUCT_REVIEWS R ON P.PRODUCT_ID = R.PRODUCT_ID
-		WHERE 1=1		
+		WHERE 1=1	
+		AND P.DELETE_YN = 'N'	
 		 <!-- 기존 검색 옵션 유지 -->
 		<if test="searchOption != null and searchOption == 'all'">
 		    AND P.CATEGORY_ID LIKE '%' || #{keyword} || '%' 
@@ -89,6 +90,7 @@
 	 	FROM PRODUCT P
 		LEFT JOIN PRODUCT_FILE F ON P.PRODUCT_ID = F.PRODUCT_ID AND F.THUMBNAIL = 'Y'
 		WHERE 1=1
+		AND P.DELETE_YN = 'N'	
 		<if test="searchOption != null and searchOption == 'all'">
 		    AND (P.CATEGORY_ID LIKE '%' || #{keyword} || '%' )
 		</if>

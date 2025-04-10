@@ -5,7 +5,6 @@ body {
 	font-family: "Noto Sans KR", sans-serif;
 	margin: 0;
 	padding: 0;
-	/*cursor: pointer;*/
 }
 
 .container {
@@ -13,7 +12,7 @@ body {
 	margin: 0 auto;
 	padding: 40px 20px;
 	background-color: #fff;
-	border-radius: 12px;
+	border-radius: 6px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 	margin-bottom: 60px;
 	margin-top: 60px;
@@ -38,7 +37,7 @@ body {
 
 /* 강조 색상 */
 .highlight {
-	color: #ff7b54;
+	color: rgb(255, 147, 0);
 	font-weight: bold;
 }
 
@@ -56,7 +55,7 @@ body {
 	height: 220px;
 	background-color: #ffffff;
 	border: 1px solid #ddd;
-	border-radius: 10px;
+	border-radius: 6px;
 	padding: 20px;
 	text-align: center;
 	color: #333;
@@ -107,7 +106,7 @@ body {
 	background-color: #fff;
 	color: #333;
 	margin-bottom: 40px;
-	border-radius: 8px;
+	border-radius: 6px;
 	overflow: hidden;
 }
 
@@ -119,7 +118,7 @@ body {
 }
 
 .compare-table thead {
-	background-color: #f4f4f4;
+	background-color: rgb(203, 235, 255);
 }
 
 .compare-table th {
@@ -139,10 +138,10 @@ body {
 }
 
 .join-btn {
-	background-color: #ff7b54;
+	background-color: rgb(255, 147, 0);
 	color: white;
 	border: none;
-	border-radius: 30px;
+	border-radius: 6px;
 	padding: 15px 30px;
 	font-size: 1.1rem;
 	cursor: pointer;
@@ -150,7 +149,7 @@ body {
 }
 
 .join-btn:hover {
-	background-color: #e7603e;
+	background-color: rgb(255, 147, 0);
 }
 
 /* 멤버십 가입 방법 */
@@ -161,7 +160,7 @@ body {
 	flex-wrap: nowrap;
 	/* 한 줄로 고정 */
 	gap: 10px;
-	max-width: 1200px;
+	max-width: 1280px;
 	/* 넉넉한 최대 너비 설정 */
 	margin: 0 auto;
 	/* 가운데 정렬 */
@@ -179,7 +178,7 @@ body {
 }
 
 .step-number {
-	color: #2980b9;
+	color: rgb(110, 158, 255);
 	font-size: 15px;
 	font-weight: bold;
 	display: block;
@@ -214,9 +213,12 @@ body {
 }
 /* FAQ 섹션 */
 .faq-section {
+	max-width: 1280px;
+	margin: 0 auto;
+		padding: 40px 20px;
 	background-color: #fdfaf5;
 	padding: 30px 25px;
-	border-radius: 12px;
+	border-radius: 6px;
 	margin-top: 60px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 	color: #444;
@@ -282,7 +284,7 @@ body {
 .tips-box {
 	background-color: #f9f9f9;
 	border: 1px solid #ddd;
-	border-radius: 8px;
+	border-radius: 6px;
 	padding: 20px 25px;
 	color: #444;
 	font-size: 0.95rem;
@@ -320,7 +322,7 @@ body {
 	max-width: 1280px;
 	margin: 60px auto;
 	background-color: #ffffff;
-	border-radius: 16px;
+	border-radius: 6px;
 	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 	padding: 40px 32px;
 }
@@ -339,7 +341,7 @@ body {
 .payment-box {
 	background-color: #fdfdfd;
 	border: 1px solid #e2e2e2;
-	border-radius: 12px;
+	border-radius: 6px;
 	padding: 24px 20px;
 	margin-bottom: 30px;
 }
@@ -364,7 +366,7 @@ body {
 .plan-options label {
 	padding: 10px 18px;
 	background-color: #f0f0f0;
-	border-radius: 10px;
+	border-radius: 6px;
 	cursor: pointer;
 	border: 1px solid #ccc;
 }
@@ -381,7 +383,7 @@ body {
 	background-color: #ff7a00;
 	color: #fff;
 	border: none;
-	border-radius: 12px;
+	border-radius: 6px;
 	cursor: pointer;
 	font-weight: 600;
 }
@@ -404,7 +406,7 @@ body {
 	margin: 60px auto;
 	padding: 24px;
 	background-color: #ffffff;
-	border-radius: 16px;
+	border-radius: 6px;
 	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
@@ -420,9 +422,9 @@ h2 {
 }
 
 .checkbox-group {
-	background: #f9f9f9;
+	background: white;
 	padding: 20px;
-	border-radius: 12px;
+	border-radius: 6px;
 	border: 1px solid #e0e0e0;
 }
 
@@ -430,10 +432,10 @@ h2 {
 	display: flex;
 	align-items: center;
 	padding: 14px;
-	background-color: #fff3e0;
+	/*background-color: rgb(203, 235, 255);*/
 	font-weight: 600;
-	border-radius: 10px;
-	border: 1px solid #ffd180;
+	border-radius: 6px;
+	border: 1px solid #ccc;
 	margin-bottom: 20px;
 	cursor: pointer;
 }
@@ -446,7 +448,7 @@ h2 {
 .term-box {
 	background-color: #fff;
 	border: 1px solid #ddd;
-	border-radius: 12px;
+	border-radius: 6px;
 	padding: 16px;
 	margin-bottom: 16px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
@@ -472,7 +474,7 @@ h2 {
 .term-content {
 	background-color: #fdfdfd;
 	padding: 12px;
-	border-radius: 8px;
+	border-radius: 6px;
 	border: 1px solid #e0e0e0;
 	max-height: 180px;
 	overflow-y: auto;
@@ -485,17 +487,17 @@ h2 {
 	width: 100%;
 	padding: 14px;
 	font-size: 16px;
-	background-color: #ff7a00;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	border: none;
-	border-radius: 10px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
 	margin-top: 20px;
 }
 
 .btn-submit:hover {
-	background-color: #ff6900;
+	background-color: rgb(140, 180, 255);
 }
 
 .btn-submit:disabled {
@@ -506,7 +508,7 @@ h2 {
 /*멤버십 본인 확인 및 결제*/
 body {
 	font-family: 'Pretendard', sans-serif;
-	background-color: #f6f7fb;
+	background-color: white;
 	margin: 0;
 	padding: 0;
 }
@@ -516,7 +518,7 @@ body {
 	margin: 60px auto;
 	padding: 30px;
 	background-color: #ffffff;
-	border-radius: 16px;
+	border-radius: 6px;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
@@ -549,7 +551,7 @@ body {
 }
 
 .step-bar li.active {
-	color: #ff7a00;
+	color:  rgb(110, 158, 255);
 }
 
 .step-bar li::before {
@@ -558,7 +560,7 @@ body {
 	position: absolute;
 	left: 0;
 	top: 0;
-	background: #ddd;
+	background:  rgb(110, 158, 255);
 	color: white;
 	width: 20px;
 	height: 20px;
@@ -568,13 +570,13 @@ body {
 }
 
 .step-bar li.active::before {
-	background: #ff7a00;
+	background:   rgb(110, 158, 255);
 }
 
 .card-section {
-	background-color: #fafafa;
+	background-color: white;
 	border: 1px solid #e0e0e0;
-	border-radius: 12px;
+	border-radius: 6px;
 	padding: 24px;
 	margin-bottom: 15px;
 }
@@ -604,16 +606,16 @@ body {
 	width: 100%;
 	padding: 14px;
 	font-size: 16px;
-	background-color: #ff7a00;
+	background-color: #ccc;
 	color: #fff;
 	border: none;
-	border-radius: 10px;
+	border-radius: 6px;
 	font-weight: 600;
 	transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-main:hover {
-	background-color: #e36700;
+	background-color: rgb(140, 180, 255);
 	transform: translateY(-1px);
 }
 
@@ -632,7 +634,7 @@ body {
 
 .plan-card {
 	border: 2px solid #ddd;
-	border-radius: 12px;
+	border-radius: 6px;
 	padding: 20px;
 	text-align: center;
 	cursor: pointer;
@@ -643,8 +645,8 @@ body {
 
 .plan-card:hover,
 .plan-card.active {
-	border-color: #ff7a00;
-	background-color: #fff3e6;
+	border-color: rgb(110, 158, 255); 
+	background-color: rgb(203, 235, 255);
 }
 
 .plan-icon {
@@ -655,19 +657,19 @@ body {
 .price-highlight {
 	font-size: 18px;
 	font-weight: bold;
-	color: #ff7a00;
+	color:  rgb(255, 147, 0);
 }
 
 .plan-badge {
 	position: absolute;
 	top: -10px;
 	right: -10px;
-	background: #ff7a00;
+	background: #4d90fe;
 	color: white;
 	font-size: 12px;
 	font-weight: bold;
 	padding: 4px 10px;
-	border-radius: 20px;
+	border-radius: 6px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 	animation: pop-badge 1.5s infinite ease-in-out;
 }
@@ -709,10 +711,10 @@ body {
 	top: -42px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: #222;
+	background: rgb(255, 147, 0);
 	color: white;
 	padding: 8px 12px;
-	border-radius: 8px;
+	border-radius: 6px;
 	font-size: 15px;
 	white-space: nowrap;
 	z-index: 10;
