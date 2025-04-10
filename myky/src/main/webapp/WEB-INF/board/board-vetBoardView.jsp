@@ -30,27 +30,21 @@
                 </div>
                 <hr class="fb-custom-hr">
 
-                <div class="fb-title-label">
-                    TITLE
-                </div>
-                <div class="fb-view-box">
-                    <a style="font-size:20px">{{info.title}}</a>
-
-                    <div class="fb-author-box">
-                        <span class="fb-author-label">작성자</span>
-                        <span class="fb-author-name">{{info.nickName}}</span>
+                <div class="fb-post-wrapper">
+                    <div class="fb-post-header">
+                    <div class="fb-post-title">{{ info.title }}</div>
+                    <div class="fb-post-meta">
+                        <span class="fb-nickname">{{ info.nickName }}</span>
                         <span class="fb-badge">{{info.points}} P</span>
-                      </div>
-                    <div>
-                        <div class="fb-meta">
-                            <span class="fb-date">🕒 {{info.createdAt}}</span>
-                            <span class="fb-views">|  조회수 {{info.cnt}}</span>
-                        </div>
+                        <span class="fb-date">🕒 {{ info.createdAt }}</span>
+                        <span class="fb-views">조회수 {{ info.cnt }}</span>
                     </div>
+                    </div>
+              
+                    <div class="fb-post-content" v-html="info.content"></div>
                 </div>
-                    <div class="fb-view-label">CONTENT</div>
-                    <div class="fb-view-boxContent" v-html="info.content"></div>
-                    
+
+
     
 
                     <!-- 답글 달기 -->
@@ -352,7 +346,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 location.href = "/board/vetBoardList.do";
                                 alert("삭제되었습니다");
                             }
@@ -371,11 +364,9 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("dd",data);
 
                                 if(data.vet) {
                                     self.vetList = data.vet;
-                                    console.log("vetList.vetId 로딩 완료:", self.vetList.vetId);
                                 } else {
 
                                 }
@@ -393,14 +384,12 @@
                             message : "게시글에 답변이 등록되었습니다."
 
                         };
-                        console.log("s",self.vetList.vetId);
                         $.ajax({
                             url: "/board/vetBoardAnReply.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("멍멍", data);
                                 self.fnView();
                                 self.showEditor();
                                 self.showEdit = 0;
@@ -421,7 +410,6 @@
                         let self =  this;
                         self.showChoice = choiceId;
                         self.reviewId = choiceId;
-                        console.log("✅ 채택 선택됨: ", choiceId); // 확인용
                         this.$nextTick(() => {
                         // document로 특정 요소 선택
                             const inputElement = document.querySelector('.answer-commentsInput'); // v-model 바인딩된 입력란
@@ -458,7 +446,6 @@
                             message : "답변이 채택되었습니다."
 
                         };
-                        console.log("userId",userId);
                         let pointAdd = {
                             userId : userId, //받을 수의사 아이디
                             usedPoint : self.info.points,
@@ -471,7 +458,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("채택",self.reviewText);
                                 alert("답변이 채택되었습니다.");
                                 self.isSelected = true;
 
@@ -482,16 +468,13 @@
                                     data : pointAdd,
                                     success : function(data) { 
                                         
-                                        console.log("받은포인트",data);
-                                        console.log("포인트 확인",self.info.points);
                                         self.fnView();
                                     },
                                     
                                 });
-                            },
-                                
+                            },                                
                             error: function () {
-                                console.error("채택 실패");
+                                alert("채택이 실패하였습니다.");
                             }
                         });
                     },
@@ -515,7 +498,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("답글 수정", data);
                                 alert("수정되었습니다.")
                                 location.href="/board/vetBoardView.do?vetBoardId=" + self.vetBoardId;
                             }
@@ -538,14 +520,13 @@
                             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                             data: nparmap,
                             success: function (data) {
-                                console.log("답글 삭제 성공", data);
+
                                 alert("삭제되었습니다.");
                                 self.fnView();
                             },
                             error: function (xhr, status, error) {
-                                console.error("❌ 삭제 실패", status, error);
-                                console.error("응답 내용:", xhr.responseText);
-                                alert("삭제 중 오류 발생!");
+
+                                alert("삭제 중 오류가 발생했습니다.");
                             }
                         });
                     },
@@ -581,7 +562,7 @@
                             data: nparmap,
                             success: function (data) {
                                 self.userInfo = data.user;
-                                console.log("user",data.user);
+
                             }
                         });
                     },

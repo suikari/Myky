@@ -63,7 +63,7 @@
                         <td><a href="javascript:;" @click="fnView(item.vetBoardId)">{{item.title}}</a></td>
                         <td>{{item.nickName}}</td>
                         <td>{{item.points}}</td>
-                        <td style="color: #fca311; font-weight: bold;">
+                        <td style="color: rgb(255, 147, 0); font-weight: bold;">
                             <template v-if="parseInt(item.commentCount) > 0">
                                 ({{ item.commentCount }})
                             </template>
@@ -162,7 +162,7 @@
                     },
                     fnVetBoardList() {
                         let self = this;
-                        console.log("searchOption:", self.searchOption);
+
                         let nparmap = {
                             searchOption: self.searchOption,
                             page: (self.page - 1) * self.pageSize,
@@ -185,14 +185,11 @@
                                     location.href="/board/vetBoardList.do";
                                 }
                                 self.list = data.vetBoard;
-                                console.log("self.nickName", data.nickName);
-                                console.log("vetBoard list:", data.vetBoard);
 
                                 if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                 } else {
                                     self.index = 0;
-                                    console.warn("count 정보 없음!", data);
                                 }
                             }
                         });
@@ -240,7 +237,6 @@
                     
                     self.fnVetBoardList();
                     localStorage.removeItem('page');
-                    console.log("sessionId:", this.sessionId); 
                 }
             });
 

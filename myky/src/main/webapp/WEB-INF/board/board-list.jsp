@@ -156,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             fnBoardList() {
                 let self = this;
-                console.log("searchOption:", self.searchOption);
                 let nparmap = {
                     searchOption: self.searchOption,
                     page: (self.page - 1) * self.pageSize,
@@ -177,13 +176,11 @@ document.addEventListener("DOMContentLoaded", function () {
                             alert("잘못된 주소입니다.");
                             location.href="/board/boardList.do";
                         }
-                        self.list = data.board;
-                        console.log("data", data);
+                        self.list = data.board;                       
                         if (data.count && data.count.cnt !== undefined) {
                             self.index = Math.ceil(data.count.cnt / self.pageSize);
                         } else {
                             self.index = 0;
-                            console.warn("count 정보 없음!", data);
                         }
                     }
                 });

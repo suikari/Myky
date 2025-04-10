@@ -157,7 +157,6 @@
 				    	    type : "POST", 
 				    	    data : nparmap,
 				    	    success : function(data) {
-                                console.log("FAQ",data);
                                 if(data.result != 'success'){
                                     alert("잘못된 주소입니다.");
                                     location.href="/board/FAQView.do";
@@ -167,7 +166,6 @@
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                 } else {
                                     self.index = 0;
-                                    console.warn("count 정보 없음!", data);
                                 }
                             }
 				        });       
@@ -181,15 +179,11 @@
                     fnFAQDrop : function (boardId){
                         let self = this;
 
-                        console.log("1", boardId);
-
                         if (self.selectedBoardId === boardId) {
                         	self.selectedBoardId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",boardId);
 
                         } else {
                             self.selectedBoardId = boardId;
-                        	console.log("3",boardId);
                         }
                     },
                     fnBoardSearch : function(){
