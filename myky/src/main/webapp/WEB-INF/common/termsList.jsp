@@ -42,8 +42,6 @@
                 해당 약관을 찾을 수 없습니다.
             </div>
 
-            <hr />
-
         </div>
 
         <jsp:include page="/WEB-INF/common/footer.jsp" />

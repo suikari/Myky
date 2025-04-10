@@ -29,17 +29,15 @@
     }
 
     .footer-top-inner {
-        max-width: 1280px; /* 최대 너비를 1280px로 설정 */
-        margin: 0 auto; /* 가운데 정렬 */
-        display: flex; /* 플렉스 박스로 설정하여 가로로 배치 */
-        justify-content: center; /* 중앙 정렬 */
-        align-items: center; /* 수직 중앙 정렬 */
-        padding: 10px 20px; /* 패딩 추가 */
+      max-width: 1280px;
+      margin: 0px auto;
+      display: flex;
+      font-size: 14px;
     }
 
     .footer-nav a {
         margin: 0 15px; /* 좌우 여백 추가 */
-        color: #333; /* 텍스트 색상 */
+        color: #555; /* 텍스트 색상 */
         text-decoration: none; /* 밑줄 제거 */
         font-weight: bold; /* 글자 두께 */
         transition: color 0.3s; /* 색상 전환 효과 */
@@ -82,8 +80,12 @@
     .footer-top {
         box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1); /* 위쪽에 그림자 추가 */
         padding: 10px 0; /* 패딩 추가 */
-
     }
+
+    .footer-main-top{
+      background-color: rgb(176, 225, 255);
+    }
+
     </style>
 </head>
 <body>
