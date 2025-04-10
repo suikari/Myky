@@ -88,7 +88,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log(data);
                             alert("수정저장");
                             location.href = "/user/login.do";
                         }
@@ -109,7 +108,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log(data);
                             if (data.count != 0) {
                                 //alert("검색되는 아이디");
 
@@ -119,12 +117,9 @@
                                 }, function (rsp) {
                                     if (rsp.success) {
                                         alert("인증성공");
-                                        console.log(rsp);
-                                        console.log(self.authFlg);
                                         self.authFlg = true;
                                     } else {
                                         alert(rsp.error_msg);
-                                        console.log(rsp);
 
                                     }
 
