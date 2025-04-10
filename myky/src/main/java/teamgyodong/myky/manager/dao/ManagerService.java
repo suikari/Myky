@@ -18,6 +18,7 @@ public interface ManagerService {
 	HashMap<String, Object> deletePartnerList(HashMap<String, Object> map);
 	
 	HashMap<String, Object> deleteVet(HashMap<String, Object> map);
+	HashMap<String, Object> deleteProduct(HashMap<String, Object> map);
 
 	
 	

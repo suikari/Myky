@@ -354,6 +354,19 @@ public class ManagerController {
 		return new Gson().toJson(resultMap);
 	}
 	
+	
+
+	// 게시글 한개 선택
+	@RequestMapping(value = "/admin/deleteProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String deleteProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		
+		resultMap = managerService.deleteProduct(map);
+		return new Gson().toJson(resultMap);
+	}
+	
 	// 게시글 한개 선택
 	@RequestMapping(value = "/admin/deleteProductImg.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
