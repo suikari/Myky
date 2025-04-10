@@ -35,14 +35,24 @@ public class MembershipController {
 	//멤버십 가입 약관
 	@RequestMapping("/membership/terms.do") 
     public String MembershipTerms(HttpServletRequest request, Model model) throws Exception{
+		String sessionId = (String) request.getSession().getAttribute("sessionId");
 
+	    if (sessionId == null || sessionId.isEmpty()) {
+	        // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+	        return "redirect:/user/login.do";
+	    }
         return "membership/membership-terms"; 
     }
 	
 	//멤버십 가입- 본인확인 및 결제
 	@RequestMapping("/membership/join.do") 
     public String MembershipJoin(HttpServletRequest request, Model model) throws Exception{
+		String sessionId = (String) request.getSession().getAttribute("sessionId");
 
+	    if (sessionId == null || sessionId.isEmpty()) {
+	        // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+	        return "redirect:/user/login.do";
+	    }
         return "membership/membership-join"; 
     }
 		

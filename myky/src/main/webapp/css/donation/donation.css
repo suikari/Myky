@@ -57,7 +57,7 @@
 }
 
 .donation-summary-buttons button {
-	background-color: #ffbc7b;
+	background-color: rgb(157, 186, 247);
 	color: #fff;
 	padding: 10px 20px;
 	border: none;
@@ -68,7 +68,7 @@
 }
 
 .donation-summary-buttons button:hover {
-	background-color: #FF7500;
+	background-color: rgb(89, 138, 240);
 }
 
 div.sparkle-star,
@@ -147,7 +147,7 @@ div .donationBtn {
 	margin-top: 10px;
 	margin-right: 10px;
 	padding: 8px 15px;
-	background-color: #ffbc7b;
+	background-color :rgb(157, 186, 247);
 	color: white;
 	text-decoration: none;
 	border-radius: 5px;
@@ -157,7 +157,7 @@ div .donationBtn {
 }
 
 div .donationBtn:hover {
-	background-color: #FF7500;
+	background-color: rgb(89, 138, 240);
 }
 
 .donationBody {
@@ -240,7 +240,7 @@ div .donationBtn:hover {
 .donationTable th {
 	width: 200px;
 	padding: 30px 0;
-	background: #ffbc7b;
+	background: rgb(203, 235, 255);
 	font-weight: bold;
 	text-align: center;
 }
@@ -262,10 +262,10 @@ div .donationBtn:hover {
 }
 
 .donateAmountBtn.selected {
-	background: #ffbc7b;
-	color: white;
+	background:  rgb(203, 235, 255);
+	color: #555;
 	font-weight: bold;
-	border: 1px solid #FF7500;
+	border: 1px solid  rgb(0, 80, 255);
 }
 
 .customAmountInput {
@@ -285,7 +285,7 @@ div .donationBtn:hover {
 .donationButton {
 	width: 30%;
 	padding: 10px;
-	background: #ffbc7b;
+	background:  rgb(157, 186, 247);
 	color: white;
 	font-size: 16px;
 	border: none;
@@ -295,7 +295,7 @@ div .donationBtn:hover {
 }
 
 .donationButton:hover {
-	background: #FF7500;
+	background: rgb(89, 138, 240);
 }
 
 .donationMessage {
@@ -347,9 +347,9 @@ div .donationBtn:hover {
 }
 
 .point-btn:hover {
-	background: #ffbc7b;
-	color: white;
-	border: 1px solid #FF7500;
+	background: rgb(203, 235, 255);
+	color: #555;
+	border: 1px solid rgb(0, 80, 255);
 	font-weight: bold;
 }
 
