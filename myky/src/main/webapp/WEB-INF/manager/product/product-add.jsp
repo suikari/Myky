@@ -73,7 +73,7 @@
             background-color: #45a049;
         }
         .editor-control {
-		    height: 200px;
+		    height: 350px;
 		    width: 100%;
         }
         
@@ -230,8 +230,41 @@
                 methods: {
                 	fnMainList : function() {
                     	var self = this;
-                    	var nparmap = self.product;
                     	
+                    	self.product.categoryId = self.category1 + ',' + self.category2
+
+                        // 각 필드가 비어 있는지 확인
+                        if (!self.product.productName) {
+                            alert("상품명을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.price) {
+                            alert("가격을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.quantity) {
+                            alert("수량을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.manufacturer) {
+                            alert("제조사를 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.description) {
+                            alert("상품 설명을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.productCode) {
+                            alert("상품 코드를 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.categoryId) {
+                            alert("카테고리를 선택해주세요.");
+                            return;
+                        }
+                        
+                    	var nparmap = self.product;
+
                     	$.ajax({
                     		url: "/admin/insertProduct.dox",
                     		dataType: "json",
@@ -292,6 +325,36 @@
                     	
                     	self.product.categoryId = self.category1 + ',' + self.category2
                     	
+                        // 각 필드가 비어 있는지 확인
+                        if (!self.product.productName) {
+                            alert("상품명을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.price) {
+                            alert("가격을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.quantity) {
+                            alert("수량을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.manufacturer) {
+                            alert("제조사를 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.description) {
+                            alert("상품 설명을 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.productCode) {
+                            alert("상품 코드를 입력해주세요.");
+                            return;
+                        }
+                        if (!self.product.categoryId) {
+                            alert("카테고리를 선택해주세요.");
+                            return;
+                        }
+                        
                     	var nparmap = self.product;
                     	
                     	
@@ -355,6 +418,16 @@
                     },
                     updateCategory() {
                         this.product.categoryId = this.category1+ "," + this.category2;
+                    },
+                    setCategory() {
+                        if (this.product.categoryId) {
+                            const categories = this.product.categoryId.split(',');
+                            this.category1 = categories[0] || '';
+                            this.category2 = categories[1] || '';
+                        } else {
+                            this.category1 = '';
+                            this.category2 = '';
+                        }
                     },
                     upload(form, callback) {
                         $.ajax({
@@ -437,7 +510,10 @@
                     		data: nparmap,
                     		success: function (data) {
                     			console.log("main11",data);
+                    			
                     			self.product = data.Product;
+                    			
+                    			self.setCategory();
                     			
                     			
                                 // ✅ 썸네일 정보 설정
