@@ -18,7 +18,7 @@
  
 
 
-    <div id="app" class="container">
+    <div id="app" class="ordercontainer">
 
         <div class="order-complete">
             <h2 class="order-complete__title">주문이 완료되었습니다!</h2>
@@ -31,19 +31,19 @@
             <table class="order-complete__table">
                 <thead>
                     <tr>
-                        <th class="order-complete__th">상품 이미지</th>
-                        <th class="order-complete__th">상품명</th>
-                        <th class="order-complete__th">수량</th>
-                        <th class="order-complete__th">가격</th>
+                        <th>상품 이미지</th>
+                        <th>상품명</th>
+                        <th>수량</th>
+                        <th>가격</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in orderList" :key="item.productId">
-                        <td class="order-complete__td" v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
-                        <td class="order-complete__td" v-else><img src="/img/product/product update.png" width="50"></td>
-                        <td class="order-complete__td">{{ item.productName }}</td>
-                        <td class="order-complete__td">{{ item.quantity }}</td>
-                        <td class="order-complete__td">{{ formatPrice(item.price) }} 원</td>
+                        <td v-if="item.filepath != null"><img :src="item.filepath" width="50"></td>
+                        <td v-else><img src="/img/product/product update.png" width="50"></td>
+                        <td>{{ item.productName }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ formatPrice(item.price) }} 원</td>
                     </tr>
                 </tbody>
             </table>
@@ -59,7 +59,7 @@
             <div class="order-complete__points">
                 <h3>포인트 적립</h3>
                 <p>이번 주문으로 적립된 포인트 : <strong>{{ formattedRewardPoints }} P</strong></p>
-                <p>└ 총 보유 포인트 : <strong>{{ currentPoint }} P</strong></p>
+                <p>└　총 보유 포인트 : <strong>{{ currentPoint }} P</strong></p>
             </div>
     
             <div class="order-complete__buttons">

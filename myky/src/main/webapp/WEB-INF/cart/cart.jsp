@@ -19,6 +19,7 @@
 
     <div id="app" class="cartContainer">
         <h2>장바구니</h2>
+        <h3 v-if="cartItems.length > 0">장바구니에 담긴 상품</h3>
         <table class="cartTable" v-if="cartItems.length > 0">
             <thead>
                 <tr>
@@ -106,9 +107,11 @@
             <h2 v-else>
                 <span>총 결제 금액: {{ formattedTotalPrice }} 원</span>
             </h2>
-            <button class="cartOrderBtn" @click="orderItems">주문하기</button>
+            <div class="btnDisplay">
+                <button class="cartOrderBtn" @click="orderItems">주문하기</button>
+            </div>
         </div>
-        <div v-else>
+        <div class="btnDisplay" v-else>
             <button class="cartOrderBtn" @click="goToProductPage">쇼핑하러 가기</button>
         </div>
     </div>
