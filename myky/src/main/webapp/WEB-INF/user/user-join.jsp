@@ -65,7 +65,7 @@
                         <input class="input-underline" v-model="user.email" :disabled="emailFlg" placeholder="이메일 입력">
                         <button class="inline-btn" v-if="!emailFlg" @click="fnEmailChecked()">인증번호</button>
                     </div>
-                    <div class="inline-group" v-if="showVerification">
+                    <div class="inline-group" v-if="showVerification" style="margin-top: 10px;">
                         <input class="input-underline" v-model="authCode" placeholder="인증번호 입력">
                         <button class="inline-btn" @click="verifyCode">확인</button>
                     </div>

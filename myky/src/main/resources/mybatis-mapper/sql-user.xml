@@ -197,7 +197,12 @@
 	<select id="selectEmail" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
 		SELECT *
 		FROM USERS
-		WHERE EMAIL = #{email}
+		WHERE 1=1 
+		AND EMAIL = #{email}
+		<if test="userId != null">
+		AND USER_ID = #{userId}
+		AND DELETE_YN != 'Y'
+		</if>
 	</select>
 	
 	
