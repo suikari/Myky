@@ -227,7 +227,7 @@ public class CartController {
 			map.put("orderStatuses", orderStatuses);			
 		}
 		
-		System.out.println("00 >>>>>>>>>>>>>>>> "+map);
+//		System.out.println("00 >>>>>>>>>>>>>>>> "+map);
 		
 		resultMap = cartService.getAllOrderList(map);
 		return new Gson().toJson(resultMap);

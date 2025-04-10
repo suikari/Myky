@@ -223,10 +223,8 @@
                                 self.shippingFee = self.selectCartItems[0].shippingFee;
                                 self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
                             }
-
                             console.log("shippingFee:", self.shippingFee);
                             console.log("shippingFreeMinimum:", self.shippingFreeMinimum);
-                            
                         }
                     });
                 },
@@ -242,7 +240,6 @@
                             console.log("멤버십 활성 여부 >>> ",data.result);
                             if(data.result === "success"){
                                 self.isMembership = true;
-
                             }
                         }
                     });

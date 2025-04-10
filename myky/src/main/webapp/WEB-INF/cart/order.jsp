@@ -101,7 +101,7 @@
             </div>
 
             <div>
-                <label>수령인: <input type="text" ref="receiverInput" class="inputField" v-model="orderInfo.receiver"
+                <label>수령인: <input type="text" ref="receiverInput" class="inputField short" v-model="orderInfo.receiver"
                         required></label><br>
                 <label>우편번호:
                     <input type="text" ref="zipcodeInput" class="inputField short" v-model="orderInfo.zipcode"
