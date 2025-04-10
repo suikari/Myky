@@ -77,7 +77,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.result == "success") {
                                     alert("문의 등록 완료");
                                     location.href = "/product/view.do?productId=" + self.productId;

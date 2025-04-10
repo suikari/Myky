@@ -151,9 +151,13 @@
                 <h4 class="faq-title">❓ 자주 묻는 질문</h4>
                 <ul class="faq-list">
                     <li class="faq-item">
-                        <strong>Q. 언제든 멤버십 해지할 수 있나요?</strong><br>
-                        A. 네! 마이페이지에서 언제든 즉시 해지 가능합니다. 해지 시 다음 달부터 결제되지 않습니다.
+                        <strong>Q. 멤버십은 자동으로 갱신되나요?</strong><br>
+                        A. 아니요! 멤버십은 자동 결제가 아닌 1, 6, 12개월 중 원하는 기간을 선택해 직접 결제하는 방식입니다.
                     </li>
+                    <li class="faq-item">
+                        <strong>Q. 멤버십 이용 기간이 끝나면 어떻게 되나요?</strong><br>
+                        A. 이용 기간 종료 시 멤버십 혜택이 자동으로 종료되며, 필요 시 다시 결제해주시면 즉시 재가입이 가능합니다.
+                    </li>                    
                     <li class="faq-item">
                         <strong>Q. 포인트는 어디에 쓸 수 있나요?</strong><br>
                         A. 쇼핑, 후원, 게시판 질문 멍냥꽁냥 내 대부분의 서비스에서 사용할 수 있습니다.
@@ -195,7 +199,6 @@
                     //유저 아이디 정보 가져오기
                     fnUserInfo() {
                         var self = this;
-                        console.log("sessionId >>> ", self.sessionId);
                         var nparmap = {
                             userId: self.sessionId
                         };
@@ -205,7 +208,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("userInfo >>> ", data.user);
                                 self.userInfo = data.user;
                             }
                         });
@@ -251,7 +253,6 @@
                             type: "POST",
                             dataType: "json",
                             success: function (data) {
-                                console.log("전체 유저 수", data);
                                 self.totalUserCnt = data.totalUserCnt;
                             }
                         });
@@ -264,7 +265,6 @@
                             type: "POST",
                             dataType: "json",
                             success: function (data) {
-                                console.log("전체 유저 기부 총액", data);
                                 self.uDonationTotal = data.userDonationSum;
                             }
                         });
@@ -279,7 +279,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("멤버십 가입자 수", data);
                                 self.membershipUser = data.memberCnt;
                             }
                         });
@@ -293,7 +292,6 @@
                             type: "POST",
                             dataType: "json",
                             success: function (data) {
-                                console.log("멤버십 회원 기부 총액", data);
                                 self.mDonationTotal = data.membershipDonationSum;
                             }
                         });

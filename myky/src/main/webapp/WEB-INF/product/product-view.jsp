@@ -497,22 +497,18 @@
                     // 총 상품 금액 (상품 가격 × 수량)
                     totalProductPrice() {
                         const result = this.info.price * this.quantity;
-                        console.log("📦 총 상품 금액:", result);
                         return result;
                     },
                     isFreeShipping() {
                         const condition = this.totalProductPrice >= this.info.shippingFreeMinimum;
-                        console.log("🚚 무료배송 조건:", this.totalProductPrice, ">=", this.info.shippingFreeMinimum, "→", condition);
                         return condition;
                     },
                     shippingCost() {
                         const cost = this.isFreeShipping ? 0 : this.info.shippingFee;
-                        console.log("💸 배송비 적용:", cost);
                         return cost;
                     },
                     totalPrice() {
                         const total = this.totalProductPrice + this.shippingCost;
-                        console.log("💰 총 결제 금액:", total);
                         return total;
                     },
                     formattedPrice() {
@@ -567,8 +563,6 @@
                             type: 'POST',
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
-
                                 if (data.result !== "success" || !data.info) {
                                     alert("상품을 불러올 수 없습니다.");
                                     location.href = "/product/list.do";
@@ -642,7 +636,6 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log("11", data);
                                 self.reviewList = data.reviewList;
                                 self.tabs[1].cmtcount = data.totalCount;
                                 self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
@@ -734,7 +727,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.result == "success") {
                                     alert("삭제가 완료되었습니다");
                                     location.href = "/product/view.do?productId=" + self.productId;
@@ -752,7 +744,6 @@
                     //유저 아이디 정보 가져오기
                     fnUserInfo() {
                         var self = this;
-                        console.log("sessionId >>> ", self.sessionId);
                         var nparmap = {
                             userId: self.sessionId
                         };
@@ -762,7 +753,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("userInfo >>> ", data.user);
                                 self.userInfo = data.user;
                             }
                         });
@@ -790,7 +780,6 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log(data);
                                 alert("장바구니에 상품이 담겼습니다.");
                             }
                         });
@@ -813,7 +802,6 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log(data);
                                 self.fnAddBuy();
                             }
                         });
@@ -841,7 +829,6 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log(data);
                                 location.href = "/cart/order.do";
                             }
                         });
@@ -889,7 +876,6 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log("QNA 불러오기 성공:", data);
                                 self.qnaList = data.list;
                                 self.qnaTotal = data.totalCount;
                                 self.qnaPages = Array.from(

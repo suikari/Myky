@@ -19,6 +19,7 @@
 
         <div id="app" class="container">
             <main>
+
                 <div class="main-banner">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
@@ -63,75 +64,81 @@
                         <div class="swiper-button-next"></div>
                     </div>
                 </div>
+                <div id="product-top">
+                    <div class="breadcrumb-container">
+                        <div class="breadcrumb">
+                            <a href="/">홈</a>
+                            / <a href="/product/list.do"> 전체상품 </a>
+                            <template v-if="largeCategory">
+                                /<a href="javascript:;" @click="goToCategory">{{ largeCategory }}</a>
+                            </template>
+                            <template v-if="subcategory">
+                                / <a href="javascript:;" @click="goToSubCategory">{{ subcategory }}</a>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="product-header">
+                        <div class="total-count">
+                            총 <strong>{{ totalCount }}</strong>개의 상품이 있습니다.
+                        </div>
+                        <div class="sort-box">
+                            <select v-model="sortOption" @change="fnChangeSort" class="sort-select">
+                                <option value="">:: 정렬방식 ::</option>
+                                <option value="high">높은가격</option>
+                                <option value="low">낮은가격</option>
+                                <option value="name">상품명</option>
+                                <option value="count">사용후기</option>
+                                <option value="registration">신상품</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
 
-                <div class="breadcrumb-container">
-                    <div class="breadcrumb">
-                        <a href="/">홈</a>
-                        / <a href="/product/list.do"> 전체상품 </a>
-                        <template v-if="largeCategory">
-                            /<a href="javascript:;" @click="goToCategory">{{ largeCategory }}</a>
-                        </template>
-                        <template v-if="subcategory">
-                            / <a href="javascript:;" @click="goToSubCategory">{{ subcategory }}</a>
-                        </template>
-                    </div>
-                </div>
-                <div class="product-header">
-                    <div class="total-count">
-                        총 <strong>{{ totalCount }}</strong>개의 상품이 있습니다.
-                    </div>
-                    <div class="sort-box">
-                        <select v-model="sortOption" @change="fnChangeSort" class="sort-select">
-                            <option value="">:: 정렬방식 ::</option>
-                            <option value="high">높은가격</option>
-                            <option value="low">낮은가격</option>
-                            <option value="name">상품명</option>
-                            <option value="count">사용후기</option>
-                            <option value="registration">신상품</option>
-                        </select>
-                    </div>
-                </div>
-                <hr>
-                <section class="product-container">
-                    <div v-for="item in list" class="product-item" :key="item.productId">
-                        <div class="product-image-wrapper">
-                            <img :src="item.filePath || '../../img/product/product update.png'"
-                                :alt="item.fileName || '이미지 없음'" class="product-image"
-                                @click.stop="fnView(item.productId)" />
-                            <div class="hover-buttons">
-                                <button @click.stop="fnAddCart(item.productId)">Cart</button>
-                                <button @click.stop="fnAddBuy(item.productId)">ADD</button>
+                    <section class="product-container">
+                        <div v-for="item in list" class="product-item" :key="item.productId">
+                            <div class="product-image-wrapper">
+                                <img :src="item.filePath || '../../img/product/product update.png'"
+                                    :alt="item.fileName || '이미지 없음'" class="product-image"
+                                    @click.stop="fnView(item.productId)" />
+                                <div class="hover-buttons">
+                                    <button @click.stop="fnAddCart(item.productId)">Cart</button>
+                                    <button @click.stop="fnAddBuy(item.productId)">ADD</button>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">{{ item.productName }}</div>
+
+                                <!-- 할인 있는 경우 -->
+                                <template v-if="isMember && item.discount > 0">
+                                    <div class="original-price">정상가: {{ formatPrice(item.price) }}</div>
+                                    <div class="discount-price">멤버십 할인가: {{ formatPrice(getDiscountedPrice(item)) }}
+                                    </div>
+                                </template>
+                                <!-- 할인 없는 경우 -->
+                                <template v-else>
+                                    <div class="discount-price">{{ formatPrice(item.price) }}</div>
+                                </template>
+
+                                <div class="shipping-fee">배송비: {{ formatPrice(item.shippingFee) }}</div>
                             </div>
                         </div>
-                        <div class="product-info">
-                            <div class="product-name">{{ item.productName }}</div>
-
-                            <!-- 할인 있는 경우 -->
-                            <template v-if="isMember && item.discount > 0">
-                                <div class="original-price">정상가: {{ formatPrice(item.price) }}</div>
-                                <div class="discount-price">멤버십 할인가: {{ formatPrice(getDiscountedPrice(item)) }}</div>
-                            </template>
-                            <!-- 할인 없는 경우 -->
-                            <template v-else>
-                                <div class="discount-price">{{ formatPrice(item.price) }}</div>
-                            </template>
-
-                            <div class="shipping-fee">배송비: {{ formatPrice(item.shippingFee) }}</div>
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
 
                 <!-- 페이지네이션 버튼 중앙에 배치 -->
-                <div class="pagination">
-                    <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')">
-                        < </a>
-                            <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
-                                :class="{ active: page === num }">
-                                <span v-if="page == num">{{ num }}</span>
-                                <span v-else>{{ num }}</span>
-                            </a>
-                            <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> > </a>
-                    </a>
+                <div class="pagination-wrapper">
+                    <div class="pagination">
+                        <a v-if="page != 1" id="index" href="javascript:;" @click="fnPageMove('prev')">
+                            < </a>
+                                <a v-for="num in index" :key="num" id="index" href="javascript:;" @click="fnPage(num)"
+                                    :class="{ active: page === num }">
+                                    <span v-if="page == num">{{ num }}</span>
+                                    <span v-else>{{ num }}</span>
+                                </a>
+                                <a v-if="page < index" id="index" href="javascript:;" @click="fnPageMove('next')"> >
+                                </a>
+                        </a>
+                    </div>
                 </div>
             </main>
         </div>
@@ -195,7 +202,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.list = data.list;
                                 self.index = Math.ceil(data.count / self.pageSize);
                                 self.totalCount = data.count;
@@ -213,6 +219,14 @@
                         let self = this;
                         self.page = num;
                         self.fnProductList();
+
+                        self.$nextTick(() => {
+                            const target = document.getElementById('product-top');
+                            if (target) {
+                                const y = target.getBoundingClientRect().top + window.pageYOffset - 100;
+                                window.scrollTo({ top: y, behavior: 'smooth' });
+                            }
+                        });
                     },
                     fnPageMove: function (direction) {
                         let self = this;
@@ -222,6 +236,14 @@
                             self.page--;
                         }
                         self.fnProductList();
+
+                        self.$nextTick(() => {
+                            const target = document.getElementById('product-top');
+                            if (target) {
+                                const y = target.getBoundingClientRect().top + window.pageYOffset - 60;
+                                window.scrollTo({ top: y, behavior: 'smooth' });
+                            }
+                        });
                     },
                     fnChangeSort() {
                         let self = this;
@@ -277,7 +299,6 @@
                     //유저 아이디 정보 가져오기
                     fnUserInfo() {
                         var self = this;
-                        console.log("sessionId >>> ", self.sessionId);
                         var nparmap = {
                             userId: self.sessionId
                         };
@@ -287,7 +308,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("userInfo >>> ", data.user);
                                 self.userInfo = data.user;
                             }
                         });
@@ -318,14 +338,12 @@
                             option: "",
                             checkYn: "N"
                         };
-                        console.log("🧾 장바구니 요청 파라미터:", nparmap);
                         $.ajax({
                             url: "/cart/addProduct.dox",
                             type: "POST",
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-                                console.log("응답:", data);
                                 if (data.result === "success") {
                                     alert("장바구니에 상품이 담겼습니다.");
                                 } else {
@@ -333,13 +351,12 @@
                                 }
                             },
                             error: function (xhr, status, err) {
-                                console.log("에러 발생:", err);
                                 alert("장바구니 요청 실패");
                             }
                         });
                     }, fnAddBuy(productId) {
                         const self = this;
-                        
+
                         if (!self.sessionId || self.sessionId === "") {
                             alert("로그인 후 이용해주세요.");
                             location.href = "/user/login.do";

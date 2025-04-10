@@ -1,6 +1,6 @@
 #app {
 	margin: 40px auto;
-	max-width: 1200px;
+	max-width: 1280px;
 }
 
 main {
@@ -16,7 +16,19 @@ main {
 	padding: 0 10px;
 	box-sizing: border-box;
 }
+/* 태블릿 (1024px 이하)에서는 2열 */
+@media screen and (max-width: 1024px) {
+  .product-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
+/* 모바일 (768px 이하)에서는 1열 */
+@media screen and (max-width: 768px) {
+  .product-container {
+    grid-template-columns: 1fr;
+  }
+}
 .product-info {
 	width: 250px;
 	text-align: left;
@@ -47,17 +59,16 @@ main {
 	height: 250px;
 	background-color: #fff;
 	border: 2px solid #e0e0e0;
-	border-radius: 10px;
+	border-radius: 6px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 	cursor: pointer;
-	/*overflow: hidden;*/
 }
 
 .product-image img {
 	width: 250px;
 	height: 250px;
 	object-fit: contain;
-	border-radius: 5px;
+	border-radius: 6px;
 	margin-bottom: 10px;
 	cursor: pointer;
 }
@@ -83,7 +94,7 @@ main {
 	background-color: rgba(255, 255, 255, 0.95);
 	color: #333;
 	border: 1px solid #ccc;
-	border-radius: 30px;
+	border-radius: 6px;
 	font-size: 15px;
 	font-weight: 600;
 	cursor: pointer;
@@ -91,7 +102,7 @@ main {
 }
 
 .hover-buttons button:hover {
-	background-color: #f08080;
+	background-color: rgb(110, 158, 255);
 	color: white;
 }
 
@@ -112,8 +123,7 @@ main {
 }
 
 .discount-price {
-	font-size: 16px;
-	color: #d32f2f;
+	color: rgb(255, 147, 0);
 	font-weight: bold;
 	margin-bottom: 6px;
 }
@@ -151,11 +161,6 @@ main {
 	font-weight: bold;
 }
 
-.discount-price strong {
-	font-size: 16px;
-	font-weight: bold;
-}
-
 .price {
 	font-size: 20px;
 	font-weight: bold;
@@ -172,36 +177,12 @@ main {
 
 .discount-info {
 	font-size: 13px;
-	color: #ff4444;
+	color: rgb(255, 147, 0);
 	margin-top: -4px;
 	margin-bottom: 10px;
 	font-weight: 500;
 }
 
-.pagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-top: 20px;
-}
-
-.pagination a {
-	margin: 0 5px;
-	text-decoration: none;
-	color: black;
-	font-size: 18px;
-}
-
-.pagination .active {
-	font-weight: bold;
-	color: #ff6600;
-}
-
-/*.board-page-btn.active {
-	background-color: transparent;   배경 없음 
-	color: #ff6600;                  원하는 포인트 컬러 
-	font-weight: bold;               강조 효과 
-}*/
 .board-page-btn:hover {
 	background-color: #ff6600;
 	color: #fff;
@@ -254,8 +235,8 @@ main {
 	width: 100%;
 	max-width: 1280px;
 	aspect-ratio: 16 / 6;
-	margin-top: 10px;
-	border-radius: 10px;
+	margin-top: 0px;
+	border-radius: 6px;
 	overflow: hidden;
 	margin-bottom: 30px;
 }
@@ -264,7 +245,7 @@ main {
 .swiper-container {
 	width: 100%;
 	aspect-ratio: 16 / 6;
-	border-radius: 30px;
+	border-radius: 6px;
 	overflow: visible;
 	position: relative;
 }
@@ -306,7 +287,7 @@ main {
 	background-color: rgba(255, 255, 255, 0.2);
 	color: #fff;
 	border: 1px solid #fff;
-	border-radius: 4px;
+	border-radius: 6px;
 	text-decoration: none;
 	font-weight: bold;
 	font-size: clamp(12px, 1.2vw, 16px);
@@ -401,7 +382,7 @@ body {
 }
 
 .container {
-	max-width: 1100px;
+	max-width: 1280px;
 	margin: 20px auto;
 	padding: 20px;
 	background: transparent;
@@ -432,9 +413,8 @@ body {
 	width: 450px;
 	height: 460px;
 	object-fit: cover;
-	border: 1px solid #000;
-	border-radius: 5px;
-	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 6px;
+	box-shadow: 0px 3px 8px  rgb(203, 235, 255);
 }
 
 .product-image-thumbNails {
@@ -448,9 +428,9 @@ body {
 	-ms-overflow-style: none;
 }
 
-.product-image-thumbNails::-webkit-scrollbar {
+/*.product-image-thumbNails::-webkit-scrollbar {
 	display: none;
-}
+}*/
 
 .product-image-thumbNails img {
 	width: 100px;
@@ -458,13 +438,11 @@ body {
 	object-fit: cover;
 	margin: 5px;
 	cursor: pointer;
-	border-radius: 5px;
-	border: 1px solid transparent;
-	transition: all 0.3s;
+	border-radius: 6px;
 }
 
 .product-image-thumbNails img:hover {
-	border: 2px solid #f08008;
+	border: 2px solid rgb(110, 158, 255);
 }
 
 .product-info {
@@ -489,7 +467,7 @@ body {
 }
 
 .detail-product-info .discount-price {
-	color: #d32f2f;
+	color: rgb(255, 147, 0);
 	font-size: 22px;
 	font-weight: bold;
 	margin-bottom: 10px;
@@ -499,7 +477,7 @@ body {
 	font-size: 13px;
 	color: #666;
 	margin-bottom: 15px;
-	font-weight: bold;
+	
 }
 
 
@@ -519,7 +497,7 @@ body {
 	display: flex;
 	align-items: center;
 	border: 1px solid #ccc;
-	border-radius: 4px;
+	border-radius: 6px;
 	overflow: hidden;
 	width: fit-content;
 	background-color: #fff;
@@ -573,7 +551,7 @@ body {
 
 .confirmed-box {
 	border: 1px solid #ccc;
-	border-radius: 8px;
+	border-radius: 6px;
 	padding: 12px 16px;
 	background-color: #fafafa;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -612,7 +590,7 @@ body {
 	padding: 0 10px;
 	border: 1px solid #ccc;
 	background-color: #f3f3f3;
-	border-radius: 4px;
+	border-radius: 6px;
 	cursor: pointer;
 	white-space: nowrap;
 }
@@ -642,7 +620,7 @@ body {
 	flex: 1;
 	height: 45px;
 	font-size: 16px;
-	background-color: red;
+	background-color: rgb(255, 147, 0);
 	color: white;
 	border: none;
 	cursor: pointer;
@@ -710,11 +688,10 @@ body {
 	color: #fff;
 	padding: 60px 20px;
 	text-align: center;
-	border-radius: 14px;
+	border-radius: 6px;
 	margin: 40px auto;
 	max-width: 1000px;
 	box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
-	/*cursor: pointer;*/
 }
 
 .vip-subtitle {
@@ -755,7 +732,7 @@ body {
 .vip-card {
 	background: #111;
 	padding: 25px 20px;
-	border-radius: 12px;
+	border-radius: 6px;
 	width: 280px;
 	box-shadow: 0 0 10px rgba(255, 215, 0, 0.07);
 	border: 1px solid rgba(255, 255, 255, 0.08);
@@ -798,13 +775,12 @@ body {
 .shipping-warning-section {
 	background: #fff8e1;
 	padding: 50px 20px;
-	border-radius: 12px;
-	max-width: 1000px;
+	border-radius: 6px;
+	max-width: 1280px;
 	margin: 60px auto;
 	text-align: center;
 	color: #333;
 	box-shadow: 0 0 12px rgba(255, 204, 0, 0.2);
-	/*cursor: pointer;*/
 }
 
 .shipping-warning-section .vip-subtitle {
@@ -837,9 +813,9 @@ body {
 	background-color: #fff3cd;
 	border-left: 5px solid #ffcc00;
 	padding: 20px 25px;
-	border-radius: 10px;
+	border-radius: 6px;
 	width: 100%;
-	max-width: 450px;
+	max-width: 650px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	text-align: left;
 }
@@ -867,8 +843,8 @@ body {
 .product-info-section {
 	background-color: #f5f6fa;
 	padding: 60px 20px;
-	border-radius: 14px;
-	max-width: 1000px;
+	border-radius: 6px;
+	max-width: 1280px;
 	margin: 60px auto;
 	text-align: center;
 	color: #333;
@@ -896,7 +872,7 @@ body {
 .product-info-card {
 	background-color: #fff;
 	padding: 30px 25px;
-	border-radius: 12px;
+	border-radius: 6px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 	text-align: left;
 	max-width: 800px;
@@ -921,7 +897,7 @@ body {
 	max-width: 400px;
 	margin: 0 auto;
 	display: block;
-	border-radius: 10px;
+	border-radius: 6px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -929,8 +905,8 @@ body {
 	background-color: #fffdf5;
 	padding: 60px 20px;
 	margin: 60px auto;
-	border-radius: 12px;
-	max-width: 1000px;
+	border-radius: 6px;
+	max-width: 1280px;
 	box-shadow: 0 4px 12px rgba(255, 204, 0, 0.1);
 }
 
@@ -945,7 +921,7 @@ body {
 .event-gift-img img {
 	width: 320px;
 	max-width: 100%;
-	border-radius: 10px;
+	border-radius: 6px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
@@ -983,7 +959,7 @@ body {
 
 /* 탭 부분 */
 .tab-wrapper {
-	max-width: 1100px;
+	max-width: 1280px;
 	margin: 40px auto;
 	font-size: 16px;
 }
@@ -1021,7 +997,7 @@ body {
 	padding: 30px;
 	font-family: 'Noto Sans KR', sans-serif;
 	background-color: #fff;
-	max-width: 1100px;
+	max-width: 1280px;
 	margin: 0 auto;
 }
 
@@ -1041,11 +1017,12 @@ body {
 .review-buttons .btn {
 	padding: 6px 14px;
 	font-size: 14px;
-	border: 1px solid #ccc;
+	font-weight: bold;
 	background-color: white;
-	color: #333;
+	border: 1px solid  rgb(110, 158, 255);
+	color:  rgb(110, 158, 255);
 	cursor: pointer;
-	border-radius: 4px;
+	border-radius: 6px;
 }
 
 .review-buttons .btn:hover {
@@ -1176,7 +1153,7 @@ body {
 	width: 130px;
 	height: 130px;
 	object-fit: cover;
-	border-radius: 8px;
+	border-radius:6px;
 	border: 1px solid #eee;
 }
 
@@ -1221,7 +1198,7 @@ body {
 	border: 1px solid #28a745;
 	color: #28a745;
 	padding: 5px 12px;
-	border-radius: 20px;
+	border-radius: 6px;
 	cursor: pointer;
 	margin-right: 8px;
 	transition: 0.2s;
@@ -1270,13 +1247,18 @@ body {
 .qna-write-btn {
 	margin-left: 1.5rem;
 }
-
+.qna-empty {
+  text-align: center;
+  padding: 80px 0; /* 위아래 여백 */
+  color: #555;
+  font-size: 16px;
+}
 .btn-outline-purple {
 	padding: 0.5rem 1rem;
-	border: 1px solid #7b61ff;
+	border: 1px solid  rgb(110, 158, 255);
 	background: #fff;
-	color: #7b61ff;
-	border-radius: 4px;
+	color:  rgb(110, 158, 255);
+	border-radius: 6px;
 	font-weight: bold;
 	cursor: pointer;
 }
@@ -1298,7 +1280,7 @@ body {
 .qna-block {
 	background-color: #f9f9f9;
 	padding: 15px 20px;
-	border-radius: 8px;
+	border-radius: 6px;
 	margin-bottom: 10px;
 }
 
@@ -1374,14 +1356,14 @@ body {
 /* 배송, 교환, 환불 영역 */
 .policy-section {
 	padding: 30px;
-	max-width: 1100px;
+	max-width: 1280px;
 	margin: 0 auto;
 }
 
 .policy-grid {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 30px 80px;
+	gap: 50px 100px;
 	justify-content: space-between;
 }
 
@@ -1402,26 +1384,57 @@ body {
 
 /* 페이징 */
 .pagination {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 8px;
-	margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 40px 0 30px 0;  
+  flex-wrap: wrap;
+  font-family: 'Segoe UI', sans-serif;
+}
+.pagination-wrapper {
+  padding-top: 80px; 
+}
+.pagination a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background-color: #f0f6ff;
+  color: rgb(0, 80, 255);
+  text-decoration: none;
+  font-size: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0, 80, 255, 0.2);
 }
 
-.pagination a {
-  padding: 6px 12px;
-  border-radius: 6px;
-  margin: 0 4px;
-  color: #333;
-  text-decoration: none;
+.pagination a:hover {
+  background-color: rgb(110, 158, 255); 
+  color: white;
+  border-color: rgb(110, 158, 255);
+  transform: translateY(-1px);
 }
 
 .pagination a.active {
-  background-color: #6c63ff;
+  background-color: rgb(0, 80, 255); 
   color: white;
   font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 80, 255, 0.3);
+  cursor: default;
+  border-color: rgb(0, 80, 255);
 }
+
+.pagination a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  background-color: #e0e0e0;
+  color: #888;
+  border-color: transparent;
+}
+
 
 /* 페이지 이동 뜨게 */
 .breadcrumb-container {
@@ -1453,12 +1466,12 @@ body {
 
 .breadcrumb a:hover {
 	text-decoration: none;
-	color: #ff6600;
+	color: rgb(0, 80, 255);
 }
 
 
 .product-image-thumbNails img.active {
-	border: 2px solid #000;
+	border: 2px solid rgb(0, 80, 255);
 	opacity: 1;
 }
 
@@ -1552,7 +1565,7 @@ h2 {
 	flex: 1;
 	padding: 8px;
 	border: 1px solid #ccc;
-	border-radius: 4px;
+	border-radius: 6px;
 }
 
 .rating-label {
@@ -1651,7 +1664,7 @@ h2 {
 	flex: 1;
 	padding: 8px;
 	border: 1px solid #ccc;
-	border-radius: 4px;
+	border-radius: 6px;
 }
 
 .rating-label {
@@ -1730,7 +1743,7 @@ h2 {
 
 .form-box {
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border-radius: 6px;
 	padding: 30px;
 	background-color: white;
 }
@@ -1817,7 +1830,7 @@ h2 {
 
 .form-box {
 	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border-radius: 6px;
 	padding: 30px;
 	background-color: white;
 }

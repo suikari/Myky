@@ -76,7 +76,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.productId = data.info.productId,
                                 self.title = data.info.title,
                                 self.questionText = data.info.questionText,
@@ -99,7 +98,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("1", data);
                                 if (data.result == "success") {
                                     alert("수정 완료.");
                                     location.href = "/product/view.do?productId=" +  self.productId;
