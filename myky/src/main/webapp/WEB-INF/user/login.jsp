@@ -43,7 +43,7 @@
 					<a href="javascript:;" @click="fnJoin()">회원가입</a>
 				</div>
 				<br>
-				<br>
+				<hr style="color: rgb(203,235,255);">
 				<!-- 소셜 로그인 버튼들 -->
 
 				<div class="social-login">

@@ -548,7 +548,7 @@
                             const response = await fetch("/email/send-auth-code", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ email: this.user.email })
+                                body: JSON.stringify({ email: this.user.email }),
                             });
 
                             const result = await response.json();
@@ -573,7 +573,7 @@
                             const response = await fetch("/email/verify-auth-code", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ email: this.user.email, code: this.authCode })
+                                body: JSON.stringify({ email: this.user.email, code: this.authCode }),
                             });
 
                             const result = await response.json();

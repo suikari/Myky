@@ -14,7 +14,6 @@
                 font-family: 'Noto Sans KR', Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color: #f0f0f0;
             }
 
             .mypage-container {
@@ -155,13 +154,13 @@
             }
 
             .tab-item:hover {
-                background-color: rgb(110, 158, 255);
-                color: white;
+                background-color: rgb(203, 235, 255);
+                color: #333;
                 cursor: pointer;
             }
 
             .tab-item.active {
-                background-color: rgb(0, 80, 255);
+                background-color: rgb(110, 158, 255);
                 color: white;
                 font-weight: 600;
             }
@@ -181,8 +180,8 @@
             }
 
             .sidebar ul li:hover {
-                background-color: rgb(110, 158, 255);
-                color: white;
+                background-color: rgb(203, 235, 255);
+                color: #333;
                 cursor: pointer;
             }
 
@@ -252,7 +251,8 @@
             }
 
             .order-table th {
-                background-color: rgb(203, 235, 255);;
+                background-color: rgb(203, 235, 255);
+                ;
                 color: #333;
                 font-weight: 600;
                 padding: 12px 10px;
@@ -324,7 +324,8 @@
             }
 
             .board-table th {
-                background-color: rgb(203, 235, 255);;
+                background-color: rgb(203, 235, 255);
+                ;
                 color: #333;
                 padding: 12px 15px;
                 text-align: center;
@@ -424,7 +425,8 @@
             .pagination .bgColer {
                 padding: 5px 10px;
                 border-radius: 6px;
-                background-color: rgb(110, 158, 255);;
+                background-color: rgb(110, 158, 255);
+                ;
                 color: white;
             }
 
@@ -535,7 +537,8 @@
 
             /* 게시글 작성 버튼 */
             .btn-board-write {
-                background-color: rgb(110, 158, 255);;
+                background-color: rgb(110, 158, 255);
+                ;
                 color: #fff;
                 padding: 10px 20px;
                 font-size: 15px;
@@ -547,7 +550,8 @@
             }
 
             .btn-board-write:hover {
-                background-color: rgb(0, 80, 255);;
+                background-color: rgb(0, 80, 255);
+                ;
                 /* 조금 더 진한 오렌지 */
             }
 
@@ -663,7 +667,8 @@
                 display: block;
                 width: 50px;
                 height: 3px;
-                background-color: rgb(110, 158, 255);;
+                background-color: rgb(110, 158, 255);
+                ;
                 margin: 10px auto;
             }
 
@@ -785,7 +790,8 @@
                 font-weight: bold;
                 color: #333;
                 margin-bottom: 10px;
-                border-bottom: 2px solid rgb(110, 158, 255);;
+                border-bottom: 2px solid rgb(110, 158, 255);
+                ;
                 padding-bottom: 5px;
             }
 
@@ -806,7 +812,8 @@
 
             /* 테이블 헤더 스타일 */
             .cpoint-header {
-                background-color: rgb(203, 235, 255);;
+                background-color: rgb(203, 235, 255);
+                ;
                 color: #333;
                 padding: 10px;
                 text-align: center;
@@ -856,49 +863,53 @@
                 flex-wrap: wrap;
                 gap: 16px;
                 justify-content: center;
-            }
-
-            .coupon-container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 16px;
-                justify-content: center;
                 background-color: #f6f5f5;
                 border-radius: 8px;
             }
 
             .coupon {
                 position: relative;
-                /* 배경 로고 위치 기준 */
-                background: linear-gradient(135deg, #FF5722, #ffe000c4);
-                /* 기존 그라데이션 */
                 border-radius: 12px;
                 padding: 16px;
-                color: #ffffff;
+                color: #333;
                 font-family: 'Arial', sans-serif;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                width: 250px;
+                width: 300px;
                 flex: none;
                 margin: 10px;
                 overflow: hidden;
-                /* 배경 이미지 넘침 방지 */
-                z-index: 1;
+                background-color: #ffffff;
             }
 
-            /* 배경 로고 이미지 */
-            .coupon-bg-logo {
+            .coupon-bg-logo{
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 200px;
-                /* 적절히 조절 가능 */
-                height: auto;
-                transform: translate(-15%, -15%);
-                opacity: 0.40;
-                /* 흐릿하게 */
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
                 z-index: 0;
+                /* 🔽 배경으로! */
                 pointer-events: none;
-                /* 사용자 클릭 방해 방지 */
+                opacity: 1;
+                /* ❗ 흐림 제거 */
+                filter: none;
+                /* ❗ 흐림 제거 */
+            }
+            .coupon-bg-logo2{
+                position: absolute;
+                top: 100px;
+                right: -60px;
+                width: 70%;
+                height: 70%;
+                object-fit: cover;
+                z-index: 0;
+                /* 🔽 배경으로! */
+                pointer-events: none;
+                opacity: 0.6;
+                /* ❗ 흐림 제거 */
+                filter: none;
+                /* ❗ 흐림 제거 */
             }
 
             .coupon-non {
@@ -919,6 +930,10 @@
                 list-style: none;
                 padding: 0;
                 margin: 0;
+                color: #333;
+                position: relative;
+                /* ⭐ 이게 핵심! 글씨가 이미지 위에 보이도록 */
+                z-index: 1;
             }
 
             .coupon-item {
@@ -929,7 +944,7 @@
 
             .coupon-name {
                 font-size: 24px;
-                color: #ffffff;
+                color: white;;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             }
 
@@ -941,14 +956,14 @@
                 font-style: italic;
                 font-size: 28px;
                 font-weight: bold;
-                color: #ffffff;
-                text-shadow: 3px 4px 5px #ed0606;
+                color: white;
+                text-shadow: 3px 4px 5px #888;
                 text-align: right;
             }
 
             .coupon-info {
                 font-size: 12px;
-                color: #ffffff;
+                color: #333;
             }
 
             .badge {
@@ -1162,8 +1177,10 @@
                                     <div v-for="item in couponList">
                                         <div class="coupon">
                                             <!-- 배경 이미지 추가 -->
-                                            <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo"
+                                            <img src="../../img/userProfile/coupon_reversed_stamp_style.png"
                                                 class="coupon-bg-logo">
+                                            <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo"
+                                                class="coupon-bg-logo2">
 
                                             <ul class="coupon-list">
                                                 <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
