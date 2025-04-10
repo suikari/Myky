@@ -85,7 +85,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.result == "success") {
                                     alert("리뷰 작성 완료.");
 

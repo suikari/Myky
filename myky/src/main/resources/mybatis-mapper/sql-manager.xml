@@ -649,6 +649,16 @@
 		WHERE file_id  = #{fileId}
 	</delete>
 	
+	 <update id="deleteProduct" parameterType="hashmap" >
+		UPDATE Product
+		SET
+			DELETE_YN  = 'Y'  	
+		WHERE product_id  = #{productId}
+	 </update>
+
+	
+	
+	
 	<insert id="insertProduct" parameterType="hashmap" useGeneratedKeys="true" keyColumn="product_id" keyProperty="productId">
 		INSERT INTO product 
 		(

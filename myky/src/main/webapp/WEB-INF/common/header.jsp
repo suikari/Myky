@@ -11,8 +11,7 @@
 
 		<title>Vue3 레이아웃 예제</title>
 		<script src="/js/vue3b.js"></script>
-		<!-- 	<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
- -->
+		<!-- <script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script> -->
 		<script src="/js/main.js"></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -31,13 +30,13 @@
 				color: gray;
 			}
 
+
+
 		</style>
 	</head>
 
 	<body>
 		<div id="header">
-
-
 			<transition name="slide">
 				<div v-if="showSearch" class="search-box">
 					<div class="search-container">
@@ -71,8 +70,8 @@
 			    <span class="top-bar-item">{{sessionName}} 님 환영합니다!</span>
 			    <span class="divider"></span>
 			    <span class="top-bar-item"><a href="/order/orderList.do">주문조회</a></span>
-			    <!--<span class="divider"></span>
-			    <span class="top-bar-item"><a href="/board/list.do?category=A">공지사항</a></span>-->
+			    <span class="divider"></span>
+			    <span class="top-bar-item"><a href="/board/list.do?category=A">공지사항</a></span>
 			    <span v-if="sessionRole == 'ADMIN'">
 			      <span class="divider"></span>
 			      <span class="top-bar-item"><a href="/manager/main.do">관리자콘솔</a></span>
@@ -83,82 +82,65 @@
 			</div>
 
 			<div class="header">
-				<!--<a href="/main.do"> <img class="logo" src="/img/logo.png" alt="로고"> </a>-->
-				<span @click="fnhome" class="mainlogo">멍냥꽁냥</span>
-				
-				<nav class="menu">
-					<div class="dropdown" v-for="menu in categories">
-						<a v-if="menu.del == 'N'" :href="menu.menuUrl">{{ menu.categoryName }}</a>
-						<div v-if="menu.children && menu.children.length" class="dropdown-menu">
-							<ul>
-								<li v-for="subMenu in menu.children">
-									<a :href="subMenu.menuUrl">{{ subMenu.categoryName }}</a>
-								</li>
-							</ul>
+				<div class="header_main">
+					<!--<a href="/main.do"> <img class="logo" src="/img/logo.png" alt="로고"> </a>-->
+					<span @click="fnhome" class="mainlogo">멍냥꽁냥</span>
+					
+					<nav class="menu">
+						<div class="dropdown" v-for="menu in categories">
+							<a v-if="menu.del == 'N'" :href="menu.menuUrl">{{ menu.categoryName }}</a>
+							<div v-if="menu.children && menu.children.length" class="dropdown-menu">
+								<ul>
+									<li v-for="subMenu in menu.children">
+										<a :href="subMenu.menuUrl">{{ subMenu.categoryName }}</a>
+									</li>
+								</ul>
+							</div>
 						</div>
-					</div>
-				</nav>
-
-<!--				<div v-if="!sessionName" class="top-bar">
-					<a href="/user/consent.do">회원가입</a>
-					| <a @click="fnLogin"> 로그인</a>
-					| <a href="/board/list.do?category=A">공지사항</a>
-				</div>
-
-				<div v-else class="top-bar">
-					<span>{{sessionName}} 님 환영합니다! </span>
-					 <a href="/order/orderList.do">주문조회</a>
-					| <a href="/board/list.do?category=A">공지사항</a>
-					<a v-if="sessionRole == 'ADMIN' " href="/manager/main.do">| 관리자콘솔</a>
-					| <a href="/member/logout.do">로그아웃</a>
-				</div>-->
-				
-				<div v-show="membershipReady" class="icons">
-					<!-- 다이아 아이콘 (isMembership에 따라 색상 다르게) -->
+					</nav>
 					
-					<span @click="toggleSearch" class="icon bi-search"></span>
-					
-					<span @click="myPage" class="icon bi-person"></span>
-					
-					<span @click="myCart" class="icon bi-cart"></span>
-					
-					<!-- 알림 아이콘 -->
-					<span @click="showNotifications" class="icon bi-bell notification-icon">
-					  <span v-if="unreadCount > 0" class="noti-badge">{{ unreadCount }}</span>
-					</span>
-					
-					<!-- 알림 드롭다운 -->
-					<div v-show="showNotificationPanel" class="notification-dropdown">
-					  <p>🔔 알림</p>
-					
-					  <ul class="notification-list">
-					    <li
-					      v-for="n in sortedNotifications"
-					      :key="n.id"
-					      :class="['notification-item', n.readYn === 'Y' ? 'read' : 'unread']"
-					      @click="ReadNotifications(n)"
-					    >
-					      <div class="noti-content">
-					        <span class="noti-message">{{ n.message }}</span>
-					        <span class="noti-time">{{ formatTime(n.createdAt) }}</span>
-					      </div>
-					    </li>
-					
-					    <li v-if="sortedNotifications.length === 0" class="notification-item read">
-					      <div class="noti-content">
-					        <span class="noti-message">새 알림이 없습니다.</span>
-					      </div>
-					    </li>
-					  </ul>
-					</div>
-					
-					<span  @click="myMembership" class="icon" :class="isMembership ? 'bi-gem mem_premium' : 'bi-gem mem_basic'">
-					</span>
+						<div v-show="membershipReady" class="icons">
+						  <!-- 1줄: 아이콘들 -->
+						  <div class="icons-row">
+						    <span @click="toggleSearch" class="icon bi-search"></span>
+						    <span @click="myPage" class="icon bi-person"></span>
+						    <span @click="myCart" class="icon bi-cart"></span>
+						    <span @click="showNotifications" class="icon bi-bell notification-icon">
+						      <span v-if="unreadCount > 0" class="noti-badge">{{ unreadCount }}</span>
+						    </span>
+						  </div>
 						
+						  <!-- 2줄: MEMBERSHIP 텍스트 -->
+						  <div class="membership-label" @click="myMembership" class="icon" :class="isMembership ? ' mem_premium' : ' mem_basic'">MEMBERSHIP</div>
+						
+						  <!-- 알림 드롭다운 -->
+						  <div v-show="showNotificationPanel" class="notification-dropdown">
+						    <p>🔔 알림</p>
+						    <ul class="notification-list">
+						      <li
+						        v-for="n in sortedNotifications"
+						        :key="n.id"
+						        :class="['notification-item', n.readYn === 'Y' ? 'read' : 'unread']"
+						        @click="ReadNotifications(n)"
+						      >
+						        <div class="noti-content">
+						          <span class="noti-message">{{ n.message }}</span>
+						          <span class="noti-time">{{ formatTime(n.createdAt) }}</span>
+						        </div>
+						      </li>
+						      <li v-if="sortedNotifications.length === 0" class="notification-item read">
+						        <div class="noti-content">
+						          <span class="noti-message">새 알림이 없습니다.</span>
+						        </div>
+						      </li>
+						    </ul>
+						  </div>
+						</div>
+							
+					</div>
 				</div>
-
 			</div>
-		</div>
+		<div class="header-placeholder"></div>
 
 		<script>
 			const headerApp = Vue.createApp({
@@ -473,13 +455,26 @@
                       });
                   },
 				  fnhome (){
-
 					location.href="/main.do";
+				  },    
+				  handleScroll() {
+				      const header = document.querySelector('.header');
+				      const scrollY = window.scrollY;
+
+				      if (scrollY > 21) {
+				        header.style.top = '0';
+				      } else {
+				        header.style.top = '22px';
+				      }
 				  }
 
 
 			},
-				mounted() {
+			beforeUnmount() {
+			    // 컴포넌트 사라질 때 이벤트 제거 (메모리 누수 방지)
+				window.removeEventListener('scroll', this.handleScroll);
+			},
+			mounted() {
 					let self = this;
 					self.fnMenuList();
 					self.fnSearchList();
@@ -491,9 +486,8 @@
 					} else {
                   	  self.membershipReady = true;
 					}
-					//console.log(self.sessionId);
-					//console.log(self.sessionName);
-					//console.log(self.sessionRole);
+					
+					window.addEventListener('scroll', this.handleScroll);
 
 				}
 			});

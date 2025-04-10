@@ -91,7 +91,6 @@
                     fnSave(){
                         let self = this;
                         let usedPoint = -Math.abs(parseInt(self.usedPoint));
-                        console.log("usedPoint",usedPoint + "," + self.usedPoint);
                         if(!(self.isNumber(usedPoint))){
                             alert("숫자만 입력해주세요");
                             return;
@@ -122,7 +121,6 @@
                                     alert("잘못된 주소입니다.");
                                     location.href="/board/vetBoardList.do";
                                 }
-				        		console.log("11",data);
                                 let currentPoint = data.point.currentPoint;
 
                                 if(currentPoint < self.usedPoint){
@@ -143,7 +141,6 @@
                                                 type : "POST", 
                                                 data : pointUsed,
                                                 success : function(data) { 
-                                                    console.log("11",data);
                                                     location.href = "/board/vetBoardList.do"
                                                 }
                                             });
@@ -172,7 +169,6 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-				        		console.log("11",data);
                                 self.currentPoint = data.point;
 				        	}
 				        });

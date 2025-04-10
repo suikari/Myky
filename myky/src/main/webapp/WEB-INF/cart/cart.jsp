@@ -62,7 +62,7 @@
             </tbody>
         </table>
         <div v-else>
-            <div class="empty-cart-message">🛒 장바구니에 담긴 상품이 없습니다.</div>
+            <div class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</div>
         </div>
 
         <div v-if="selectCartItems.length > 0">

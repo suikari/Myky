@@ -13,7 +13,7 @@
 
 /* 섹션 헤더 */
 .fb-section-header {
-    color: #FFBC7B;
+    color: rgb(0, 80, 255);
     font-weight: bold;
     height: 70px;
     padding: 10px;
@@ -29,7 +29,7 @@
 }
 
 .fb-section-headerDown {
-    color: #FFA145;
+    color: #272727;
     font-weight: bold;
     text-align: left;
     display: flex;
@@ -40,19 +40,10 @@
     max-width: 1280px;
 }
 
-/* 제목 라벨 */
-.fb-title-label {
-    font-size: 20px;
-    font-weight: bold;
-    color: #FFBC7B;
-    margin-top: 70px;
-    margin-bottom: 10px;
-    width: 1280px;
-    max-width: 100%;
-}
+
 
 .fb-title-point {
-	border: 2px solid #FFBC7B;
+	/* border: 2px solid rgb(110, 158, 255); */
 	border-radius: 6px;
 	padding: 5px;
     font-size: 16px;
@@ -186,13 +177,14 @@
 }
 /* 제목 input wrapper */
 .fb-title-input {
-    max-width: 1280px;
+    max-width: 1000px;
     width: 100%;
     margin-bottom: -50px;
 }
 
 .fb-title-inputImg {
-    width: 1280px;
+    width: 100%;
+    max-width: 1200px;
     margin-top: 80px;
     margin-bottom: -50px;
 }
@@ -260,7 +252,7 @@
     padding: 10px 20px;
     font-size: 14px;
     font-weight: bold;
-    background-color: #FFBC7B;
+    background-color: rgb(110,158,255);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -270,18 +262,18 @@
 }
 
 .fb-button:hover {
-    background-color: #FFBC7B;
-    color: #FFA145;
+    background-color: rgb(0, 80, 255);
+    color: #ffffff;
 }
 
 /* input 박스 스타일 (fb 범위 안에서만 적용) */
 #fb-app .fb-title-input input,
 #fb-app .fb-title-inputImg input {
     margin-top: -100px;
-    width: 100%;
-    max-width: 500px;
+    width: 90%;
+    max-width: 1000px;
     padding: 8px 10px;
-    border: 2px solid #FFBC7B;
+    border: 2px solid #eaeaea;
     border-radius: 6px;
     font-size: 16px;
     outline: none;
@@ -301,17 +293,10 @@
     width: 100%;
     max-width: 1280px;
 }
-.fb-meta {
-  display: flex;
-  gap: 12px;
-  font-size: 13px;
-  color: #555;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
+
 
 .fb-badge {
-  background-color: #FFBC7B;
+  background-color: rgb(110, 158, 255);
   color: #fff;
   font-weight: bold;
   padding: 2px 8px;
@@ -321,7 +306,7 @@
 
 .fb-date,
 .fb-views {
-  color: #444;
+  color: #cbcbcb;
 }
 
 
@@ -330,41 +315,14 @@
 /*수의사 게시판view*/
 
 
-.fb-view-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #FFBC7B;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #FFBC7B;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
 
-.fb-author-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #FFBC7B;
-  font-weight: bold;
-  margin: 6px 0 12px;
-}
-
-.fb-author-label {
-background-color: #ccf2f4;
-  color: #FFBC7B;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 600;
-}
 
 .fb-author-name {
   font-weight: bold;
 }
 
 .fb-badge {
-  background-color: #FFBC7B;
+  background-color: rgb(110, 158, 255);
   color: white;
   padding: 2px 8px;
   border-radius: 999px;
@@ -419,7 +377,7 @@ background-color: #ccf2f4;
 	width: 1014px;
 	margin-top: 20px;
 	font-size: 18px;
-	background-color: #FFBC7B;
+	background-color: rgb(110, 158, 255);
 	color: #fff;
 	border: none;
 	border-radius: 6px;
@@ -464,7 +422,7 @@ background-color: #ccf2f4;
 }
 
 .star-rating .star.active {
-    color: #FFBC7B;
+    color: rgb(255, 147, 0);
 }
 .fb-content-wrap {
 	width: 90%;
@@ -473,7 +431,7 @@ background-color: #ccf2f4;
 
 
 .fb-editor-boxBig {
-    border: 2px solid #FFBC7B;
+    border: 2px solid #eaeaea;
     border-radius: 10px;
     padding: 16px;
 	height: 1100px;
@@ -484,7 +442,7 @@ background-color: #ccf2f4;
     box-sizing: border-box;	
 }
 .fb-editor-boxBigAdd{
-    border: 2px solid #FFBC7B;
+    border: 2px solid #eaeaea;
     border-radius: 10px;
     padding: 16px;
 	height: 600px;
@@ -539,7 +497,7 @@ background-color: #ccf2f4;
 
 .fb-answer-box {
     background-color: #f6f8fa;
-    border: 2px solid #FFBC7B;
+    border: 2px solid #eaeaea;
     border-radius: 10px;
     padding: 16px;
     margin: 20px 0;
@@ -601,8 +559,8 @@ background-color: #ccf2f4;
     padding: 6px 14px;
     font-size: 14px;
     font-weight: bold;
-    background-color: #FFBC7B;
-    color: #FFA145;
+    background-color: rgb(110, 158, 255);
+    color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -610,15 +568,15 @@ background-color: #ccf2f4;
 }
 
 .fb-cmtButton:hover {
-    background-color: #FFBC7B;
-    color: #FFA145;
+    background-color: rgb(0, 80, 255);
+    color: #fff;
 }
 
 /* 채택 버튼 */
 .fb-choice-button {
     align-self: flex-end;
-    background-color: #FFBC7B;
-    color: #FFA145;
+    background-color: rgb(110,158,255);
+    color: #fff;
     border: none;
 	font-weight: bold;
     border-radius: 6px;
@@ -633,7 +591,7 @@ background-color: #ccf2f4;
 	z-index: 10;
 }
 .fb-accepted-answer-box{
-	border: 2px solid #FFBC7B; 
+	border: 2px solid rgb(110,158,255); 
 	border-radius: 10px; 
 	padding: 15px; 
 	margin: 10px 0; 
@@ -646,8 +604,8 @@ background-color: #ccf2f4;
 }
 
 .fb-choice-button:hover {
-    background-color: #FFBC7B;
-    color: #FFA145;
+    background-color: rgb(0,80,255);
+    color: #fff;
 }
 .fb-footer-buttons {
     display: flex;
@@ -660,18 +618,21 @@ background-color: #ccf2f4;
 }
 
 .fb-choiceSaveButton{
-    background-color: #FFBC7B;
-    color: #FFA145;
+    background-color: rgb(110,158,255);
+    color: #fff;
     padding: 10px 20px;
     border-radius: 5px; 
     border: none; 
     cursor: pointer; 
     margin-top: 10px;
 }
+
+  
 #fb-viewPage {
-    max-width: 1000px;
+    max-width: 1280px;
     margin: 40px auto;
     padding: 40px;
+    margin: auto;
     background-color: #fff;
     border-radius: 10px;
     font-family: 'Noto Sans KR', sans-serif;
@@ -680,7 +641,7 @@ background-color: #ccf2f4;
 #fb-viewPage .fb-view-header {
     font-size: 36px;
     font-weight: bold;
-    color: #FFBC7B;
+    color: rgb(0, 80, 255);
     margin-bottom: 10px;
 }
 
@@ -694,7 +655,7 @@ background-color: #ccf2f4;
 #fb-viewPage .fb-view-label {
     font-size: 25px;
     font-weight: bold;
-    color: #FFBC7B;
+    color: rgb(110,158,255);
     margin-top: 40px;
     margin-bottom: 10px;
     max-width: 1000px;
@@ -706,53 +667,117 @@ background-color: #ccf2f4;
     align-items: center;
 }
 
-#fb-viewPage .fb-view-box {
-    border: 2px solid #FFBC7B;
-    font-weight: bold;
-    border-radius: 6px;
-    padding: 15px;
-    background-color: #fdfdfd;
-    font-size: 16px;
-    line-height: 1.8;
-    color: #333;
-    word-break: break-word;
-    white-space: pre-wrap;
-    align-items: center;
-    width: 100%;
+.fb-post-container {
+    width: 90%;
     max-width: 1000px;
-}
-.fb-view-boxContent{
-    border: 2px solid #FFBC7B;
-    border-radius: 6px;
-    padding: 15px;
-    background-color: #fdfdfd;
-    font-size: 16px;
-    line-height: 1.8;
-    color: #333;
-    word-break: break-word;
-    white-space: pre-wrap;
-    min-height: 500px;
+    margin: 0 auto;
+    padding: 40px 0;
     text-align: center;
-    align-items: center;
-    width: 100%;
-    max-width: 1000px;
+    box-sizing: border-box;
+  }
+  
+  .fb-title-label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #272727;
+    margin: 50px 0 10px;
+    border-bottom: 1px solid#eaeaea;
+    padding-bottom: 6px;
+  }
+  
+  .fb-view-box {
+    margin-bottom: 20px;
+  }
+  
+  .fb-post-wrapper {
+    width: 1000px;    
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  
+  .fb-post-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .fb-post-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  
+  .fb-post-meta {
+    font-size: 14px;
+    color: #888;
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .fb-post-meta span {
+    position: relative;
+  }
+  
+  .fb-post-meta span::after {
+    content: '';
+    width: 1px;
+    height: 12px;
+    background: #ccc;
+    display: inline-block;
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .fb-post-meta span:last-child::after {
+    display: none;
+  }
+  
+  .fb-post-content {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.8;
+    text-align: left;
+  }
+  .fb-post-content img {
+  display: block;
+  margin: 20px auto; /* 상하 여백 + 좌우 가운데 */
+  max-width: 100%;   /* 너무 커지지 않도록 */
+  height: auto;
 }
+  
+  .fb-view-boxContent {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #333;
+    margin-top: 10px;
+  }
 
 .fb-view-boxContent img {
-	max-width: 80%;
+	width: 1000px;
 }
 
 #fb-viewPage .fb-view-files {
     margin-top: 10px;
     width: 100%;
-    max-width: 1000px;
+    max-width: 1280px;
     text-align: center;
     align-items: center;
 	
 }
 
 #fb-viewPage .fb-file-link {
-    color: #FFBC7B;
+    color: #fff;
     font-weight: bold;
     text-decoration: none;
     margin-right: 10px;
@@ -762,8 +787,8 @@ background-color: #ccf2f4;
 }
 .fb-view-files {
     margin-bottom: 20px;
-    color: #FFBC7B;
-    border: 2px solid #FFBC7B;
+    color: rgb(110, 158, 255);
+    border: 2px solid #fff;
     border-radius: 6px;
     padding: 15px;
     text-align: center;
@@ -771,7 +796,7 @@ background-color: #ccf2f4;
 	font-weight: bold;
 }
 #fb-viewPage .fb-file-link:hover {
-    color: #fca311;
+    color: rgb(0, 80, 255);
 }
 
 .fb-search-wrapper {
@@ -798,22 +823,22 @@ background-color: #ccf2f4;
     font-size: 14px;
     border-radius: 6px;
     padding: 0 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #eaeaea;
     box-sizing: border-box;
 }
 .fb-search-left input {
     width: 220px;
-    background-color: #f0f0f0;
-    border: 2px solid #FFBC7B;
+    background-color: #fff;
+    border: 2px solid #0366d6;
     border-radius: 30px;
     transition: all 0.3s ease;
 }
 .fb-search-left input:focus {
-    background-color: #fff;
-    border-color: #FFA145;
+    background-color: #ffff;
+    border-color: rgb(110, 158, 255);
 }
 .fb-search-left button {
-    background-color: #FFBC7B;
+    background-color: rgb(110,158,255);
     color: #fff;
     border: none;
     font-weight: bold;
@@ -821,14 +846,14 @@ background-color: #ccf2f4;
     transition: all 0.3s ease;
 }
 .fb-search-left button:hover {
-    background-color: #FFA145;
+    background-color: rgb(0, 80, 255);
     color: #fff;
 }
 
 .fb-acceptButtonN {
-    color: #fff;
+    color: #272727;
     font-weight: bold;
-    background-color: #FFBC7B;
+    background-color: #eaeaea;
     border-radius: 6px;
     width: 100px;
     height: 30px;
@@ -838,7 +863,7 @@ background-color: #ccf2f4;
 .fb-acceptButtonY {
     color: #fff;
     font-weight: bold;
-    background-color: #FFA145;
+    background-color: rgb(110,158,255);
     border-radius: 6px;
     width: 100px;
     height: 30px;
@@ -854,7 +879,7 @@ background-color: #ccf2f4;
 
 }
 .fb-cmtCountColor {
-    color: #FFBC7B;
+    color: rgb(255,147,0);
 }
 
 
@@ -887,8 +912,9 @@ background-color: #ccf2f4;
 	border: none;
 }
 .fb-table-th {
-    background-color: #FFBC7B;
-    color: #fff;
+    background-color:fff;
+    border-bottom: 1px solid #ddd;
+    color: #272727;
     padding: 15px;
     font-weight: 600;
 	height: 45px;
@@ -898,7 +924,11 @@ background-color: #ccf2f4;
     text-align: center;   /* 가로 가운데 정렬 */
     vertical-align: middle;  /* 세로 가운데 정렬 */
     padding: 12px;
-
+}
+.fb-table-td:hover {
+    color: rgb(110,158,255);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 .fb-table-td {
   table-layout: fixed;
@@ -910,17 +940,14 @@ background-color: #ccf2f4;
 	margin: 15px;
     font-size: 14px;
     color: #333;
-    background-color: #f0f0f0;
+    background-color: #fff;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.fb-tr:nth-child(even) td {
-    background-color: #fafafa;
-}
 .fb-a a{
-    color: #FFBC7B;
+    color: #272727;
     font-weight: bold;
     text-decoration: none;
 	margin-top: 20px;
@@ -934,7 +961,7 @@ background-color: #ccf2f4;
     margin: 0 4px;
     font-weight: bold;
     cursor: pointer;
-    color: #FFBC7B;
+    color: #272727;
 }
 
 .fb-page-number:hover {
@@ -942,7 +969,7 @@ background-color: #ccf2f4;
 }
 
 .fb-current-page {
-    color: #FFBC7B;
+    color: rgb(110,158,255);
     text-decoration: underline;
     cursor: default;
 	font-weight: bold;
@@ -962,7 +989,7 @@ background-color: #ccf2f4;
 .fb-buttonTitle {
   padding: 4px 0;
   display: inline-block;
-  color: #FFBC7B;
+  color: #272727;
   font-weight: bold;
   cursor:pointer;
   margin-top: 10px;
@@ -990,8 +1017,9 @@ tr.fb-dropdown-content {
     /* 드롭다운 컨텐츠에 마우스를 올렸을 때 */
 .fb-dropdown-content:hover {
     background-color: #f8f8f8;  /* 호버시 배경색 */
-    color: #FFBC7B;
+    color: rgb(0, 80, 255);
     font-weight: bold;
+    cursor: pointer;
 }
 tr.faq-td.faq-even td {
     background-color: #f0f0f0;
@@ -1079,18 +1107,7 @@ tr.faq-td.faq-odd td {
 .FileDownload:hover {
     color: #FFBC7B;
 }
-.fb-cmtButton {
-     padding: 5px 10px;
-     font-size: 14px;
-     font-weight: bold;
-     background-color: #FFBC7B;
-     color: #fff;
-     border-radius: 6px;
-     cursor: pointer;
-     width: fit-content;
-     margin-inline-end: auto;
-     border: none;
- }
+
 
  .fb-cmtButtonBox {
      border-radius: 6px;
@@ -1128,8 +1145,8 @@ tr.faq-td.faq-odd td {
 
  .fb-cmtTextBox {
      border-radius: 6px;
-     border: 1px solid #f7f7f8;
-     background-color: #FFBC7B;
+     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+     background-color: #fff;
      max-width: 1000px;
      width: 100%;
      margin: 5px;
@@ -1199,11 +1216,11 @@ tr.faq-td.faq-odd td {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #FFBC7B;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #eaeaea;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     flex-shrink: 0;
 	border: 5px solid transparent;
-	border-image: radial-gradient(circle, #FFBC7B 20%, transparent 20%) 1;
+	border-image: radial-gradient(circle, #fff 20%, transparent 20%) 1;
   }
 
   /* 오른쪽 정보 영역 */
@@ -1219,20 +1236,20 @@ tr.faq-td.faq-odd td {
   .fb-profile-name {
     font-size: 20px;
     font-weight: bold;
-    color: #FFBC7B;
+    color: #272727;
     word-break: keep-all;
   }
 
   /* 뱃지 */
   .fb-profile-badges {
     margin-top: 6px;
-	color: #FFBC7B;
+	color: rgb(110, 158, 255);
 	font-weight: bold;
   }
 
 
   .fb-badge.orange {
-    background-color: #FFBC7B;
+    background-color: rgb(110, 158, 255);
     color: rgb(223, 223, 223);
 	margin-left: 5px;
   }
@@ -1256,7 +1273,7 @@ tr.faq-td.faq-odd td {
 	margin-bottom: 20px !important;
     margin: auto;
     padding: 20px;
-    background-color: #FFBC7B;
+    background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
@@ -1411,12 +1428,16 @@ tr.faq-td.faq-odd td {
    vertical-align: middle;
    padding-left: 10px;
  }
+ .fb-buttonReply:hover{
+    background-color: #0366d6;
+    color: #fff;
+ }
  .reply-box {
    width: 100%;
  }
  .fb-buttonReply {
    padding: 8px 16px;
-   background-color: #FFBC7B;
+   background-color: rgb(110,158,255);
    color: #fff;
    border: none;
    border-radius: 6px;

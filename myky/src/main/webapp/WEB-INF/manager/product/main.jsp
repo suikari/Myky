@@ -394,7 +394,7 @@
 	                            </td>
 	                            <td>
            							<button class="btn-edit me-2" @click="fnEdit(member.productId)">수정</button>
-	                                <!-- <button class="btn-delete">삭제</button> -->
+	                                <button class="btn-delete" @click="fnDelete(member.productId)">삭제</button>
 	                            </td>
 	                        </tr>
 	                        
@@ -603,6 +603,33 @@
                     		}
                     	});
                     },
+                    fnDelete : function( productId ){
+                        let self = this;
+                        
+                        if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+                            return false;
+                        }
+                        
+                      	//selectList : JSON.stringify(self.selectList),                      	
+        				var nparmap = {
+                            productId : productId,
+                        };
+        				$.ajax({
+        					url:"/admin/deleteProduct.dox",
+        					dataType:"json",	
+        					type : "POST", 
+        					data : nparmap,
+        					success : function(data) { 
+        						console.log(data);
+                                alert(data.count + "건 삭제 완료!");
+                                self.page = 1;
+                				self.fnMainList();
+        					}
+        				});
+                    },
+                    
+                    
+                    
                     fnView(boardId) {
                         let self = this;
                         localStorage.setItem("page", self.page);

@@ -92,8 +92,6 @@
                                     alert("작성자만 접근 가능합니다.");
                                     location.href="/board/vetBoardList.do";
                                 }
-
-				        		console.log("view",data);
                                     self.info = data.info;
                                     self.answerList = data.answerList;
                                     self.fnQuill();

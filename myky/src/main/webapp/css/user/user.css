@@ -32,51 +32,14 @@
 }
 
 /* 버튼 스타일 */
-.kakao-btn {
-	width: 100%;
-	background-color: #fee500;
-	color: #3c1e1e;
-	border: none;
-	border-radius: 25px;
-	padding: 14px 0;
-	font-weight: bold;
-	font-size: 16px;
-	margin-bottom: 24px;
-	cursor: pointer;
-}
 
-.naver-btn {
-	width: 100%;
-	background-color: rgba(6, 181, 6, 0.697);
-	color: white;
-	border: none;
-	border-radius: 25px;
-	padding: 14px 0;
-	font-weight: bold;
-	font-size: 16px;
-	margin-bottom: 24px;
-	cursor: pointer;
-}
-
-.google-btn {
-	width: 100%;
-	background-color: black;
-	color: white;
-	border: none;
-	border-radius: 25px;
-	padding: 14px 0;
-	font-weight: bold;
-	font-size: 16px;
-	margin-bottom: 24px;
-	cursor: pointer;
-}
 
 .login-btn {
 	width: 100%;
-	background-color: #1a1a5e;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	border: none;
-	border-radius: 25px;
+	border-radius: 6px;
 	padding: 14px 0;
 	font-size: 16px;
 	margin-top: 10px;
@@ -84,7 +47,7 @@
 }
 
 .login-btn:hover {
-	background-color: #0f0f3f;
+	background-color: rgb(0, 80, 255);
 }
 
 /* 아이디/비번 찾기 */
@@ -112,7 +75,7 @@
 	/* 텍스트 버튼과 동일 */
 	height: 50px;
 	/* 버튼 높이와 동일 */
-	border-radius: 50px;
+	border-radius: 6px;
 	/* 둥근 모서리 - 버튼과 통일 */
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 	/* 버튼과 같은 그림자 효과 */
@@ -217,7 +180,7 @@
 	padding: 12px;
 	font-size: 16px;
 	border: none;
-	border-radius: 25px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: background-color 0.2s;
 	width: 100%;
@@ -225,21 +188,21 @@
 }
 
 .id-btn-search {
-	background-color: #2b50aa;
+	background-color: rgb(110, 158, 255);
 	color: white;
 }
 
 .id-btn-search:hover {
-	background-color: #1f3f8f;
+	background-color: rgb(0, 80, 255);
 }
 
 .id-btn-cancel {
-	background-color: #ccc;
-	color: #333;
+	background-color: #eaeaea;
+	color: white;
 }
 
 .id-btn-cancel:hover {
-	background-color: #bbb;
+	background-color: #ccc;
 }
 
 /* 결과 섹션 */
@@ -261,21 +224,21 @@
 }
 
 .id-reset-btn {
-	background-color: #f0ad4e;
+	background-color: rgb(110, 158, 255);
 	color: white;
 }
 
 .id-reset-btn:hover {
-	background-color: #ec971f;
+	background-color: rgb(0, 80, 255);
 }
 
 .id-login-btn {
-	background-color: #2b50aa;
+	background-color: rgb(110, 158, 255);
 	color: white;
 }
 
 .id-login-btn:hover {
-	background-color: #1f3f8f;
+	background-color: rgb(0, 80, 255);
 }
 
 /* 반응형 */
@@ -354,7 +317,7 @@
 	font-size: 16px;
 	color: #fff;
 	border: none;
-	border-radius: 25px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: background-color 0.3s;
 	min-width: 45%;
@@ -362,35 +325,35 @@
 
 /* 버튼 컬러 */
 .auth-btn {
-	background-color: #2b50aa;
+	background-color: rgb(110, 158, 255);
 }
 
 .auth-btn:hover {
-	background-color: #1f3f8f;
+	background-color: rgb(0, 80, 255);
 }
 
 .auth-btn2 {
-	background-color: #ccc;
+	background-color: #eaeaea;
 }
 
 .auth-btn2:hover {
-	background-color: #bbb;
-}
-
-.save-btn {
-	background-color: #2b50aa;
-}
-
-.save-btn:hover {
-	background-color: #1f3f8f;
-}
-
-.save-btn2 {
 	background-color: #ccc;
 }
 
+.save-btn {
+	background-color: rgb(110, 158, 255);
+}
+
+.save-btn:hover {
+	background-color: rgb(0, 80, 255);
+}
+
+.save-btn2 {
+	background-color: #eaeaea;
+}
+
 .save-btn2:hover {
-	background-color: #bbb;
+	background-color: #ccc;
 }
 
 /* 반응형 */
@@ -424,6 +387,7 @@
 /**/
 /**/
 
+
 .con-container {
 	max-width: 1000px;
 	margin: 50px auto;
@@ -449,10 +413,15 @@
 	color: #333;
 }
 
+
 /* 약관 박스 스타일 */
 .box {
-	margin-top: 10px;
-	margin-bottom: 30px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    height: 200px;
+    overflow-y: scroll;
+    background-color: #f9f9f9;
 }
 
 .box textarea {
@@ -482,21 +451,23 @@ hr {
 
 /* 버튼 스타일 (기존 clb 클래스 활용) */
 .clb {
-	display: inline-block;
-	padding: 12px 24px;
-	font-size: 16px;
-	color: #4a90e2;
-	border: 1px solid #4a90e2;
-	border-radius: 6px;
-	background-color: transparent;
-	transition: background-color 0.3s ease, color 0.3s ease;
-	cursor: pointer;
-	margin-right: 10px;
+    background-color: rgb(110, 158, 255);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin: 10px;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .clb:hover {
-	background-color: #4a90e2;
+	background-color: rgb(0, 80, 255);
 	color: white;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-left: 10px;
 }
 
 /* 반응형 대응 */
@@ -564,7 +535,7 @@ hr {
 	white-space: nowrap;
 	padding: 10px 16px;
 	font-size: 14px;
-	background-color: #2b50aa;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	border: none;
 	border-radius: 6px;
@@ -573,7 +544,7 @@ hr {
 }
 
 .inline-btn:hover {
-	background-color: #1f3f8f;
+	background-color: rgb(0, 80, 255);
 }
 
 /* 라벨 */
@@ -596,17 +567,17 @@ hr {
 .btn-submit {
 	width: 100%;
 	padding: 14px;
-	background-color: #e2b258;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	font-size: 16px;
 	border: none;
-	border-radius: 8px;
+	border-radius: 6px;
 	cursor: pointer;
 	transition: background-color 0.3s;
 }
 
 .btn-submit:hover {
-	background-color: #dc8b01;
+	background-color: rgb(0, 80, 255);
 }
 
 /**//**/
@@ -698,11 +669,11 @@ hr {
 
 /* 버튼 */
 .user-info-btn {
-    background: #2b50aa;
+    background: rgb(110, 158, 255);
     color: white;
     border: none;
     padding: 6px 12px;
-    border-radius: 25px;
+    border-radius: 6px;
     font-size: 14px;
     cursor: pointer;
     transition: background 0.3s;
@@ -710,16 +681,16 @@ hr {
 }
 
 .user-info-btn:hover {
-    background: #1f3f8f;
+    background: rgb(0, 80, 255);
 }
 
 /* 취소 버튼 */
 .user-info-btn.cancel {
-    background: #ccc;
+    background: #eaeaea;
 }
 
 .user-info-btn.cancel:hover {
-    background: #bbb;
+    background: #ccc;
 }
 
 /* 버튼 그룹 정렬 */
@@ -745,10 +716,10 @@ hr {
 
 .custom-file-label {
     display: inline-block;
-    background-color: #2b50aa;
+    background-color: rgb(110, 158, 255);
     color: white;
     padding: 8px 16px;
-    border-radius: 25px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     text-align: center;
@@ -757,7 +728,7 @@ hr {
 }
 
 .custom-file-label:hover {
-    background-color: #1f3f8f;
+    background-color: rgb(0, 80, 255);
 }
 
 

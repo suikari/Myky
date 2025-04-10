@@ -84,8 +84,6 @@
           fnIdChecked: function () {
             var self = this;
             self.phoneNumber = self.selectNum + self.num1 + self.num2;
-            console.log(self.phoneNumber);
-            console.log(self.userName);
             var nparmap =
             {
               phoneNumber: self.phoneNumber,
@@ -97,14 +95,12 @@
               type: "POST",
               data: nparmap,
               success: function (data) {
-                console.log(data);
                 if (data.count == 0) {
                   alert("정보에 일치하는 아이디가 없습니다.");
 
 
                 } else {
                   self.list = data.user;
-                  console.log(self.list);
                   self.authFlg = true;
                 }
               }

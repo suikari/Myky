@@ -272,14 +272,12 @@
                         var nparmap = {
                             userId: self.userId
                         };
-                        console.log(self.userId);
                         $.ajax({
                             url: "/user/info.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.user = data.user;
                             }
                         });
@@ -339,7 +337,7 @@
 
                         var nparmap = self.user
 
-                        console.log(nparmap);
+
                         $.ajax({
                             url: "/user/update.dox",
                             dataType: "json",
@@ -347,7 +345,6 @@
                             data: nparmap,
                             success: function (data) {
                                 alert("수정 완료");
-                                console.log(data);
 
                                 if ($("#file1")[0].files.length > 0) {
                                     var form = new FormData();
@@ -448,7 +445,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.count == 0) {
                                     alert("사용 가능한 닉네임입니다");
                                     self.nickFlg = false;
@@ -479,17 +475,11 @@
                         let self = this;
                         self.user.address = roadFullAddr + ', ' + zipNo;
 
-                        console.log(roadFullAddr);
-                        console.log(roadAddrPart1);
-                        console.log(addrDetail);
-                        console.log(engAddr);
-                        console.log(zipNo);
                     },
                     //사진 미리보기
                     uploadImage(event) {
                         let self = this;
                         self.picFlg = true;
-                        console.log(self.picFlg);
                         const file = event.target.files[0];
                         if (file) {
                             const reader = new FileReader();
@@ -537,7 +527,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.count == 0) {
                                     self.sendEmailAuth();
 

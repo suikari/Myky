@@ -34,23 +34,19 @@
                     새 소식을 알려드립니다<div class="f"></div>
                 </div>
                 <hr class="fb-custom-hr">
-
-                <div class="fb-title-label">
-                    TITLE
-                </div>
-                <div class="fb-view-box">
-                    <a style="font-size:20px">{{info.title}}</a>
-
-                    <div class="fb-author-box">
-                        <div class="fb-author-label">작성자: {{info.nickName}}</div>
-                        <div class="fb-meta">
-                            <span class="fb-date">🕒 {{info.createdAt}}</span>
-                            <span class="fb-views">|  조회수 {{info.cnt}}</span>
-                        </div>
+                
+                <div class="fb-post-wrapper">
+                    <div class="fb-post-header">
+                      <div class="fb-post-title">{{ info.title }}</div>
+                      <div class="fb-post-meta">
+                        <span class="fb-nickname">{{ info.nickName }}</span>
+                        <span class="fb-date">🕒 {{ info.createdAt }}</span>
+                        <span class="fb-views">조회수 {{ info.cnt }}</span>
+                      </div>
                     </div>
-                </div>
-                <div class="fb-title-label">CONTENT</div>
-                <div class="fb-view-boxContent" v-html="info.content"></div>
+                  
+                    <div class="fb-post-content" v-html="info.content"></div>
+                  </div>
 
                 <!-- 좋아요, 싫어요 버튼 -->
                 <div class="like-button-wrapper">
@@ -281,7 +277,6 @@
                 },
                 computed: {
                     size(fileSize) {
-                        console.log("1", fileSize);
                         let size = Math.ceil(parseInt(fileSize) / 1024);
 
                         return parseInt(size);
@@ -306,7 +301,6 @@
                                     alert("잘못된 주소입니다.");
                                     location.href = "/board/boardList.do";
                                 }
-                                console.log("댓글", data);
                                 self.info = data.info
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
@@ -328,7 +322,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("7979", data);
 
                                 if (data.result == "success") {
 
@@ -378,7 +371,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 location.href = "/board/list.do?category=" + self.category;
                                 alert("삭제되었습니다!");
                             }
@@ -388,7 +380,7 @@
                         let self = this;
                         self.editCommentId = item.commentId;
                         self.editContent = item.content;
-                        console.log(self.editContent);
+
                         var nparmap = {
                             commentId: item.commentId
                         };
@@ -408,7 +400,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 alert("수정됐습니다!");
                                 self.editCommentId = "";
                                 self.fnView();
@@ -417,7 +408,7 @@
                     },
                     fnCommentRemove(commentId) {
                         let self = this;
-                        console.log(commentId);
+
                         var nparmap = {
                             commentId: commentId
                         };
@@ -431,7 +422,7 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
+
                                 alert("삭제되었습니다");
                                 self.fnView();
                             }
@@ -451,7 +442,7 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
+
                                 alert("등록되었습니다");
                                 self.fnView();
                                 self.content = "";
@@ -488,7 +479,7 @@
                     },
                     fnReply(commentId) {
                         let self = this;
-                        console.log(commentId);
+
                         if (self.replyFormId == commentId) {
                             self.replyFormId = "";
                             return;
@@ -540,7 +531,7 @@
                                 type: "POST",
                                 data: nparmap,
                                 success: function (data) {
-                                    console.log("eee", data);
+
                                     self.fnlikestatus();
                                 }
                             });
@@ -553,7 +544,7 @@
                                 type: "POST",
                                 data: nparmap,
                                 success: function (data) {
-                                    console.log("eee", data);
+
                                     self.fnlikestatus();
                                 }
                             });
@@ -566,7 +557,7 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
+
                                 self.fnView();
 
                             }

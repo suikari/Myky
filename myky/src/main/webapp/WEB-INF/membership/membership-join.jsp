@@ -22,13 +22,13 @@
                 <h2>🐾 멍냥꽁냥 멤버십 가입</h2>
             </div>
             <ul class="step-bar">
-                <li class="active">1. 회원 정보 확인</li>
-                <li :class="{ active: confirmed }">2. 결제</li>
+                <li class="active">회원 정보 확인</li>
+                <li :class="{ active: confirmed }">결제</li>
             </ul>
 
             <!-- ✅ 회원 정보 확인 -->
             <div class="card-section">
-                <h3>🙋 회원 정보 확인</h3>
+                <h3>회원 정보 확인</h3>
                 <div class="info-grid">
                     <div class="info-item"><strong>이름:</strong> {{ userInfo.userName }}</div>
                     <div class="info-item"><strong>아이디:</strong> {{ userInfo.userId }}</div>
@@ -45,7 +45,7 @@
 
             <!-- ✅ 결제 수단 선택 -->
             <div class="card-section" ref="paymentBox" id="payment-section">
-                <h3>💳 결제 옵션 선택</h3>
+                <h3> 결제 옵션 선택</h3>
 
                 <div class="plan-options" ref="planOptions" style="position: relative;">
                     <!-- 1개월 -->
@@ -123,7 +123,7 @@
             if (typeof IMP !== 'undefined') {
                 IMP.init(userCode);
             } else {
-                console.error('IMP is not loaded properly');
+
             }
 
             const app = Vue.createApp({
@@ -146,7 +146,6 @@
                 methods: {
                     fnUserInfo() {
                         let self = this;
-                        console.log("sessionId >>> ", self.sessionId);
                         var nparmap = {
                             userId: self.sessionId
                         };
@@ -156,7 +155,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("userInfo >>> ", data.user);
                                 self.userInfo = data.user;
                             }
                         });
@@ -244,37 +242,31 @@
                         }, function (rsp) {
                             if (rsp.success) {
                                 alert("멤버십 결제가 완료되었습니다! 감사합니다.");
-                                console.log("결제 정보 >>> ", rsp);
 
                                 self.fnAddMembership(rsp);
                                 location.href = "/membership/main.do";
 
                             } else {
                                 alert("결제에 실패했습니다.");
-                                console.log("결제 정보 >>> ", rsp.error_msg);
                             }
                         }
                         )
                     },
                     fnAddMembership: function (rsp) {
                         var self = this;
-                        // console.log("nparmap",nparmap);
                         var nparmap = {
                             userId: self.userInfo.userId,
                             membershipType: self.membershipType,
                             expirationDate: self.expirationDate
                         };
-                        console.log("nparmap", nparmap);
                         $.ajax({
                             url: "/membership/addmember.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("멤버십 정보 저장 여부 >>> ", data.result);
                                 self.membershipId = data.membershipId;
-                                console.log("fnAddMembership >> self.membershipId >>> ", self.membershipId);
-                                // DB 저장 후 후원ID 가져오기
+
                                 self.fnPaymentHistory(rsp);
                             }
                         });
@@ -288,10 +280,6 @@
                         } else {
                             paymentMethod = rsp.pay_method;
                         }
-
-                        console.log("paymentMethod >>> ", paymentMethod);
-                        console.log("fnPaymentHistory >> self.membershipId >>> ", self.membershipId);
-
                         var nparmap = {
                             option: "",
                             paymentCode: rsp.merchant_uid,
@@ -309,14 +297,12 @@
                             userId: self.userInfo.userId,
                             usedPoint: null
                         };
-                        console.log("nparmap", nparmap);
                         $.ajax({
                             url: "/payment.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("결제 정보 저장 여부 >>> ", data.result);
                             }
                         });
                     },

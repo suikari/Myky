@@ -18,7 +18,7 @@
             }
 
             .mypage-container {
-                width: 80%;
+                width: 100%;
                 margin: 30px auto;
                 background: #fff;
                 padding: 30px;
@@ -102,8 +102,8 @@
             .summary-item:hover {
                 transform: translateY(-4px);
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                background-color: #f3eded;
-                border: 1px solid #f4a261;
+                background-color: rgb(203, 235, 255);
+                border: 1px solid rgb(110, 158, 255);
             }
 
             .summary-title {
@@ -126,7 +126,7 @@
 
             .sidebar {
                 width: 25%;
-                background: #f9e2c1;
+                background: #f7f7f7;
                 padding: 20px;
                 border-radius: 10px;
                 font-family: 'Noto Sans KR', sans-serif;
@@ -146,7 +146,7 @@
 
             .tab-item {
                 padding: 10px 15px;
-                border-radius: 25px;
+                border-radius: 6px;
                 margin-bottom: 8px;
                 font-size: 14px;
                 color: #444;
@@ -155,33 +155,34 @@
             }
 
             .tab-item:hover {
-                background-color: #fbb276;
+                background-color: rgb(110, 158, 255);
                 color: white;
                 cursor: pointer;
             }
 
             .tab-item.active {
-                background-color: #f4a261;
+                background-color: rgb(0, 80, 255);
                 color: white;
                 font-weight: 600;
             }
 
             .sidebar ul {
                 list-style: none;
+                color: #444;
                 padding: 0;
             }
 
             .sidebar ul li {
                 padding: 10px 15px;
-                border-radius: 25px;
+                border-radius: 6px;
                 font-size: 14px;
                 margin-bottom: 6px;
                 transition: background-color 0.2s ease, color 0.2s ease;
             }
 
             .sidebar ul li:hover {
-                background-color: #e0e0e0;
-                color: #000;
+                background-color: rgb(110, 158, 255);
+                color: white;
                 cursor: pointer;
             }
 
@@ -251,7 +252,7 @@
             }
 
             .order-table th {
-                background-color: #f0f0f0;
+                background-color: rgb(203, 235, 255);;
                 color: #333;
                 font-weight: 600;
                 padding: 12px 10px;
@@ -323,8 +324,8 @@
             }
 
             .board-table th {
-                background-color: #f4a261;
-                color: white;
+                background-color: rgb(203, 235, 255);;
+                color: #333;
                 padding: 12px 15px;
                 text-align: center;
                 font-size: 16px;
@@ -352,8 +353,8 @@
             }
 
             .board-table a:hover {
-                color: #f4a261;
-                text-decoration: underline;
+                color: rgb(110, 158, 255);
+                text-decoration: none;
             }
 
             .board-table td:nth-child(3),
@@ -381,7 +382,7 @@
             .board-page button {
                 margin-top: 10px;
                 padding: 8px 16px;
-                background-color: #f4a261;
+                background-color: rgb(110, 158, 255);
                 border: none;
                 border-radius: 6px;
                 color: white;
@@ -389,7 +390,7 @@
             }
 
             .board-page button:hover {
-                background-color: #f4a261;
+                background-color: rgb(0, 80, 255);
             }
 
             .cmtCountColor {
@@ -423,7 +424,7 @@
             .pagination .bgColer {
                 padding: 5px 10px;
                 border-radius: 6px;
-                background-color: #f4a261;
+                background-color: rgb(110, 158, 255);;
                 color: white;
             }
 
@@ -475,7 +476,7 @@
             .board-page select:focus,
             .board-page input[type="text"]:focus,
             .board-page input[type="search"]:focus {
-                border-color: #f4a261;
+                border-color: rgb(110, 158, 255);
                 box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
             }
 
@@ -515,7 +516,7 @@
 
             .board-controls select:focus,
             .board-controls input[type="text"]:focus {
-                border-color: #f4a261;
+                border-color: rgb(110, 158, 255);
                 box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
             }
 
@@ -534,7 +535,7 @@
 
             /* 게시글 작성 버튼 */
             .btn-board-write {
-                background-color: #f4a261;
+                background-color: rgb(110, 158, 255);;
                 color: #fff;
                 padding: 10px 20px;
                 font-size: 15px;
@@ -546,7 +547,7 @@
             }
 
             .btn-board-write:hover {
-                background-color: #e98b3e;
+                background-color: rgb(0, 80, 255);;
                 /* 조금 더 진한 오렌지 */
             }
 
@@ -568,8 +569,8 @@
             }
 
             .comment-table-header {
-                background-color: #f4a261;
-                color: white;
+                background-color: rgb(203, 235, 255);
+                color: #333;
                 text-align: center;
                 font-weight: bold;
             }
@@ -606,12 +607,12 @@
             }
 
             .comment-link {
-                color: #007BFF;
+                color: rgb(110, 158, 255);
                 text-decoration: none;
             }
 
             .comment-link:hover {
-                text-decoration: underline;
+                color: rgb(0, 80, 255);
             }
 
             /* 작성일 스타일 */
@@ -649,10 +650,10 @@
                 margin-top: 30px;
                 margin-bottom: 20px;
                 font-family: 'Arial', sans-serif;
-                background: linear-gradient(to right, #ff6600, #ff9966);
+                /* background: linear-gradient(to right, #ff6600, #ff9966); */
                 background-clip: text;
                 -webkit-background-clip: text;
-                color: transparent;
+                color: rgb(110, 158, 255);
                 padding: 10px 0;
             }
 
@@ -662,7 +663,7 @@
                 display: block;
                 width: 50px;
                 height: 3px;
-                background-color: #ff6600;
+                background-color: rgb(110, 158, 255);;
                 margin: 10px auto;
             }
 
@@ -784,7 +785,7 @@
                 font-weight: bold;
                 color: #333;
                 margin-bottom: 10px;
-                border-bottom: 2px solid #f4a261;
+                border-bottom: 2px solid rgb(110, 158, 255);;
                 padding-bottom: 5px;
             }
 
@@ -805,10 +806,10 @@
 
             /* 테이블 헤더 스타일 */
             .cpoint-header {
-                background-color: #f4a261;
-                color: white;
+                background-color: rgb(203, 235, 255);;
+                color: #333;
                 padding: 10px;
-                text-align: left;
+                text-align: center;
                 font-size: 16px;
             }
 
@@ -820,7 +821,7 @@
 
             .cpoint-row td {
                 padding: 12px 15px;
-                text-align: left;
+                text-align: center;
                 font-size: 14px;
             }
 
@@ -837,7 +838,7 @@
             .cpoint-pagination a {
                 display: inline-block;
                 padding: 8px 14px;
-                background-color: #f4a261;
+                background-color: rgb(110, 158, 255);
                 color: #fff;
                 border-radius: 6px;
                 margin: 0 5px;
@@ -847,7 +848,7 @@
             }
 
             .cpoint-pagination a:hover {
-                background-color: #e76f51;
+                background-color: rgb(0, 80, 255);
             }
 
             .coupon-container {
@@ -906,7 +907,7 @@
                 padding: 16px;
                 color: #ffffff;
                 font-family: 'Arial', sans-serif;
-                width: 800px;
+                width: 1280px;
                 height: 200px;
                 text-align: center;
                 line-height: 150px;
@@ -960,7 +961,7 @@
             }
 
             .badge-yes {
-                background-color: #f4a261;
+                background-color: rgb(0, 80, 255);
                 /* 초록색 */
                 color: white;
             }
@@ -1043,7 +1044,6 @@
                                 <h3>나의 개인정보</h3>
                                 <li><a @click="fnInfo()">회원 정보 수정</a></li>
                                 <li><a @click="fnWithdraw()">회원 탈퇴</a></li>
-                                <li></li>
                             </ul>
                         </aside>
 
@@ -1162,7 +1162,8 @@
                                     <div v-for="item in couponList">
                                         <div class="coupon">
                                             <!-- 배경 이미지 추가 -->
-                                            <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo" class="coupon-bg-logo">
+                                            <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo"
+                                                class="coupon-bg-logo">
 
                                             <ul class="coupon-list">
                                                 <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
@@ -1466,14 +1467,15 @@
                                                     <td colspan="5">후원 내역이 없습니다.</td>
                                                 </tr>
                                             </table>
-
-                                            <a v-if="page4 != 1" id="donaIndex" href="javascript:;" class="bgColer2"
-                                                @click="fnPageMove4('pvev')">
-                                                < </a>
-                                                    <a v-if="donaIndex > 1 && page4 != donaIndex" id="pointIndex"
-                                                        href="javascript:;" class="bgColer2"
-                                                        @click="fnPageMove4('next')">
-                                                        > </a>
+                                            <div class="cpoint-pagination">
+                                                <a v-if="page4 != 1" id="donaIndex" href="javascript:;" class="bgColer2"
+                                                    @click="fnPageMove4('pvev')">
+                                                    < </a>
+                                                        <a v-if="donaIndex > 1 && page4 != donaIndex" id="pointIndex"
+                                                            href="javascript:;" class="bgColer2"
+                                                            @click="fnPageMove4('next')">
+                                                            > </a>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1598,7 +1600,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.user = data.user;
                             }
                         });
@@ -1632,7 +1633,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log('대한', data.point);
                                 if (data.point == null || data.point == undefined) {
                                     self.point.currentPoint = 0;
                                 } else {
@@ -1695,14 +1695,12 @@
                             pageSize: self.pageSize,
                             page: (self.page - 1) * self.pageSize // 페이지 시작점
                         };
-                        console.log(nparmap);
                         $.ajax({
                             url: "/board/list.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.board = data.board;
                                 self.boardCnt = data.count;
                                 if (data.count && data.count.cnt !== undefined) { // 율 코드 문의하기
@@ -1761,18 +1759,15 @@
                             page2: (self.page2 - 1) * self.pageSize2, // 페이지 시작점
                             commKeyword: self.commKeyword
                         };
-                        console.log(nparmap);
                         $.ajax({
                             url: "/user/comment.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.commentList = data.comment;
                                 self.commCnt = data.count2;
                                 self.index2 = Math.ceil(data.count2 / self.pageSize2);
-                                console.log(self.index2);
                             }
                         });
                     },
@@ -1835,7 +1830,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.donaList = data.donation;
                                 self.sum = data.sum;
                                 self.donaCnt = data.donaCount;
@@ -1900,10 +1894,8 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 self.couponList = data.coupon;
                                 self.couponCnt = data.count;
-                                console.log(self.couponCnt);
 
                             }
                         });
@@ -1914,18 +1906,16 @@
                         let nparmap = {
                             userId: self.userId
                         };
-                        console.log(nparmap);
                         $.ajax({
                             url: "/user/orderList.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("주문 상세 목록 >>> ", data.orderList);
                                 self.orderList = data.orderList;
                                 self.orderCnt = data.orderCount;
                                 self.orderAllCnt = data.orderAllCount;
-                                console.log('올카운트', self.orderAllCnt);
+
 
                             }
                         });
@@ -1937,17 +1927,15 @@
                             userId: self.userId
 
                         };
-                        console.log("파라", nparmap);
+
                         $.ajax({
                             url: "/user/memberShip.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("데이타 카운트", data.count);
                                 if (data.count > 0) {
                                     self.membership = data.ship;
-                                    console.log("ㅅ쉽", self.membership);
                                     self.membershipYn = "Y";
                                 } else {
                                     self.membershipYn = "N";
@@ -1984,7 +1972,6 @@
                             pageSize: self.vetPageSize,
                             page: (self.vetPage - 1) * self.pageSize // 페이지 시작점
                         };
-                        console.log('파라메타', nparmap);
 
                         $.ajax({
                             url: "/board/vetBoardList.dox",
@@ -1992,47 +1979,20 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("데이타타", data);
                                 if (data.result != 'success') {
                                     alert("잘못된 주소입니다.");
-                                    // location.href="/board/vetBoardList.do";
                                 }
                                 self.vetBoardList = data.vetBoard;
-                                console.log("vetBoard list:", data.vetBoard);
                                 if (data.count && data.count.cnt !== undefined) {
                                     self.vetIndex = Math.ceil(data.count.cnt / self.vetPageSize);
                                     self.vetCnt = data.count;
                                     data.count.cnt
                                 } else {
                                     self.vetIndex = 0;
-                                    console.warn("count 정보 없음!", data);
                                 }
                             }
                         });
                     }
-
-
-
-                    // //수의사 정보 공유
-                    // fnVetInfo() {
-                    //     var self = this;
-                    //     var nparmap = {
-                    //         userId: self.userId
-                    //     };
-                    //     $.ajax({
-                    //         url: "/user/vetInfo.dox",
-                    //         dataType: "json",
-                    //         type: "POST",
-                    //         data: nparmap,
-                    //         success: function (data) {
-                    //             console.log(data);
-                    //             self.user = data.user;
-                    //             self.vet = data.vet;
-                    //             console.log(self.vet);
-
-                    //         }
-                    //     });
-                    // }
 
                 },
 
@@ -2049,7 +2009,6 @@
                     self.fnOrderList();
                     self.fnGetTab();
                     self.fnMyVetBoardList();
-                    // self.fnVetInfo();
                     window.vueObj = this;
 
                 }
