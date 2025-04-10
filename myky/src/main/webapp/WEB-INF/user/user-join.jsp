@@ -103,7 +103,6 @@
             </div>
         </div>
 
-        <jsp:include page="/WEB-INF/common/footer.jsp" />
     </body>
 
     </html>
@@ -220,7 +219,6 @@
                             }
                         }
 
-                        console.log(self.user);
                         var nparmap = self.user;
                         // 파라미터에 해쉬맵(user)로 묶어서 보내는 방법도 있다
                         $.ajax({
@@ -229,7 +227,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 alert("가입을 축하드립니다");
                                 location.href = "/user/login.do";
                             }
@@ -256,7 +253,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.count == 0) {
                                     alert("사용 가능한 아이디입니다");
                                     self.idFlg = true;
@@ -288,7 +284,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.count == 0) {
                                     alert("사용 가능한 닉네임입니다");
                                     self.nickFlg = true;
@@ -306,11 +301,6 @@
                         let self = this;
                         self.user.address = roadFullAddr + ', ' + zipNo;
 
-                        console.log(roadFullAddr);
-                        console.log(roadAddrPart1);
-                        console.log(addrDetail);
-                        console.log(engAddr);
-                        console.log(zipNo);
                     },
 
                     fnEmailChecked: function () {
@@ -335,7 +325,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.count == 0) {
                                     self.sendEmailAuth();
 

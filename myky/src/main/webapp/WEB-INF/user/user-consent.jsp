@@ -9,35 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/css/user/user.css" />
     <style>
-        .con-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 30px;
-        }
 
-        .box {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-            height: 200px;
-            overflow-y: scroll;
-            background-color: #f9f9f9;
-        }
-
-        .clb {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin: 10px;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.2);
-            margin-left: 10px;
-        }
     </style>
 </head>
 
@@ -133,7 +105,6 @@
                     const requiredUnchecked = self.termsList
                         .filter(term => term.requiredYn === 'Y')
                         .some(term => self.agreeList[term.termId] !== 'Y');
-                        console.log(self.agreeList.T008);
                     if (requiredUnchecked) {
                         alert("필수 약관에 모두 동의해 주세요.");
                         return;
@@ -150,8 +121,6 @@
             },
             mounted() {
                 this.loadTerms();
-                console.log("email:", this.email);
-                console.log("name:", this.name);
             }
         });
 

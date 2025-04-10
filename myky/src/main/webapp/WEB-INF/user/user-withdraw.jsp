@@ -50,18 +50,18 @@
             }
 
             button {
-                background: #2b50aa;
+                background: rgb(110, 158, 255);
                 color: white;
                 border: none;
                 padding: 10px 15px;
                 margin: 5px;
-                border-radius: 25px;
+                border-radius: 6px;
                 cursor: pointer;
                 transition: 0.3s;
             }
 
             button:hover {
-                background: #1f3f8f;
+                background: rgb(0, 80, 255);
             }
 
             button:nth-child(2) {
@@ -153,14 +153,12 @@
                         var nparmap = {
                             userId: self.userId
                         };
-                        console.log(self.userId);
                         $.ajax({
                             url: "/user/withdraw.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.count > 0) {
                                     alert("탈퇴되었습니다!");
                                     opener.withdrawBack(); // 탈퇴시 mypage
@@ -188,7 +186,6 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log(data);
                                 if (data.result == "success") {
                                     self.authFlg = true;
                                     self.noAuthFlg = false;

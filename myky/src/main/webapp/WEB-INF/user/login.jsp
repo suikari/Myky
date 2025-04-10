@@ -97,7 +97,6 @@
 						type: "POST",
 						data: nparmap,
 						success: function (data) {
-							console.log(self);
 							if (data.result == "success") {
 								alert(data.user.userName + "님 환영해여!") //service에서 user로 정의 했으니 멤버로..
 								location.href = self.reUrl;
@@ -138,7 +137,6 @@
 					// location.href = "/logout";
 				},
 				fnNaverLogin() {
-					console.log("22",this.naverLogin);
 					const loginAnchor = document.querySelector('#naverIdLogin a');
 					if (loginAnchor) {
 						loginAnchor.click(); // ✅ SDK가 만든 로그인 링크 클릭
@@ -149,7 +147,6 @@
 				onMessageFromNaver(event) {
 					if (event.data?.type === "naverLogin") {
 						const userInfo = event.data.data;
-						console.log("네이버 로그인 정보 수신됨:", userInfo);
 
 						var self = this;
 						var nparmap = {
@@ -163,7 +160,6 @@
 							type: "POST",
 							data: nparmap,
 							success: function (data) {
-								console.log(data);
 
 								if((data.result == "fail1")){
 									return;
@@ -172,7 +168,6 @@
 										alert(data.user.userName + "님 환영해요!");
 										location.href = "/main.do";
 									} else {
-										console.log("구글 카운트:", data.count);
 										if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
 											//sessionStorage.setItem("socialLoginConfirmed", "true"); 
 											//location.href = "/user/consent.do";
