@@ -29,7 +29,7 @@ public interface MainMapper {
 	
 	List<Category> selectCategoryList(HashMap<String, Object> map);
 	List<Notification> selectNotificationList(HashMap<String, Object> map);
-	void selectTermsContent(Map<String, Object> map);
+
 
 	
 	

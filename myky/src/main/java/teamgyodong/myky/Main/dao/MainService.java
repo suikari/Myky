@@ -12,7 +12,7 @@ public interface MainService {
 	HashMap<String, Object> selectNotificationList(HashMap<String, Object> map);
 
 	HashMap<String, Object> updateNotification(HashMap<String, Object> map);
-	HashMap<String, Object> selectTermsContent(Map<String, Object> param);
+
 
 	
 	
