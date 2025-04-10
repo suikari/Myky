@@ -1,5 +1,5 @@
 .cartContainer {
-	max-width: 900px;
+	max-width: 1280px;
 	margin: auto;
 	padding: 20px;
 }
@@ -14,7 +14,7 @@
 }
 
 .product-link:hover {
-    color: #ffbc7b;
+    color: rgb(110, 158, 255);
     text-decoration: underline;
 }
 
@@ -32,6 +32,7 @@
 .cartTable {
 	width: 100%;
 	border-collapse: collapse;
+	border-radius: 6px;
 	margin-top: 20px;
 }
 
@@ -43,37 +44,40 @@
 }
 
 .cartTable th {
-	background: #f5f5f5;
+	background: rgb(203, 235, 255);
 }
 
 .quantityBtn {
 	cursor: pointer;
+	border: 1px solid #ddd;
+	border-radius: 6px;
 	padding: 5px 10px;
 }
 
 .removeBtn {
-	background: red;
+	background: rgb(255, 147, 0);
 	color: white;
 	border: none;
+	border-radius: 6px;
 	padding: 5px 10px;
 	cursor: pointer;
 }
 
 .cartOrderBtn {
-	width: 100%;
-	padding: 10px;
-	background: #ffbc7b;
+	width: 400px;
+	padding: 20px;
+	background: rgb(110, 158, 255);
 	color: white;
 	font-size: 16px;
 	border: none;
+	border-radius: 6px;
 	cursor: pointer;
-	margin-top: 20px;
-	margin-bottom: 100px;
+	margin: 20px 450px;
 	transition: background 0.3s;
 }
 
 .cartOrderBtn:hover {
-	background: #FF7500;
+	background: rgb(0, 80, 255);
 }
 
 .cartOrderTable {
@@ -90,15 +94,14 @@
 }
 
 .cartOrderTable th {
-	background: #f5f5f5;
+	background: rgb(203, 235, 255);
 	font-weight: bold;
 }
 
 .ordercontainer {
-	max-width: 900px;
+	max-width: 1280px;
 	margin: auto;
 	padding: 20px;
-	font-family: Arial, sans-serif;
 }
 
 .ordercontainer h2,
@@ -121,7 +124,7 @@
 }
 
 .orderTable th {
-	background: #f5f5f5;
+	background: rgb(203, 235, 255);
 	font-weight: bold;
 }
 
@@ -144,7 +147,7 @@
 	padding: 20px;
 	margin-top: 20px;
 	border-radius: 5px;
-	background: #fafafa;
+	background: rgb(241, 247, 248);
 }
 
 .delivery-section label {
@@ -166,7 +169,7 @@
 .payBtn {
 	width: 100%;
 	padding: 12px;
-	background: #ffbc7b;
+	background: rgb(110, 158, 255);
 	color: white;
 	font-size: 16px;
 	border: none;
@@ -177,7 +180,7 @@
 }
 
 .payBtn:hover {
-	background: #FF7500;
+	background: rgb(0, 80, 255);
 }
 
 .discountTable {
@@ -197,7 +200,7 @@
 }
 
 .discountTable th {
-	background-color: #f8f8f8;
+	background-color: rgb(241, 247, 248);
 	font-weight: bold;
 	color: #333;
 }
@@ -207,7 +210,7 @@
 }
 
 .discountTable tr:nth-child(even) {
-	background-color: #f9f9f9;
+	background-color: rgb(241, 247, 248);
 }
 
 .discountTable input[type="text"] {
@@ -222,7 +225,7 @@
 .discountTable button {
 	padding: 6px 10px;
 	border: none;
-	background-color: #ffbc7b;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	border-radius: 5px;
 	cursor: pointer;
@@ -232,7 +235,7 @@
 }
 
 .discountTable button:hover {
-	background-color: #FF7500;
+	background-color: rgb(0, 80, 255);
 }
 
 .order-complete {
@@ -273,7 +276,7 @@
 }
 
 .order-complete__th {
-	background: #f7f7f7;
+	background: rgb(203, 235, 255);
 	font-weight: bold;
 }
 
@@ -286,7 +289,7 @@
 	text-align: left;
 	padding: 15px;
 	border-radius: 8px;
-	background: #f9f9f9;
+	background: rgb(241, 247, 248);
 	margin-bottom: 15px;
 }
 
@@ -314,22 +317,18 @@
 }
 
 .order-complete__button.main {
-	background: #ffbc7b;
+	background: rgb(110, 158, 255);
 	color: white;
 }
 
 .order-complete__button.history {
-	background: #ffbc7b;
+	background: rgb(110, 158, 255);
 	color: white;
 }
 
 .order-complete__button:hover {
+	background: rgb(0, 80, 255);
 	opacity: 0.8;
-}
-
-.order-body {
-	font-family: 'Arial', sans-serif;
-	background-color: #f4f7fc;
 }
 
 .order-container {
@@ -362,7 +361,7 @@
 .empty-order__link {
     display: inline-block;
     padding: 10px 24px;
-    background-color: #ffbc7b;
+    background-color: rgb(110, 158, 255);
     color: #fff;
     text-decoration: none;
     border-radius: 8px;
@@ -371,7 +370,7 @@
 }
 
 .empty-order__link:hover {
-    background-color: #FF7500;
+    background-color: rgb(0, 80, 255);
 }
 
 .order-history {
@@ -391,7 +390,7 @@
 }
 
 .order-history__button {
-	background: #ffbc7b;
+	background: rgb(110, 158, 255);
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -402,7 +401,7 @@
 }
 
 .order-history__button:hover {
-	background: #FF7500;
+	background: rgb(0, 80, 255);
 	transform: scale(1.05);
 }
 
@@ -421,7 +420,7 @@
 
 .order-history__input:focus,
 .order-history__select:focus {
-	border-color: #FF7500;
+	border-color: rgb(0, 80, 255);
 	outline: none;
 }
 
@@ -429,6 +428,7 @@
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 20px;
+	margin-bottom: 35px;
 	background-color: #ffffff;
 	border-radius: 8px;
 	overflow: hidden;
@@ -442,21 +442,23 @@
 }
 
 .order-history__table th {
-	background-color: #ffbc7b;
-	color: white;
+	background-color: rgb(203, 235, 255);
+	color: #555;
 	font-weight: bold;
 }
 
 .order-history__table td {
-	background-color: #f9f9f9;
+	background-color: rgb(248, 250, 250);
+	color: #666;
 }
 
-.order-history__table tr:hover {
-	background-color: #f1f1f1;
+.order-history__hr {
+	border: 2px solid #eee;
+	margin: 20px 0;
 }
 
 .order-history__details-button {
-	background-color: #ffbc7b;
+	background-color: rgb(157, 186, 247);
 	color: white;
 	border: none;
 	padding: 8px 16px;
@@ -467,14 +469,13 @@
 }
 
 .order-history__details-button:hover {
-	background-color: #FF7500;
+	background-color: rgb(89, 138, 240);
 }
 
 .order-history__details {
-	background-color: #f1f1f1;
+	background-color: rgb(248, 250, 250);
 	padding: 20px;
 	border-radius: 8px;
-	margin-top: 10px;
 	text-align: left;
 	font-size: 14px;
 }
@@ -497,7 +498,7 @@
 }
 
 .order-history__details-table th {
-	background-color: #ffbc7b;
+	background-color: rgb(223, 243, 255);
 	font-weight: normal;
 	color: #333;
 }
@@ -507,37 +508,37 @@
 }
 
 .order-date {
-	font-size: 18px;
+	font-size: 24px;
 	font-weight: bold;
-	background: #e9ecef;
 	padding: 10px;
 	margin-top: 20px;
-	border-radius: 8px;
-	color: #333;
+	color: rgb(110, 158, 255);
 	display: inline-block;
 }
 
 .order-id {
 	font-weight: bold;
+	color: #555;
 	font-size: 16px;
 	margin-top: 10px;
 }
 
 .order-edit-form {
-	background-color: #fff;
-	padding: 20px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
-	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+	background-color: rgb(248, 250, 250);
+	padding: 0 20px 20px 20px;
 }
 
 .order-input {
-	width: 100%;
+	width: 50%;
 	padding: 8px;
 	margin: 5px 0;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 14px;
+}
+
+.order-input.form-margin {
+	margin-right: 20px;
 }
 
 .order-input.short {
@@ -546,7 +547,7 @@
 }
 
 .order-button {
-	background-color: #ffbc7b;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	padding: 8px 12px;
 	border: none;
@@ -557,7 +558,7 @@
 }
 
 .order-button:hover {
-	background-color: #FF7500;
+	background-color: rgb(0, 80, 255);
 }
 
 .add-to-cart-button {
@@ -571,11 +572,11 @@
 }
 
 .add-to-cart-button:hover {
-	background-color: #f5f5f5;
+	background-color: rgb(241, 247, 248);
 }
 
 .added-to-cart {
-	background-color: #ffbc7b !important;
+	background-color: rgb(110, 158, 255) !important;
 	color: white !important;
 	border: 1px solid #ccc !important;
 }
@@ -585,7 +586,7 @@
 	top: 50%;
 	left: 50%;
 	transform: translateX(-50%);
-	background-color: #ffbc7b;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	padding: 10px 20px;
 	border-radius: 5px;
@@ -629,7 +630,6 @@
 	max-height: 680px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 	text-align: center;
-
 	display: flex;
 	flex-direction: column;
 }
@@ -638,9 +638,7 @@
 	flex: 1;
 	overflow-y: auto;
 	padding-right: 10px;
-
 	max-height: 540px;
-
 	scrollbar-width: thin;
 	scrollbar-color: #ccc transparent;
 }
@@ -682,7 +680,7 @@
 }
 
 .exchange-return-box:hover {
-	background: #f0f8ff;
+	background: rgb(241, 247, 248);
 }
 
 .exchange-return-box select {
@@ -724,7 +722,7 @@
 	background: #f8f8f8;
 	padding: 10px;
 	margin: 15px auto;
-	border-left: 4px solid #ffbc7b;
+	border-left: 4px solid rgb(110, 158, 255);
 	font-size: 14px;
 	text-align: left;
 }
@@ -737,7 +735,7 @@
 }
 
 .exchange-return-submit {
-	background: #ffbc7b;
+	background: rgb(110, 158, 255);
 	color: white;
 	border: none;
 	padding: 10px;
@@ -771,7 +769,7 @@
 
 .highlight-order {
 	background-color: #fff;
-	border: 2px solid #FF7500;
+	border: 2px solid rgb(255, 147, 0);
 	border-radius: 5px;
 	transition: all 0.3s ease;
 }

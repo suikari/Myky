@@ -814,7 +814,7 @@ button.favorite-btn:hover #favoriteStar {
 .map-button {
 	margin-top: auto;
 	padding: 6px 12px;
-	background: #FF8C42;
+	background: #ffbc7b;
 	color: white;
 	border: none;
 	border-radius: 6px;
@@ -822,7 +822,7 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .map-button:hover {
-	background: #e07b3e;
+	background: #FF7500;
 }
 
 .partner-pagination {
@@ -835,9 +835,9 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .partner-pagination button {
-	background-color: #fff6f2;
-	border: 1px solid #ffcdb2;
-	color: #d46a3d;
+	background-color: rgb(255, 249, 244);
+	border: 1px solid #ffbc7b;
+	color: #FF7500;
 	padding: 8px 14px;
 	border-radius: 12px;
 	font-size: 14px;
@@ -848,16 +848,16 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .partner-pagination button:hover:not(:disabled) {
-	background-color: #ffe4d3;
-	border-color: #ffa878;
-	color: #b4552a;
+	background-color: rgb(255, 236, 221);
+	border-color: #ffbc7b;
+	color: #FF7500;
 }
 
 .partner-pagination button.active {
-	background-color: #FF8C42;
+	background-color: #ffbc7b;
 	color: white;
 	font-weight: bold;
-	border-color: #ff8c42;
+	border-color: #ffbc7b;
 	box-shadow: 0 2px 6px rgba(255, 140, 66, 0.4);
 }
 
@@ -871,12 +871,12 @@ button.favorite-btn:hover #favoriteStar {
 
 .partner-website a {
 	text-decoration: none;
-	color: #FF8C42;
+	color: #ffbc7b;
 	font-weight: bold;
 }
 
 .partner-website a:hover {
-	color: #e07b3e;
+	color: #FF7500;
 }
 
 .no-result {
@@ -893,37 +893,38 @@ button.favorite-btn:hover #favoriteStar {
 .category-buttons button {
 	margin: 5px;
 	padding: 8px 14px;
-	background-color: #fff6f2;
-	color: #d46a3d;
-	border: 1px solid #ffcdb2;
+	background-color: rgb(255, 249, 244);
+	color: #FF7500;
+	border: 1px solid #ffbc7b;
 	border-radius: 6px;
 	cursor: pointer;
 	font-size: 14px;
 }
 
 .category-buttons button:hover {
-	background-color: #ffa878;
+	background-color: #ffbc7b;
 }
 
 .category-buttons button.active {
-	background-color: #ffa878;
+	background-color: #ffbc7b;
+	color: #fff;
 	font-weight: bold;
 }
 
 .partner-search-input {
 	padding: 8px 14px;
 	font-size: 14px;
-	border: 1px solid #ccc;
+	border: 1px solid #ffbc7b;
 	border-radius: 6px;
 	width: 220px;
 	outline: none;
 	transition: border-color 0.3s, box-shadow 0.3s;
-	background-color: #fffdfc;
+	background-color: rgb(255, 249, 244);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .partner-search-input:focus {
-	border-color: #FF8C42;
+	border-color: #FF7500;
 	box-shadow: 0 0 5px rgba(255, 140, 66, 0.3);
 }
 
@@ -931,7 +932,7 @@ button.favorite-btn:hover #favoriteStar {
 	margin-left: 8px;
 	padding: 8px 16px;
 	font-size: 14px;
-	background-color: #FF8C42;
+	background-color: #ffbc7b;
 	color: white;
 	border: none;
 	border-radius: 6px;
@@ -940,6 +941,6 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .partner-search-button:hover {
-	background-color: #e07b3e;
+	background-color: #FF7500;
 	box-shadow: 0 2px 6px rgba(255, 140, 66, 0.3);
 }
