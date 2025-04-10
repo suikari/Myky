@@ -82,33 +82,33 @@
                                     <td colspan="5">
                                         <div class="order-history__details">
                                             <div v-if="!isEditing">
-                                                <p><strong>수령인:</strong> {{ orders[0].receiverName }}</p>
-                                                <p><strong>연락처:</strong> {{ formatPhoneNumber(orders[0].receiverPhone) }}</p>
-                                                <p><strong>배송지:</strong> {{ orders[0].receiverAddr }}</p>
-                                                <p><strong>배송메시지:</strong> {{ orders[0].deliveryMessage || '없음' }}</p>
+                                                <p><strong>수령인 : </strong> {{ orders[0].receiverName }}</p>
+                                                <p><strong>연락처 : </strong> {{ formatPhoneNumber(orders[0].receiverPhone) }}</p>
+                                                <p><strong>배송지 : </strong> {{ orders[0].receiverAddr }}</p>
+                                                <p><strong>배송메시지 : </strong> {{ orders[0].deliveryMessage || '없음' }}</p>
                                                 <hr>
                                             </div>
                                             <div v-else class="order-edit-form">
-                                                <label>수령인: 
-                                                  <input type="text" class="order-input" v-model="orderInfo.receiver" required>
+                                                <label> 수령인 :　
+                                                  <input type="text" class="order-input short" v-model="orderInfo.receiver" required>
                                                 </label><br>
                                           
-                                                <label>우편번호:
-                                                  <input type="text" class="order-input short" v-model="orderInfo.zipcode"
-                                                    placeholder="우편번호" readonly>
-                                                  <button type="button" @click="searchAddress">우편번호 검색</button>
+                                                <label>우편번호 : 
+                                                  <input type="text" class="order-input short form-margin" v-model="orderInfo.zipcode"
+                                                    placeholder="우편번호" readonly> 
+                                                  <button type="button" @click="searchAddress" class="order-button">우편번호 검색</button>
                                                 </label><br>
                                           
-                                                <label>기본 주소:
+                                                <label>기본 주소 : 
                                                   <input type="text" class="order-input" v-model="orderInfo.baseAddress" placeholder="기본 주소" readonly>
                                                 </label><br>
                                           
-                                                <label>상세 주소:
+                                                <label>상세 주소 : 
                                                   <input type="text" class="order-input" v-model="orderInfo.detailAddress"
                                                     placeholder="상세 주소 입력">
                                                 </label><br>
                                           
-                                                <label>휴대폰 번호:
+                                                <label>휴대폰 번호 : 
                                                   <select v-model="orderInfo.phonePrefix" class="order-input short" required>
                                                     <option value="010">010</option>
                                                     <option value="011">011</option>
@@ -162,13 +162,13 @@
                                                 </tbody>
                                             </table>
                                             <div v-if="cartMessage" class="cart-message">{{ cartMessage }}</div>
-                                            <div v-if="determineShippingStatus(orders) == '주문접수'">
+                                            <span v-if="determineShippingStatus(orders) == '주문접수'">
                                                 <button @click="cancelOrder(orders,orderId)" class="order-button">주문취소</button>
-                                                <button @click="toggleEditMode(orders[0])" class="order-button">배송정보수정</button>
-                                            </div>
-                                            <div v-if="hasDeliveredProduct(orders)">
+                                                <button @click="toggleEditMode(orders)" class="order-button">배송정보수정</button>
+                                            </span>
+                                            <span v-if="hasDeliveredProduct(orders)">
                                                 <button @click="openReturnPopup(orders)" class="order-button">교환/반품신청</button>
-                                            </div>
+                                            </span>
                                             <div>
                                                 <p>※해당 주문건이 [주문접수] 상태일 때만 주문취소, 배송정보수정이 가능합니다.</p>
                                             </div>
@@ -178,6 +178,7 @@
                             </tbody>
                         </table>
                     </div>
+                    <hr class="order-history__hr">
                 </div>
             </div>
         </div>
@@ -428,8 +429,22 @@
                         }
                     });
                 },
-                toggleEditMode(order) {
+                toggleEditMode(orders) {
+                    console.log("배송정보수정 받아온 정보>>> ",orders);
+                    
+                    const invalidStatuses = ['shipped', 'delivered', 'exchange', 'exchanged', 'return', 'returned'];
+                    const hasInvalidStatus = orders.some(order =>
+                        invalidStatuses.includes(order.refundStatus)
+                    );
+                    
+                    if (hasInvalidStatus) {
+                        alert("배송이 시작된 상품 또는 교환/반품 중인 상품이 포함되어 있어 배송정보를 수정할 수 없습니다.");
+                        return;
+                    }
+                    
+                    let order = orders[0];
                     console.log("배송정보수정 정보>>> ",order);
+
                     const fullAddress = order.receiverAddr; 
                     console.log("배송지 정보>>> ",order.receiverAddr);
 
