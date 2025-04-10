@@ -190,7 +190,7 @@
 		<div class="footer-top">
 			<div class="footer-top-inner">
 				<div id="footer-nav" class="footer-nav">
-                    <a href="#" @click.prevent="goToTermsPage('intro')">회사 소개</a>
+                    <a href="#" @click.prevent="goToIntro()">회사 소개</a>
                     <a href="#" @click.prevent="goToTermsPage('service')">이용약관</a>
                     <a href="#" @click.prevent="goToTermsPage('privacy')"><strong>개인정보처리방침</strong></a>
                     <a href="#" @click.prevent="goToTermsPage('guide')">이용안내</a>
@@ -245,7 +245,6 @@
                 email: 'tester@naver.com'
               },
               termsList: [
-                { type: 'intro', label: '회사 소개' },
                 { type: 'terms', label: '이용약관' },
                 { type: 'privacy', label: '개인정보처리방침' },
                 { type: 'guide', label: '이용안내' }
@@ -253,13 +252,17 @@
             };
           },
           methods: {
+            goToIntro() {
+              window.location.href = "/common/companyIntro.do";
+            },
             goToTermsPage(type) {
-              if (type === 'intro') return; // 회사소개는 클릭만 되고 이동 X
+              //if (type === 'intro') return; // 회사소개는 클릭만 되고 이동 X
               window.location.href = "/common/termsList.do?type=" + type;
             },
             scrollToTop() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            },
+            
           },
           mounted() {
             const scrollBtn = document.querySelector('.scroll-top-btn');

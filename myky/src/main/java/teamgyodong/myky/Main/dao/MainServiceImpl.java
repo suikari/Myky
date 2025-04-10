@@ -122,12 +122,6 @@ public class MainServiceImpl implements MainService {
 		return resultMap;
 	}
 
-	@Override
-	public HashMap<String, Object> selectTermsContent(Map<String, Object> map) {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		
-		mainMapper.selectTermsContent(map);
-		return resultMap;
-	}
+
 	
 }

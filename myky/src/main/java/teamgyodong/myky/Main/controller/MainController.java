@@ -54,13 +54,16 @@ public class MainController {
 	
 	@RequestMapping("/common/termsList.do")
 	public String termsList(@RequestParam("type") String type, Model model) throws Exception {
-		HashMap<String, Object> param = new HashMap<>();
-	    param.put("category", type);
 
-	    HashMap<String, Object> content = mainService.selectTermsContent(param);
-	    model.addAttribute("content", content); // JSP에서 사용 가능
 
 	    return "common/termsList";
+	}
+	
+	@RequestMapping("/common/companyIntro.do")
+	public String companyIntro(Model model) throws Exception {
+
+
+	    return "common/companyIntro";
 	}
 	
     @RequestMapping("/member/logout.do") 
