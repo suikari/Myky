@@ -251,6 +251,7 @@
 .fb-button {
     padding: 10px 20px;
     font-size: 14px;
+    margin: 30px;
     font-weight: bold;
     background-color: rgb(110,158,255);
     color: #fff;
@@ -340,11 +341,15 @@
     color: #0366d6;
     margin-right: 10px;
 }
+.vet-rating{
+    color:#8f8f8f;
+}
 .fb-answer-nickname2 {
-	border-right: #FFBC7B;
+	border-right: rgb(110, 158, 255);
+    font-size: 18px;
 	margin-top: 5px;
     font-weight: bold;
-    color: #FFBC7B;
+    color: rgb(110, 158, 255);
     margin-right: 10px;
 	margin-bottom: 4px;
 }
@@ -364,25 +369,32 @@
 
 .fb-answer-actions {
     margin-top: 30px;
-    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 	margin:auto;
+    text-align: center;
+    margin: auto;
 }
 .fb-answerButton {
 	padding: 10px;
+    margin: auto;
+    margin-bottom: 50px;
 	font-weight: bold;
 	text-align: center;
-	width: 1014px;
-	margin-top: 20px;
-	font-size: 18px;
+	width: 60px;
+	margin-top: 10px;
+	font-size: 15px;
 	background-color: rgb(110, 158, 255);
 	color: #fff;
 	border: none;
 	border-radius: 6px;
 	cursor: pointer;
 	transition: all 0.2s ease;
+}
+.fb-answerButton:hover {
+    color:#fff;
+    background-color: rgb(0, 80, 255);
 }
 .answer.comments{
 	border-radius: 6px;
@@ -417,7 +429,6 @@
     cursor: pointer;
     color: #eee;
     transition: color 0.2s;
-    user-select: none;
 
 }
 
@@ -452,7 +463,7 @@
 }
 .fb-editor-box {
     background-color: #f9f9f9;
-    border: 2px solid #FFBC7B;
+    border: 2px solid rgb(110, 158, 255);
     border-radius: 10px;
     padding: 16px;
 	height: 350px;
@@ -464,7 +475,7 @@
 }
 .fb-editor-box-an {
     background-color: #f9f9f9;
-    border: 2px solid #FFBC7B;
+    border: 2px solid rgb(110, 158, 255);
     border-radius: 10px;
     padding: 16px;
 	height: 350px;
@@ -545,7 +556,7 @@
     bottom: -2px;
     height: 3px;
     width: 0;
-    background-color: #FFBC7B;
+    background-color: rgb(110, 158, 255);
     transition: width 0.3s ease;
 }
 
@@ -598,7 +609,7 @@
 }
 .fb-accepted-header{
 	font-weight: bold;
-    color: #FFBC7B;
+    color: rgb(110, 158, 255);
     margin-bottom: 12px;
     font-size: 18px;
 }
@@ -690,7 +701,8 @@
   }
   
   .fb-post-wrapper {
-    width: 1000px;    
+    width: 1000px;
+    min-height: 300px; /* 최소 높이 설정 */
     margin: 50px auto;
     padding: 30px;
     background-color: #fff;
@@ -912,13 +924,23 @@
 	border: none;
 }
 .fb-table-th {
-    background-color:fff;
     border-bottom: 1px solid #ddd;
     color: #272727;
     padding: 15px;
     font-weight: 600;
 	height: 45px;
     font-size: 15px;
+}
+
+.fb-table-th th {
+    border-bottom: 1px solid #ddd; /* 색상과 두께를 필요에 따라 조정하세요 */
+    color: #272727;
+    padding: 10px;
+    font-weight: 600;
+    height: 45px;
+    font-size: 15px;
+    text-align: center;   /* 가로 가운데 정렬 */
+    vertical-align: middle;  /* 세로 가운데 정렬 */
 }
 .fb-table-th, .fb-table-td {
     text-align: center;   /* 가로 가운데 정렬 */
@@ -936,7 +958,7 @@
   word-wrap: break-word;
 }
 .fb-table-td td {
-    padding: 10px;
+    padding: 20px;
 	margin: 15px;
     font-size: 14px;
     color: #333;
@@ -979,7 +1001,7 @@
       margin: 15px;
       font-size: 14px;
       color: #333;
-      background-color: #fafafa;
+      background-color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1021,18 +1043,29 @@ tr.fb-dropdown-content {
     font-weight: bold;
     cursor: pointer;
 }
-tr.faq-td.faq-even td {
-    background-color: #f0f0f0;
-}
-tr.faq-td.faq-odd td {
-    background-color: #fafafa;
-}
+
 .fb-button-group {
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
-  flex-wrap: wrap;          /* 버튼이 많으면 다음 줄로 */
-  gap: 10px;                /* 버튼 간 여백 */
-  margin: 20px 0;           /* 위아래 여백 */
+  justify-content: center; 
+  flex-wrap: wrap;         
+  gap: 10px;             
+  margin: 20px 0;     
+}
+.fb-button-faq{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 15px;
+    color:rgb(0, 80, 255);
+    padding: 13px;
+    width: 10%;
+    border-radius: 30px;
+    cursor: pointer;
+}
+.fb-button-faq:hover{
+    background-color: rgb(110, 158, 255);
+    border:none;
+    color: #fff;
 }
 .fb-pagination {
     text-align: center;
@@ -1046,7 +1079,7 @@ tr.faq-td.faq-odd td {
 }
 
 .fb-pagination span.current-page {
-    color: #FFBC7B;
+    color: rgb(110, 158, 255);
     text-decoration: underline;
     cursor: default;
 }
@@ -1055,7 +1088,7 @@ tr.faq-td.faq-odd td {
     text-decoration: underline;
 }
 .fb-fill-btn {
-    background-color: #FFBC7B;
+    background-color: rgb(110, 158, 255);
     color: #fff;
 	font-weight: bold;
     border: none;
@@ -1068,7 +1101,7 @@ tr.faq-td.faq-odd td {
 }
 
 .fb-fill-btn:hover {
-    background-color: #FFBC7B;
+    background-color: rgb(110, 158, 255);
 	color: #fff;
 }
 .fb-cmt2button {
@@ -1086,7 +1119,7 @@ tr.faq-td.faq-odd td {
 .likeButton {
     background-color: white;
     border: none;
-    color: #FFBC7B;
+    color: rgb(110, 158, 255);
     cursor: pointer;
 }
 
@@ -1097,28 +1130,33 @@ tr.faq-td.faq-odd td {
     margin: 40px;
     gap: 20px;
 }
+ .like-button-margin{
+    margin: 10px; /* Adjust the margin as needed */
+    font-weight: bold;
+}
 
 .FileDownload {
-    color: #FFBC7B;
+    color: rgb(110, 158, 255);;
     text-decoration: none;
     font-weight: bold;
 }
 
 .FileDownload:hover {
-    color: #FFBC7B;
+    color: rgb(110, 158, 255);
 }
 
 
  .fb-cmtButtonBox {
      border-radius: 6px;
-     max-width: 600px;
+     padding: 20px;
+     max-width: 1000px;
 	 width: 100%;
      margin-top: 50px;
      margin-bottom: 5px;
-	 padding: 10px;
-     border: 2px solid rgb(192, 192, 192);
+     border: 1px solid rgb(192, 192, 192);
 	 margin: 50px;
 	 display: block;
+     box-sizing: border-box;
  }
 
  .fb-cmtButton2 {
@@ -1132,15 +1170,21 @@ tr.faq-td.faq-odd td {
      width: fit-content;
      margin-inline-end: auto;
      border: none;
-     margin: 1px;
+     margin: 2px;
  }
+ .fb-cmtButton2:hover{
+    color: #fff;
+    background-color: rgb(110, 158, 255);
+}
 
  .fb-cmtInput {
      max-width: 500px;
      width: 100%;
      border: 1px solid #ccc;
+     border-bottom: 1px solid #ccc;
      border-radius: 4px;
      padding: 8px;
+     margin: 30px;
  }
 
  .fb-cmtTextBox {
@@ -1188,20 +1232,22 @@ tr.faq-td.faq-odd td {
    .likeButton2 {
       width: 40px;
       height: 40px;
+      font-weight: bold;
   }
 
   .likeButton {
       background-color: FFBC7B;
       border: none;
-      color: #FFBC7B;
+      color: rgb(110, 158, 255);
       cursor: pointer;
+      font-weight: bold;
   }
 
 
   .fb-top-profile {
     display: flex;
     align-items: center;
-    background-color: rgb(192, 192, 192, 0.02);
+    background-color: #fff;
     border-radius: 16px;
     padding: 20px 30px;
     gap: 24px;
@@ -1216,8 +1262,8 @@ tr.faq-td.faq-odd td {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #eaeaea;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background-color: rgb(110, 158, 255,0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
 	border: 5px solid transparent;
 	border-image: radial-gradient(circle, #fff 20%, transparent 20%) 1;
@@ -1250,11 +1296,11 @@ tr.faq-td.faq-odd td {
 
   .fb-badge.orange {
     background-color: rgb(110, 158, 255);
-    color: rgb(223, 223, 223);
+    color: rgb(255, 255, 255);
 	margin-left: 5px;
   }
 
-  /* 설명 */
+  /* 설명 */ㄴ
   .fb-profile-desc {
     margin-top: 10px;
     font-size: 14px;
@@ -1348,7 +1394,7 @@ tr.faq-td.faq-odd td {
   /* 포커스 시 효과 */
   .answer-commentsInput:focus {
     border-color: #FFBC7B;
-    box-shadow: 0 0 10px rgba(252, 163, 17, 0.7); /* 포커스 시 부드러운 그림자 */
+    box-shadow: 0 0 10px rgb(110, 158, 255); /* 포커스 시 부드러운 그림자 */
     outline: none; /* 기본 outline을 제거 */
   }
   .fb-accepted-answer {
@@ -1356,12 +1402,12 @@ tr.faq-td.faq-odd td {
       border-radius: 8px;  /* 부드러운 둥근 모서리 */
       padding: 18px 24px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);  /* 자연스러운 그림자 */
-      border-left: 4px solid #FFBC7B;  /* 채택된 답변 왼쪽에 세련된 색상 선 */
+      border-left: 4px solid rgb(110, 158, 255);  /* 채택된 답변 왼쪽에 세련된 색상 선 */
       transition: all 0.3s ease;  /* 부드러운 트랜지션 */
   }
   /* 선택된 답변에 더 강한 강조가 필요하다면 */
   .fb-accepted-answer.active {
-      border-left: 6px solid #FFBC7B; /* 강조 색상 */
+      border-left: 6px solid rgb(110, 158, 255); /* 강조 색상 */
       background-color: #f7f7f7; /* 배경 살짝 그레이로 */
   }
   /* 프로필 이미지와 닉네임 세로로 정렬 */
@@ -1444,3 +1490,7 @@ tr.faq-td.faq-odd td {
    cursor: pointer;
    font-size: 14px;
  }
+
+.parent-class {
+    text-align: center;
+}

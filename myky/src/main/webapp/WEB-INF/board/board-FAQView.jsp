@@ -27,12 +27,12 @@
 
         <div class="fb-setCss">
             <div class="fb-button-group">
-                <button class="fb-button" @click="fnChange('이용방법')">이용방법</button>
-                <button class="fb-button" @click="fnChange('교환/반품')">교환/반품</button>
-                <button class="fb-button" @click="fnChange('계정')">계정</button>
-                <button class="fb-button" @click="fnChange('상품관련')">상품관련</button>
-                <button class="fb-button" @click="fnChange('배송')">배송</button>
-                <button class="fb-button" @click="fnChange('결제관리')">결제관리</button>
+                <button class="fb-button-faq" @click="fnChange('이용방법')">이용방법</button>
+                <button class="fb-button-faq" @click="fnChange('교환/반품')">교환/반품</button>
+                <button class="fb-button-faq" @click="fnChange('계정')">계정</button>
+                <button class="fb-button-faq" @click="fnChange('상품관련')">상품관련</button>
+                <button class="fb-button-faq" @click="fnChange('배송')">배송</button>
+                <button class="fb-button-faq" @click="fnChange('결제관리')">결제관리</button>
             </div>
             <div class="fb-search-wrapper">
                 <template class="fb-search-right">
@@ -45,7 +45,7 @@
                 </template>
             </div>
             <table class="fb-table-wrapper fb-setCss">
-                <tr class="fb-table-th fb-table-td">
+                <tr class="fb-table-th">
                     <th>번호</th>
                     <th>카테고리</th>
                     <th>제목</th> 
@@ -53,7 +53,7 @@
                 <!-- 게시글 목록 -->
                 <template v-for="(item, index) in menu" class="fb-table-td fb-tr">
                     <template v-if="item.isDeleted == 'N'">
-                        <tr :class="['faq-td', index % 2 === 1 ? 'faq-even' : 'faq-odd']" @click="fnFAQDrop(item.boardId)">
+                        <tr class="fb-table-td" :class="['faq-td', index % 2 === 1 ? 'faq-even' : 'faq-odd']" @click="fnFAQDrop(item.boardId)">
                             <td>{{item.boardId}}</td>
                             <td>{{item.menu}}</td>
                             <td>
