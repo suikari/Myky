@@ -284,13 +284,6 @@
                 color: #555;
             }
 
-            .section-title {
-                font-size: 22px;
-                font-weight: bold;
-                margin: 40px auto 20px;
-                text-align: center;
-            }
-
             .board-container {
                 width: 380px;
                 min-height: 300px;
