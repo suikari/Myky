@@ -52,27 +52,27 @@
                 <div class="like-button-wrapper">
                     <template v-if="likeStatus">
                         <button @click="likeButton('like','M')" class="likeButton">
-                            <img src="../img/buttonImg/heart.png" class="likeButton2" alt="좋아요" />
-                            <span>{{ info.likes }}</span>
+                            <span class="like-button-margin">{{ info.likes }}</span>
+                            <img src="../img/buttonImg/like2.png" class="likeButton2" alt="좋아요" />
                         </button>
                     </template>
                     <template v-else>
                         <button @click="likeButton('like','P')" class="likeButton">
-                            <img src="../img/buttonImg/nonheart.png" class="likeButton2" alt="좋아요" />
-                            <span>{{ info.likes }}</span>
+                            <span class="like-button-margin">{{ info.likes }}</span>
+                            <img src="../img/buttonImg/like.png" class="likeButton2" alt="좋아요" />
                         </button>
                     </template>
 
                     <template v-if="dislikeStatus">
                         <button @click="likeButton('dislike','M')" class="likeButton">
-                            <img src="../img/buttonImg/broken-heart.png" class="likeButton2" alt="싫어요" />
-                            <span>{{ info.dislikes }}</span>
+                            <img src="../img/buttonImg/dislike2.png" class="likeButton2" alt="싫어요" />
+                            <span class="like-button-margin">{{ info.dislikes }}</span>
                         </button>
                     </template>
                     <template v-else>
                         <button @click="likeButton('dislike','P')" class="likeButton">
-                            <img src="../img/buttonImg/broken-nonheart.png" class="likeButton2" alt="싫어요" />
-                            <span>{{ info.dislikes }}</span>
+                            <img src="../img/buttonImg/dislike.png" class="likeButton2" alt="싫어요" />
+                            <span class="like-button-margin">{{ info.dislikes }}</span>
                         </button>
                     </template>
                 </div>
@@ -143,7 +143,7 @@
                                                         <button class="fb-cmtButton2" @click="fnCommentEdit(item)">수정</button>
                                                 </template>
                                                 <template v-if="sessionId == item.userId || sessionRole == 'ADMIN'">
-                                                    <button class="fb-cmtButton2" @click="fnCommentRemove(item.commentId)">❌</button>
+                                                    <button class="fb-cmtButton2" @click="fnCommentRemove(item.commentId)">삭제</button>
                                                 </template>
                                             </template>
                                         </div>
@@ -158,9 +158,8 @@
                                 </div>
 
                                 <!-- 대댓글 반복 -->
-                                <div v-for="reply in item.replies || []" :key="reply.commentId"
-                                    style="margin-left: 30px;">
-                                    <div v-if="editCommentId === reply.commentId">
+                                <div v-for="reply in item.replies || []" :key="reply.commentId" style="margin-left: 50px;" class="fb-cmtTextBox">
+                                    <div v-if="editCommentId === reply.commentId" class="fb-cmtTextBox">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                         <input class="fb-cmtInput" v-model="editContent"/>
                                         <button class="fb-cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
@@ -174,13 +173,13 @@
                                             <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                             <div style="margin-bottom: 5px;">{{ reply.content }}</div>
                                             <div
-                                                style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #888;">
+                                                style="display: flex; align-items: center; font-size: 13px; color: #888;">
                                                 <span>{{ reply.updatedTime }}</span>
                                                 <template v-if="sessionId === reply.userId">
                                                     <button class="fb-cmtButton2" @click="fnCommentEdit(reply) ">수정</button>
                                                 </template>
                                                 <template v-if="sessionId === reply.userId || sessionRole === 'ADMIN'">
-                                                    <button class="fb-cmtButton2" @click="fnCommentRemove(reply.commentId)">❌</button>
+                                                    <button class="fb-cmtButton2" @click="fnCommentRemove(reply.commentId)">삭제</button>
                                                 </template>
                                             </div>
                                         </div>
@@ -188,18 +187,18 @@
                                 </div>
                             </tr>
                         </table>
-                            <table class="fb-cmtButtonBox" v-if="sessionId">
+                            <div class="fb-cmtButtonBox" v-if="sessionId">
                                 <div></div>
-                                <th class="replyNickName"> {{nickName}} </th>
-                                <td class="reply-input-cell">
+                                <div class="replyNickName"> {{sessionName}} </div>
+                                <div class="reply-input-cell">
                                     <div class="reply-box">
                                         <textarea class="clean-textarea" v-model="content" cols="60" rows="5" placeholder="답글을 입력하세요"></textarea>
                                         <div class="reply-button-cell">
                                             <button class="fb-buttonReply" @click="fnCommentSave">저장</button>
                                         </div>
                                     </div>
-                                </td>
-                            </table>
+                                </div>
+                            </div>
                     </div>
 
                 <div class="fb-buttonMargin">
@@ -233,6 +232,7 @@
                         page: "${param.page}",
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
+                        sessionName : "${sessionName}",
                         userId: {},
                         nickName: "",
                         content: "",

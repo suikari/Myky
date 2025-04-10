@@ -100,18 +100,15 @@
                                     <span class="fb-badge orange">{{answer.eMail}}</span >
                                 </div>
                                 <!-- 수의사별 별점 표시 -->
-                                <div v-if="answer.vetAnswerdetail" class="vet-rating">
-                                    {{ answer.vetAnswerdetail.length }}건 채택
-                                
+                                <div v-if="answer.vetAnswerdetail" class="vet-rating">                           
                                     <!-- 별점 표시 -->
                                     <div class="star-rating">
                                         <span v-for="n in 5" :key="n" class="star"
                                               :class="{ active: n <= getAverageRating(answer) }">★</span>
                                     </div>
-                                
+                                    {{ answer.vetAnswerdetail.length }}건 채택
                                     <div class="average-rating">평균 평점: {{ getAverageRating(answer) }} </div>
-                                </div>
-                            
+                                </div>                            
                             </div>
                         </div>
                         <!-- 본문 -->
@@ -122,9 +119,6 @@
 
                     <!-- 답변 출력/채택 전 -->
                     <div v-else>
-                        <div class="fb-answer-header">
-                            
-                        </div>
                         <div class="fb-top-profile">
                             <img :src="answer.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
                                 alt="프로필 이미지"
@@ -150,7 +144,8 @@
                             </div>
                         </div>
                         <div class="quill-output" v-if="answer.isDeleted == 'N'" v-html="answer.reviewText"></div>
-                        <div v-if="answer.isDeleted == 'Y'" > 삭제된 답변입니다 </div>
+                        <div class="quill-output" v-if="answer.isDeleted == 'Y'" > 삭제된 답변입니다 </div>
+                        
                     </div>
 
                  <!-- 답변 채택 -->
@@ -207,12 +202,12 @@
                             </div>
                             <button class="fb-cmtButton" @click="fnCancle">취소</button>
                         </template>
-                        <button class="fb-cmtButton" @click="fnAnRemove(answer.reviewId)">❌ 삭제</button>
+                        <button class="fb-cmtButton" @click="fnAnRemove(answer.reviewId)">삭제</button>
                     </template>
                     
-                    <template v-if="answer.isDeleted == 'Y'">
+                    <!-- <template v-if="answer.isDeleted == 'Y'">
                         <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
-                    </template>
+                    </template> -->
                 </div>
                   
                 <div class="fb-footer-buttons">
