@@ -26,127 +26,6 @@
                 height: 100%;
                 font-family: 'Segoe UI', sans-serif;
             }
-
-            /* 전체 2단 레이아웃 */
-            .signup-layout {
-                display: flex;
-                height: 100vh;
-            }
-
-            /* 왼쪽 이미지 */
-            .signup-visual {
-                flex: 1;
-                background: url('../../img/userProfile/회원가입용 사진2.jpg') no-repeat center center;
-                background-size: cover;
-            }
-
-            /* 오른쪽 회원가입 폼 */
-            .signup-form {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: #f9f9f9;
-                overflow-y: auto;
-            }
-
-            .join-container {
-                max-width: 1280px;
-                width: 100%;
-                margin: auto;
-                padding: 78px 200px;
-                background-color: #ffffff;
-                border-radius: 12px;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            }
-
-            .section {
-                margin-bottom: 24px;
-            }
-
-            .input-underline {
-                width: 100%;
-                padding: 10px 5px;
-                font-size: 15px;
-                border: none;
-                border-bottom: 2px solid #ddd;
-                outline: none;
-                transition: border-color 0.3s;
-                background-color: transparent;
-            }
-
-            .input-underline:focus {
-                border-bottom-color: #4a90e2;
-            }
-
-            .inline-group {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .inline-btn {
-                white-space: nowrap;
-                padding: 10px 16px;
-                font-size: 14px;
-                background-color: rgb(110, 158, 255);
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .inline-btn:hover {
-                background-color: rgb(0, 80, 255);
-            }
-
-            .label {
-                font-weight: 600;
-                margin-bottom: 6px;
-                display: block;
-                font-size: 14px;
-                color: #333;
-            }
-
-            .radio-group {
-                display: flex;
-                gap: 20px;
-                margin-top: 10px;
-            }
-
-            .btn-submit {
-                width: 100%;
-                padding: 14px;
-                background-color: rgb(110, 158, 255);
-                color: white;
-                font-size: 16px;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .btn-submit:hover {
-                background-color: rgb(0, 80, 255);
-            }
-
-            .btn-main {
-                margin-top: 10px;
-                width: 100%;
-                padding: 14px;
-                background-color: #ccc;
-                color: #333;
-                font-size: 16px;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .btn-main:hover {
-                background-color: #aaa;
-            }
         </style>
     </head>
 
@@ -219,7 +98,7 @@
                     <div class="section">
                         <label class="label">연락처</label>
                         <div class="inline-group">
-                            <select class="input-underline" v-model="selectNum">
+                            <select class="input-underline" v-model="selectNum" style="width: 75px;">
                                 <option>010</option>
                                 <option>011</option>
                                 <option>017</option>
@@ -355,6 +234,8 @@
 
                             // 날짜 유효성 검사
                             const date = new Date(year, month - 1, day);
+                            const today = new Date(); // 이 줄을 추가!
+
                             if (
                                 !(date.getFullYear() === year &&
                                     date.getMonth() === month - 1 &&
@@ -363,6 +244,18 @@
                                 alert("생년월일 8자리가 유효하지 않습니다. 재입력 바랍니다. ex)20050130");
                                 return;
                             }
+
+                            // 시험 해봐야 할 것들
+                            if (date > today) {
+                                alert("미래의 날짜는 생년월일로 사용할 수 없습니다.");
+                                return;
+                            }
+
+                            if (year < 1900) {
+                                alert("1900년 이후의 생년월일만 입력 가능합니다.");
+                                return;
+                            }
+                            // 시험 해봐야 할 것들
                         }
 
                         var nparmap = self.user;
