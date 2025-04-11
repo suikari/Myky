@@ -743,6 +743,8 @@
                             location.href = "/user/login.do";
                             return;
                         }
+   
+                        // location.href = "/product/review.do?productId=" + self.productId;
                         const nparmap = {
                             userId: self.sessionId,
                             productId: self.productId
@@ -763,9 +765,6 @@
                                 alert("서버와 통신 중 오류가 발생했습니다.");
                             }
                         });
-
-
-                        // location.href = "/product/review.do?productId=" + self.productId;
                     },
                     //개인 리뷰 삭제
                     fnDelete: function (reviewId) {
