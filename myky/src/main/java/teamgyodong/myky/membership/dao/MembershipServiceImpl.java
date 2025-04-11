@@ -162,11 +162,18 @@ public class MembershipServiceImpl implements MembershipService {
 	public HashMap<String, Object> addMembership(HashMap<String, Object> map) {
 	    HashMap<String, Object> resultMap = new HashMap<>();
 	    try {
-	        membershipMapper.insertMembership(map);  
-
+	    	 String userId = (String) map.get("userId");
+	    	 
+	    	 // 🔍 가입 이력 체크
+	         int joinCount = membershipMapper.getMembershipHistoryCount(userId); // 0이면 첫 가입
+	         
+	         
+	    	 membershipMapper.insertMembership(map);  	    	 
 
 	        resultMap.put("membershipId", map.get("membershipId"));
 	        resultMap.put("result", "success");
+	        
+	        resultMap.put("isFirstJoin", joinCount == 0); 
 
 	    } catch (Exception e) {
 	        e.printStackTrace();

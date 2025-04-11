@@ -137,7 +137,8 @@
                         showTooltip: false,
                         tooltipText: '',
                         selectedPlanText: '',
-                        tooltipStyle: {}
+                        tooltipStyle: {},
+                        rewardPoint: "5000"
                     };
                 },
                 computed: {
@@ -267,6 +268,11 @@
                             success: function (data) {
                                 self.membershipId = data.membershipId;
 
+                                // ✅ 첫 가입일 경우만 포인트 적립
+                                if (data.isFirstJoin === true) {
+                                    self.fnRewardPoint();
+                                }
+
                                 self.fnPaymentHistory(rsp);
                             }
                         });
@@ -303,6 +309,28 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
+                            }
+                        });
+                    },
+                    fnRewardPoint: function () {
+                        let self = this;
+                        console.log("적립할 포인트 >>> ", self.rewardPoint);
+
+                        var nparmap = {
+                            usedPoint: self.rewardPoint,
+                            remarks: "멤버십 가입시 적립 포인트",
+                            userId: self.userInfo.userId
+                        };
+                        $.ajax({
+                            url: "/point/used.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("포인트 적립 내역 저장 >>> ", data.result);
+                                if (data.result === "success") {
+                                    alert("가입 축하 5,000포인트가 지급되었습니다!");
+                                }
                             }
                         });
                     },

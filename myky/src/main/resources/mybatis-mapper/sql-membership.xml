@@ -90,13 +90,25 @@
 	    ORDER BY DISPLAY_ORDER ASC
 	    
 	</select>
+	
+	<insert id="insertMembership" parameterType="hashmap">
+	    <selectKey keyProperty="membershipId" resultType="int" order="BEFORE">
+	        SELECT MEMBERSHIP_SEQ.NEXTVAL FROM DUAL
+	    </selectKey>
+	
+	    INSERT INTO membership (
+	        membership_id, membership_type, expiration_date, renewal_date, is_canceled, user_id, donation_yn
+	    ) VALUES (
+	        #{membershipId}, #{membershipType}, ADD_MONTHS(SYSDATE, #{expirationDate}), SYSDATE, 'N', #{userId}, 'N'
+	    )
+	</insert>
 
-	<insert id="insertMembership" parameterType="hashmap" useGeneratedKeys="true" keyColumn="membership_Id" keyProperty="membershipId">
+	<!--<insert id="insertMembership" parameterType="hashmap" useGeneratedKeys="true" keyColumn="membership_Id" keyProperty="membershipId">
 		
 		insert into membership (membership_id , membership_type, expiration_date,renewal_date, is_canceled,user_id,donation_yn )
 		values (membership_seq.nextval,#{membershipType}, ADD_MONTHS(SYSDATE, #{expirationDate}),sysdate,'N',#{userId},'N')
 		
-	</insert>
+	</insert>-->
 
 	<select id="selectMembershipIdByUserId"  parameterType="hashmap" resultType="String">
 		SELECT MEMBERSHIP_ID
@@ -104,6 +116,12 @@
 	    WHERE USER_ID = #{userId}
 	</select>
 	
+	<select id="getMembershipHistoryCount" parameterType="hashmap" resultType="int">
+	    SELECT COUNT(*)
+	    FROM MEMBERSHIP
+	    WHERE USER_ID = #{userId}
+	</select>
+
 	
 </mapper>
 
