@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
 			session.setAttribute("sessionId", user.getUserId()); //member 클래스에서 get으로 꺼내기
 			session.setAttribute("sessionName", user.getUserName());
 			session.setAttribute("sessionRole", user.getRole());
+			session.setAttribute("sessionNickName", user.getNickName());
 
 			session.setMaxInactiveInterval(60*60); // 60 * 60초 세션시간 정하기
 			
