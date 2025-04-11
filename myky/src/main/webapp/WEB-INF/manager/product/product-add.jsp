@@ -262,14 +262,19 @@
                             alert("카테고리를 선택해주세요.");
                             return;
                         }
-                        
-                    	var nparmap = self.product;
+
+                        var formData = new FormData();
+                        formData.append("product", new Blob([JSON.stringify(self.product)], { type: "application/json" }));
+
+                    	//var nparmap = self.product;
 
                     	$.ajax({
                     		url: "/admin/insertProduct.dox",
                     		dataType: "json",
                     		type: "POST",
-                    		data: nparmap,
+                            data: formData,
+                            contentType: false,
+                            processData: false, 
                     		success: function (data) {
                     			console.log(data);
         						
@@ -354,15 +359,20 @@
                             alert("카테고리를 선택해주세요.");
                             return;
                         }
-                        
-                    	var nparmap = self.product;
+
+                        var formData = new FormData();
+                        formData.append("product", new Blob([JSON.stringify(self.product)], { type: "application/json" }));
+                    	
+                        //var nparmap = self.product;
                     	
                     	
                     	$.ajax({
                     		url: "/admin/updateProduct.dox",
                     		dataType: "json",
                     		type: "POST",
-                    		data: nparmap,
+                    		data: formData,
+                            contentType: false,
+                            processData: false, 
                     		success: function (data) {
                     			console.log(data);
         						
