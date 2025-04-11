@@ -9,7 +9,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/product/product.css" />
         <style>
-
+            .product-view p {
+                text-align: center;
+            }
         </style>
     </head>
 
@@ -181,7 +183,7 @@
                         </div>
                     </section>
 
-                    <div v-html="info.description"></div>
+                    <div class="product-view"  v-html="info.description"></div>
 
                     <hr style="margin-top: 40px;">
 
