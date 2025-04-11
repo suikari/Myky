@@ -5,10 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자유게시판</title>
-    <!-- Quill CSS -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <!-- Quill JS -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <link rel="stylesheet" href="/css/board/board.css"/>
     <style>
         
@@ -18,7 +15,7 @@
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
  
     <div id="fb-app" class="fb-container">
-        <div id="viewPage">
+        <div class="fb-content-wrap">
             <div class="fb-section-header" v-if="category == 'F'">
                 EDIT
             </div>
@@ -28,8 +25,9 @@
             <div class="fb-section-headerDown" >
                 게시글 내용을 수정합니다.
             </div>
-            <hr class="fb-custom-hr">
-            <div class="fb-content-wrap">
+            <div class="fb-setCss">
+                <hr class="fb-custom-hr">
+            </div>
 
                 <div class="fb-title-label">TITLE</div>
                 <div class="fb-title-input">
@@ -40,24 +38,25 @@
                 </div>
                 <div class="fb-title-label">CONTENT</div>
                 <div class="fb-editor-boxBig">
-                    <div id="fb-editor" style="height: 1000px;"></div>
+                    <div id="fb-editor"></div>
                 </div>
-                <div class="fb-view-label">첨부파일</div>
+                <div class="fb-title-label">첨부파일</div>
                 <div class="fb-view-files"> 
                     <div v-for="item in fileList" :key="reload">
                         <div class="fb-link-container">
-                            <span class="fb-FileDownload">{{item.fileName}}</span>
-                            <span class="fb-FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb)</span>
+                            <span class="FileDownload ">{{item.fileName}}</span>
+                            <span class="FileDownload"> ({{ Math.ceil(item.fileSize/1024)}} kb)</span>
                             <button class="fb-button" @click="fnRemove(item.fileId)">삭제</button>
                             <img :src="item.filePath" :alt="item.fileName" class="fb-preview-image">
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <button class="fb-button fb-buttonStyle" @click="fnEdit">저장</button>
-                <button class="fb-button fb-buttonStyle" @click="fnBack(info)">뒤로가기</button>
+            <div class="fb-buttonStyle fb-buttonMargin">
+                <button class="fb-button" @click="fnEdit">저장</button>
+                <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
             </div>
+        </div>
         </div>
     </div>
 
@@ -138,8 +137,10 @@
 				        	}
 				        });
                     },
+                    
                     fnEdit : function (){
                         var self = this;
+
 				        var nparmap = {
                             title : self.info.title,
                             content : self.info.content,
@@ -151,7 +152,11 @@
 				        	dataType:"json",	
 				        	type : "POST", 
 				        	data : nparmap,
-				        	success : function(data) { 
+				        	success : function(data) {
+                                if(!confirm("저장하시겠습니까?")){
+                                    alert("취소되었습니다.");
+                                    return;                                    
+                                }
                                 alert("수정되었습니다.");
 
                                 if( $("#file1")[0].files.length > 0){
@@ -193,6 +198,7 @@
                             self.info.content = quill.root.innerHTML;
                         });
                     },
+
                     //파일업로드
                     upload : function(form){
                     	var self = this;
@@ -219,11 +225,16 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                alert("삭제되었습니다!");
+                                if(!confirm("삭제하시겠습니까?")){
+                                    alert("취소되었습니다.");
+                                    return;                                    
+                                }
+                                alert("삭제되었습니다");
                                 self.fnFileView();
                             }
                         });
                     },
+
                 },
                 mounted() {
                 	var self = this;

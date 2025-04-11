@@ -7,9 +7,7 @@
     <title>수의사 게시판 ADD</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-    <!-- Quill CDN -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <link rel="stylesheet" href="/css/board/board.css"/>
 	
     <style>
@@ -43,7 +41,7 @@
                 <button class="fb-fill-btn" @click="usedPoint = currentPoint.currentPoint">
                     전액입력
                 </button>
-                <!-- <button class="fb-point-button" :class="{ 'fb-point-button-active': isUsed }" @click="fnUsePoint">사용</button> -->
+               
             </div>
             <div class="fb-title-label">
                 <div>TITLE</div>
@@ -90,6 +88,7 @@
                 methods: {
                     fnSave(){
                         let self = this;
+
                         let usedPoint = -Math.abs(parseInt(self.usedPoint));
                         if(!(self.isNumber(usedPoint))){
                             alert("숫자만 입력해주세요");
@@ -144,6 +143,7 @@
                                                     location.href = "/board/vetBoardList.do"
                                                 }
                                             });
+                                            alert("저장되었습니다.");
                                         } else {
                                             alert("취소되었습니다.");
                                         } 
@@ -186,7 +186,7 @@
                     fnUsePoint (){
                         let self = this;
                         self.isUsed = !self.isUsed;
-                    }
+                    },
                 },
                 mounted() {
                 	let self = this;

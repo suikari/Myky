@@ -7,9 +7,7 @@
     <title>수의사 게시판</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-    <!-- Quill CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
     <link rel="stylesheet" href="/css/board/board.css"/>
     
 
@@ -189,12 +187,10 @@
                         <button class="fb-cmtButton" @click="fnAnEditCha(answer.reviewText, answer.reviewId)" v-if="showEdit !== answer.reviewId">수정</button>
                         <template v-if="(showEdit == answer.reviewId) && info.isAccepted === 'N'">
                             <div class="fb-editor-box">
-                                <!-- 🖋 Quill 에디터 [수정]-->
-                                <div>
-                                    <div id="editorEdit" class="fb-quill-editor"></div>
-                                </div>
+                                <!-- Quill 에디터 컨테이너 -->
+                                <div id="editorEdit" class="fb-quill-editor"></div>
                                 <div class="fb-reply-buttons">
-                                    <button class="fb-cmtButton" @click="fnAnEdit()">등록</button>
+                                    <button class="fb-cmtButton" @click="fnAnEdit">등록</button>
                                 </div>
                             </div>
                             <button class="fb-cmtButton" @click="fnCancle">취소</button>
@@ -338,7 +334,7 @@
                             url: "/board/vetBoardList.dox",
                             dataType: "json",
                             type: "POST",
-                            data: nparmap,
+                            data: nparmap, 
                             success: function (data) {
                                 if(data.result != 'success'){
                                     alert("잘못된 주소입니다.");
@@ -610,6 +606,11 @@
                     },
                     fnCancle : function(){
                         let self = this;
+                        // 현재 활성화된 에디터 인스턴스 제거
+                        if (self.quillInstances[self.reviewId]) {
+                            self.quillInstances[self.reviewId].container.remove();
+                            delete self.quillInstances[self.reviewId];
+                        }
                         self.showEdit = null;
                         alert("취소되었습니다.");
                         return;
@@ -637,13 +638,15 @@
                     },
                     editorEdit : function(contents) {
                         let self = this;
-                       
-                            // 이미 인스턴스가 있다면 재생성하지 않음
-                            if (self.quillEdit) {
-                                self.quillEdit.root.innerHTML = contents;
-                                return;
-                            }
-
+                        // 이전 에디터가 있다면 제거
+                        if (self.quillInstances[answerId]) {
+                            self.quillInstances[answerId].container.remove();
+                            delete self.quillInstances[answerId];
+                        }
+                        // 새로운 에디터 컨테이너 생성
+                        const editorContainer = document.createElement('div');
+                        editorContainer.id = `editor-${answerId}`;
+                        document.querySelector('#editorEdit').appendChild(editorContainer);
                             // 새로 생성
                             self.quillEdit = new Quill('#editorEdit', {
                                 theme: 'snow',
@@ -660,12 +663,12 @@
                             });
 
                             // 초기 내용 설정
-                            self.quillEdit.root.innerHTML = contents;
+                            self.quillInstances[answerId].root.innerHTML = contents;
 
                             // 에디터 내용이 변경될 때마다 Vue 데이터 업데이트
-                            self.quillEdit.on('text-change', function () {
-                                self.reviewText = self.quillEdit.root.innerHTML;
-                            });
+                            self.quillInstances[answerId].on('text-change', function() {
+                                self.reviewText = self.quillInstances[answerId].root.innerHTML;
+});
 
 
                     },
