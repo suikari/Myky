@@ -13,13 +13,11 @@
 
         </style>
     </head>
-
-    <body>
+    <body>                            
         <jsp:include page="../common/header.jsp" />
 
         <div id="app" class="container">
             <main>
-
                 <div class="main-banner">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
@@ -59,7 +57,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- 버튼 -->
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
                     </div>
