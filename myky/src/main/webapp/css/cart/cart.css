@@ -1,8 +1,7 @@
 .cartContainer {
 	max-width: 1280px;
-	margin: 30px auto;
+	margin: 100px auto 150px auto;
 	margin-bottom: 200px;
-	padding: 20px;
 }
 
 .cartContainer h2 {
@@ -111,8 +110,7 @@
 
 .ordercontainer {
 	max-width: 1280px;
-	margin: 30px auto;
-	padding: 40px;
+	margin: 100px auto 150px auto;
 }
 
 .ordercontainer h2 {
@@ -169,9 +167,10 @@
 }
 
 .delivery-section {
+	width: 900px;
 	border: 1px solid #ddd;
 	padding: 40px;
-	margin-top: 40px;
+	margin: 40px auto 10px auto;
 	border-radius: 6px;
 	background: rgb(241, 247, 248);
 }
@@ -204,7 +203,7 @@
 }
 
 .delivery-section select {
-	width: 100%;
+	width: 80%;
 	padding: 10px;
 	margin-top: 8px;
 	border: 1px solid #ccc;
@@ -399,8 +398,7 @@
 
 .order-container {
 	max-width: 1280px;
-	margin: 30px auto;
-	padding: 40px;
+	margin: 100px auto 150px auto;
 }
 
 .order-container h2 {

@@ -22,8 +22,8 @@
 
     <div id="app" class="order-body">
         <div class="order-container">
+            <h2>주문/배송조회</h2>
             <div class="order-history">
-                <h2>주문/배송조회</h2>
                 <!-- 주문 조회 필터 -->
                 <div class="order-history__filter">
                     <button @click="setDateRange(1)" class="order-history__button">최근 1개월</button>
