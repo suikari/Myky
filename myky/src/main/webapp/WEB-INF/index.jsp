@@ -541,9 +541,9 @@
                     </div>
                 </section>
 
-                <!-- ✅ 공지사항 & 후원내역 -->
+                
                 <section class="info-section">
-                    <!-- 공지사항 -->
+                    <!-- ✅ 공지사항 & 후원내역
                     <div class="board-container notice">
                         <div class="board-title-wrapper">
                             <div class="board-header">
@@ -561,7 +561,7 @@
                                 <div class="post-content">{{ post.createdAt }}</div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
 
                     <!-- 후원내역 -->
@@ -891,7 +891,7 @@
                         //console.log(self.code);
                     }
 
-                    self.fnboardList();
+                    //self.fnboardList();
                     self.fnProductList();
                     self.fnDonationList();
                     self.autoScroll();

@@ -593,3 +593,28 @@ body {
 			font-weight: bold;
 			color: #e8bb33;
 		}
+
+
+
+		/* ... existing code ... */
+
+		.donation {
+			position: fixed;
+			right: 20px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 180px;
+			background-color: white !important;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			border-radius: 20px;
+			z-index: 999;
+			min-height: 250px !important;
+			padding: 18px !important;
+		}
+
+		.board-div.scroll {
+			max-height: 400px;
+			overflow-y: auto;
+		}
+
+		/* ... existing code ... */
