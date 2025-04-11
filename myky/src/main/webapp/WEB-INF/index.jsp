@@ -1017,7 +1017,7 @@
                         let speed = 1; // 스크롤 속도
 
                         setInterval(() => {
-                            if (!container) return;
+                            if (!container || container.scrollHeight === 0) return; // 내용이 없을 때 작동하지 않음
 
                             container.scrollTop += speed;
 
@@ -1065,7 +1065,7 @@
                             new Swiper('.best-swiper', {
                                 slidesPerView: 5,
                                 slidesPerGroup: 5,
-                                spaceBetween: -5,
+                                spaceBetween: 0,
                                 navigation: {
                                     nextEl: '.best-next',
                                     prevEl: '.best-prev',
@@ -1082,7 +1082,7 @@
                             new Swiper('.new-swiper', {
                                 slidesPerView: 5,
                                 slidesPerGroup: 5,
-                                spaceBetween: 20,
+                                spaceBetween: 0,
                                 navigation: {
                                     nextEl: '.new-next',
                                     prevEl: '.new-prev',

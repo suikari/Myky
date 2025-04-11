@@ -33,12 +33,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     
     <!-- Vue 3 Script -->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3"></script>
-    
-    <!-- Quill CDN -->
-	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3"></script> 
  
      <style>
     </style>

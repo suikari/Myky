@@ -723,18 +723,16 @@ button.favorite-btn:hover #favoriteStar {
 
 .partner-container {
 	max-width: 1280px;
-	margin: 50px auto 150px auto;
-	padding: 20px;
+	margin: 100px auto 150px auto;
 	flex: 1;
 }
 
 .partner-list {
-	padding: 20px;
 	text-align: center;
 }
 
 .partner-list__title {
-	font-size: 24px;
+	margin-top: 0;
 	margin-bottom: 50px;
 }
 
