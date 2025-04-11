@@ -120,7 +120,7 @@ html.map body {
 
 #menu_wrap {
 	position: absolute;
-	top: 0;
+	top: 40px;
 	left: 0;
 	bottom: 0;
 	width: 270px;
@@ -296,7 +296,7 @@ html.map body {
 
 #category {
 	position: absolute;
-	top: 2%;
+	top: 4%;
 	left: 17%;
 	/* 왼쪽에서 오른쪽으로 위치 변경 */
 	border-radius: 5px;
