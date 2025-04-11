@@ -1710,6 +1710,9 @@ h2 {
 	height: 300px;
 	border: 1px solid #ccc;
 }
+.ql-container {
+    min-height: 500px; 
+}
 
 .button-box {
 	margin-top: 30px;

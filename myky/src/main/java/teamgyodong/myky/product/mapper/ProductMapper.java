@@ -54,6 +54,12 @@ public interface ProductMapper {
 
 	Qna selectQna(HashMap<String, Object> map);
 
+	int getPurchaseCount(HashMap<String, Object> map);
+
+	
+
+	
+
 	
 
 	

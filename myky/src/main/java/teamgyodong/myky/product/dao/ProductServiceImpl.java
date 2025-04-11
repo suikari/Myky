@@ -137,7 +137,22 @@ public class ProductServiceImpl implements ProductService {
 		productMapper.insertReviewFile(map);
 	}
 	
-	
+	public HashMap<String, Object> checkPurchaseForReview(HashMap<String, Object> map) {
+	    HashMap<String, Object> resultMap = new HashMap<>();
+	    try {
+	        int count = productMapper.getPurchaseCount(map); // 구매 여부 조회
+	        resultMap.put("result", "success");
+	        resultMap.put("purchased", count > 0 ? "Y" : "N");
+	        resultMap.put("purchaseCount", count);
+	    } catch (Exception e) {
+	        resultMap.put("result", "error");
+	        resultMap.put("message", "구매 여부 확인 중 오류가 발생했습니다.");
+	        e.printStackTrace();
+	    }
+	    return resultMap;
+	}
+
+
 	//상품 QnA 페이지
 	public HashMap<String, Object> getQnAList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub

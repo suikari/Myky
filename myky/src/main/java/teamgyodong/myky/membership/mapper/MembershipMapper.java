@@ -32,6 +32,8 @@ public interface MembershipMapper {
 	void insertMembership(HashMap<String, Object> map);
 
 	String selectMembershipIdByUserId(String userId);
+
+	int getMembershipHistoryCount(String userId);
 	
 	
 
