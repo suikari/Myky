@@ -41,30 +41,30 @@
     <div id="app" class="partner-container">
         <div class="partner-list">
             <h2 class="partner-list__title">제휴처 소개</h2>
-            <input type="text" v-model="searchKeyword" @keyup.enter="fnPartnerSearch" class="partner-search-input" placeholder="검색어 입력..." />
-            <button @click="fnPartnerSearch" class="partner-search-button">검색</button>
             <div class="category-buttons">
-                <button @click="filterByCategory(null)">전체</button>
+                <button @click="filterByCategory(null)" :class="{ active: categoryCode === null }">전체</button>
                 <button @click="filterByCategory(1)" :class="{ active: categoryCode === 1 }">숙소</button>
                 <button @click="filterByCategory(2)" :class="{ active: categoryCode === 2 }">식당</button>
                 <button @click="filterByCategory(3)" :class="{ active: categoryCode === 3 }">관광지</button>
                 <button @click="filterByCategory(4)" :class="{ active: categoryCode === 4 }">편의시설</button>
+                <input type="text" v-model="searchKeyword" @keyup.enter="fnPartnerSearch" class="partner-search-input" placeholder="검색어 입력..." />
+                <button @click="fnPartnerSearch" class="partner-search-button">검색</button>
             </div>
             <div class="partner-grid" v-if="partners.length > 0">
                 <div v-for="partner in partners" :key="partner.partnerdetailId" class="partner-card">
                     <h2 class="partner-name">{{ partner.name }}</h2>
-                    <p class="partner-address">📍 {{ partner.address }}</p>
-                    <p class="partner-phone">📞 {{ partner.phoneNumber }}</p>
+                    <p class="partner-address"><strong>주소 : </strong> {{ partner.address }}</p>
+                    <p class="partner-phone"><strong>연락처 : </strong> {{ partner.phoneNumber }}</p>
                     <p v-if="partner.websiteUrl"  class="partner-website">
                         🔗 <a :href="normalizedUrl(partner.websiteUrl)" target="_blank">웹사이트 방문</a>
                     </p>
-                    <p class="partner-hours">🕒 운영시간: {{ partner.openingHours }}</p>
-                    <p class="partner-holiday">🚫 휴무일: {{ partner.regularHoliday || '없음' }}</p>
+                    <p class="partner-hours"><strong>운영시간 : </strong> {{ partner.openingHours }}</p>
+                    <p class="partner-holiday"><strong>휴무일 : </strong> {{ partner.regularHoliday || '없음' }}</p>
                     <button @click="showMap(partner)" class="map-button">지도에서 보기</button>
                 </div>
             </div>
             <div class="no-result" v-else>
-                😿 검색 결과가 없습니다.
+                검색 결과가 없습니다.
             </div>
             <div class="partner-pagination">
                 <button @click="fnPageMove('prev')" :disabled="page === 1">이전</button>
