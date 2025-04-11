@@ -30,4 +30,7 @@ public class Product {
 	private String fileSize ;
 	private String fileEtc;
 	private String thumbYn ;
+	
+	
+	
 }

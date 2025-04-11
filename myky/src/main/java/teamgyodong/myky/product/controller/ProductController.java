@@ -91,7 +91,6 @@ public class ProductController {
 		return "product/product-reviewEdit"; 
     }
 	
-	
 	//상품 문의 글쓰기
 	@RequestMapping("/product/qnawrite.do")
 	public String qnawrite(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) {
@@ -221,7 +220,14 @@ public class ProductController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	
+	// 상품 구매 여부 확인
+	@RequestMapping(value = "/product/checkPurchase.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String checkProductPurchase(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	    HashMap<String, Object> resultMap = productService.checkPurchaseForReview(map);
+	    return new Gson().toJson(resultMap);
+	}
+
 	//QnA
 	@RequestMapping(value = "/product/qnaList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
