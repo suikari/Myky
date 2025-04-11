@@ -102,10 +102,9 @@
 
                                     <!-- 수정 중인 경우 -->
                                     <div v-if="editCommentId == item.commentId">
-                                        <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}</div>
+                                        <div style="font-weight: bold; margin-bottom: 3px;">{{ sessionNickName }}</div>
+                                        <div>
                                         <input v-model="editContent" class="fb-cmtInput" />
-
-                                        <div style="display: flex; gap: 5px;">
                                             <button class="fb-cmtButton2"
                                                 @click="fnCommentUpdate(item.commentId)">저장</button>
                                             <button class="fb-cmtButton2" @click="editCommentId = ''">취소</button>
@@ -193,7 +192,7 @@
                         </table>
                             <div class="fb-cmtButtonBox" v-if="sessionId">
                                 <div></div>
-                                <div class="replyNickName"> {{sessionName}} </div>
+                                <div class="replyNickName"> {{sessionNickName}} </div>
                                 <div class="reply-input-cell">
                                     <div class="reply-box">
                                         <textarea class="clean-textarea" v-model="content" cols="60" rows="5" placeholder="댓글을 입력하세요"></textarea>
