@@ -719,17 +719,13 @@ button.favorite-btn:hover #favoriteStar {
   flex-direction: column;
   min-height: 100vh;
   background-color: #fffdfc;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.partner-container {
-  flex: 1;
 }
 
 .partner-container {
 	max-width: 1280px;
-	margin: 0 auto;
+	margin: 50px auto 150px auto;
 	padding: 20px;
+	flex: 1;
 }
 
 .partner-list {
@@ -739,7 +735,7 @@ button.favorite-btn:hover #favoriteStar {
 
 .partner-list__title {
 	font-size: 24px;
-	margin-bottom: 40px;
+	margin-bottom: 50px;
 }
 
 .partner-grid {
@@ -750,10 +746,10 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .partner-card {
-	background: #fffcfa;
+	background: rgb(241, 247, 248);
 	padding: 15px;
-	border-radius: 10px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ddd;
+	border-radius: 6px;
 	text-align: left;
 	display: flex;
 	flex-direction: column;
@@ -764,6 +760,7 @@ button.favorite-btn:hover #favoriteStar {
 .partner-name {
 	font-size: 18px;
 	font-weight: bold;
+	color: #333;
 	margin-bottom: 5px;
 }
 
@@ -804,10 +801,10 @@ button.favorite-btn:hover #favoriteStar {
 	right: 10px;
 	width: 35px;
 	height: 35px;
-	background: white;
-	color: black;
+	background: rgb(241, 247, 248);
+	color: rgb(110, 158, 255);
 	font-size: 24px;
-	border: 2px solid #ccc;
+	border: 2px solid rgb(110, 158, 255);
 	border-radius: 50%;
 	cursor: pointer;
 	display: flex;
@@ -818,15 +815,15 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .map-close-button:hover {
-	background: #dadada;
-	border-color: #575757;
-	color: #575757;
+	background: rgb(241, 247, 248);
+	border-color: rgb(0, 80, 255);
+	color: rgb(0, 80, 255);
 }
 
 .map-button {
 	margin-top: auto;
 	padding: 6px 12px;
-	background: #ffbc7b;
+	background: rgb(110, 158, 255);
 	color: white;
 	border: none;
 	border-radius: 6px;
@@ -834,7 +831,7 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .map-button:hover {
-	background: #FF7500;
+	background: rgb(0, 80, 255);
 }
 
 .partner-pagination {
@@ -843,13 +840,13 @@ button.favorite-btn:hover #favoriteStar {
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 8px;
-	margin-top: 30px;
+	margin-top: 50px;
 }
 
 .partner-pagination button {
-	background-color: rgb(255, 249, 244);
-	border: 1px solid #ffbc7b;
-	color: #FF7500;
+	background-color: rgb(241, 247, 248);
+	border: 1px solid rgb(157, 186, 247);
+	color: rgb(0, 80, 255);
 	padding: 8px 14px;
 	border-radius: 12px;
 	font-size: 14px;
@@ -860,17 +857,16 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .partner-pagination button:hover:not(:disabled) {
-	background-color: rgb(255, 236, 221);
-	border-color: #ffbc7b;
-	color: #FF7500;
+	background-color: rgb(157, 186, 247);
+	color: #fff;
 }
 
 .partner-pagination button.active {
-	background-color: #ffbc7b;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	font-weight: bold;
-	border-color: #ffbc7b;
-	box-shadow: 0 2px 6px rgba(255, 140, 66, 0.4);
+	border-color: rgb(110, 158, 255);
+	box-shadow: 0 0 5px rgba(0, 80, 255, 0.3);
 }
 
 .partner-pagination button:disabled {
@@ -883,12 +879,12 @@ button.favorite-btn:hover #favoriteStar {
 
 .partner-website a {
 	text-decoration: none;
-	color: #ffbc7b;
+	color: rgb(110, 158, 255);
 	font-weight: bold;
 }
 
 .partner-website a:hover {
-	color: #FF7500;
+	color: rgb(0, 80, 255);
 }
 
 .no-result {
@@ -898,53 +894,55 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .category-buttons {
-	margin: 20px 0;
+	margin: 40px 0;
 	text-align: center;
 }
 
 .category-buttons button {
 	margin: 5px;
 	padding: 8px 14px;
-	background-color: rgb(255, 249, 244);
-	color: #FF7500;
-	border: 1px solid #ffbc7b;
+	background-color: #fff;
+	color: rgb(0, 80, 255);
+	border: 1px solid rgb(110, 158, 255);
 	border-radius: 6px;
 	cursor: pointer;
+	font-weight: bold;
 	font-size: 14px;
 }
 
 .category-buttons button:hover {
-	background-color: #ffbc7b;
+	background-color: rgb(157, 186, 247);
+	color: #fff;
 }
 
 .category-buttons button.active {
-	background-color: #ffbc7b;
+	background-color: rgb(110, 158, 255);
 	color: #fff;
-	font-weight: bold;
 }
 
 .partner-search-input {
 	padding: 8px 14px;
+	margin-left : 25px;
 	font-size: 14px;
-	border: 1px solid #ffbc7b;
+	border: 1px solid rgb(110, 158, 255);
 	border-radius: 6px;
 	width: 220px;
 	outline: none;
 	transition: border-color 0.3s, box-shadow 0.3s;
-	background-color: rgb(255, 249, 244);
+	background-color: #fff;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .partner-search-input:focus {
-	border-color: #FF7500;
-	box-shadow: 0 0 5px rgba(255, 140, 66, 0.3);
+	border-color: rgb(0, 80, 255);
+	box-shadow: 0 0 5px rgba(0, 80, 255, 0.3);
 }
 
 .partner-search-button {
 	margin-left: 8px;
 	padding: 8px 16px;
 	font-size: 14px;
-	background-color: #ffbc7b;
+	background-color: rgb(110, 158, 255);
 	color: white;
 	border: none;
 	border-radius: 6px;
@@ -953,8 +951,8 @@ button.favorite-btn:hover #favoriteStar {
 }
 
 .partner-search-button:hover {
-	background-color: #FF7500;
-	box-shadow: 0 2px 6px rgba(255, 140, 66, 0.3);
+	background-color: rgb(0, 80, 255);
+	box-shadow: 0 0px 6px rgba(0, 80, 255, 0.3);
 }
 .pagination-container {
   display: flex;
