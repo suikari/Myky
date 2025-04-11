@@ -7,10 +7,7 @@
     <title>수의사 게시판 수정</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-	    <!-- Quill CSS -->
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <!-- Quill JS -->
-        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <link rel="stylesheet" href="/css/board/board.css"/>
     <style>
       
@@ -19,7 +16,7 @@
 <body>
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
     <div id="fb-app" class="fb-container">
-        <div id="fb-viewPage">
+        <div class="fb-content-wrap">
             <div class="fb-section-header">
                 EDIT
             </div>
@@ -35,9 +32,9 @@
 
             <div class="fb-title-label">CONTENT</div>
             <div class="fb-editor-boxBig">
-                <div id="fb-editor" style="height: 1000px;"></div>
+                <div id="fb-editor"></div>
             </div>
-            <div class="fb-buttonStyle">
+            <div class="fb-buttonStyle fb-buttonMargin">
                 <button class="fb-button" @click="fnEdit">저장</button>
                 <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
             </div>
@@ -100,6 +97,7 @@
                     },
                     fnEdit : function (){
                         var self = this;
+
 				        var nparmap = {
                             title : self.info.title,
                             content : self.info.content,
@@ -112,8 +110,12 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-                                alert("수정되었습니다.");
-                                    location.href="/board/vetBoardList.do";
+                                if(!confirm("저장하시겠습니까?")){
+                                    alert("취소되었습니다.");
+                                    return;                                    
+                                }
+                                alert("저장되었습니다");
+                                location.href="/board/vetBoardList.do";
 				        	}
 				        });
                     },
@@ -143,6 +145,7 @@
                             self.info.content = quill.root.innerHTML;
                         });
                     },
+
                 },
                 mounted() {
                 	var self = this;

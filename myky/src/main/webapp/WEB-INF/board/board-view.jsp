@@ -52,13 +52,13 @@
                 <div class="like-button-wrapper">
                     <template v-if="likeStatus">
                         <button @click="likeButton('like','M')" class="likeButton">
-                            <span class="like-button-margin">{{ info.likes }}</span>
+                            <span class="like-button-margin" :style="{ opacity: info.likes > 0 ? 1 : 0 }">{{ info.likes }}</span>
                             <img src="../img/buttonImg/like2.png" class="likeButton2" alt="좋아요" />
                         </button>
                     </template>
                     <template v-else>
                         <button @click="likeButton('like','P')" class="likeButton">
-                            <span class="like-button-margin">{{ info.likes }}</span>
+                            <span class="like-button-margin" :style="{ opacity: info.likes > 0 ? 1 : 0 }">{{ info.likes }}</span>
                             <img src="../img/buttonImg/like.png" class="likeButton2" alt="좋아요" />
                         </button>
                     </template>
@@ -66,13 +66,13 @@
                     <template v-if="dislikeStatus">
                         <button @click="likeButton('dislike','M')" class="likeButton">
                             <img src="../img/buttonImg/dislike2.png" class="likeButton2" alt="싫어요" />
-                            <span class="like-button-margin">{{ info.dislikes }}</span>
+                            <span class="like-button-margin" :style="{ opacity: info.dislikes > 0 ? 1 : 0 }">{{ info.dislikes }}</span>
                         </button>
                     </template>
                     <template v-else>
                         <button @click="likeButton('dislike','P')" class="likeButton">
                             <img src="../img/buttonImg/dislike.png" class="likeButton2" alt="싫어요" />
-                            <span class="like-button-margin">{{ info.dislikes }}</span>
+                            <span class="like-button-margin" :style="{ opacity: info.dislikes > 0 ? 1 : 0 }">{{ info.dislikes }}</span>
                         </button>
                     </template>
                 </div>
@@ -97,8 +97,7 @@
                     <table>
                         <tr v-if="cmtList.commentId != null">
                             <div v-for="item in cmtList" :key="item.commentId">
-                                <div class="fb-cmtTextBox" 
-                                     v-for="item in cmtList" 
+                                <div class="fb-cmtTextBox"                                       
                                      :style="item.userId === sessionId ? 'background-color: #f8f8f8;' : ''">
 
                                     <!-- 수정 중인 경우 -->
@@ -140,7 +139,7 @@
                                             <a class="fb-cmt2button" @click="fnReply(item.commentId)">답글 달기</a>
 
                                             <!-- 수정/삭제 -->
-                                            <template v-if="item.isDeleted == 'N'">
+                                            <template v-if="item.isDeleted == 'N'&& editCommentId !== item.commentId">
                                                 <template v-if="sessionId == item.userId">
                                                         <button class="fb-cmtButton2" @click="fnCommentEdit(item)">수정</button>
                                                 </template>
@@ -160,7 +159,10 @@
                                 </div>
 
                                 <!-- 대댓글 반복 -->
-                                <div v-for="reply in item.replies || []" :key="reply.commentId" style="margin-left: 50px;" class="fb-cmtTextBox">
+                                <div v-for="reply in item.replies || []" :key="reply.commentId"
+                                :style="{
+                                    marginLeft: '50px',
+                                    backgroundColor: reply.userId === sessionId ? '#f8f8f8' : ''}">
                                     <div v-if="editCommentId === reply.commentId" class="fb-cmtTextBox">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                         <input class="fb-cmtInput" v-model="editContent"/>
@@ -194,7 +196,7 @@
                                 <div class="replyNickName"> {{sessionName}} </div>
                                 <div class="reply-input-cell">
                                     <div class="reply-box">
-                                        <textarea class="clean-textarea" v-model="content" cols="60" rows="5" placeholder="답글을 입력하세요"></textarea>
+                                        <textarea class="clean-textarea" v-model="content" cols="60" rows="5" placeholder="댓글을 입력하세요"></textarea>
                                         <div class="reply-button-cell">
                                             <button class="fb-buttonReply" @click="fnCommentSave">저장</button>
                                         </div>
@@ -250,6 +252,7 @@
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
                         sessionName : "${sessionName}",
+                        sessionNickName : "${sessionNickName}",
                         userId: {},
                         nickName: "",
                         content: "",
@@ -391,7 +394,7 @@
                             data: nparmap,
                             success: function (data) {
                                 location.href = "/board/list.do?category=" + self.category;
-                                alert("삭제되었습니다!");
+                                alert("삭제되었습니다");
                             }
                         });
                     },
@@ -403,9 +406,20 @@
                         var nparmap = {
                             commentId: item.commentId
                         };
+                        $.ajax({
+                            url: "/board/CommentEdit.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                
+                                alert("수정되었습니다");
+                            }
+                        });
                     },
                     fnCommentUpdate(commentId) {
                         var self = this;
+                        self.editCommentId = null;  
                         var nparmap = {
                             commentId: commentId,
                             boardId: self.boardId,
@@ -419,7 +433,11 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                alert("수정됐습니다!");
+                                if(!confirm("수정하시겠습니까?")){
+                                    alert("취소되었습니다.");
+                                    return;                                    
+                                }
+                                alert("수정되었습니다");
                                 self.editCommentId = "";
                                 self.fnView();
                             }
@@ -498,13 +516,16 @@
                     },
                     fnReply(commentId) {
                         let self = this;
-
-                        if (self.replyFormId == commentId) {
-                            self.replyFormId = "";
-                            return;
-                        }
-
-                        self.replyFormId = commentId;
+                        if (self.replyFormId === commentId) {
+                                self.replyFormId = "";
+                                self.replyContent = ""; // 내용도 초기화
+                        } else {
+                            // 다른 입력창이 열려있었다면 닫기
+                            if (self.replyFormId) {
+                                self.replyContent = ""; // 이전 내용 초기화
+                            }
+                            self.replyFormId = commentId;
+                        }                  
                     },
                     likeButton(status, PM) {
                         let self = this;
@@ -584,7 +605,7 @@
 
                     },
                     fnDownload(filePath, fileName, fileSize) {
-                        const confirmMsg = fileName + " ( " + Math.ceil(fileSize/1024) +  "KB) 파일을 다운로드하시겠습니까?";
+                        const confirmMsg = fileName + " ( " + Math.ceil(fileSize/1024) +  "KB ) 파일을 다운로드하시겠습니까?";
                         if (confirm(confirmMsg)) {
                         // 다운로드를 강제로 트리거
                         const link = document.createElement('a');

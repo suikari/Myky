@@ -7,9 +7,7 @@
     <title>자유게시판</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-    <!-- Quill CDN -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
     <link rel="stylesheet" href="/css/board/board.css"/>
 
     <style>
@@ -22,36 +20,36 @@
 	<jsp:include page="/WEB-INF/common/header.jsp"/>
  
     <div id="fb-app" class="fb-container">
-        <div class="fb-section-header" v-if="category == 'F'">
-            ADD
-        </div>
-        <div class="fb-section-header" v-if="category == 'A'">
-            NOTICE ADD
-        </div>
-            <div class="fb-section-headerDown">
-                게시글 내용을 작성합니다.
+        <div class="fb-content-wrap">
+            <div class="fb-section-header" v-if="category == 'F'">
+                ADD
             </div>
-            <hr class="fb-custom-hr">
+            <div class="fb-section-header" v-if="category == 'A'">
+                NOTICE ADD
+            </div>
+                <div class="fb-section-headerDown">
+                    게시글 내용을 작성합니다.
+                </div>
+                <hr class="fb-custom-hr">
 
-            <div class="fb-content-wrap">
-                <div class="fb-title-label">TITLE</div>
-                <div class="fb-title-input">
-                    <input v-model="title">
-                </div>
-                <div class="fb-title-inputImg">
-                    <input type="file" id="file1" name="file1" multiple>
-                </div>
-                <div class="fb-title-label">CONTENT</div>
-                <div class="fb-editor-totalBox">
-                    <div class="fb-editor-boxBig">
-                        <div id="fb-editor"></div>
+                    <div class="fb-title-label">TITLE</div>
+                    <div class="fb-title-input">
+                        <input v-model="title">
                     </div>
-                    <div class="fb-buttonStyle fb-buttonMargin">
-                        <button class="fb-button" @click="fnSave">저장</button>
-                        <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+                    <div class="fb-title-inputImg">
+                        <input type="file" id="file1" name="file1" multiple>
                     </div>
-                </div>
-            </div>
+                    <div class="fb-title-label">CONTENT</div>
+                    <div class="fb-editor-totalBox">
+                        <div class="fb-editor-boxBig">
+                            <div id="fb-editor"></div>
+                        </div>
+                        <div class="fb-buttonStyle fb-buttonMargin">
+                            <button class="fb-button" @click="fnSave">저장</button>
+                            <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+                        </div>
+                    </div>
+        </div>
     </div>
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
 
@@ -78,6 +76,7 @@
                 methods: {
                     fnSave(){
                         let self = this;
+
                         let nparmap = {
                             title : self.title,
                             content : self.content,
@@ -93,6 +92,10 @@
                                 if(data.result != 'success'){
                                     alert("잘못된 주소입니다.");
                                     location.href="/board/list.do?category="+self.category;
+                                }
+                                if(!confirm("저장하시겠습니까?")){
+                                    alert("취소되었습니다.");
+                                    return;                                    
                                 }
                                 alert("저장되었습니다.");
                                 location.href="/board/list.do?category="+self.category;
@@ -133,7 +136,7 @@
                         location.href="/board/list.do?category=" + self.category;
                         
                     },
-                
+
                 },
                 mounted() {
                     let self = this;
