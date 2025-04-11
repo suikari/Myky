@@ -10,8 +10,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/user/user.css" />
         <style>
-
-
             .mypage-container {
                 width: 100%;
                 margin: 30px auto;
@@ -863,6 +861,7 @@
                 background-color: #f6f5f5;
                 border-radius: 8px;
             }
+
             .coupon-container h2 {
                 padding-top: 30px;
             }
@@ -1085,15 +1084,19 @@
                                     </div>
                                     <div class="status-item">
                                         <span class="status-label">배송 중</span><br>
-                                        <span class="status-count">{{ orderCnt[3].orderCount }}</span>
+                                        <span class="status-count">{{ orderCnt[4].orderCount }}</span>
                                     </div>
                                     <div class="status-item">
                                         <span class="status-label">배송 완료</span><br>
+                                        <span class="status-count">{{ orderCnt[0].orderCount }}</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="status-label">환불신청</span><br>
                                         <span class="status-count">{{ orderCnt[1].orderCount }}</span>
                                     </div>
                                     <div class="status-item">
-                                        <span class="status-label">취소</span><br>
-                                        <span class="status-count">{{ orderCnt[0].orderCount }}</span>
+                                        <span class="status-label">반품신청</span><br>
+                                        <span class="status-count">{{ orderCnt[3].orderCount }}</span>
                                     </div>
                                 </div>
                                 <div class="order-list">
@@ -1114,14 +1117,16 @@
                                                 <td><span>{{formattedAmount(item.price)}} 원</span></td>
                                                 <td><span>{{item.quantity}} 개</span></td>
                                                 <td>
-                                                    <span v-if="item.orderStatus == 'paid'"
+                                                    <span v-if="item.refundStatus == 'none'"
                                                         class="anonymous">주문접수</span>
-                                                    <span v-if="item.orderStatus == 'shipped'" class="anonymous">배송
+                                                    <span v-if="item.refundStatus == 'shipped'" class="anonymous">배송
                                                         중</span>
-                                                    <span v-if="item.orderStatus == 'delivered'" class="anonymous">배송
+                                                    <span v-if="item.refundStatus == 'delivered'" class="anonymous">배송
                                                         완료</span>
-                                                    <span v-if="item.orderStatus == 'cancel'"
-                                                        class="anonymous">취소</span>
+                                                    <span v-if="item.refundStatus == 'return'"
+                                                        class="anonymous">반품신청</span>
+                                                    <span v-if="item.refundStatus == 'exchange'"
+                                                        class="anonymous">환불신청</span>
                                                 </td>
                                                 <td><span>{{item.orderedAt}}</span></td>
                                             </tr>
@@ -1223,8 +1228,8 @@
                                             @click="fnCouponPageMove('pvev')">
                                             &lt;
                                         </a>
-                                        <a v-if="couponIndex > 1 && couponPage != couponIndex" href="javascript:;" class="bgColer2"
-                                            @click="fnCouponPageMove('next')">
+                                        <a v-if="couponIndex > 1 && couponPage != couponIndex" href="javascript:;"
+                                            class="bgColer2" @click="fnCouponPageMove('next')">
                                             &gt;
                                         </a>
                                     </div>
@@ -1460,15 +1465,15 @@
 
                                     </tr>
                                     <tr v-if="membership.length == 0">
-                                        <td colspan="3" style="text-align: center;"> 
+                                        <td colspan="3" style="text-align: center;">
                                             <h3>멤버십 구독 내역이
                                                 없습니다.</h3>
                                             <button @click="fnMemberShip()" class="btn-board-write">멤버십 구독하기</button>
                                         </td>
-                                            
+
                                     </tr>
                                 </table>
-                                
+
 
 
                             </div>
@@ -1604,15 +1609,16 @@
                         page4: 1,
                         couponList: [],
                         couponCnt: 1,
-                        couponIndex:0,
-                        couponPage:1,
-                        couponPageSize:6,
+                        couponIndex: 0,
+                        couponPage: 1,
+                        couponPageSize: 6,
                         orderList: [],
                         orderCnt: [
-                            { orderStatus: 'shipped', orderCount: '0' },
-                            { orderStatus: 'delivered', orderCount: '0' },
-                            { orderStatus: 'paid', orderCount: '0' },
-                            { orderStatus: 'cancel', orderCount: '0' }
+                            { refundStatus: 'none', orderCount: '0' },
+                            { refundStatus: 'shipped', orderCount: '0' },
+                            { refundStatus: 'delivered', orderCount: '0' },
+                            { refundStatus: 'exchange', orderCount: '0' },
+                            { refundStatus: 'return', orderCount: '0' }
                         ],
                         orderAllCnt: "",
                         membership: [],
@@ -1958,7 +1964,7 @@
                                 self.couponList = data.coupon;
                                 self.couponCnt = data.count;
                                 self.couponIndex = Math.ceil(data.count / self.couponPageSize);
-                                console.log('쿠폰인덱스',self.couponIndex)
+                                console.log('쿠폰인덱스', self.couponIndex)
                             }
                         });
                     },
@@ -2018,11 +2024,11 @@
                     },
                     fnGetTab() {
                         let self = this;
-                        if (self.paramsTab != null && self.paramsTab != '' ) {
+                        if (self.paramsTab != null && self.paramsTab != '') {
                             self.changeTab(self.paramsTab);
                         }
                     },
-                    
+
                     fnOrderListStatus: function () {
                         location.href = "/order/orderList.do";
                     },
@@ -2084,7 +2090,7 @@
                     self.fnGetTab();
                     self.fnMyVetBoardList();
                     window.vueObj = this;
-                    console.log("dididi",self.activeTab);
+                    console.log("dididi", self.activeTab);
 
                 }
             });

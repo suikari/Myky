@@ -181,17 +181,18 @@ select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.rec
 		    SELECT 'shipped' FROM dual
 		    UNION ALL
 		    SELECT 'delivered' FROM dual
-		    UNION ALL
+    		UNION ALL
 		    SELECT 'none' FROM dual
 		    UNION ALL
 		    SELECT 'exchange' FROM dual
 		    UNION ALL
 		    SELECT 'return' FROM dual
+		    
 		)
-
-	SELECT 
-	    r.REFUND_STATUS,
-	    COUNT(od.REFUND_STATUS) AS STATUS_COUNT
+		
+		SELECT 
+		    r.REFUND_STATUS,
+		    COUNT(od.REFUND_STATUS) AS orderCount
 		FROM 
 		    REFUND_STATUS_LIST r
 		LEFT JOIN (
@@ -230,9 +231,15 @@ select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.rec
 	</select>
 	
 	<select id="selectOrderAllCnt" parameterType="hashmap" resultType="int">
-       SELECT COUNT(*)
-       FROM ORDERS
-       WHERE USER_ID = #{userId}
+select COUNT(*)
+	    from orders o
+	    join order_details od on o.order_id = od.order_id
+	    join (
+			select p.*, f.filepath
+		    from product p  
+		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
+		) p on od.product_id = p.product_id
+	    where o.user_id = #{userId}
 	</select>
 	
 	
