@@ -7,99 +7,245 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>join page</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+        <script src="/js/vue3b.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
-		<link rel="stylesheet" href="/css/user/user.css" />
+        <link rel="stylesheet" href="/css/user/user.css" />
         <style>
-           
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            html,
+            body {
+                height: 100%;
+                font-family: 'Segoe UI', sans-serif;
+            }
+
+            /* 전체 2단 레이아웃 */
+            .signup-layout {
+                display: flex;
+                height: 100vh;
+            }
+
+            /* 왼쪽 이미지 */
+            .signup-visual {
+                flex: 1;
+                background: url('../../img/userProfile/회원가입용 사진2.jpg') no-repeat center center;
+                background-size: cover;
+            }
+
+            /* 오른쪽 회원가입 폼 */
+            .signup-form {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #f9f9f9;
+                overflow-y: auto;
+            }
+
+            .join-container {
+                max-width: 1280px;
+                width: 100%;
+                margin: auto;
+                padding: 78px 200px;
+                background-color: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            }
+
+            .section {
+                margin-bottom: 24px;
+            }
+
+            .input-underline {
+                width: 100%;
+                padding: 10px 5px;
+                font-size: 15px;
+                border: none;
+                border-bottom: 2px solid #ddd;
+                outline: none;
+                transition: border-color 0.3s;
+                background-color: transparent;
+            }
+
+            .input-underline:focus {
+                border-bottom-color: #4a90e2;
+            }
+
+            .inline-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .inline-btn {
+                white-space: nowrap;
+                padding: 10px 16px;
+                font-size: 14px;
+                background-color: rgb(110, 158, 255);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .inline-btn:hover {
+                background-color: rgb(0, 80, 255);
+            }
+
+            .label {
+                font-weight: 600;
+                margin-bottom: 6px;
+                display: block;
+                font-size: 14px;
+                color: #333;
+            }
+
+            .radio-group {
+                display: flex;
+                gap: 20px;
+                margin-top: 10px;
+            }
+
+            .btn-submit {
+                width: 100%;
+                padding: 14px;
+                background-color: rgb(110, 158, 255);
+                color: white;
+                font-size: 16px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .btn-submit:hover {
+                background-color: rgb(0, 80, 255);
+            }
+
+            .btn-main {
+                margin-top: 10px;
+                width: 100%;
+                padding: 14px;
+                background-color: #ccc;
+                color: #333;
+                font-size: 16px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .btn-main:hover {
+                background-color: #aaa;
+            }
         </style>
     </head>
 
     <body>
-        <jsp:include page="/WEB-INF/common/header.jsp" />
 
-        <div id="app" class="container">
-            <div class="join-container">
-                <div class="section">
-                    <label class="label">아이디</label>
-                    <div class="inline-group">
-                        <input class="input-underline" v-model="user.userId" :disabled="idFlg" placeholder="영문, 숫자 포함 4~16자.">
-                        <button class="inline-btn" v-if="!idFlg" @click="fnIdChecked()">중복체크</button>
+        <div id="app" class="signup-layout">
+            <!-- 이미지 영역 -->
+            <div class="signup-visual"></div>
+
+            <!-- 폼 영역 -->
+            <div class="signup-form">
+                <div class="join-container">
+                    <div class="section">
+                        <label class="label">아이디</label>
+                        <div class="inline-group">
+                            <input class="input-underline" v-model="user.userId" :disabled="idFlg"
+                                placeholder="영문, 숫자 포함 4~16자.">
+                            <button class="inline-btn" v-if="!idFlg" @click="fnIdChecked()">중복체크</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="section">
-                    <label class="label">비밀번호</label>
-                    <input class="input-underline" type="password" v-model="user.pwd" placeholder="영문, 숫자, 특수문자 포함 8~20자 조합.">
-                </div>
-
-                <div class="section">
-                    <label class="label">비밀번호 확인</label>
-                    <input class="input-underline" type="password" v-model="user.pwdCheck">
-                </div>
-
-                <div class="section">
-                    <label class="label">이름</label>
-                    <input class="input-underline" v-model="user.userName" placeholder="한글 또는 영문 입력. EX)김철수,brianKim">
-                </div>
-
-                <div class="section">
-                    <label class="label">닉네임</label>
-                    <div class="inline-group">
-                        <input class="input-underline" v-model="user.nickName" :disabled="nickFlg" placeholder="한글,영문,숫자 포함 1~8자.">
-                        <button class="inline-btn" v-if="!nickFlg" @click="fnNickChecked()">중복체크</button>
+                    <div class="section">
+                        <label class="label">비밀번호</label>
+                        <input class="input-underline" type="password" v-model="user.pwd"
+                            placeholder="영문, 숫자, 특수문자 포함 8~20자 조합.">
                     </div>
-                </div>
 
-                <div class="section">
-                    <label class="label">주소</label>
-                    <div class="inline-group">
-                        <input class="input-underline" v-model="user.address" disabled>
-                        <button class="inline-btn" @click="fnSearchAddr()">주소검색</button>
+                    <div class="section">
+                        <label class="label">비밀번호 확인</label>
+                        <input class="input-underline" type="password" v-model="user.pwdCheck">
                     </div>
-                </div>
 
-                <div class="section">
-                    <label class="label">이메일</label>
-                    <div class="inline-group">
-                        <input class="input-underline" v-model="user.email" :disabled="emailFlg" placeholder="이메일 입력">
-                        <button class="inline-btn" v-if="!emailFlg" @click="fnEmailChecked()">인증번호</button>
+                    <div class="section">
+                        <label class="label">이름</label>
+                        <input class="input-underline" v-model="user.userName"
+                            placeholder="한글 또는 영문 입력. EX)김철수,brianKim">
                     </div>
-                    <div class="inline-group" v-if="showVerification" style="margin-top: 10px;">
-                        <input class="input-underline" v-model="authCode" placeholder="인증번호 입력">
-                        <button class="inline-btn" @click="verifyCode">확인</button>
+
+                    <div class="section">
+                        <label class="label">닉네임</label>
+                        <div class="inline-group">
+                            <input class="input-underline" v-model="user.nickName" :disabled="nickFlg"
+                                placeholder="한글,영문,숫자 포함 1~8자.">
+                            <button class="inline-btn" v-if="!nickFlg" @click="fnNickChecked()">중복체크</button>
+                        </div>
                     </div>
-                    <p v-if="message" style="margin-top: 8px; color: #4a90e2;">{{ message }}</p>
-                </div>
 
-                <div class="section">
-                    <label class="label">연락처</label>
-                    <div class="inline-group">
-                        <select class="input-underline" v-model="selectNum">
-                            <option>010</option>
-                            <option>011</option>
-                            <option>017</option>
-                        </select>
-                        <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;">
-                        <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;">
+                    <div class="section">
+                        <label class="label">주소</label>
+                        <div class="inline-group">
+                            <input class="input-underline" v-model="user.address" disabled>
+                            <button class="inline-btn" @click="fnSearchAddr()">주소검색</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="section">
-                    <label class="label">생년월일</label>
-                    <input class="input-underline" v-model="user.birthDate" placeholder="생년월일 8자리 혹은 미입력">
-                </div>
-
-                <div class="section">
-                    <label class="label">성별</label>
-                    <div class="radio-group">
-                        <label><input type="radio" v-model="user.gender" value="M"> 남성</label>
-                        <label><input type="radio" v-model="user.gender" value="F"> 여성</label>
-                        <label><input type="radio" v-model="user.gender" value="N"> 비공개</label>
+                    <div class="section">
+                        <label class="label">이메일</label>
+                        <div class="inline-group">
+                            <input class="input-underline" v-model="user.email" :disabled="emailFlg"
+                                placeholder="이메일 입력">
+                            <button class="inline-btn" v-if="!emailFlg" @click="fnEmailChecked()">인증번호</button>
+                        </div>
+                        <div class="inline-group" v-if="showVerification" style="margin-top: 10px;">
+                            <input class="input-underline" v-model="authCode" placeholder="인증번호 입력">
+                            <button class="inline-btn" @click="verifyCode">확인</button>
+                        </div>
+                        <p v-if="message" style="margin-top: 8px; color: #4a90e2;">{{ message }}</p>
                     </div>
-                </div>
 
-                <button class="btn-submit" @click="fnJoin1()">회원가입</button>
+                    <div class="section">
+                        <label class="label">연락처</label>
+                        <div class="inline-group">
+                            <select class="input-underline" v-model="selectNum">
+                                <option>010</option>
+                                <option>011</option>
+                                <option>017</option>
+                            </select>
+                            <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;">
+                            <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;">
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <label class="label">생년월일</label>
+                        <input class="input-underline" v-model="user.birthDate" placeholder="생년월일 8자리 혹은 미입력">
+                    </div>
+
+                    <div class="section">
+                        <label class="label">성별</label>
+                        <div class="radio-group">
+                            <label><input type="radio" v-model="user.gender" value="M"> 남성</label>
+                            <label><input type="radio" v-model="user.gender" value="F"> 여성</label>
+                            <label><input type="radio" v-model="user.gender" value="N"> 비공개</label>
+                        </div>
+                    </div>
+
+                    <button class="btn-submit" @click="fnJoin1()">회원가입</button>
+                    <button class="btn-main" @click="fnMain()">취소</button>
+                </div>
             </div>
         </div>
 
@@ -388,6 +534,9 @@
                         } catch (error) {
                             this.message = "서버 오류 발생.";
                         }
+                    },
+                    fnMain: function () {
+                        location.href = "/main.do";
                     }
                 },
                 mounted() {

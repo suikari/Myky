@@ -10,11 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/user/user.css" />
         <style>
-            body {
-                font-family: 'Noto Sans KR', Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-            }
+
 
             .mypage-container {
                 width: 100%;
@@ -859,6 +855,19 @@
             }
 
             .coupon-container {
+                display: block;
+                flex-wrap: wrap;
+                gap: 8px;
+                text-align: center;
+                justify-content: center;
+                background-color: #f6f5f5;
+                border-radius: 8px;
+            }
+            .coupon-container h2 {
+                padding-top: 30px;
+            }
+
+            .coupon-subContainer {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 16px;
@@ -881,7 +890,7 @@
                 background-color: #ffffff;
             }
 
-            .coupon-bg-logo{
+            .coupon-bg-logo {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -896,7 +905,8 @@
                 filter: none;
                 /* ❗ 흐림 제거 */
             }
-            .coupon-bg-logo2{
+
+            .coupon-bg-logo2 {
                 position: absolute;
                 top: 100px;
                 right: -60px;
@@ -913,7 +923,7 @@
             }
 
             .coupon-non {
-                background: linear-gradient(135deg, #f5e6e7, #f7f4f3);
+                background-color: #f6f5f5;
                 border-radius: 12px;
                 padding: 16px;
                 color: #ffffff;
@@ -944,7 +954,8 @@
 
             .coupon-name {
                 font-size: 24px;
-                color: white;;
+                color: white;
+                ;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.5);
             }
 
@@ -1174,35 +1185,49 @@
 
                             <div v-if="activeTab === 'coupon'">
                                 <div class="coupon-container">
-                                    <div v-for="item in couponList">
-                                        <div class="coupon">
-                                            <!-- 배경 이미지 추가 -->
-                                            <img src="../../img/userProfile/coupon_reversed_stamp_style.png"
-                                                class="coupon-bg-logo">
-                                            <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo"
-                                                class="coupon-bg-logo2">
+                                    <h2>보유 쿠폰 목록</h2>
+                                    <hr>
+                                    <div class="coupon-subContainer">
+                                        <div v-for="item in couponList">
+                                            <div class="coupon">
+                                                <!-- 배경 이미지 추가 -->
+                                                <img src="../../img/userProfile/coupon_reversed_stamp_style.png"
+                                                    class="coupon-bg-logo">
+                                                <img src="../../img/userProfile/mungNyangCoupon.png" alt="logo"
+                                                    class="coupon-bg-logo2">
 
-                                            <ul class="coupon-list">
-                                                <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
-                                                <li class="coupon-item coupon-discount">-{{item.discountRate}}% SALES
-                                                </li>
-                                                <li class="coupon-item coupon-condition">
-                                                    {{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능
-                                                </li>
-                                                <li class="coupon-item coupon-limit">
-                                                    최대 {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인
-                                                </li>
-                                                <li class="coupon-item coupon-info">발급 일 : {{item.createdAt}}</li>
-                                                <li class="coupon-item coupon-info">유효 기간: {{item.expirationDate}} 까지
-                                                </li>
-                                            </ul>
+                                                <ul class="coupon-list">
+                                                    <li class="coupon-item coupon-name">{{item.couponName}} 쿠폰</li>
+                                                    <li class="coupon-item coupon-discount">-{{item.discountRate}}%
+                                                        SALES
+                                                    </li>
+                                                    <li class="coupon-item coupon-condition">
+                                                        {{formattedAmount(item.minimumSpend)}}원 이상 결제시 사용 가능
+                                                    </li>
+                                                    <li class="coupon-item coupon-limit">
+                                                        최대 {{formattedAmount(item.maxDiscountAmount)}} 원 까지 할인
+                                                    </li>
+                                                    <li class="coupon-item coupon-info">발급 일 : {{item.createdAt}}</li>
+                                                    <li class="coupon-item coupon-info">유효 기간: {{item.expirationDate}}
+                                                        까지
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div v-if="couponList.length==0" class="coupon-non">
+                                            보유하신 쿠폰이 없습니다.
                                         </div>
                                     </div>
-                                    <div v-if="couponList.length==0" class="coupon-non">
-                                        보유하신 쿠폰이 없습니다.
+                                    <div class="cpoint-pagination">
+                                        <a v-if="couponPage != 1" href="javascript:;" class="bgColer2"
+                                            @click="fnCouponPageMove('pvev')">
+                                            &lt;
+                                        </a>
+                                        <a v-if="couponIndex > 1 && couponPage != couponIndex" href="javascript:;" class="bgColer2"
+                                            @click="fnCouponPageMove('next')">
+                                            &gt;
+                                        </a>
                                     </div>
-
-
                                 </div>
                             </div>
 
@@ -1420,7 +1445,7 @@
 
 
                             <div v-if="activeTab === 'subscribe'" class="cpoint-page">
-                                <table class="cpoint-table">
+                                <table class="board-table">
                                     <tr>
                                         <th class="cpoint-header" style="text-align: center;">멤버십 내용</th>
                                         <th class="cpoint-header" style="text-align: center;">구독 날짜</th>
@@ -1435,12 +1460,15 @@
 
                                     </tr>
                                     <tr v-if="membership.length == 0">
-                                        <td colspan="3" style="text-align: center; padding-top : 20px;"> 멤버십 구독 내역이
-                                            없습니다.</td>
+                                        <td colspan="3" style="text-align: center;"> 
+                                            <h3>멤버십 구독 내역이
+                                                없습니다.</h3>
+                                            <button @click="fnMemberShip()" class="btn-board-write">멤버십 구독하기</button>
+                                        </td>
+                                            
                                     </tr>
-
-
                                 </table>
+                                
 
 
                             </div>
@@ -1576,6 +1604,9 @@
                         page4: 1,
                         couponList: [],
                         couponCnt: 1,
+                        couponIndex:0,
+                        couponPage:1,
+                        couponPageSize:6,
                         orderList: [],
                         orderCnt: [
                             { orderStatus: 'shipped', orderCount: '0' },
@@ -1681,6 +1712,10 @@
 
                         if (tabId == 'vetBoard') {
                             self.fnMyVetBoardList('C');
+                        }
+
+                        if (tabId == 'coupon') {
+                            self.fnCoupon('C');
                         }
 
                         self.activeTab = tabId;
@@ -1830,6 +1865,10 @@
                         location.href = "/board/vetBoardList.do"
                     },
 
+                    fnMemberShip() {
+                        location.href = "/membership/main.do"
+                    },
+
                     fnDonaInfo(commend) {
                         var self = this;
                         if (commend == 'C') {
@@ -1900,10 +1939,15 @@
                         self.fnPoint2('');
                     },
 
-                    fnCoupon() {
+                    fnCoupon(commend) {
                         var self = this;
+                        if (commend == 'C') {
+                            self.couponPage = 1;
+                        }
                         var nparmap = {
                             userId: self.userId,
+                            couponPageSize: self.couponPageSize,
+                            couponPage: (self.couponPage - 1) * self.couponPageSize // 페이지 시작점
                         };
                         $.ajax({
                             url: "/user/coupon.dox",
@@ -1913,9 +1957,20 @@
                             success: function (data) {
                                 self.couponList = data.coupon;
                                 self.couponCnt = data.count;
-
+                                self.couponIndex = Math.ceil(data.count / self.couponPageSize);
+                                console.log('쿠폰인덱스',self.couponIndex)
                             }
                         });
+                    },
+
+                    fnCouponPageMove: function (direction) {
+                        let self = this;
+                        if (direction == "next") {
+                            self.couponPage++;
+                        } else {
+                            self.couponPage--;
+                        }
+                        self.fnCoupon('');
                     },
 
                     fnOrderList: function () {
@@ -1962,10 +2017,12 @@
                         });
                     },
                     fnGetTab() {
-                        if (self.paramsTab != null) {
-                            self.activeTab = self.paramsTab;
+                        let self = this;
+                        if (self.paramsTab != null && self.paramsTab != '' ) {
+                            self.changeTab(self.paramsTab);
                         }
                     },
+                    
                     fnOrderListStatus: function () {
                         location.href = "/order/orderList.do";
                     },
@@ -2027,6 +2084,7 @@
                     self.fnGetTab();
                     self.fnMyVetBoardList();
                     window.vueObj = this;
+                    console.log("dididi",self.activeTab);
 
                 }
             });
