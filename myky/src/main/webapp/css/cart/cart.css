@@ -154,6 +154,11 @@
 	box-sizing: border-box;
 }
 
+.inputField:focus {
+	border-color: rgb(0, 80, 255);
+	outline: none;
+}
+
 .inputField.form-margin {
 	margin-right: 20px;
 }
@@ -268,6 +273,11 @@
 	border-radius: 6px;
 	font-size: 14px;
 	margin-right: 5px;
+}
+
+.discountTable input[type="text"]:focus {
+	border-color: rgb(0, 80, 255);
+	outline: none;
 }
 
 .discountTable button {
@@ -584,6 +594,11 @@
 	font-size: 14px;
 }
 
+.order-input:focus {
+	border-color: rgb(0, 80, 255);
+	outline: none;
+}
+
 .order-input.form-margin {
 	margin-right: 20px;
 }
@@ -754,6 +769,11 @@
 	border-radius: 6px;
 }
 
+.exchange-return-select:focus {
+	border-color: rgb(0, 80, 255);
+	outline: none;
+}
+
 .exchange-return-textarea {
 	width: 400px;
 	height: 80px;
@@ -762,6 +782,11 @@
 	border-radius: 6px;
 	resize: none;
 	margin-top: 5px;
+}
+
+.exchange-return-textarea:focus {
+	border-color: rgb(0, 80, 255);
+	outline: none;
 }
 
 .exchange-return-notice {

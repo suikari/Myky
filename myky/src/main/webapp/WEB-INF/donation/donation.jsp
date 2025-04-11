@@ -89,6 +89,7 @@
                                             :class="{'selected': donateAmount === 50000}"
                                             @click="selectAmount(50000)">50,000원</button>
                                         <input type="text" class="customAmountInput" v-model="customAmount"
+                                            :class="{'selected': customAmount}" 
                                             @input="formatCustomAmount" @focus="clearSelection"
                                             @blur="validateCustomAmount" @keyup.enter="validateCustomAmount"
                                             placeholder="직접입력">
@@ -111,7 +112,7 @@
                                         <button @click="useAllPoints" class="point-btn">전체 사용</button>
                                         <button @click="applyPoints" class="point-btn">적용</button>
                                     </span>
-                                    <span class="point-summary"> └　{{ formattedDiscountPoint }} 포인트 사용</span>
+                                    <span class="point-summary"> └　{{ formattedDiscountPoint }} P 사용</span>
                                     <div v-if="usedPoint != 0" class="point-remaining">포인트를 차감한 금액 {{ remainingAmount }} 원이 결제됩니다.</div>
                                 </td>
                             </tr>
@@ -125,9 +126,9 @@
                 </section>
                 <section>
                     <div class="donationSectionTitle">출금 정책</div>
-                    <p class="donationSectionContents"><strong>[출금 정책 안내]</strong></p>
+                    <p class="donationSectionContents">[출금 정책 안내]</p>
                     <p class="donationSectionContents">※ 일시 납입은 신청 즉시 결제가 이루어집니다.</p>
-                    <label>
+                    <label class="donationTextColor">
                         <input class="donationCheckbox" name="policyCheck" type="checkbox"> 상기 출금 정책을 모두 이해함
                     </label>
                 </section>
@@ -135,8 +136,8 @@
                     <div class="donationTitle">
                         <label class="donationSectionTitle"><input type="checkbox" name="agreeAll" @change="fnToggleAllAgree"> 전체 동의하기</label>
                     </div>
-                    <div class="donationContents">
-                        <label>
+                    <div>
+                        <label class="donationTextColor">
                             <input class="donationCheckbox" name="agree" type="checkbox">[필수] 후원약관 동의
                             <a href="javascript:void(0);" @click="toggleTerms">{{ showTerms ? '[닫기]' : '[보기]' }}</a>
                         </label>
@@ -145,12 +146,12 @@
                             <div v-html="termsInfo[0].content"></div>
                         </div>
                     </div>
-                    <div class="donationContents">
-                        <label>
+                    <div>
+                        <label class="donationTextColor">
                             <input class="donationCheckbox" name="agree" type="checkbox">[필수] 개인정보 처리방침 동의
                             <a href="javascript:void(0)" @click="togglePrivacyPolicy">{{ showPrivacyPolicy ? '[닫기]'
                                 : '[보기]' }}</a>
-                        </label>
+                        </label class="donationTextColor">
 
                         <div v-if="showPrivacyPolicy" class="privacy-policy">
                             <div v-html="termsInfo[1].content"></div>
@@ -352,10 +353,14 @@
                     }
                 },
                 validateCustomAmount() {
-                    if (this.donateAmount < 100) {
-                        alert("최소 금액은 100원 이상입니다.");
-                        this.donateAmount = 100;
-                        this.customAmount = "100";
+                    if (!this.customAmount) return;
+                    
+                    const amount = parseInt(this.customAmount.replace(/[^0-9]/g, ''));
+                    
+                    if (isNaN(amount) || amount < 1000) {
+                        alert("최소 금액은 1,000원 이상입니다.");
+                        this.donateAmount = 1000;
+                        this.customAmount = "1,000원";
                         this.calculateTotal();
                     }
                 },
@@ -382,8 +387,15 @@
                 },
                 formatCustomAmount() {
                     const raw = this.customAmount.replace(/[^0-9]/g, '');
-                    this.customAmount = Number(raw).toLocaleString();
-                    this.donateAmount = Number(raw);
+                    
+                    if (raw) {
+                        this.customAmount = Number(raw).toLocaleString() + '원';
+                        this.donateAmount = Number(raw);
+                    } else {
+                        this.customAmount = '';
+                        this.donateAmount = 0;
+                    }
+                    
                     this.calculateTotal();
                 },
                 fnToggleAllAgree: function (event) {
@@ -627,10 +639,7 @@
 
                         }
                     });
-                },
-                goToMain() {
-                    window.location.href = "/main.do";
-                },
+                }
             },
             mounted() {
                 let self = this;

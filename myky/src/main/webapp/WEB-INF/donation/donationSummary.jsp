@@ -23,7 +23,7 @@
         <div id="app" class="container">
 
             <div class="donation-summary-container">
-                <h2 class="donation-summary-title">🎉 후원이 완료되었습니다!</h2>
+                <h2 class="donation-summary-title">후원이 완료되었습니다!</h2>
 
                 <div class="donation-summary-card">
                     <div class="donation-summary-item">
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="donation-summary-thanks">
-                    진심으로 감사드립니다. 💖
+                    진심으로 감사드립니다.
                     소중한 후원이 큰 힘이 됩니다!
                 </div>
 
