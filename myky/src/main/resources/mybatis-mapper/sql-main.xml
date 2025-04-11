@@ -37,6 +37,7 @@
 	    <if test="qnaId != null">, qna_id</if>
 	    <if test="parentCommentId != null">, parent_comment_id</if>
    		<if test="reviewId != null">, review_id</if>
+   		<if test="productId != null">, product_id</if>
 	  )
 	  VALUES (
 	    notifications_seq.NEXTVAL,
@@ -48,7 +49,9 @@
 	    <if test="orderId != null">, #{orderId}</if>
 	    <if test="qnaId != null">, #{qnaId}</if>
 	    <if test="parentCommentId != null">, #{parentCommentId}</if>
-	    <if test="reviewId != null">, #{reviewId}</if>	    
+	    <if test="reviewId != null">, #{reviewId}</if>
+	    <if test="productId != null">, #{productId}</if>
+	    
 	  )
 	</insert>
 

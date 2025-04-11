@@ -66,6 +66,7 @@
         background-color: rgb(176, 225, 255);
         width: 100%;
         color: #272727 !important;
+        font-size: 13px;
       }
 
       .footer-main,
@@ -86,7 +87,7 @@
 
       .footer-content-title {
         margin-bottom: 10px;
-        color: rgb(0, 80, 255) !important;
+        color: #fff !important;
         font-size: 22px;
         font-weight: bold;
       }
@@ -137,11 +138,11 @@
             <div class="footer-left">
               <div class="footer-company-title footer-content-title">{{ company.name }}</div>
               <div class="footer-company-info">
-                <div class="company-detail"><strong>대표:</strong> {{ company.ceo }}</div>
-                <div class="company-detail"><strong>주소:</strong> {{ company.address }} </div>
-                <div class="company-detail"><strong>대표전화:</strong> {{ company.phone }} </div>
-                <div class="company-detail"><strong>사업자 등록번호:</strong> {{ company.registrationNumber }}
-                  <strong>이메일:</strong> {{ company.email }}</div>
+                <div class="company-detail">대표 : {{ company.ceo }}</div>
+                <div class="company-detail">주소 : {{ company.address }} </div>
+                <div class="company-detail">대표전화 : {{ company.phone }}   통신판매업 신고 제 2025-인천부평-1004호 </div>
+                <div class="company-detail">사업자 등록번호  {{ company.registrationNumber }}
+                  이메일 : {{ company.email }}</div>
               </div>
             </div>
             <div class="footer-main">
@@ -153,9 +154,9 @@
             <div class="footer-right">
               <div class="section-title footer-content-title">SNS SERVICE</div>
               <div class="sns-links">
-                <i class="bi bi-facebook" style="font-size: 2rem; color: #3b5998;"></i>
-                <i class="bi bi-instagram" style="font-size: 2rem; color: #E4405F;"></i>
-                <i class="bi bi-youtube" style="font-size: 2rem; color: #FF0000;"></i>
+                <i class="bi bi-facebook" style="font-size: 1.5rem; "></i>
+                <i class="bi bi-instagram" style="font-size: 1.5rem; "></i>
+                <i class="bi bi-youtube" style="font-size: 1.5rem;"></i>
               </div>
             </div>
           </div>
@@ -164,7 +165,7 @@
         </div>
       </div>
     </div> 
-    
+
       <script>
         const footer = Vue.createApp({
           data() {
