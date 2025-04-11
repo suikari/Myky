@@ -37,5 +37,13 @@ public interface ProductService {
   Review getReviewById(HashMap<String, Object> param);
 
   Qna getQnaById(HashMap<String, Object> param);
+  
+  HashMap<String, Object> checkPurchaseForReview(HashMap<String, Object> map);
+  
+  
+
+ 
+
+
 
 }

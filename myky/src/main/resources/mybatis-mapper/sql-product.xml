@@ -293,6 +293,15 @@
 		ORDER BY CREATED_AT DESC
 	 </select>
 	
+	<select id="getPurchaseCount" parameterType="hashmap" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM ORDER_DETAILS OD
+	    JOIN ORDERS O ON OD.ORDER_ID = O.ORDER_ID
+	    WHERE O.USER_ID = #{userId}
+	      AND OD.PRODUCT_ID = #{productId}
+	</select>
+
+	
 </mapper>
 
 

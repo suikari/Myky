@@ -99,7 +99,7 @@
                                     @click.stop="fnView(item.productId)" />
                                 <div class="hover-buttons">
                                     <button @click.stop="fnAddCart(item.productId)">Cart</button>
-                                    <button @click.stop="fnAddBuy(item.productId)">ADD</button>
+                                    <button @click.stop="fnAddBuy(item.productId)">Buy</button>
                                 </div>
                             </div>
                             <div class="product-info">
