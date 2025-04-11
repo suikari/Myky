@@ -152,6 +152,7 @@
         SELECT C.*, TO_CHAR(CREATED_AT,'YYYY-MM-DD') AS createdAt, TO_CHAR(EXPIRATION_DATE,'YYYY-MM-DD') AS expirationDate
         FROM COUPON C
         WHERE USER_ID = #{userId}
+        OFFSET #{couponPage} ROWS FETCH NEXT #{couponPageSize} ROWS ONLY
 	</select>
 		
 	<select id="selectCouponCnt" parameterType="hashmap" resultType="int">
@@ -162,7 +163,7 @@
 	
 	<select id="selectUserOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
 	   
-	    select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.product_id, od.quantity, od.price, od.tracking_number 
+select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.order_detail_id, od.product_id, od.quantity, od.price, od.refund_status
 	    from orders o
 	    join order_details od on o.order_id = od.order_id
 	    join (
@@ -170,27 +171,43 @@
 		    from product p  
 		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
 		) p on od.product_id = p.product_id
-	    where 1=1
-	    AND o.user_id = #{userId} 
-	    order by o.ordered_at desc
+	    where o.user_id = #{userId}
+        order by o.ordered_at desc
 		OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
 	</select>
 	
 	<select id="selectOrderCnt" parameterType="hashmap" resultType="teamgyodong.myky.user.model.User">
-		WITH STATUS_LIST AS (
-    		SELECT 'paid' AS ORDER_STATUS FROM DUAL UNION ALL
-    		SELECT 'shipped' FROM DUAL UNION ALL
-    		SELECT 'delivered' FROM DUAL UNION ALL
-    		SELECT 'cancel' FROM DUAL
+		WITH REFUND_STATUS_LIST (REFUND_STATUS) AS (
+		    SELECT 'shipped' FROM dual
+		    UNION ALL
+		    SELECT 'delivered' FROM dual
+		    UNION ALL
+		    SELECT 'none' FROM dual
+		    UNION ALL
+		    SELECT 'exchange' FROM dual
+		    UNION ALL
+		    SELECT 'return' FROM dual
 		)
-		SELECT S.ORDER_STATUS, 
-		       COUNT(O.ORDER_ID) AS orderCount  
-		FROM STATUS_LIST S
-		LEFT JOIN ORDERS O 
-		    ON LOWER(S.ORDER_STATUS) = LOWER(O.ORDER_STATUS)  
-		    AND O.USER_ID = #{userId}
-		GROUP BY S.ORDER_STATUS
-		ORDER BY S.ORDER_STATUS
+
+	SELECT 
+	    r.REFUND_STATUS,
+	    COUNT(od.REFUND_STATUS) AS STATUS_COUNT
+		FROM 
+		    REFUND_STATUS_LIST r
+		LEFT JOIN (
+		    SELECT od.REFUND_STATUS
+		    FROM orders o
+		    JOIN order_details od ON o.order_id = od.order_id
+		    JOIN (
+		        SELECT p.product_id, f.filepath
+		        FROM product p
+		        LEFT JOIN product_file f 
+		            ON p.product_id = f.product_id AND f.thumbnail = 'Y'
+		    ) p ON od.product_id = p.product_id
+		    WHERE o.user_id = #{userId}
+		) od ON r.REFUND_STATUS = od.REFUND_STATUS
+		GROUP BY r.REFUND_STATUS
+		ORDER BY r.REFUND_STATUS
 	</select>
 	
 	

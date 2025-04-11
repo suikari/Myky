@@ -266,7 +266,12 @@
 		    
 		ORDER BY 
 		    F.VET_BOARD_ID DESC
-		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		
+		<if test="page != null and pageSize != null ">
+                OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+        </if>
+            
+		
 	</select>
 	
 	<!--수의사 게시판 조회수 출력-->

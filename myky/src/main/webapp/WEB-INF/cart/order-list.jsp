@@ -202,7 +202,7 @@
     
                         <div v-if="item.checked">
                             <label>수량 선택:
-                                <select v-model="item.selectedQuantity">
+                                <select v-model="item.selectedQuantity" class="exchange-return-select">
                                     <option v-for="n in Array.from({ length: item.quantity }, (_, i) => i + 1)" :key="n" :value="n">{{ n }}</option>
                                 </select>
                             </label>

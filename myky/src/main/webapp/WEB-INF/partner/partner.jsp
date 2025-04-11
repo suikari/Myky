@@ -79,70 +79,62 @@
   
           <ul id="placesList">
             <!-- 검색된 병원 및 제휴사 수 -->
-            <div v-if="visiblePartnerList.length > 0 && !isFavoritesVisible" class="count">
-              총 {{ visiblePartnerList.length }}개 제휴사가 검색되었습니다.
-            </div>
+            <!-- ✅ 제휴사 검색 결과 및 페이징 (currentView가 partner일 때만) -->
+<div v-if="currentView === 'partner' && visiblePartnerList.length > 0 && !isFavoritesVisible" class="count">
+    총 {{ visiblePartnerList.length }}개 제휴사가 검색되었습니다.
+    <hr />
+    <div class="pagination-container">
+      <button @click="goToPartnerPage(1)" :disabled="partnerPagination.currentPage === 1"><<</button>
+      <button @click="prevPartnerPage" :disabled="partnerPagination.currentPage === 1"><</button>
   
-            <div v-if="currentView === 'hospital' && hoslist.length > 0 && !isFavoritesVisible" class="count">
-              총 {{ hoslist.length }}개 병원이 검색되었습니다.
-              <hr />
-              <div v-if="currentView === 'hospital'">
-                <!-- 병원 리스트 페이징 -->
-                <button @click="goToPage(1)" :disabled="pagination.currentPage === 1"><<</button>
-
-                <button @click="prevPage" :disabled="pagination.currentPage === 1"><</button>
-
-                <span v-for="page in totalPages || 1" :key="page">
-                <button
-                    @click="goToPage(page)"
-                    :class="{ active: page === pagination.currentPage }"
-                >
-                    {{ page }}
-                </button>
-                </span>
-
-                <button @click="nextPage" :disabled="pagination.currentPage === totalPages">></button>
-
-                <button @click="goToPage(totalPages)" :disabled="pagination.currentPage === totalPages">>></button>
-
-              </div>
-            </div>
+      <span v-for="page in partnerPaginationButtons" :key="'partner-page-' + page">
+        <button @click="goToPartnerPage(page)" :class="{ active: page === partnerPagination.currentPage }">
+          {{ page }}
+        </button>
+      </span>
   
-            <div v-if="visiblePartnerList.length > 0 || currentView === 'partner'">
-                <!-- ⏮ 맨 앞으로 -->
-                <button @click="goToPartnerPage(1)" :disabled="partnerPagination.currentPage === 1"><<</button>
-              
-                <!-- ◀ 이전 -->
-                <button @click="prevPartnerPage" :disabled="partnerPagination.currentPage === 1"><</button>
-              
-                <!-- 페이지 번호들 -->
-                <span v-for="page in partnerPaginationButtons" :key="'partner-page-' + page">
-                  <button @click="goToPartnerPage(page)" :class="{ active: page === partnerPagination.currentPage }">
-                    {{ page }}
-                  </button>
-                </span>
-              
-                <!-- ▶ 다음 -->
-                <button @click="nextPartnerPage" :disabled="partnerPagination.currentPage === partnertotalPages">></button>
-              
-                <!-- ⏭ 맨 뒤로 -->
-                <button @click="goToPartnerPage(partnertotalPages)" :disabled="partnerPagination.currentPage === partnertotalPages">>></button>
-              </div>
+      <button @click="nextPartnerPage" :disabled="partnerPagination.currentPage === partnertotalPages">></button>
+      <button @click="goToPartnerPage(partnertotalPages)" :disabled="partnerPagination.currentPage === partnertotalPages">>></button>
+    </div>
+  </div>
+
+  <div v-if="currentView === 'hospital' && hoslist.length > 0 && !isFavoritesVisible" class="count">
+    총 {{ hoslist.length }}개 병원이 검색되었습니다.
+    <hr />
+    <div class="pagination-container">
+      <button @click="goToPage(1)" :disabled="pagination.currentPage === 1"><<</button>
+      <button @click="prevPage" :disabled="pagination.currentPage === 1"><</button>
+  
+      <span v-for="page in totalPages || 1" :key="page">
+        <button
+          @click="goToPage(page)"
+          :class="{ active: page === pagination.currentPage }"
+        >
+          {{ page }}
+        </button>
+      </span>
+  
+      <button @click="nextPage" :disabled="pagination.currentPage === totalPages">></button>
+      <button @click="goToPage(totalPages)" :disabled="pagination.currentPage === totalPages">>></button>
+    </div>
+  </div>
               
   
-            <ul v-if="(currentView === 'hospital' || currentView === 'partner') && !isFavoritesVisible">
-              <li v-for="(hospital, index) in paginatedHospitals" :key="'hos-' + hospital.hospitalNo" @click="moveToLocation(hospital)">
-                <div>{{ hospital.hosName }}</div>
-                <span>{{ hospital.hosAddress }}</span>
-                <hr />
-              </li>
+              <ul v-if="currentView === 'hospital' && !isFavoritesVisible">
+                <li v-for="(hospital, index) in paginatedHospitals" :key="'hos-' + hospital.hospitalNo" @click="moveToLocation(hospital)">
+                  <div>{{ hospital.hosName }}</div>
+                  <span>{{ hospital.hosAddress }}</span>
+                  <hr />
+                </li>
+              </ul>
   
-              <li v-for="(partner, index) in paginatedPartners" :key="'partner-' + partner.partnerdetailId" @click="moveToLocation(partner)">
-                <div>{{ partner.name }}</div>
-                <span>{{ partner.address }}</span>
-                <hr />
-              </li>
-            </ul>
+              <ul v-else-if="currentView === 'partner' && !isFavoritesVisible">
+                <li v-for="(partner, index) in paginatedPartners" :key="'partner-' + partner.partnerdetailId" @click="moveToLocation(partner)">
+                  <div>{{ partner.name }}</div>
+                  <span>{{ partner.address }}</span>
+                  <hr />
+                </li>
+              </ul>
   
             <div v-if="isFavoritesVisible" class="favorites-list">
               <h3>⭐ 내 즐겨찾기 목록</h3>
@@ -276,22 +268,73 @@
         }
     },
     watch: {
-        hoslist(newVal) {
-    // 병원 리스트가 새로 들어오고, 검색어가 있다면 자동 재검색
-    if (newVal.length > 0 && this.keyword.trim()) {
-      this.searchPlaces();
+  currentView: {
+    immediate: true,
+    handler(newView) {
+      console.log("🔄 현재 뷰 변경:", newView);
+      
+      // 모든 마커 제거
+      this.removeAllMarkers();
+
+      // 뷰에 따라 적절한 마커 표시
+      if (newView === 'hospital') {
+        this.$nextTick(() => {
+          if (this.hoslist && this.hoslist.length > 0) {
+            this.addMarkers();
+          }
+        });
+      } else if (newView === 'partner') {
+        this.$nextTick(() => {
+          if (this.filteredPartnerlist && this.filteredPartnerlist.length > 0) {
+            this.displayPartnerPlaces(this.filteredPartnerlist, {
+              includeFavorites: true,
+              clear: true
+            });
+          }
+        });
+      }
     }
   },
-  partnerlist(newVal) {
-    if (newVal.length > 0 && this.keyword.trim()) {
-      this.searchPlaces();
+
+  hospitalMarkers(newMarkers) {
+    if (this.currentView === 'hospital') {
+      this.showHospitalMarkers();
+    }
+  },
+
+  partnerMarkers(newMarkers) {
+    if (this.currentView === 'partner') {
+      this.showPartnerMarkers();
     }
   }
-    },
+}
+,
     methods: {
         isUserLoggedIn() {
         return !!this.user;  // user 객체가 존재하면 로그인 상태
     },
+    removeAllMarkers() {
+  if (this.hospitalMarkers && Array.isArray(this.hospitalMarkers)) {
+    this.hospitalMarkers.forEach(marker => marker.setMap(null));
+    this.hospitalMarkers = [];
+  }
+
+  if (this.partnerMarkers && Array.isArray(this.partnerMarkers)) {
+    this.partnerMarkers.forEach(marker => marker.setMap(null));
+    this.partnerMarkers = [];
+  }
+}
+,
+showHospitalMarkers() {
+  if (!this.hospitalMarkers || !Array.isArray(this.hospitalMarkers)) return;
+  this.hospitalMarkers.forEach(marker => marker.setMap(this.map));
+},
+
+showPartnerMarkers() {
+  if (!this.partnerMarkers || !Array.isArray(this.partnerMarkers)) return;
+  this.partnerMarkers.forEach(marker => marker.setMap(this.map));
+},
+
     //페이징 
     
      // 병원용

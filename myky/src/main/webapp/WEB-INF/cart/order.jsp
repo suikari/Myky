@@ -138,7 +138,7 @@
             </div>
 
             <h3>배송 요청 사항</h3>
-            <select v-model="orderInfo.deliveryMessage">
+            <select v-model="orderInfo.deliveryMessage" class="inputField">
                 <option value="">배송 메시지를 선택해주세요</option>
                 <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
                 <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
