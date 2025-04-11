@@ -706,22 +706,26 @@
                     },
                     fnCreate() {
                     	let self = this;
-                        console.log("저장할 Vet 데이터:", self.newVet);                        
-                        nparmap =  self.newVet;
-                    	$.ajax({
-                    		url: "/admin/insertVet.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("main1",data);
-                    			self.newVet = {};
-            					self.fnMainList();
+                        // 유효성 검사
+                        if (!self.newVet.vetId || !self.newVet.vetName || !self.newVet.email || !self.newVet.phone || !self.newVet.hospital) {
+                            alert('모든 필드를 입력해 주세요.');
+                            return;
+                        }
+                        console.log("저장할 Vet 데이터:", self.newVet);
+                        nparmap = self.newVet;
+                        $.ajax({
+                            url: "/admin/insertVet.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                console.log("main1", data);
+                                self.newVet = {};
+                                self.fnMainList();
 
                                 self.isCreating = false; // 저장 후 폼 닫기
-                    		}
-                    	});
-                    	
+                            }
+                        });
                     }
                     
                     

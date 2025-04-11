@@ -103,8 +103,8 @@
                                 <option>011</option>
                                 <option>017</option>
                             </select>
-                            <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;">
-                            <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;">
+                            <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;" maxlength="4" inputmode="numeric">
+                            <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;" maxlength="4" inputmode="numeric">
                         </div>
                     </div>
 

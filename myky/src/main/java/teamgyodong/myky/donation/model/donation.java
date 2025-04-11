@@ -13,7 +13,7 @@ public class donation {
 	private String imageUrl;
 	
 	private String donationId;
-	private String amount;
+	private int amount;
 	private String donationDate;
 	private String message;
 	private String userId;

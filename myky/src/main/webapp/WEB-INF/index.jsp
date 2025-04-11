@@ -105,7 +105,7 @@
                 align-items: center;
                 background: #fff;
                 border-radius: 16px;
-                padding: 20px 15px;
+                padding: 15px 15px;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
                 transition: transform 0.2s ease-in-out;
             }
@@ -148,7 +148,6 @@
                 border-bottom: 1px solid #eee;
                 font-size: 14px;
                 color: #333;
-                cursor: pointer;
             }
 
             .post-item:hover {
@@ -551,6 +550,7 @@
                 text-align: center;
                 padding: 20px 20px;
                 margin: 10px 10px;
+                cursor: pointer;
             }
 
             .slider-card:hover {
@@ -703,7 +703,7 @@
 	                            <span>후원하기</span>
 	                        </div>
                         </a>
-                        <a href="/cart/list.do">
+                        <a href="/order/orderList.do">
                            <div class="shortcut-item">
 	                            <img src="img/quick/manifest.png" alt="주문조회" />
 	                            <span>주문조회</span>
@@ -747,7 +747,7 @@
                                 <div>
                                     <span v-if="post.anonymousYn == 'N'">{{ post.nickName }}</span>
                                     <span v-if="post.anonymousYn == 'Y'">익명</span>
-                                    님이 {{ post.centerName }} 에 {{ post.amount }} 원을 후원 해주셨습니다.
+                                    님이 {{ post.centerName }} 에 {{ post.amount.toLocaleString() }} 원을 후원 해주셨습니다.
                                 </div>
                                 <div class="post-content">{{ post.donationDate }}</div>
                             </div>

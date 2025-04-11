@@ -159,9 +159,7 @@
 
                                 <!-- 대댓글 반복 -->
                                 <div v-for="reply in item.replies || []" :key="reply.commentId"
-                                :style="{
-                                    marginLeft: '50px',
-                                    backgroundColor: reply.userId === sessionId ? '#f8f8f8' : ''}">
+                                :style="{backgroundColor: reply.userId === sessionId ? '#f8f8f8' : ''}"   style="margin-left: 40px; padding: 10px;">
                                     <div v-if="editCommentId === reply.commentId" class="fb-cmtTextBox">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
                                         <input class="fb-cmtInput" v-model="editContent"/>
