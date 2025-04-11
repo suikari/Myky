@@ -264,6 +264,11 @@
                         data: params,
                         success: function (data) {
                             console.log("cartList >>> ", data.checkList);
+                            if (!data.checkList || data.checkList.length === 0) {
+                                alert("결제할 상품이 없습니다. \n장바구니 페이지로 이동합니다.");
+                                window.location.href = "/cart/list.do";
+                                return;
+                            }
                             self.selectCartItems = data.checkList;
                             self.cartId = data.checkList[0].cartId;
                             console.log("cartId >>> ",self.cartId);
@@ -692,6 +697,7 @@
             },
             mounted() {
                 let self = this;
+                
                 self.fnUserInfo();
 
                 if (typeof IMP !== 'undefined') {

@@ -41,14 +41,22 @@ public class DonationController {
 	
 	@RequestMapping("/donation.do") 
 	public String donation(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		
+		HttpSession session = request.getSession();
+        String sessionId = (String) session.getAttribute("sessionId");
+        
 		request.setAttribute("map", map);
 		return "donation/donation";
 	}
 
 	@RequestMapping("/donation/complete.do") 
 	public String donationComplete(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		
+		HttpSession session = request.getSession();
+        String sessionId = (String) session.getAttribute("sessionId");
+        
+        if (sessionId == null) {
+            return "redirect:/user/login.do";
+        }
+        
 		request.setAttribute("map", map);
 		return "donation/donationSummary";
 	}

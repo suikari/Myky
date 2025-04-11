@@ -407,11 +407,6 @@
                 fnPaymentCheck: function () {
                     var self = this;
 
-                    if(self.userInfo == null){
-                        alert("로그인이 필요한 기능입니다. \n로그인 페이지로 이동합니다.");
-                        window.location.href = "/user/login.do";
-                    }
-
                     var policyChecked = document.querySelector("input[name='policyCheck']").checked;
                     var checkboxes = document.querySelectorAll("input[name='agree']");
                     var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
@@ -643,10 +638,16 @@
             },
             mounted() {
                 let self = this;
+                
+                if (!self.centerId) {
+                    alert("후원할 보호소를 선택해주세요. \n보호소 목록 페이지로 이동합니다.");
+                    window.location.href = "/center.do";
+                    return;
+                }
+
                 self.fnCenterInfo();
                 self.fnUserInfo();
                 self.fnGetTerms();
-
             }
         });
 
