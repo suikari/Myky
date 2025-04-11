@@ -691,14 +691,15 @@
                             location.href = "/user/login.do";
                             return;
                         }
-
                         if (this.alreadyClicked[reviewId]) return;
-
 
                         $.ajax({
                             url: "/product/reviewHelpCnt.dox",
                             type: "POST",
-                            data: { reviewId: reviewId },
+                            data: { 
+                                reviewId: reviewId,
+                                userId : self.sessionId
+                            },
                             dataType: "json",
                             success: function (data) {
                                 if (data.result === "success") {
