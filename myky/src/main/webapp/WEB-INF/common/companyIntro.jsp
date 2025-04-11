@@ -60,7 +60,7 @@
     }
 
     .middleintroTitle1 {
-        transform: translate(210px, -190px);
+        transform: translate(170px, -190px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 20px; /* 글씨 크기 */
@@ -72,7 +72,7 @@
     }
 
     .middleintroTitle2 {
-        transform: translate(210px, -90px);
+        transform: translate(170px, -90px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 20px; /* 글씨 크기 */
@@ -84,7 +84,7 @@
     }
 
     .middleintroTitle3 {
-        transform: translate(178px, 0px);
+        transform: translate(140px, 0px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 20px; /* 글씨 크기 */
@@ -96,7 +96,7 @@
     }
 
     .middleintroTitle4 {
-        transform: translate(175px, 85px);
+        transform: translate(295px, 85px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 20px; /* 글씨 크기 */
@@ -118,7 +118,7 @@
     }
 
     .topintroContent2 {
-        transform: translate(-250px, 50px);
+        transform: translate(-255px, 70px);
         position: absolute;
         color: white;
         font-size: 15px; /* 글씨 크기 설정 */
@@ -131,7 +131,7 @@
     }
     .middleintroContent1{
         font-weight: 450;
-        transform: translate(310px, -200px);
+        transform: translate(270px, -200px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 15px; /* 글씨 크기 */
@@ -141,7 +141,7 @@
 
     .middleintroContent2{
         font-weight: 450;
-        transform: translate(320px, -100px);
+        transform: translate(280px, -100px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 15px; /* 글씨 크기 */
@@ -151,7 +151,7 @@
 
     .middleintroContent3{
         font-weight: 450;
-        transform: translate(347px, -15px);
+        transform: translate(312px, -15px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 15px; /* 글씨 크기 */
@@ -160,12 +160,12 @@
     }
 
     .middleintroContent4{
+        text-align: left;
         font-weight: 450;
-        transform: translate(320px, 70px);
+        transform: translate(255px, 80px);
         position: absolute; /* 텍스트를 이미지 위에 올리기 위해 위치 설정 */
         color: white; /* 글씨 색 */
         font-size: 15px; /* 글씨 크기 */
-        text-align: center; /* 텍스트 가운데 정렬 */
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 그림자 효과 */
     }
 
@@ -197,7 +197,8 @@
                     <div class="topintroContent2">
                         "당신의 반려동물, 우리의 가족처럼"
                         <br>저희는 반려동물을 사랑하는 사람들을 위한 통합 플랫폼입니다.
-                        <br>반려동물 용품 쇼핑부터 전문 수의사 상담, 그리고 내 주변 동물병원 검색까지!
+                        <br>반려동물 용품 쇼핑부터 전문 수의사 1:1 상담, 
+                        <br>그리고 근처 동물병원 및 반려동물과 함께 갈 수 있는 제휴사 편의시설 검색까지!
                         <br>한 곳에서 모두 해결할 수 있는 편리한 서비스를 제공합니다.
                         <br>또한 매출의 일부를 유기동물 보호소에 기부하여 모든 생명이 행복한 세상을 만들어갑니다.
                     </div>
@@ -222,10 +223,11 @@
                         궁금한 점이 있다면 언제든지 수의사에게 질문하고, 신뢰할 수 있는 답변을 받아보세요.
                     </div>
                     <div class="middleintroTitle4">
-                        내 주변 동물병원 찾기
+                        가까운 동물병원과 반려동물 동반 가능한 시설을 한 번에 찾기
                     </div>
                     <div class="middleintroContent4">
-                        가까운 동물병원을 손쉽게 찾아, 위급한 순간에도 빠르게 대처할 수 있습니다.
+                        가까운 동물병원과 반려동물 동반이 가능한 편의시설을 손쉽게 찾아, 
+                        <br>위급한 순간에도 빠르게 대처할 수 있습니다.
                     </div>
                 </div>
                 <div class="bottom-image">
