@@ -13,4 +13,5 @@ public class Notification {
     private String readYn;
     private String createdAt;
     private String userId;
+    private String productId;
 }
