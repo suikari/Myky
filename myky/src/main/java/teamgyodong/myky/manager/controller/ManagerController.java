@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -258,7 +259,7 @@ public class ManagerController {
 	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/updateProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String updateProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String updateProduct(Model model, @RequestPart("product") HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		
@@ -323,7 +324,7 @@ public class ManagerController {
 	// 게시글 여러개 삭제
 	@RequestMapping(value = "/admin/insertProduct.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String insertProduct(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String insertProduct(Model model, @RequestPart("product") HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		

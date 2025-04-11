@@ -38,25 +38,11 @@
                 box-shadow: none;
             }
 
-            /* 배너 안쪽 이미지 영역 */
-            .swiper-slide img {
-                width: 100%;
-                height: 380px;
-                object-fit: cover;
-                border-radius: 0;
-                display: block;
-                /* ✅ inline-block 이면 간격 생김 */
-            }
+
 
             .swiper-wrapper {
-                width: 100% !important;
-                display: flex;
-            }
-
-            .swiper-slide img {
                 width: 100%;
-                height: 100%;
-                object-fit: cover;
+                display: flex;
             }
 
             /* 하단 그라데이션 효과 */
@@ -72,7 +58,7 @@
             }
 
             .swiper-slide {
-                width: 100% !important;
+                width: 100% ;
                 /* 한 슬라이드가 전체 너비 차지 */
                 margin: 0 !important;
                 /* 가운데 정렬 방지 */
@@ -85,6 +71,17 @@
                 /* 필요시 */
             }
 
+            .swiper-slide-product {
+                width: 20% !important ;
+                background: none !important;
+            }
+
+            .swiper-slide-product img {
+                height: 185px !important;
+                object-fit: cover;
+
+            }
+            
             .swiper-slide img {
                 width: 100%;
                 height: auto;
@@ -180,7 +177,7 @@
             }
 
             .product-card {
-                width: calc(20% - 25px);
+                width: calc(20% - 40px);
                 min-width: 150px;
                 height: 230px;
                 flex-direction: column;
@@ -238,12 +235,13 @@
 
             /* ✅ 개별 박스 공통 스타일 */
             .product-box {
-                width: 48%;
+                width: 100%;
                 background: #fff8f0;
                 border-radius: 12px;
-                padding: 30px 20px;
+                padding: 30px 40px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
                 box-sizing: border-box;
+                position: relative;
             }
 
             /* ✨ 신규 상품 박스 색상 */
@@ -323,7 +321,11 @@
                 color: #888;
                 text-decoration: none;
             }
-
+			
+			a {
+				text-decoration: none;     
+			}
+			
             .board-more:hover {
                 text-decoration: underline;
             }
@@ -355,7 +357,7 @@
 
             .board-container.donation {
                 background: #fff8f0;
-                border-top: 4px solid #ffa94d;
+                border-top: 4px solid rgb(110, 158, 255);;
             }
 
             /* 신규 상품 색상 전용 배경 */
@@ -483,6 +485,172 @@
                 display: none;
                 /* Chrome, Safari, Opera*/
             }
+
+            .donation-close-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #666;
+                padding: 5px 10px;
+                border-radius: 50%;
+                transition: background-color 0.2s;
+            }
+
+            .donation-close-btn:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            .donation-toggle-btn {
+                position: fixed;
+                right: 85px;
+                bottom: 20px;
+                background: white;
+                border: none;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                cursor: pointer;
+                z-index: 999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform 0.2s;
+                border: 3px solid rgb(110, 158, 255);
+            }
+
+            .donation-toggle-btn:hover {
+                transform: translateY(-10%) scale(1.1);
+            }
+
+            /* 슬라이더 컨테이너 스타일 */
+            .product-swiper {
+                position: relative;
+                overflow: hidden;
+            }
+
+            /* 슬라이드 아이템 스타일 */
+            .slide-item {
+                width: calc(20% - 20px); /* 5개씩 보이도록 설정 */
+                height: auto;
+            }
+
+            /* 슬라이더 카드 스타일 */
+            .slider-card {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+                border-radius: 6px;
+                padding: 10px;
+                position: relative;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+                transition: transform 0.2s;
+                text-align: center;
+                padding: 20px 20px;
+                margin: 10px 10px;
+            }
+
+            .slider-card:hover {
+                transform: translateY(-5px);
+            }
+
+            /* 슬라이더 이미지 컨테이너 */
+            .slider-image {
+                width: 100%;
+                height: 180px;
+                position: relative;
+                margin-bottom: 10px;
+            }
+
+            /* 슬라이더 이미지 */
+            .slider-img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+
+            /* 슬라이더 텍스트 스타일 */
+            .slider-name {
+                font-size: 14px;
+                font-weight: 600;
+                margin: 10px 0;
+                height: 40px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+
+            .slider-price {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            /* 슬라이더 뱃지 */
+            .slider-badge {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: #ff6f61;
+                color: white;
+                padding: 4px 8px;
+                font-size: 12px;
+                border-radius: 6px;
+                font-weight: bold;
+                z-index: 1;
+            }
+
+            /* 신상품 뱃지 색상 */
+            .new-products .slider-badge {
+                background-color: rgb(89, 138, 240);
+            }
+
+            /* 네비게이션 버튼 스타일 수정 */
+            .product-swiper .swiper-button-next,
+            .product-swiper .swiper-button-prev {
+                width: 40px;
+                height: 40px;
+                background-color: white;
+                border-radius: 50%;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                opacity: 1;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-top: 0;
+            }
+
+            .product-swiper .swiper-button-next {
+                right: 0;
+            }
+
+            .product-swiper .swiper-button-prev {
+                left: 0;
+            }
+
+            .product-swiper .swiper-button-next::after,
+            .product-swiper .swiper-button-prev::after {
+                font-size: 18px;
+                color: #333;
+            }
+
+            /* 베스트 상품 네비게이션 버튼 */
+            .best-swiper .swiper-button-next,
+            .best-swiper .swiper-button-prev {
+                color: #ff6f61;
+            }
+
+            /* 신상품 네비게이션 버튼 */
+            .new-swiper .swiper-button-next,
+            .new-swiper .swiper-button-prev {
+                color: rgb(89, 138, 240);
+            }
+
         </style>
     </head>
 
@@ -509,36 +677,38 @@
 
                 <!-- ✅ 아이콘 4개 -->
                 <section class="shortcut-grid">
-                    <div class="shortcut-item">
+                    
                         <a href="/partner/list.do">
+                        	<div class="shortcut-item">
                             <img src="img/quick/vet.png" alt="병원찾기" />
                             <span>병원찾기</span>
+                            </div>
                         </a>
-                    </div>
-                    <div class="shortcut-item">
+                    
                         <a href="/product/list.do">
-                            <img src="img/quick/pet-shop.png" alt="용품구매" />
-                            <span>용품구매</span>
+                            <div class="shortcut-item">
+	                            <img src="img/quick/pet-shop.png" alt="용품구매" />
+	                            <span>용품구매</span>
+                            </div>
                         </a>
-                    </div>
-                    <div class="shortcut-item">
                         <a href="/partner/info.do">
-                            <img src="img/quick/partner.png" alt="제휴사" />
-                            <span>제휴처 소개</span>
+                            <div class="shortcut-item">
+	                            <img src="img/quick/partner.png" alt="제휴사" />
+	                            <span>제휴처 소개</span>
+                            </div>
                         </a>
-                    </div>
-                    <div class="shortcut-item">
                         <a href="/center.do">
-                            <img src="img/quick/donation.png" alt="후원하기" />
-                            <span>후원하기</span>
+                            <div class="shortcut-item">
+	                            <img src="img/quick/donation.png" alt="후원하기" />
+	                            <span>후원하기</span>
+	                        </div>
                         </a>
-                    </div>
-                    <div class="shortcut-item">
                         <a href="/cart/list.do">
-                            <img src="img/quick/manifest.png" alt="주문조회" />
-                            <span>주문조회</span>
+                           <div class="shortcut-item">
+	                            <img src="img/quick/manifest.png" alt="주문조회" />
+	                            <span>주문조회</span>
+                            </div>
                         </a>
-                    </div>
                 </section>
 
                 
@@ -563,28 +733,31 @@
                         </div>
                     </div> -->
 
-
                     <!-- 후원내역 -->
-                    <div class="board-container donation">
+                    <div v-if="showDonation" class="board-container donation">
+                        <button @click="toggleDonation" class="donation-close-btn">×</button>
                         <div class="board-title-wrapper">
                             <div class="board-header">
                                 <img src="img/quick/charity.png" class="board-icon" alt="후원">
                                 <div class="board-title">후원내역</div>
                             </div>
-                            <!-- <a href="/donation/list.do" class="board-more">더보기</a> -->
                         </div>
                         <div class="board-div scroll" id="scrollBox">
                             <div v-for="post in donations" class="post-item">
                                 <div>
                                     <span v-if="post.anonymousYn == 'N'">{{ post.nickName }}</span>
                                     <span v-if="post.anonymousYn == 'Y'">익명</span>
-                                    님이 {{ post.centerName }} 에
+                                    님이 {{ post.centerName }} 에 {{ post.amount }} 원을 후원 해주셨습니다.
                                 </div>
-                                <div class="post-content">{{ post.amount }} 원을 후원 해주셨습니다.</div>
                                 <div class="post-content">{{ post.donationDate }}</div>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- 하단에 후원내역 아이콘 추가 -->
+                    <button v-if="!showDonation" @click="toggleDonation" class="donation-toggle-btn">
+                        <img src="img/quick/charity.png" alt="후원내역" style="width: 24px; height: 24px;">
+                    </button>
 
                 </section>
 
@@ -596,24 +769,23 @@
                             <h2>🔥 베스트 상품</h2>
                             <p>가장 인기 있는 반려동물 용품을 소개합니다</p>
                         </div>
-                        <div class="product-list">
-                            <div v-for="product in getDisplayedProducts(products, currentPageBest)"
-                                class="product-card">
-                                <div class="badge">BEST</div>
-                                <div class="product-image" @click="fnPView(product.productId)">
-                                    <img class="product_img"
-                                        :src="product.filePath || '../../img/product/product update.png'"
-                                        :alt="product.fileName || '이미지 없음'" />
+                        <div class="product-swiper best-swiper">
+                            <div class="swiper-wrapper">
+                                <div v-for="product in products" class="swiper-slide swiper-slide-product">
+                                    <div class="slider-card">
+                                        <div class="slider-badge">BEST</div>
+                                        <div class="slider-image" @click="fnPView(product.productId)">
+                                            <img class="slider-img"
+                                                :src="product.filePath || '../../img/product/product update.png'"
+                                                :alt="product.fileName || '이미지 없음'" />
+                                        </div>
+                                        <div class="slider-name">{{ product.productName }}</div>
+                                        <div class="slider-price">{{ product.price.toLocaleString() }}원</div>
+                                    </div>
                                 </div>
-                                <div class="product-name">{{ product.productName }}</div>
-                                <div class="product-price">{{ product.price.toLocaleString() }}원</div>
                             </div>
-                        </div>
-                        <div class="navigation">
-                            <button class="nav-button" @click="prevPage('best')"
-                                :disabled="currentPageBest === 0">이전</button>
-                            <button class="nav-button" @click="nextPage('best')"
-                                :disabled="currentPageBest >= maxPage(products)">다음</button>
+                            <div class="swiper-button-next best-next"></div>
+                            <div class="swiper-button-prev best-prev"></div>
                         </div>
                     </div>
 
@@ -623,24 +795,23 @@
                             <h2>✨ 신규 상품</h2>
                             <p>따끈따끈! 막 들어온 반려동물 신상품을 만나보세요</p>
                         </div>
-                        <div class="product-list">
-                            <div v-for="product in getDisplayedProducts(productsN, currentPageNew)"
-                                class="product-card">
-                                <div class="badge">NEW</div>
-                                <div class="product-image" @click="fnPView(product.productId)">
-                                    <img class="product_img"
-                                        :src="product.filePath || '../../img/product/product update.png'"
-                                        :alt="product.fileName || '이미지 없음'" />
+                        <div class="product-swiper new-swiper">
+                            <div class="swiper-wrapper">
+                                <div v-for="product in productsN" class="swiper-slide swiper-slide-product">
+                                    <div class="slider-card">
+                                        <div class="slider-badge">NEW</div>
+                                        <div class="slider-image" @click="fnPView(product.productId)">
+                                            <img class="slider-img"
+                                                :src="product.filePath || '../../img/product/product update.png'"
+                                                :alt="product.fileName || '이미지 없음'" />
+                                        </div>
+                                        <div class="slider-name">{{ product.productName }}</div>
+                                        <div class="slider-price">{{ product.price.toLocaleString() }}원</div>
+                                    </div>
                                 </div>
-                                <div class="product-name">{{ product.productName }}</div>
-                                <div class="product-price">{{ product.price.toLocaleString() }}원</div>
                             </div>
-                        </div>
-                        <div class="navigation">
-                            <button class="new-nav-button" @click="prevPage('new')"
-                                :disabled="currentPageNew === 0">이전</button>
-                            <button class="new-nav-button" @click="nextPage('new')"
-                                :disabled="currentPageNew >= maxPage(productsN)">다음</button>
+                            <div class="swiper-button-next new-next"></div>
+                            <div class="swiper-button-prev new-prev"></div>
                         </div>
                     </div>
                 </section>
@@ -679,8 +850,7 @@
                         currentPageNew: 0,  // 신규 상품 현재 페이지
                         itemsPerPage: 5,   // 한 페이지당 상품 개수
                         code: "",
-
-
+                        showDonation: true, 
                     };
                 },
                 computed: {
@@ -732,7 +902,7 @@
                         var self = this;
                         var nparmap = {
                             page: 0,
-                            pageSize: 10,
+                            pageSize: 20,
                             sortOption: "count"
                         };
                         $.ajax({
@@ -750,7 +920,7 @@
                         var self = this;
                         var nparmap = {
                             page: 0,
-                            pageSize: 10,
+                            pageSize: 20,
                             sortOption: "registration"
                         };
                         $.ajax({
@@ -858,29 +1028,73 @@
                             }
                         }, 50); // 50ms마다 실행 (속도 조절 가능)
                     },
+                    toggleDonation() {
+                        this.showDonation = !this.showDonation;
+                        if (this.showDonation) {
+                            this.fnDonationList(); // 다시 열 때 데이터 새로고침
+                            this.$nextTick(() => {
+                                this.autoScroll(); // 스크롤 재시작
+                            });
+                        }
+                    },
                 },
                 mounted() {
                     let self = this;
 
+                    // 기존 hero-banner 스와이퍼
                     this.$nextTick(() => {
-                        new Swiper(this.$refs.swiperContainer, {
-                            loop: true, // 반복
-                            autoplay: {
-                                delay: 3000,
-                                disableOnInteraction: false, // 사용자가 버튼을 눌러도 자동 재생 유지
-                            },
-                            slidesPerView: 1, // 자동 너비 조절
-                            spaceBetween: 0, // 슬라이드 간격
-                            pagination: {
-                                el: ".swiper-pagination",
-                                clickable: true,
-                            },
-                            navigation: {
-                                nextEl: ".swiper-button-next",
-                                prevEl: ".swiper-button-prev",
-                            },
+                            new Swiper(this.$refs.swiperContainer, {
+                                loop: true,
+                                autoplay: {
+                                    delay: 3000,
+                                    disableOnInteraction: false,
+                                },
+                                slidesPerView: 1,
+                                spaceBetween: 0,
+                                pagination: {
+                                    el: ".swiper-pagination",
+                                    clickable: true,
+                                },
+                                navigation: {
+                                    nextEl: ".swiper-button-next",
+                                    prevEl: ".swiper-button-prev",
+                                },
+                            });
+
+                            // 베스트 상품 스와이퍼
+                            new Swiper('.best-swiper', {
+                                slidesPerView: 5,
+                                slidesPerGroup: 5,
+                                spaceBetween: -5,
+                                navigation: {
+                                    nextEl: '.best-next',
+                                    prevEl: '.best-prev',
+                                },
+                                loop: false,
+                                speed: 600,
+                                allowTouchMove: true,
+                                touchRatio: 1,
+                                touchAngle: 45,
+                                grabCursor: true
+                            });
+
+                            // 신상품 스와이퍼
+                            new Swiper('.new-swiper', {
+                                slidesPerView: 5,
+                                slidesPerGroup: 5,
+                                spaceBetween: 20,
+                                navigation: {
+                                    nextEl: '.new-next',
+                                    prevEl: '.new-prev',
+                                },
+                                loop: false,
+                                speed: 600,
+                                allowTouchMove: true,
+                                touchRatio: 1,
+                                touchAngle: 45,
+                                grabCursor: true
+                            });
                         });
-                    });
 
 
                     const queryParams = new URLSearchParams(window.location.search);
