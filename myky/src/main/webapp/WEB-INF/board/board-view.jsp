@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="/css/board/board.css"/>
 
         <style>
-           
+   
         </style>
 
     </head>
@@ -97,7 +97,9 @@
                     <table>
                         <tr v-if="cmtList.commentId != null">
                             <div v-for="item in cmtList" :key="item.commentId">
-                                <div class="fb-cmtTextBox">
+                                <div class="fb-cmtTextBox" 
+                                     v-for="item in cmtList" 
+                                     :style="item.userId === sessionId ? 'background-color: #f8f8f8;' : ''">
 
                                     <!-- 수정 중인 경우 -->
                                     <div v-if="editCommentId == item.commentId">
@@ -210,6 +212,21 @@
                     </template>
                     <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
                 </div>
+                
+                <div class="fb-mini-board">
+                    <table class="fb-mini-table">
+                        <tr class="fb-mini-table-th fb-mini-th">
+                            <th colspan="4">전체글</th>
+                        </tr>
+                        <tr class="fb-mini-td" v-for="list2 in list.slice(0,5)"  @click="fnGetBoardList(list2.boardId)"
+                            :style="list2.boardId === info.boardId ? 'font-weight: bold; background-color: #f8f8f8' : ''">
+                            <td style="width: 600px;">{{list2.title}}</td>
+                            <td>{{list2.nickName}}</td>
+                            <td>{{list2.createdAt}}</td>
+                            <td>{{list2.cnt}}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
         </div>
@@ -272,7 +289,9 @@
                         status: "",
                         likes: "",
                         dislikes: "",
-
+                        list: [],
+                        index: 0,
+                        pageSize: 5,
                     };
                 },
                 computed: {
@@ -576,7 +595,51 @@
                         document.body.removeChild(link);
                         }
                     },
+                    fnBoardList() {
+                        let self = this;
+                        let nparmap = {
+                            boardId: self.boardId,
+                            category: self.category,
+                        };
+                        $.ajax({
+                            url: "/board/list.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/list.do";
+                                }
+                                
+                                // 현재 게시글의 인덱스 찾기
+                                let currentIndex = data.board.findIndex(item => item.boardId === self.boardId);
+                                
+                                // 현재 게시글 기준 앞뒤 2개씩 총 5개 게시글 추출
+                                let start = Math.max(0, currentIndex - 2);
+                                let end = Math.min(start + 5, data.board.length);
+                                
+                                // start가 끝에서부터 5개 미만일 경우 앞에서부터 조정
+                                if (end - start < 5) {
+                                    start = Math.max(0, end - 5);
+                                }
+                                
+                                self.list = data.board.slice(start, end);
 
+                                // 나머지 코드는 그대로 유지
+                                if (data.count && data.count.cnt !== undefined) {
+                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                } else {
+                                    self.index = 0;
+                                }
+                            }
+                        });
+                    },
+                    fnGetBoardList(boardId){
+                        let self = this;
+                        localStorage.setItem("page", self.page);
+                        location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
+                    },   
                 },
                 mounted() {
                     let self = this;
@@ -584,7 +647,7 @@
                     self.boardId = params.get("boardId") || "";
                     self.category = params.get("category") || "F";
 
-
+                    self.fnBoardList();
                     self.fnView();
                 }
             });

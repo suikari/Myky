@@ -21,10 +21,11 @@
             수의사 게시판
         </div>
         <div class="fb-section-headerDown">
-            질문과 답
+            수의사분들과 함께 질문을 나눠보세요
         </div>    
-        <div class="fb-setCss"></div>
-        <hr class="fb-custom-hr">
+        <div class="fb-setCss">
+            <hr class="fb-custom-hr">
+        </div>
             <div class="fb-search-wrapper">
                 <div class="fb-search-right">
                     <select v-model="pageSize" @change="fnBoardSearch">
@@ -57,22 +58,26 @@
                     <th style="width: 50px;">작성일</th>
                     <th>채택</th>
                 </tr>
-                <tr v-for="(item, index) in list" class="fb-table-td fb-tr">
+                <tr v-if="list.length === 0 || !list.some(item => item.isDeleted === 'N')">
+                    <td colspan="8" style="text-align: center; padding: 50px;">검색된 게시글이 없습니다.</td>
+                </tr>
+                <tr v-for="(item, index) in list" class="fb-table-td fb-tr" v-else>
                     <template v-if="item.isDeleted == 'N'">
                         <td>{{item.vetBoardId}}</td>
-                        <td><a href="javascript:;" @click="fnView(item.vetBoardId)">{{item.title}}</a></td>
+                        <td href="javascript:;" @click="fnView(item.vetBoardId)" style="font-weight: bold;">{{item.title}}</td>
                         <td>{{item.nickName}}</td>
                         <td>{{item.points}}</td>
                         <td style="color: rgb(255, 147, 0); font-weight: bold;">
                             <template v-if="parseInt(item.commentCount) > 0">
-                                ({{ item.commentCount }})
+                                {{ item.commentCount }}
                             </template>
                         </td>
                         <td>{{item.cnt}}</td>
                         <td>{{item.createdAt.substring(0, 10)}}</td>
                         <td>
-                            <div class="fb-acceptButtonN" v-if="item.isAccepted == 'N'">채택 전</div>
                             <div class="fb-acceptButtonY" v-if="item.isAccepted == 'Y'">채택완료</div>
+                            <div class="fb-acceptButtonN" v-else-if="parseInt(item.commentCount) > 0">채택 전</div>
+                            <div class="fb-acceptButtonW" v-else>답변대기</div>
                         </td>
                     </template>
                 </tr>

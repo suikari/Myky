@@ -55,12 +55,15 @@
                     <th style="width: 50px;">작성일</th>
                     <th>조회수</th>
                 </tr>
-                <tr v-for="(item, index) in list" class="fb-table-td fb-tr">
+                <tr v-if="list.length === 0 || !list.some(item => item.isDeleted === 'N')">
+                    <td colspan="5" style="text-align: center; padding: 50px;">검색된 게시글이 없습니다.</td>
+                </tr>
+                <tr v-for="(item, index) in list" class="fb-table-td fb-tr" v-else>
                     <template v-if="item.isDeleted == 'N'">
                         <td>{{item.boardId}}</td>
-                        <td><a href="javascript:;" @click="fnView(item.boardId)">{{item.title}}
-                            <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="fb-cmtCountColor">({{item.commentCount}})</span>
-                        </a></td>
+                        <td href="javascript:;" @click="fnView(item.boardId)" style="font-weight: bold;">{{item.title}}
+                        <span v-if="parseInt(item.commentCount) > 0 && category == 'F'" class="fb-cmtCountColor">({{item.commentCount}})</span>
+                        </td>
                         <td>{{item.nickName}}</td>
                         <td>{{item.createdAt.substring(0, 10)}}</td>
                         <td>{{item.cnt}}</td>

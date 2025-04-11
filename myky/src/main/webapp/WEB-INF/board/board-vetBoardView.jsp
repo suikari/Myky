@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue3 레이아웃 예제</title>
+    <title>수의사 게시판</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <!-- Quill CDN -->
@@ -26,7 +26,7 @@
                     VIEW
                 </div>
                 <div class="fb-section-headerDown">
-                    질문과 답
+                    수의사분들과 함께 질문을 나눠보세요
                 </div>
                 <hr class="fb-custom-hr">
 
@@ -44,8 +44,6 @@
                     <div class="fb-post-content" v-html="info.content"></div>
                 </div>
 
-
-    
 
                     <!-- 답글 달기 -->
                     <div class="fb-answer-actions">
@@ -114,7 +112,6 @@
                         <!-- 본문 -->
 
                             <div v-html="answer.reviewText" class="quill-output"></div>
-
                     </div>
 
                     <!-- 답변 출력/채택 전 -->
@@ -204,12 +201,10 @@
                         </template>
                         <button class="fb-cmtButton" @click="fnAnRemove(answer.reviewId)">삭제</button>
                     </template>
-                    
-                    <!-- <template v-if="answer.isDeleted == 'Y'">
-                        <div style="margin-bottom: 5px;">삭제된 답변입니다.</div>
-                    </template> -->
+
                 </div>
                   
+                
                 <div class="fb-footer-buttons">
                     <template v-if="sessionId == info.userId && info.isAccepted === 'N'">
                         <button class="fb-button" @click="fnEdit()">수정</button>
@@ -219,7 +214,32 @@
                     </template>
                         <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
                 </div>
-                
+                <div class="fb-mini-board">
+                    <table class="fb-mini-table">
+                        <tr class="fb-mini-table-th fb-mini-th">
+                            <th colspan="4">전체글</th>
+                        </tr>
+
+                        <tr class="fb-mini-td" v-for="list2 in list.slice(0,5)" 
+                            :style="list2.vetBoardId === info.vetBoardId ? 'font-weight: bold; background-color: #f8f8f8' : ''"
+                            @click="fnVetList(list2.vetBoardId)">
+                            <td style="width: 600px;">{{list2.title}}</td>
+                            <td>{{list2.points}}P</td>
+                            <td>{{list2.createdAt}}</td>
+                            <td>
+                                <span :class="[
+                                    list2.isAccepted === 'Y' ? 'fb-mini-accepted' : 
+                                    parseInt(list2.commentCount) > 0 ? 'fb-mini-waiting' : 
+                                    'fb-mini-noAnswer'
+                                ]">
+                                    {{list2.isAccepted === 'Y' ? '채택완료' : 
+                                      parseInt(list2.commentCount) > 0 ? '채택전' : 
+                                      '답변대기'}}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>        
 	<jsp:include page="/WEB-INF/common/footer.jsp"/>
@@ -236,6 +256,7 @@
                     return {
                         vetBoardId : "${map.vetBoardId}",
                         info : {},
+                        list : [],
                         page: "${param.page}",
                         sessionId: "${sessionId}",
                         sessionRole: "${sessionRole}",
@@ -299,6 +320,58 @@
 
 				        	},
 				        });
+                    },
+                    fnVetBoardList() {
+                        let self = this;
+                        let nparmap = {
+                            searchOption: self.searchOption,
+                            page: (self.page - 1) * self.pageSize,
+                            pageSize: self.pageSize,
+                            orderKey: self.orderKey,
+                            orderType: self.orderType,
+                            keyword: self.keyword,
+                            userId: self.userId,
+                            nickName : self.nickName,
+                            content : self.content,
+                        };
+                        $.ajax({
+                            url: "/board/vetBoardList.dox",
+                            dataType: "json",
+                            type: "POST",
+                            data: nparmap,
+                            success: function (data) {
+                                if(data.result != 'success'){
+                                    alert("잘못된 주소입니다.");
+                                    location.href="/board/vetBoardList.do";
+                                }
+                                
+                                // 현재 게시글의 인덱스 찾기
+                                let currentIndex = data.vetBoard.findIndex(item => item.vetBoardId === self.vetBoardId);
+                                
+                                // 현재 게시글 기준 앞뒤 2개씩 총 5개 게시글 추출
+                                let start = Math.max(0, currentIndex - 2);
+                                let end = Math.min(start + 5, data.vetBoard.length);
+                                
+                                // start가 끝에서부터 5개 미만일 경우 앞에서부터 조정
+                                if (end - start < 5) {
+                                    start = Math.max(0, end - 5);
+                                }
+                                
+                                self.list = data.vetBoard.slice(start, end);
+
+                                // 나머지 코드는 그대로 유지
+                                if (data.count && data.count.cnt !== undefined) {
+                                    self.index = Math.ceil(data.count.cnt / self.pageSize);
+                                } else {
+                                    self.index = 0;
+                                }
+                            }
+                        });
+                    },
+                    fnVetList(vetBoardId){
+                        let self = this;                        
+                        localStorage.setItem("page", self.page);
+                        location.href="/board/vetBoardView.do?vetBoardId=" + vetBoardId;
                     },
                     getCurrent : function(){
                         let self = this;
@@ -462,7 +535,8 @@
                                     type : "POST", 
                                     data : pointAdd,
                                     success : function(data) { 
-                                        
+                                        self.showChoice = '';
+                                        self.reviewId = '';
                                         self.fnView();
                                     },
                                     
@@ -604,7 +678,6 @@
                         const total = validRatings.reduce((sum, r) => sum + r, 0);
                         return (total / validRatings.length).toFixed(1);
                     },
-
                 },
                 mounted() {
                     let self = this;
@@ -613,7 +686,7 @@
                     self.fnVetInfo();
                     self.fnView();
                     self.getCurrent();
-
+                    self.fnVetBoardList();
 
                     self.fnUserInfo();
 

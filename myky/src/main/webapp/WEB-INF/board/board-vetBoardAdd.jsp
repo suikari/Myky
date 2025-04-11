@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue3 레이아웃 예제</title>
+    <title>수의사 게시판 ADD</title>
 	<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
     <!-- Quill CDN -->
@@ -33,11 +33,11 @@
             <div class="fb-title-label">POINT</div>
             <div class="fb-point-input">
                 <div class="fb-point-box">
-                    <span class="fb-point-unit2"> {{ usedPoint != '' ? '사용포인트' : '보유포인트' }} </span>
+                    <span class="fb-point-unit2"> {{ usedPoint === '' ? '보유포인트' : '사용포인트' }} </span>
                     <input v-model="usedPoint" class="fb-point-place fb-point-clear-input"
                     v-bind:placeholder="currentPoint.currentPoint" @input="fnCheck" @focus="isUsed = false">
                     <span class="fb-point-unit">P</span>
-                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click="usedPoint = ''"><img src="../img/freeBoard/close.png"></button>
+                    <button class="fb-clear-btn" :class="{ 'disabled': !usedPoint }" @click="usedPoint = 0"><img src="../img/freeBoard/close.png"></button>
                     
                 </div>
                 <button class="fb-fill-btn" @click="usedPoint = currentPoint.currentPoint">
@@ -55,7 +55,7 @@
             <div class="fb-editor-boxBigAdd">
                 <div id="fb-editor" style="height: 500px;"></div>
             </div>
-            <div class="fb-buttonStyle">
+            <div class="fb-buttonStyle fb-buttonMargin">
                 <button class="fb-button" @click="fnSave">저장</button>
                 <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
             </div>
