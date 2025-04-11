@@ -13,7 +13,7 @@
 
 /* 섹션 헤더 */
 .fb-section-header {
-    color: rgb(0, 80, 255);
+    color: rgb(110, 158, 255);
     font-weight: bold;
     height: 70px;
     padding: 10px;
@@ -48,7 +48,7 @@
 	padding: 5px;
     font-size: 16px;
     font-weight: bold;
-    color: #FFA145;
+    color: rgb(255, 147, 0);
     margin-bottom: 10px; /* 인풋과 간격 벌리기 */
     width: 1280px;
     max-width: 100%;
@@ -68,7 +68,7 @@
 .fb-point-box {
     display: inline-flex;
     align-items: center;
-    border: 2px solid #FFBC7B;
+    border: 2px solid rgb(255, 147, 0);
     border-radius: 6px;
     padding: 0 10px;
     height: 36px;
@@ -86,12 +86,12 @@
     width: 100%;
     max-width: 90px;
 	text-align: right;
-	color: #FFBC7B ;
+	color: rgb(255, 147, 0);
 	font-weight: bold;
 }
 /* input 포커스 시 부모 박스 강조 */
 .fb-point-box:focus-within {
-    border-color: #FFBC7B;
+    border-color: rgb(255, 147, 0);
 }
 
 /* "원" 단위 텍스트 */
@@ -99,7 +99,7 @@
 	text-align: left;
     margin-left: 1px;
     font-size: 15px;
-    color: #FFBC7B;
+    color: rgb(255, 147, 0);
     white-space: nowrap;
 	font-weight: bold;
 	margin-right: 10px;
@@ -116,13 +116,13 @@
 	font-weight: bold;
 }
 .fb-point-input:focus {
-    border-color: #FFBC7B;
+    border-color: rgb(255, 147, 0);
 }
 .fb-point-button{
 	padding: 5px 10px;
 	font-size: 14px;
 	font-weight: bold;
-	background-color: #FFBC7B;
+	background-color: rgb(255, 147, 0);
 	color: #fff;
 	border: none;
 	border-radius: 6px;
@@ -142,7 +142,7 @@
 .fb-point-clear-input {
   width: 100%;
   padding: 8px 30px 8px 10px; /* 오른쪽 공간 확보 */
-  border: 2px solid #FFBC7B;
+  border: 2px solid rgb(255, 147, 0);
   border-radius: 6px;
   font-size: 14px;
   outline: none;
@@ -201,8 +201,11 @@
 	margin-top: 5px;
     width: 100%;
 	max-width: 1280px;
-	height: 1000px;
     transition: border-color 0.3s;
+    height: auto;          /* 고정 높이 대신 자동 높이 설정 */
+    min-height: 300px;
+    transition: border-color 0.3s;
+    overflow: auto; 
 }
 .answer2{
 	height: 200px !important;
@@ -211,7 +214,6 @@
 	max-width: 1200px;
 }
 .fb-editor-box-answer{
-    border: 2px solid #FFBC7B;
     border-radius: 10px;
     padding: 16px;
 	height: 600px;
@@ -243,16 +245,18 @@
 	margin: 30px auto;
 	text-align: center;
 }
-.fb-buttonMargin{
-	text-align: center;
-	margin: 30px;
-	
+.fb-buttonMargin {
+    text-align: center;
+    margin: 20px 0;  /* 상하 여백만 주고 좌우 여백은 제거 */
+    display: flex;   /* 버튼들을 나란히 배치 */
+    justify-content: center;  /* 가운데 정렬 */
+    gap: 10px;      /* 버튼 사이 간격을 10px로 설정 */
 }
 .fb-button {
     padding: 10px 20px;
     font-size: 14px;
-    margin: 30px;
     font-weight: bold;
+    margin-bottom: 30px;
     background-color: rgb(110,158,255);
     color: #fff;
     border: none;
@@ -270,26 +274,37 @@
 /* input 박스 스타일 (fb 범위 안에서만 적용) */
 #fb-app .fb-title-input input,
 #fb-app .fb-title-inputImg input {
-    margin-top: -100px;
-    width: 90%;
-    max-width: 1000px;
+    width: 100%;
+    max-width: 1000px;  /* 모든 입력 요소의 최대 너비를 1000px로 통일 */
     padding: 8px 10px;
     border: 2px solid #eaeaea;
     border-radius: 6px;
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s;
+    box-sizing: border-box;  /* padding과 border를 width에 포함 */
 }
 
 #fb-app input:focus {
     border-color: #FFBC7B;
+}
+.fb-acceptButtonW {
+    color: #FFF;
+    font-weight: bold;
+    background-color: #888;
+    border-radius: 6px;
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    margin: auto;
+    line-height: 30px;  /* 텍스트 세로 중앙 정렬을 위해 추가 */
 }
 
 /* 구분선 */
 .fb-custom-hr {
     border: none;
     border-top: 1px solid #ccc;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 40px;
     width: 100%;
     max-width: 1280px;
@@ -438,16 +453,17 @@
 .fb-content-wrap {
 	width: 90%;
 	max-width: 1000px;
+    margin: 0 auto;
 }
-
 
 .fb-editor-boxBig {
     border: 2px solid #eaeaea;
     border-radius: 10px;
     padding: 16px;
-	height: 1100px;
-	width: 100%;
-	max-width: 1000px; /* 🔽 줄였습니다 */
+	height: auto;          /* 고정 높이 대신 자동 높이 설정 */
+    min-height: 300px;     /* 최소 높이 설정 */
+    transition: border-color 0.3s;
+    overflow: auto; 
 	margin: 0 auto; 
 	margin-bottom: 5px;
     box-sizing: border-box;	
@@ -474,15 +490,18 @@
     box-sizing: border-box;
 }
 .fb-editor-box-an {
-    background-color: #f9f9f9;
+    background-color: #fff;
     border: 2px solid rgb(110, 158, 255);
     border-radius: 10px;
     padding: 16px;
-	height: 350px;
 	width: 1033px;
 	margin: auto; 
 	margin-bottom: 5px;
     box-sizing: border-box;
+    height: auto;          /* 고정 높이 대신 자동 높이 설정 */
+    min-height: 300px;     /* 최소 높이 설정 */
+    transition: border-color 0.2s;
+    overflow: auto;  
 }
 .fb-deleted-answer {
     color: #999;
@@ -576,6 +595,7 @@
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin: 5px;
 }
 
 .fb-cmtButton:hover {
@@ -692,8 +712,8 @@
     font-weight: bold;
     color: #272727;
     margin: 50px 0 10px;
-    border-bottom: 1px solid#eaeaea;
     padding-bottom: 6px;
+    margin-top: 100px;
   }
   
   .fb-view-box {
@@ -702,8 +722,9 @@
   
   .fb-post-wrapper {
     width: 1000px;
-    min-height: 300px; /* 최소 높이 설정 */
+    min-height: 350px; /* 최소 높이 설정 */
     margin: 50px auto;
+    margin-top: 100px;
     padding: 30px;
     background-color: #fff;
     border: 1px solid #e0e0e0;
@@ -783,8 +804,8 @@
     margin-top: 10px;
     width: 100%;
     max-width: 1280px;
-    text-align: center;
-    align-items: center;
+    text-align: left;
+    align-items: left;
 	
 }
 
@@ -1036,13 +1057,6 @@
 tr.fb-dropdown-content {
     display: table-row;  /* 드롭다운이 보이도록 설정 */
 }
-    /* 드롭다운 컨텐츠에 마우스를 올렸을 때 */
-.fb-dropdown-content:hover {
-    background-color: #f8f8f8;  /* 호버시 배경색 */
-    color: rgb(0, 80, 255);
-    font-weight: bold;
-    cursor: pointer;
-}
 
 .fb-button-group {
   display: flex;
@@ -1062,10 +1076,9 @@ tr.fb-dropdown-content {
     border-radius: 30px;
     cursor: pointer;
 }
-.fb-button-faq:hover{
-    background-color: rgb(110, 158, 255);
+.fb-buttonTitle:hover{
     border:none;
-    color: #fff;
+    color: rgb(110, 158, 255);
 }
 .fb-pagination {
     text-align: center;
@@ -1493,4 +1506,116 @@ tr.fb-dropdown-content {
 
 .parent-class {
     text-align: center;
+}
+/* 미니 게시판 스타일 */
+.fb-table-mini-wrapper {
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    border-spacing: 0;
+    margin: auto;
+    margin-top: 20px;
+    width: 90%;
+    max-width: 1280px;
+    text-align: center;
+}
+.fb-mini-table-th th {
+    text-align: left;  /* th 요소만 왼쪽 정렬 */
+    padding-left: 20px;  /* 왼쪽 여백 추가 */
+}
+.fb-mini-table-th {
+    border-bottom: 1px solid #ddd;
+    color: #272727;
+    padding: 15px;
+    font-weight: 600;
+	height: 45px;
+    font-size: 15px;
+}
+.fb-mini-board {
+    margin: 20px 0;
+    font-size: 13px;  /* 기본 폰트 크기 축소 */
+    
+}
+
+.fb-mini-table {
+    border: 1px solid #fbfbfb;
+    box-shadow: 0 2px 4px rgba(0, 0, 2, 0.07);
+    width: 100%;
+	max-width: 1280px;
+    border-collapse: collapse;
+    background-color: #fff;
+	margin: auto;
+}
+
+.fb-mini-th {
+    /* background-color: #f8f8f8; */
+    font-size: 13px;
+    padding: 8px;
+    height: 32px;
+}
+
+.fb-mini-td {
+    font-size: 12px;
+    padding: 6px;
+    height: 32px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.fb-mini-td td {
+    padding: 6px;
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fb-mini-accepted {
+    color: rgb(110,158,255);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgba(110,158,255,0.1);
+}
+
+.fb-mini-waiting {
+    color: #888;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+}
+
+/* 미니 테이블 호버 효과 */
+.fb-mini-td:hover {
+    background-color: #f9f9f9;
+}
+.fb-mini-accepted {
+    color: rgb(110,158,255);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgba(110,158,255,0.1);
+}
+
+.fb-mini-waiting {
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}
+
+.fb-mini-noAnswer {
+    color: #888;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: #f5f5f5;
 }

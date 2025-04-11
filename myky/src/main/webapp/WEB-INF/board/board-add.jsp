@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/css/board/board.css"/>
 
     <style>
-       
+
     </style>
     
     
@@ -42,12 +42,14 @@
                     <input type="file" id="file1" name="file1" multiple>
                 </div>
                 <div class="fb-title-label">CONTENT</div>
-                <div class="fb-editor-boxBig">
-                    <div id="fb-editor" style="height: 1000px;"></div>
-                </div>
-                <div class="fb-buttonStyle">
-                    <button class="fb-button" @click="fnSave">저장</button>
-                    <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+                <div class="fb-editor-totalBox">
+                    <div class="fb-editor-boxBig">
+                        <div id="fb-editor"></div>
+                    </div>
+                    <div class="fb-buttonStyle fb-buttonMargin">
+                        <button class="fb-button" @click="fnSave">저장</button>
+                        <button class="fb-button" @click="fnBack(info)">뒤로가기</button>
+                    </div>
                 </div>
             </div>
     </div>

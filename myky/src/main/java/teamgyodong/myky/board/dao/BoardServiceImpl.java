@@ -297,7 +297,7 @@ public class BoardServiceImpl implements BoardService {
 		}
 		
 		return resultMap;
-	}
+	}	
 	@Override
 	//수의사 게시글 상세보기
 	public HashMap<String, Object> vetBoardView(HashMap<String, Object> map) {
