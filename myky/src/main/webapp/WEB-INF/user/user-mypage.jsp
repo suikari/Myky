@@ -10,14 +10,14 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/user/user.css" />
         <style>
-
+            
         </style>
     </head>
 
     <body>
         <jsp:include page="/WEB-INF/common/header.jsp" />
 
-        <div id="app" class="container">
+        <div id="app" class="container" style="font-family: 'Noto Sans KR', sans-serif;">
             <template v-if="userId!=''">
                 <div class="mypage-container">
                     <div class="profile-wrapper">
@@ -41,15 +41,15 @@
                         </div>
 
                         <div class="summary">
-                            <div class="summary-item">
+                            <div class="summary-item" role="button" @click="activeTab = 'point'">
                                 <div class="summary-title">현재 포인트</div>
                                 <div class="summary-value">{{ formattedAmount(point.currentPoint) }}P</div>
                             </div>
-                            <div class="summary-item">
+                            <div class="summary-item" role="button" @click="activeTab = 'coupon'">
                                 <div class="summary-title">보유 쿠폰</div>
                                 <div class="summary-value">{{ couponCnt }}개</div>
                             </div>
-                            <div class="summary-item">
+                            <div class="summary-item" role="button" @click="activeTab = 'order'">
                                 <div class="summary-title">총 주문 수</div>
                                 <div class="summary-value">{{ orderAllCnt }}회</div>
                             </div>
@@ -58,16 +58,17 @@
 
                     <div class="main-content">
                         <aside class="sidebar">
-                            <ul>
-                                <div class="tab-menu">
-                                    <h3>나의 쇼핑 정보</h3>
-                                    <div v-for="tab in tabs" :key="tab.id"
-                                        :class="['tab-item', { active: activeTab === tab.id }]"
-                                        @click="changeTab(tab.id)">
-                                        {{ tab.label }}
+                            <div class="sidebar-top"></div>
+                                <ul>
+                                    <div class="tab-menu">
+                                        <h3>나의 쇼핑 정보</h3>
+                                        <div v-for="tab in tabs" :key="tab.id"
+                                            :class="['tab-item', { active: activeTab === tab.id }]"
+                                            @click="changeTab(tab.id)">
+                                            {{ tab.label }}
+                                        </div>
                                     </div>
-                                </div>
-                            </ul>
+                                </ul>
                             <hr>
                             <ul>
                                 <div class="tab-menu">
@@ -93,23 +94,27 @@
                             <span v-if="activeTab === 'order'">
                                 <h3>최근 주문내역 현황</h3>
                                 <div class="status-box">
-                                    <div class="status-item">
+                                    <div class="status-item" role="button" @click="orderKey = 'none'; fnOrderList('')">
                                         <span class="status-label">주문접수</span><br>
                                         <span class="status-count">{{ orderCnt[2].orderCount }}</span>
                                     </div>
-                                    <div class="status-item">
+                                    <div class="status-item" role="button"
+                                        @click="orderKey = 'shipped'; fnOrderList('')">
                                         <span class="status-label">배송 중</span><br>
                                         <span class="status-count">{{ orderCnt[4].orderCount }}</span>
                                     </div>
-                                    <div class="status-item">
+                                    <div class="status-item" role="button"
+                                        @click="orderKey = 'delivered'; fnOrderList('')">
                                         <span class="status-label">배송 완료</span><br>
                                         <span class="status-count">{{ orderCnt[0].orderCount }}</span>
                                     </div>
-                                    <div class="status-item">
-                                        <span class="status-label">환불신청</span><br>
+                                    <div class="status-item" role="button"
+                                        @click="orderKey = 'exchange'; fnOrderList('')">
+                                        <span class="status-label">교환신청</span><br>
                                         <span class="status-count">{{ orderCnt[1].orderCount }}</span>
                                     </div>
-                                    <div class="status-item">
+                                    <div class="status-item" role="button"
+                                        @click="orderKey = 'return'; fnOrderList('')">
                                         <span class="status-label">반품신청</span><br>
                                         <span class="status-count">{{ orderCnt[3].orderCount }}</span>
                                     </div>
@@ -131,17 +136,12 @@
                                                             href="javascript:;">{{item.productName}}</a></span></td>
                                                 <td><span>{{formattedAmount(item.price)}} 원</span></td>
                                                 <td><span>{{item.quantity}} 개</span></td>
-                                                <td>
-                                                    <span v-if="item.refundStatus == 'none'"
-                                                        class="anonymous">주문접수</span>
-                                                    <span v-if="item.refundStatus == 'shipped'" class="anonymous">배송
-                                                        중</span>
-                                                    <span v-if="item.refundStatus == 'delivered'" class="anonymous">배송
-                                                        완료</span>
-                                                    <span v-if="item.refundStatus == 'return'"
-                                                        class="anonymous">반품신청</span>
-                                                    <span v-if="item.refundStatus == 'exchange'"
-                                                        class="anonymous">환불신청</span>
+                                                <td :data-status="item.refundStatus">
+                                                    <span v-if="item.refundStatus == 'none'">주문접수</span>
+                                                    <span v-if="item.refundStatus == 'shipped'">배송 중</span>
+                                                    <span v-if="item.refundStatus == 'delivered'">배송 완료</span>
+                                                    <span v-if="item.refundStatus == 'return'">반품 신청</span>
+                                                    <span v-if="item.refundStatus == 'exchange'">교환 신청</span>
                                                 </td>
                                                 <td><span>{{item.orderedAt}}</span></td>
                                             </tr>
@@ -502,7 +502,7 @@
                                     </div>
                                     <div class="donation-amount">
                                         총
-                                        <span>{{sum.amount}}</span>원 입니다.
+                                        <span>{{formattedAmount(sum.amount)}}</span>원 입니다.
                                     </div>
                                     <div class="thank-you-message">언제나 따뜻한 후원 감사합니다.<div>
                                             <br>
@@ -644,7 +644,7 @@
                         vetPage: 1,
                         vetPageSize: 5,
                         vetCnt: 0,
-                        orderKey:"none"
+                        orderKey: "none"
 
 
 
@@ -902,6 +902,7 @@
                             pageSize4: self.pageSize4,
                             page4: (self.page4 - 1) * self.pageSize4,
                         };
+                        console.log('넌 왜이래', nparmap);
                         $.ajax({
                             url: "/user/donaInfo.dox",
                             dataType: "json",
@@ -980,7 +981,6 @@
                                 self.couponList = data.coupon;
                                 self.couponCnt = data.count;
                                 self.couponIndex = Math.ceil(data.count / self.couponPageSize);
-                                console.log('쿠폰인덱스', self.couponIndex)
                             }
                         });
                     },
@@ -995,13 +995,13 @@
                         self.fnCoupon('');
                     },
 
-                    fnOrderList: function (orderKey) {
+                    fnOrderList: function (commend) {
                         let self = this;
                         let nparmap = {
                             userId: self.userId,
-                            orderKey:self.orderKey
+                            orderKey: self.orderKey
                         };
-                        console.log('오더키',nparmap);
+                        console.log('오더키', nparmap);
                         $.ajax({
                             url: "/user/orderList.dox",
                             dataType: "json",
@@ -1103,12 +1103,12 @@
                     self.fnMemberShipInfo();
                     self.fnInfo2();
                     self.fnPoint();
+                    self.fnPoint2();
                     self.fnCoupon();
                     self.fnOrderList();
                     self.fnGetTab();
                     self.fnMyVetBoardList();
                     window.vueObj = this;
-                    console.log("dididi", self.activeTab);
 
                 }
             });

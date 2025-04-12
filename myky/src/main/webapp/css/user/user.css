@@ -862,6 +862,7 @@ input[type="checkbox"] {
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 	min-width: 130px;
+	cursor: pointer;
 	/* 줄어들지 않게 최소 너비도 설정 */
 }
 
@@ -890,13 +891,24 @@ input[type="checkbox"] {
 	margin-top: 20px;
 }
 
+
 .sidebar {
 	width: 25%;
 	background: #f7f7f7;
-	padding: 20px;
+	padding-top: 0;
 	border-radius: 10px;
 	font-family: 'Noto Sans KR', sans-serif;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+	overflow: hidden;           /* ✅ 둥근 모서리가 안 잘리게 */
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-top {
+  background-color: #cbeaff;
+  padding: 20px 15px;
+  margin-top: -10px; /* 상단 여백 제거 */
+  border-radius: 12px 12px 0 0;
 }
 
 .sidebar h3 {
@@ -908,6 +920,7 @@ input[type="checkbox"] {
 
 .tab-menu {
 	margin-bottom: 20px;
+	padding: 10px;
 }
 
 .tab-item {
@@ -985,7 +998,7 @@ input[type="checkbox"] {
 	text-align: center;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 	transition: transform 0.2s ease;
-	cursor: default;
+	cursor: pointer;
 }
 
 .status-item:hover {
@@ -1026,6 +1039,7 @@ input[type="checkbox"] {
 	text-align: center;
 	font-size: 15px;
 	border-bottom: 1px solid #ddd;
+	
 }
 
 .order-table td {
@@ -1055,8 +1069,23 @@ input[type="checkbox"] {
 	flex: 2;
 }
 
-.order-table td:nth-child(5) {
-	color: #007bff;
+/* 주문접수 - 기본 상태 */
+.order-table td[data-status='none'] {
+	color: #6c757d; /* 회색 */
+	font-weight: bold;
+}
+
+/* 배송 관련 상태 - 파란색 */
+.order-table td[data-status='shipped'],
+.order-table td[data-status='delivered'] {
+	color: #007bff; /* 파란색 */
+	font-weight: bold;
+}
+
+/* 반품/교환 - 빨간색 */
+.order-table td[data-status='return'],
+.order-table td[data-status='exchange'] {
+	color: #dc3545; /* 빨간색 */
 	font-weight: bold;
 }
 
@@ -1085,9 +1114,12 @@ a {
 /* 게시판 테이블 */
 .board-table {
 	width: 100%;
-	border-collapse: collapse;
-	margin: 20px 0;
-	font-family: Arial, sans-serif;
+	border-collapse: separate;  /* 👈 변경 필요 */
+	border-spacing: 0;          /* 👈 셀 간격 제거 (collapse처럼) */
+	border-radius: 10px;        /* ✅ 원하는 radius 적용 */
+	overflow: hidden;           /* ✅ 둥근 모서리가 안 잘리게 */
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .board-table th {
@@ -1335,8 +1367,12 @@ a {
 /* 테이블 스타일 */
 .comment-table {
 	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
+	border-collapse: separate;  /* 👈 변경 필요 */
+	border-spacing: 0;          /* 👈 셀 간격 제거 (collapse처럼) */
+	border-radius: 10px;        /* ✅ 원하는 radius 적용 */
+	overflow: hidden;           /* ✅ 둥근 모서리가 안 잘리게 */
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .comment-table-header {
@@ -1571,10 +1607,14 @@ a {
 
 /* 테이블 스타일 */
 .cpoint-table {
-	border-radius: 12px;
 	width: 100%;
-	border-collapse: collapse;
 	margin-top: 10px;
+	border-collapse: separate;  /* 👈 변경 필요 */
+	border-spacing: 0;          /* 👈 셀 간격 제거 (collapse처럼) */
+	border-radius: 10px;        /* ✅ 원하는 radius 적용 */
+	overflow: hidden;           /* ✅ 둥근 모서리가 안 잘리게 */
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 /* 테이블 헤더 스타일 */

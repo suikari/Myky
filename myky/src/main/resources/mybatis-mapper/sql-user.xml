@@ -121,11 +121,11 @@
         WHERE USER_ID = #{userId}
 	</select>
 	
-	<select id="sumDona" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
-        SELECT NVL(TO_CHAR(SUM(AMOUNT),'fm999,999,999,999'),0) AS amount
-        FROM DONATION_HISTORY
-        WHERE USER_ID = #{userId}
-	</select>
+<select id="sumDona" parameterType="hashmap" resultType="teamgyodong.myky.donation.model.donation">
+    SELECT NVL(SUM(AMOUNT), 0) AS amount
+    FROM DONATION_HISTORY
+    WHERE USER_ID = #{userId}
+</select>
 	
 	<select id="selectVet" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.Vet">
         SELECT *
@@ -162,17 +162,25 @@
 	</select>
 	
 	<select id="selectUserOrderList" parameterType="hashmap" resultType="teamgyodong.myky.cart.model.cart">
-	   
-select o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id, o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message, p.product_name, p.filepath, od.order_detail_id, od.product_id, od.quantity, od.price, od.refund_status
-	    from orders o
-	    join order_details od on o.order_id = od.order_id
-	    join (
-			select p.*, f.filepath
-		    from product p  
-		    left join product_file f on p.product_id = f.product_id and f.thumbnail = 'Y'
-		) p on od.product_id = p.product_id
-	    where o.user_id = #{userId}
-        order by o.ordered_at desc
+		SELECT 
+		    o.order_id, o.total_price, o.order_status, o.ordered_at, o.user_id,
+		    o.receiver_name, o.receiver_phone, o.receiver_addr, o.delivery_message,
+		    p.product_name, p.filepath,
+		    od.order_detail_id, od.product_id, od.quantity, od.price, od.refund_status
+		FROM orders o
+		JOIN order_details od ON o.order_id = od.order_id
+		JOIN (
+		    SELECT p.*, f.filepath
+		    FROM product p  
+		    LEFT JOIN product_file f ON p.product_id = f.product_id AND f.thumbnail = 'Y'
+		) p ON od.product_id = p.product_id
+		WHERE o.user_id = #{userId}
+		ORDER BY 
+		    CASE 
+		        WHEN od.refund_status = #{orderKey}THEN 0 
+		        ELSE 1
+		    END,
+		    o.ordered_at
 		OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY
 	</select>
 	
