@@ -510,10 +510,7 @@ public class UserController {
     }
 	
     
-    
-    
-    
-    
+
     //구글 로그인
     @RequestMapping("/googleLogin")
     public String googleLogin() {
@@ -528,14 +525,6 @@ public class UserController {
         return "redirect:/localhost:8081/user/login.do"; // 홈이나 원하는 경로로 리디렉션
     }
     
-    
-    
-    
-//    @RequestMapping("/user/google-user.dox")
-//    public String user(@AuthenticationPrincipal OAuth2User principal) {
-//    	request.setAttribute("info", principal.getAttributes());
-//        return "test"; // 로그인한 사용자 정보 반환
-//    }
     
 
 	@RequestMapping(value = "/user/google-user.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
