@@ -205,16 +205,21 @@
 	<!--도움돼요-->
 	<select id="selectHelpfulByUser" parameterType="hashmap" resultType="int">
 	    SELECT COUNT(*) 
-	    FROM PRODUCT_REVIEWS
-	    WHERE REVIEW_ID = #{reviewId} 
-	      AND USER_ID = #{userId, jdbcType=VARCHAR}
+	    FROM REVIEW_HELP_LOG
+	    WHERE REVIEW_ID = #{reviewId}
+	      AND USER_ID = #{userId}
 	</select>
-	
+
 	<update id="updateHelpCnt" parameterType="hashmap">
 	    UPDATE PRODUCT_REVIEWS
-	    	SET HELPCNT = HELPCNT + 1
-    	WHERE REVIEW_ID = #{reviewId}
+	    SET HELPCNT = NVL(HELPCNT, 0) + 1
+	    WHERE REVIEW_ID = #{reviewId}
 	</update>
+	
+	<insert id="insertHelpfulLog" parameterType="hashmap">
+	    INSERT INTO REVIEW_HELP_LOG (REVIEW_ID, USER_ID)
+	    VALUES (#{reviewId}, #{userId})
+	</insert>
 
 	<!--QnA 목록 조회-->
 	<select id="selectQnaList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Qna">

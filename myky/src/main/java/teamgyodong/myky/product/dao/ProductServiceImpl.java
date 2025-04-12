@@ -123,13 +123,19 @@ public class ProductServiceImpl implements ProductService {
 	    if (check > 0) {
 	        resultMap.put("result", "fail");
 	        resultMap.put("message", "이미 추천한 리뷰입니다.");
-	    } else { 
-	        productMapper.updateHelpCnt(map);  
+	    } else {
+	        // 추천 기록 테이블에 저장
+	        productMapper.insertHelpfulLog(map);
+
+	        // 제품 테이블 HELP_CNT 증가
+	        productMapper.updateHelpCnt(map);
+
 	        resultMap.put("result", "success");
 	    }
 
 	    return resultMap;
 	}
+
 
 	//상품 리뷰 파일 업로드
 	public  void addReviewFile(HashMap<String, Object> map) {
