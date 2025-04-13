@@ -344,13 +344,13 @@
 						            
 						        </select>
 						    </div>
-						
+
 						    <!-- 검색 옵션 -->
 						    <div class="col-auto">
 						        <select v-model="searchOption" class="form-select">
 						            <option value="all">전체</option>
-						            <option value="title">제목</option>
-						            <option value="userId">작성자</option>
+						            <option value="name">시설명</option>
+						            <option value="address">주소</option>
 						        </select>
 						    </div>
 						
@@ -623,7 +623,7 @@
 				        	name : '',
 				            userId : '',
 				        },
-	                    searchOption: 'userId',
+	                    searchOption: 'all',
 	                    page: 1,
 	                    pageSize: 20,
 	                    keyword: '',
