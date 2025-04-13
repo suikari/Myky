@@ -97,7 +97,7 @@
                     <table>
                         <tr v-if="cmtList.commentId != null">
                             <div v-for="item in cmtList" :key="item.commentId">
-                                <div class="fb-cmtTextBox"                                       
+                                <div class="fb-cmtTextBox"   :id="'comment-' + item.commentId"                                      
                                      :style="item.userId === sessionId ? 'background-color: #f8f8f8;' : ''">
 
                                     <!-- 수정 중인 경우 -->
@@ -158,7 +158,7 @@
                                 </div>
 
                                 <!-- 대댓글 반복 -->
-                                <div v-for="reply in item.replies || []" :key="reply.commentId"
+                                <div v-for="reply in item.replies || []" :key="reply.commentId" :id="'comment-' + reply.commentId"   
                                 :style="{backgroundColor: reply.userId === sessionId ? '#f8f8f8' : ''}"   style="margin-left: 40px; padding: 10px;">
                                     <div v-if="editCommentId === reply.commentId" class="fb-cmtTextBox">
                                         <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
@@ -659,6 +659,36 @@
                         location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
                     },   
                 },
+                watch: {
+					cmtList(newVal) {
+					    const params = new URLSearchParams(window.location.search);
+					    const commentId = params.get("commentId");
+
+					    if (commentId) {
+					        this.$nextTick(() => {
+					            const element = document.getElementById('comment-' + commentId);
+					            if (element) {
+					                console.log('찾은 요소:', element);
+
+					                // 원래 배경색 저장
+					                const originalBackgroundColor = getComputedStyle(element).backgroundColor;
+
+					                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+					                // 하이라이트 효과
+					                element.style.transition = 'background-color 0.5s';
+					                element.style.backgroundColor = 'rgb(255, 147, 0)';
+
+					                setTimeout(() => {
+					                    element.style.backgroundColor = originalBackgroundColor;
+					                }, 3000);
+					            } else {
+					                console.warn('댓글 요소를 찾지 못했습니다:', commentId);
+					            }
+					        });
+					    }
+					}
+                },
                 mounted() {
                     let self = this;
                     const params = new URLSearchParams(window.location.search);
@@ -667,6 +697,8 @@
 
                     self.fnBoardList();
                     self.fnView();
+
+                    
                 }
             });
 

@@ -111,6 +111,9 @@
 		</if>
 	 </select>
 	
+	
+ 
+	 
 	  <!-- 리뷰 글쓰기 -->
 	 <insert id="insertReview" parameterType="hashmap" useGeneratedKeys="true" keyColumn="REVIEW_ID" keyProperty="reviewId">
 	 	INSERT INTO PRODUCT_REVIEWS (REVIEW_ID,USER_ID,RATING,REVIEW_TEXT,CREATED_AT,PRODUCT_ID, TITLE, HELPCNT) 
@@ -155,8 +158,18 @@
 		FROM REVIEW_FILE F
 		LEFT JOIN PRODUCT_REVIEWS R ON F.REVIEW_ID = R.REVIEW_ID
 		WHERE F.REVIEW_ID = #{reviewId}
+		ORDER BY THUMB_YN DESC
 	</select>
 
+	
+	<!--리뷰 파일 리스트 Y 가져오기 -->
+	 <select id="selectReviewThumb"  parameterType="hashmap" resultType="int">
+			SELECT count(*) as cnt
+			FROM REVIEW_FILE
+			WHERE THUMB_YN = 'Y'
+			AND   REVIEW_ID= #{reviewId}
+	 </select>
+	 
 	 <!-- 리뷰 리스트 -->
 	 <select id="selectReviewList" parameterType="hashmap" resultType="teamgyodong.myky.product.model.Review">
 	    SELECT P.PRODUCT_ID, P.PRODUCT_NAME, R.REVIEW_ID, R.REVIEW_TEXT, R.RATING ,R.USER_ID, R.TITLE, R.CREATED_AT ,R.HELPCNT,R.DELETE_YN ,F.*

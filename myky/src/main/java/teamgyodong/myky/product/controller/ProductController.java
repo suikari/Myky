@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import teamgyodong.myky.Config.Common;
 import teamgyodong.myky.product.dao.ProductService;
+import teamgyodong.myky.product.mapper.ProductMapper;
 import teamgyodong.myky.product.model.Product;
 import teamgyodong.myky.product.model.Qna;
 import teamgyodong.myky.product.model.Review;
@@ -31,6 +32,8 @@ public class ProductController {
 
 	@Autowired
 	ProductService productService;
+	@Autowired
+	ProductMapper productMapper;
 	
 	//상품 리스트 가져오기
 	@RequestMapping("/product/list.do") 
@@ -310,8 +313,14 @@ public class ProductController {
 				map.put("fileOrgname", fileOrgname);
 				map.put("fileSize",size);
 				map.put("fileEtc", extName); 
-				map.put("thumbYn", "Y");
-
+				
+				int thumbConut = productMapper.selectReviewThumb(map);
+				
+				if (thumbConut < 1) {
+					map.put("thumbYn", "Y");
+				} else {
+					map.put("thumbYn", "N");
+				}
 				productService.addReviewFile(map);
 				
 				model.addAttribute("fileName", multi.getOriginalFilename());
