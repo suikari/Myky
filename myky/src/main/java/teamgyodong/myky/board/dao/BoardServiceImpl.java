@@ -385,7 +385,6 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
-		int Noticount = mainMapper.insertNotification(map);
 	    int count = boardMapper.checkDuplicateVetAnswer(map);
 
 	    if (count > 0) {
@@ -394,6 +393,7 @@ public class BoardServiceImpl implements BoardService {
 	        return resultMap;
 	    }
 		boardMapper.insertVetAnReply(map);
+		int Noticount = mainMapper.insertNotification(map);
 
 		resultMap.put("result", "success");
 		return resultMap;

@@ -349,8 +349,9 @@
 						    <div class="col-auto">
 						        <select v-model="searchOption" class="form-select">
 						            <option value="all">전체</option>
-						            <option value="title">제목</option>
-						            <option value="userId">작성자</option>
+						            <option value="userId">ID</option>
+						            <option value="vetName">이름</option>
+									<option value="vetNickname">닉네임</option>
 						        </select>
 						    </div>
 						
@@ -555,7 +556,7 @@
 				        	name : '',
 				            userId : '',
 				        },
-	                    searchOption: 'userId',
+	                    searchOption: 'all',
 	                    page: 1,
 	                    pageSize: 5,
 	                    keyword: '',

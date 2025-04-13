@@ -58,9 +58,9 @@
 
 
                 <!-- 답변 출력 전체 -->
-                <div v-for="answer in answerList" class="fb-answer-box">
+                <div v-for="answer in answerList" class="fb-answer-box" :id="'comment-' + answer.reviewId"  >
                     <!-- 채택된 답변 -->
-                    <div v-if="answer.comments" class="fb-accepted-answer">
+                    <div v-if="answer.comments" class="fb-accepted-answer"   >
                         <div class="fb-accepted-header">
                             질문자 채택
                         </div>
@@ -113,7 +113,7 @@
                     </div>
 
                     <!-- 답변 출력/채택 전 -->
-                    <div v-else>
+                    <div v-else >
                         <div class="fb-top-profile">
                             <img :src="answer.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
                                 alt="프로필 이미지"
@@ -282,16 +282,6 @@
                     };
                 },
                 computed: {
-                    acceptedAnswers() {
-                        return this.answerList.filter(
-                        answer => answer.comments && answer.comments !== 'null'
-                        );
-                    },
-                    normalAnswers() {
-                        return this.answerList.filter(
-                        answer => (!answer.comments || answer.comments === 'null') && answer.isDeleted === 'N'
-                        );
-                    }
                 },
                 methods: {
                     fnView(){
@@ -313,7 +303,7 @@
                                 }
                                 self.info = data.info;
                                 self.answerList = data.answerList;
-
+                                console.log("22",self.answerList);
 				        	},
 				        });
                     },
@@ -681,6 +671,32 @@
                         const total = validRatings.reduce((sum, r) => sum + r, 0);
                         return (total / validRatings.length).toFixed(1);
                     },
+                },
+                watch: {
+                    answerList(newVal) {
+                        const params = new URLSearchParams(window.location.search);
+                        const commentId = params.get("commentId");
+
+                        if (commentId) {
+                        this.$nextTick(() => {
+                            const element = document.getElementById('comment-' + commentId);
+                            if (element) {
+                            console.log('찾은 요소:', element);
+                            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                            // 하이라이트 효과
+                            element.style.transition = 'background-color 0.5s';
+                            element.style.backgroundColor = 'rgb(255, 147, 0)';
+
+                            setTimeout(() => {
+                                element.style.backgroundColor = '';
+                            }, 3000);
+                            } else {
+                            console.warn('댓글 요소를 찾지 못했습니다:', commentId);
+                            }
+                        });
+                        }
+                    }
                 },
                 mounted() {
                     let self = this;

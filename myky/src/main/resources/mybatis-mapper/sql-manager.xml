@@ -416,7 +416,7 @@
 	    <if test="searchOption != null and searchOption == 'name'">
 	        AND u.username LIKE '%' || #{keyword} || '%'
 	    </if>
-	    <if test="searchOption != null and searchOption == 'eamil'">
+	    <if test="searchOption != null and searchOption == 'email'">
 	        AND u.email LIKE '%' || #{keyword} || '%'
 	    </if>
 	    <if test="searchOption != null and searchOption == 'address'">
@@ -452,7 +452,7 @@
 	    <if test="searchOption != null and searchOption == 'name'">
 	        AND u.username LIKE '%' || #{keyword} || '%'
 	    </if>
-	    <if test="searchOption != null and searchOption == 'eamil'">
+	    <if test="searchOption != null and searchOption == 'email'">
 	        AND u.email LIKE '%' || #{keyword} || '%'
 	    </if>
 	    <if test="searchOption != null and searchOption == 'address'">
@@ -472,14 +472,27 @@
 		
 	</select>
 	
+	
+									
 	<select id="selectAllVetList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.Vet">
 	
 		SELECT *
 		FROM veterinarian
 		Where 1=1
-	 	<if test="searchOption != null and searchOption == 'userId'">
-	        AND NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	 	<if test="searchOption != null and searchOption == 'all'">
+	        AND (NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	       		OR VET_NAME LIKE '%' || #{keyword} || '%' 
+	       		OR VET_NICKNAME LIKE '%' || #{keyword} || '%' )
 	    </if>   
+	    <if test="searchOption != null and searchOption == 'userId'">
+	        AND  NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	    </if>  
+	    <if test="searchOption != null and searchOption == 'vetName'">
+	        AND VET_NAME LIKE '%' || #{keyword} || '%' 
+	    </if>  
+	    <if test="searchOption != null and searchOption == 'vetNickname'">
+	        AND VET_NICKNAME LIKE '%' || #{keyword} || '%' 
+	    </if>  
 	     ORDER BY CREATED_AT DESC
 		<if test="page != null and pageSize != null" >
 		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -493,9 +506,20 @@
 		SELECT COUNT(*)
         from veterinarian 
         Where 1=1
+	 	<if test="searchOption != null and searchOption == 'all'">
+	        AND (NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
+	       		OR VET_NAME LIKE '%' || #{keyword} || '%' 
+	       		OR VET_NICKNAME LIKE '%' || #{keyword} || '%' )
+	    </if>   
 	    <if test="searchOption != null and searchOption == 'userId'">
 	        AND  NVL(USER_ID,' ') LIKE '%' || #{keyword} || '%'
-	    </if>
+	    </if>  
+	    <if test="searchOption != null and searchOption == 'vetName'">
+	        AND VET_NAME LIKE '%' || #{keyword} || '%' 
+	    </if>  
+	    <if test="searchOption != null and searchOption == 'vetNickname'">
+	        AND VET_NICKNAME LIKE '%' || #{keyword} || '%' 
+	    </if>  
 	    
 	</select>
 	
@@ -592,13 +616,22 @@
 		</if>
 	</select>
 	
-	
-	
+
 	<select id="selectAllPartnerList" parameterType="hashmap"  resultType="teamgyodong.myky.manager.model.mPartner">
 	
 		SELECT *
 		FROM partner_detail
 		Where 1=1
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (NAME LIKE '%' || #{keyword} || '%'
+			OR ADDRESS LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'name'">
+			AND NAME LIKE '%' || #{keyword} || '%'		
+		</if>
+		<if test="searchOption != null and searchOption == 'address'">
+			AND ADDRESS LIKE '%' || #{keyword} || '%'
+		</if>
 	    ORDER BY partner_detail_id DESC
 		<if test="page != null and pageSize != null" >
 		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
@@ -612,7 +645,16 @@
 		SELECT COUNT(*)
         from partner_detail 
         Where 1=1
-	    
+	    <if test="searchOption != null and searchOption == 'all'">
+			AND (NAME LIKE '%' || #{keyword} || '%'
+			OR ADDRESS LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'name'">
+			AND NAME LIKE '%' || #{keyword} || '%'		
+		</if>
+		<if test="searchOption != null and searchOption == 'address'">
+			AND ADDRESS LIKE '%' || #{keyword} || '%'
+		</if>
 	</select>
 	
 	

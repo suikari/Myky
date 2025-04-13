@@ -311,9 +311,9 @@
                             <div class="review-card-body">
                                 <h4 class="review-title" v-if="review.title">{{ review.title }}</h4>
                                 <p class="review-text" v-html="review.reviewText"></p>
-                                <div v-if="review.filePath" class="review-image">
-                                    <img :src="review.filePath" alt="리뷰 이미지">
-                                </div>
+								<div v-for="fileList in review.Reviews" class="review-image">
+	                                    <img v-if="fileList.filePath" :src="fileList.filePath" alt="리뷰 이미지">
+								</div>
                             </div>
                             <div class="review-card-footer">
                                 <div class="review-helpful">
@@ -364,7 +364,7 @@
                     </div>
 
                     <div v-else class="qna-list">
-                        <div class="qna-item" v-for="qna in qnaList" :key="qna.qnaId">
+                        <div class="qna-item" v-for="qna in qnaList" :key="qna.qnaId"  :id="'comment-' + qna.qnaId" >
                             <div class="qna-block question">
                                 <div class="qna-label">
                                     질문 <span class="qna-user-id">[{{ qna.userId }}]</span>
@@ -600,7 +600,7 @@
                                     location.href = "/product/list.do";
                                     return;
                                 }
-
+								
                                 self.info = data.info;
                                 self.imgList = data.imgList;
                                 self.reviewList = data.reviewList || [];
@@ -668,6 +668,9 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
+								console.log("3333",data);
+
+								
                                 self.reviewList = data.reviewList;
                                 self.tabs[1].cmtcount = data.totalCount;
                                 self.reviewPages = Array.from({ length: Math.ceil(data.totalCount / self.reviewPageSize) }, (_, i) => i + 1);
@@ -1040,6 +1043,30 @@
                         return Math.round((counts[scoreNum] || 0) / total * 100);
                     }
                 },
+				watch: {
+					qnaList(newVal) {
+					    const params = new URLSearchParams(window.location.search);
+					    const qnaId = params.get("qnaId");
+
+					    if (qnaId) {
+							this.activeTab = 'qna';
+
+					        this.$nextTick(() => {
+								//console.log("33",this.activeTab);
+								
+					            const element = document.getElementById('comment-' + qnaId);
+					            if (element) {
+					                //console.log('찾은 요소:', element);
+
+					                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+					            } else {
+					                //console.warn('댓글 요소를 찾지 못했습니다:', qnaId);
+					            }
+					        });
+					    }
+					}
+				},
                 mounted() {
                     const params = new URLSearchParams(window.location.search);
                     this.productId = params.get("productId") || "";
@@ -1090,6 +1117,9 @@
                             thumbnailScroll.scrollLeft = scrollLeft - walk;
                         });
                     }, 300); // 0.3초 후에 실행
+					
+					
+					
                 }
             });
 
