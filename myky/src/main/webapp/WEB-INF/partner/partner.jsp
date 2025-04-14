@@ -890,7 +890,7 @@ if (self.currentView === 'hospital' && isSearch) {
 
         self.moveToLocation(filteredHospitals[0]);
     } else {
-        alert("검색된 병원이 없습니다.");
+        //alert("검색된 병원이 없습니다.");
     }
 }
 
@@ -1091,7 +1091,7 @@ else if (self.currentView === 'partner' && isSearch) {
                     this.moveToLocation(this.hoslist[0]);
                 }
             } else {
-                alert("검색된 병원이 없습니다.");
+                //alert("검색된 병원이 없습니다.");
             }
         } 
         // 제휴사 뷰일 경우
