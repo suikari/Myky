@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>유저 정보</title>
+        <title>user info</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/user/user.css" />
@@ -139,7 +139,7 @@
                         <template v-if="emailFlg">
                             <label for="email" class="user-info-label">이메일 :</label>
                             <input id="email" class="user-info-input" v-model="user.email" disabled>
-                            <button class="user-info-btn" @click="sendEmailEdit()">이메일 수정</button>
+                            <button class="user-info-btn" @click="sendEmailEdit()">이메일 변경</button>
                         </template>
 
                         <template v-else>
@@ -305,7 +305,7 @@
                         }
 
                         if (!self.emailFlg) {
-                            alert("이메일 인증을 끝내주십시오");
+                            alert("이메일 인증 혹은 취소를 해주십시오.");
                             return;
                         }
 
