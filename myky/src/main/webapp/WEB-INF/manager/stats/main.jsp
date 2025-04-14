@@ -229,79 +229,148 @@
             font-size: 14px;
             color: #6b7280;
         }
+
+        /* 로딩 화면 스타일 */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            min-height: 500px;
+        }
+
+        .loading-text {
+            font-size: 24px;
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .dog-container {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .running-dog {
+            width: 240px;
+            height: 240px;
+            background: url('/img/manager/Lodingdog.png') no-repeat center center;
+            background-size: contain;
+            position: absolute;
+            animation: runDog 2s infinite linear;
+        }
+
+        @keyframes runDog {
+            0% {
+                left: -100px;
+                transform: scaleX(1);
+            }
+            49% {
+                transform: scaleX(1);
+            }
+            50% {
+                left: 100%;
+                transform: scaleX(-1);
+            }
+            99% {
+                transform: scaleX(-1);
+            }
+            100% {
+                left: -100px;
+                transform: scaleX(1);
+            }
+        }
+
+        .dashboard-container {
+            position: relative;  /* 추가된 스타일 */
+        }
     </style>
     
 </head>
 <body>
 
     <div id="app" class="dashboard-container col-9">
+        <!-- 로딩 화면 -->
+        <div class="loading-overlay" v-if="isLoading">
+            <div class="loading-text">로딩중...</div>
+            <div class="dog-container">
+                <div class="running-dog"></div>
+            </div>
+        </div>
        
-            <!-- Main Content1 -->
-            <div class=" main-content">
-                <h2>통계</h2>
+        <!-- Main Content1 -->
+        <div class="main-content" v-show="!isLoading">
+            <h2>통계</h2>
 
 
-				<div class="row stats-cards">
-				  <div class="col-md-3 col-sm-6 mb-4" v-for="(item, index) in stats" :key="index">
-				    <div class="card stat-card text-center p-3">
-				      <div :class="['stat-icon', item.bg]">
-				        <i :class="item.icon"></i>
-				      </div>
-				      <div class="stat-number mt-2">{{ item.number }}</div>
-				      <div class="stat-label">{{ item.label }}</div>
-				    </div>
-				  </div>
-				</div>
+			<div class="row stats-cards">
+			  <div class="col-md-3 col-sm-6 mb-4" v-for="(item, index) in stats" :key="index">
+			    <div class="card stat-card text-center p-3">
+			      <div :class="['stat-icon', item.bg]">
+			        <i :class="item.icon"></i>
+			      </div>
+			      <div class="stat-number mt-2">{{ item.number }}</div>
+			      <div class="stat-label">{{ item.label }}</div>
+			    </div>
+			  </div>
+			</div>
 
 
-				
-				<!-- 추가된 카드: 이달의 판매 금액과 후원 금액 -->
-				<div class="row mt-4">
-				  <div class="col-md-6 mb-4">
-				    <div class="card stat-card text-center p-3">
-				      <div class="stat-icon bg-green">
-				        <i class="bi bi-cash-stack"></i>
-				      </div>
-				      <div class="stat-number mt-2">₩ {{ formattedSel }}</div>
-				      <div class="stat-label">이달의 판매 금액</div>
-				    </div>
-				  </div>
-				  <div class="col-md-6 mb-4">
-				    <div class="card stat-card text-center p-3">
-				      <div class="stat-icon bg-orange">
-				        <i class="bi bi-hand-thumbs-up-fill"></i>
-				      </div>
-				      <div class="stat-number mt-2">₩ {{ formattedDonation }}</div>
-				      <div class="stat-label">이달의 후원 금액</div>
-				    </div>
-				  </div>
-				</div>
+			
+			<!-- 추가된 카드: 이달의 판매 금액과 후원 금액 -->
+			<div class="row mt-4">
+			  <div class="col-md-6 mb-4">
+			    <div class="card stat-card text-center p-3">
+			      <div class="stat-icon bg-green">
+			        <i class="bi bi-cash-stack"></i>
+			      </div>
+			      <div class="stat-number mt-2">₩ {{ formattedSel }}</div>
+			      <div class="stat-label">이달의 판매 금액</div>
+			    </div>
+			  </div>
+			  <div class="col-md-6 mb-4">
+			    <div class="card stat-card text-center p-3">
+			      <div class="stat-icon bg-orange">
+			        <i class="bi bi-hand-thumbs-up-fill"></i>
+			      </div>
+			      <div class="stat-number mt-2">₩ {{ formattedDonation }}</div>
+			      <div class="stat-label">이달의 후원 금액</div>
+			    </div>
+			  </div>
+			</div>
 
 
-		        <div class="row mt-4">
-		            <div class="col-md-6">
-		                <div class="card search-rank-container">
-		                    <div class="card-header">검색어 순위</div>
-		                    <ul class="search-rank-list">
-		                        <li class="search-rank-item" v-for="(word, index) in searchRanks" :key="index">
-		                            <span class="search-rank-number">{{ index + 1 }}</span>
-		                            <span class="search-rank-keyword">{{ word.SearchTerm }}</span>
-		                            <span class="search-rank-count">{{ word.SearchCount }}회</span>
-		                        </li>
-		                        
-		                        <li v-if="searchChk">
-		                         	<span class="search-rank-number">검색 기록이 없습니다.</span>
-		                        </li>
-		                    </ul>
-		                </div>
-		            </div>
-		            <div class="col-md-6">
-		                <div class="card chart-container">
-		               		<div class="card-header" v-show="options.series.length === 0">검색 결과가 없습니다.</div>
-							<div id="chart" v-else></div>
-		                </div>
-		            </div>
-		        </div>
+	        <div class="row mt-4">
+	            <div class="col-md-6">
+	                <div class="card search-rank-container">
+	                    <div class="card-header">검색어 순위</div>
+	                    <ul class="search-rank-list">
+	                        <li class="search-rank-item" v-for="(word, index) in searchRanks" :key="index">
+	                            <span class="search-rank-number">{{ index + 1 }}</span>
+	                            <span class="search-rank-keyword">{{ word.SearchTerm }}</span>
+	                            <span class="search-rank-count">{{ word.SearchCount }}회</span>
+	                        </li>
+	                        
+	                        <li v-if="searchChk">
+	                         	<span class="search-rank-number">검색 기록이 없습니다.</span>
+	                        </li>
+	                    </ul>
+	                </div>
+	            </div>
+	            <div class="col-md-6">
+	                <div class="card chart-container">
+	               		<div class="card-header" v-show="options.series.length === 0">검색 결과가 없습니다.</div>
+						<div id="chart" v-else></div>
+	                </div>
+	            </div>
+	        </div>
 
 
         </div>
@@ -316,6 +385,7 @@
             const app = Vue.createApp({
             	 data() {
                      return {
+                    	 isLoading: true,
                     	 stats: [
                              { icon: 'bi bi-heart-fill', number: "..", label: '이달의 후원 수', bg: 'bg-blue' },
                              { icon: 'bi bi-box-fill', number: "..", label: '이달의 상품 등록수', bg: 'bg-yellow' },
@@ -356,98 +426,93 @@
                         
                 },
                 methods: {
-                	fnMainList : function() {
+                	async fnMainList() {
                     	var self = this;
-                    	var nparmap = {
-                    			year : self.year,
-                    			month : self.month,
-                                
-                    	};
-                    	$.ajax({
-                    		url: "/admin/mainList.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("main",data);
-                    			
-                    			
-                    			if (data.donationCnt) {
-                        			self.stats[0].number = data.donationCnt;
-                    			} else {
-                    				self.stats[0].number = 0;
-                    			}
-                    			
-                    			if (data.productcnt) {
-                        			self.stats[1].number = data.productcnt;
-                    			} else {
-                    				self.stats[1].number = 0;
-                    			}
-                    			
-                    			if (data.paycnt) {
-                        			self.stats[2].number = data.paycnt;
-                    			} else {
-                    				self.stats[2].number = 0;
-                    			}
-                    			
-                    			if (data.userCnt) {
-                        			self.stats[3].number = data.userCnt;
-                    			} else {
-                    				self.stats[3].number = 0;
-                    			}
-							
-                    			for (var i= 0 ; i < data.Pay.length ; i++ ){
-                        			self.saletot += parseInt(data.Pay[i].amount);
-                    			}
-                    			
-                    			for (var i= 0 ; i < data.Donation.length ; i++ ){
-                    				self.donationtot += parseInt(data.Donation[i].amount);
-                    			}
+                    	self.isLoading = true;
+                    	
+                    	try {
+                    		// 모든 AJAX 요청을 Promise로 변환하여 병렬로 실행
+                    		await Promise.all([
+                    			// 첫 번째 AJAX 요청
+                    			new Promise((resolve, reject) => {
+                    				$.ajax({
+                    					url: "/admin/mainList.dox",
+                    					dataType: "json",
+                    					type: "POST",
+                    					data: { year: self.year, month: self.month },
+                    					success: resolve,
+                    					error: reject
+                    				});
+                    			}).then(data => {
+                    				console.log("main", data);
+                    				if (data.donationCnt) self.stats[0].number = data.donationCnt;
+                    				else self.stats[0].number = 0;
                     				
-                    		}
-                    	
-                    	});
-                       	$.ajax({
-                    		url: "/admin/searchList.dox",
-                    		dataType: "json",
-                    		type: "POST",
-                    		data: nparmap,
-                    		success: function (data) {
-                    			console.log("12",data);
-                    			
-                    			if (Array.isArray(data.Search) && data.Search.length > 0){
-                        			self.searchRanks = data.Search;
-                    			} else {
-                        			self.searchRanks = "";
-                    				searchChk = true;
-                    			}                    			               			
-                    		}
-                    	
-                    	});
-						
-						$.ajax({
-							url: "/admin/membershipVal.dox",
-							dataType: "json",
-							type: "POST",
-							data: nparmap,
-							success: function (data) {
-								console.log("123",data);
-								
-								
-								if (data.Membership && data.Membership.membershipUserCount !== undefined) {
-									var per =  (parseInt(data.Membership.membershipUserCount) / (parseInt(data.Membership.membershipUserCount) + parseInt(data.Membership.nonMembershipUserCount))) * 100;
-									self.options.series.push(per.toFixed(0));
-	
-									var chart = new ApexCharts(document.querySelector("#chart"), self.options);
-									chart.render();
-                    			} 
-                    			
-							}
+                    				if (data.productcnt) self.stats[1].number = data.productcnt;
+                    				else self.stats[1].number = 0;
+                    				
+                    				if (data.paycnt) self.stats[2].number = data.paycnt;
+                    				else self.stats[2].number = 0;
+                    				
+                    				if (data.userCnt) self.stats[3].number = data.userCnt;
+                    				else self.stats[3].number = 0;
+							
+                    				self.saletot = data.Pay.reduce((sum, item) => sum + parseInt(item.amount), 0);
+                    				self.donationtot = data.Donation.reduce((sum, item) => sum + parseInt(item.amount), 0);
+                    			}),
 
-						});
-						
-						
-                    	
+                    			// 두 번째 AJAX 요청
+                    			new Promise((resolve, reject) => {
+                    				$.ajax({
+                    					url: "/admin/searchList.dox",
+                    					dataType: "json",
+                    					type: "POST",
+                    					data: { year: self.year, month: self.month },
+                    					success: resolve,
+                    					error: reject
+                    				});
+                    			}).then(data => {
+                    				console.log("12", data);
+                    				if (Array.isArray(data.Search) && data.Search.length > 0) {
+                        				self.searchRanks = data.Search;
+                    				} else {
+                        				self.searchRanks = "";
+                    					self.searchChk = true;
+                    				}                    			               			
+                    			}),
+
+                    			// 세 번째 AJAX 요청
+                    			new Promise((resolve, reject) => {
+                    				$.ajax({
+                    					url: "/admin/membershipVal.dox",
+                    					dataType: "json",
+                    					type: "POST",
+                    					data: { year: self.year, month: self.month },
+                    					success: resolve,
+                    					error: reject
+                    				});
+                    			}).then(data => {
+                    				console.log("123", data);
+                    				if (data.Membership && data.Membership.membershipUserCount !== undefined) {
+                    					var per = (parseInt(data.Membership.membershipUserCount) / 
+                    						(parseInt(data.Membership.membershipUserCount) + 
+                    						 parseInt(data.Membership.nonMembershipUserCount))) * 100;
+                    					self.options.series = [per.toFixed(0)];
+                    					
+                    					setTimeout(() => {
+                    						var chart = new ApexCharts(document.querySelector("#chart"), self.options);
+                    						chart.render();
+                    					}, 0);
+                    				} 
+                    				
+                    			})
+                    		]);
+                    	} catch (error) {
+                    		console.error("데이터 로딩 중 오류 발생:", error);
+                    	} finally {
+                    		// 모든 데이터 로딩이 완료되면 로딩 화면 숨기기
+                    		self.isLoading = false;
+                    	}
                     },
                 	
                 	
