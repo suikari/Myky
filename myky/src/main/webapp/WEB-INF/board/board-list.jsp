@@ -114,7 +114,7 @@
                 </div>
 
                     <template  v-if="category == 'A'">
-                        <button class="button" @click="fnAdd" v-if="sessionRole == 'ADMIN'">글쓰기</button>
+                        <button class="fb-button" @click="fnAdd" v-if="sessionRole == 'ADMIN'">글쓰기</button>
                     </template>
                     
                     <template  v-else>

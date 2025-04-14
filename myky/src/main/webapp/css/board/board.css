@@ -207,7 +207,7 @@
     transition: border-color 0.3s;
     overflow: auto;
 }
-#fb-editor * {
+#fb-editor {
     cursor: text;
     min-height: inherit;  /* 최소 높이 상속 */
 }
@@ -543,6 +543,7 @@
     position: relative;
     max-width: 1000px;
     flex-direction: column;
+    margin: auto;
 }
 
 .fb-answer-box.accepted {
@@ -899,6 +900,7 @@
     height: 30px;
     text-align: center;
 	margin : auto;
+    line-height: 30px;
 }
 .fb-acceptButtonY {
     color: #fff;
@@ -909,6 +911,7 @@
     height: 30px;
     text-align: center;
 	margin : auto;
+    line-height: 30px;
 }
 .fb-setCss {
     width: 100%;
@@ -954,7 +957,6 @@
 .fb-table-th {
     border-bottom: 1px solid #ddd;
     color: #272727;
-    padding: 15px;
     font-weight: 600;
 	height: 45px;
     font-size: 15px;
@@ -963,7 +965,7 @@
 .fb-table-th th {
     border-bottom: 1px solid #ddd; /* 색상과 두께를 필요에 따라 조정하세요 */
     color: #272727;
-    padding: 10px;
+    padding: 20px;
     font-weight: 600;
     height: 45px;
     font-size: 15px;
@@ -1446,6 +1448,28 @@ tr.fb-dropdown-content {
       align-items: flex-start;
       gap: 12px;
   }
+.fb-top-profile-img1:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  .fb-profile-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.fb-top-profile-img1 {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+}
+
+.fb-nickname {
+    font-weight: bold;
+}
   /* 프로필 이미지 */
   .fb-top-profile-img2 {
       width: 100px;
