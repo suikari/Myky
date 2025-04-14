@@ -271,7 +271,6 @@
                 OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
         </if>
             
-		
 	</select>
 	
 	<!--수의사 게시판 조회수 출력-->
@@ -304,7 +303,7 @@
 	<select id="selectVetAnList" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetAnswer">
 		SELECT A.*, V.*, U.PROFILE_IMAGE
 		FROM VET_ANSWER A
-		LEFT JOIN (
+		INNER JOIN (
 			SELECT *
 			FROM VETERINARIAN
 		) V ON A.VET_ID = V.VET_ID
@@ -409,6 +408,7 @@
 	      AND VET_BOARD_ID = #{vetBoardId}
 	</select>
 	
+	<!-- 수의사 게시판 별점-->
 	<select id="selectVetRating" parameterType="hashmap" resultType="teamgyodong.myky.board.model.vetAnswer">
 		SELECT *
 		FROM VET_ANSWER

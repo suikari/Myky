@@ -119,8 +119,13 @@
                                             <div style="margin-bottom: 5px;">삭제된 댓글입니다.</div>
                                         </template>
                                         <template v-else>
-                                            <div style="font-weight: bold; margin-bottom: 3px;">{{ item.nickName }}
-                                            </div>
+                                            <div class="fb-profile-container">
+                                            <img :src="item.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                                                alt="프로필 이미지"
+                                                class="fb-top-profile-img1">
+                                            <span class="fb-nickname">{{ item.nickName }}
+                                            </span>
+                                        </div>
 
                                             <!-- 댓글 내용 -->
                                             <div style="margin-bottom: 5px;">{{ item.content }}</div>
@@ -161,7 +166,13 @@
                                 <div v-for="reply in item.replies || []" :key="reply.commentId" :id="'comment-' + reply.commentId"   
                                 :style="{backgroundColor: reply.userId === sessionId ? '#f8f8f8' : ''}"   style="margin-left: 40px; padding: 10px;">
                                     <div v-if="editCommentId === reply.commentId" class="fb-cmtTextBox">
-                                        <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
+                                        <div class="fb-profile-container">
+                                            <img :src="item.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                                                alt="프로필 이미지"
+                                                class="fb-top-profile-img1">
+                                            <span class="fb-nickname">{{ item.nickName }}
+                                            </span>
+                                        </div>
                                         <input class="fb-cmtInput" v-model="editContent"/>
                                         <button class="fb-cmtButton2" @click="fnCommentUpdate(reply.commentId)">저장</button>
                                         <button class="fb-cmtButton2" @click="editCommentId = ''">취소</button>
@@ -171,7 +182,14 @@
                                             <div style="margin: 20px;">삭제된 댓글입니다.</div>
                                         </div>
                                         <div v-else>
-                                            <div style="font-weight: bold; margin-bottom: 3px;">{{ reply.nickName }}</div>
+                                            <div class="fb-profile-container">
+                                                <img :src="item.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                                                    alt="프로필 이미지"
+                                                    class="fb-top-profile-img1">
+                                                <span class="fb-nickname">{{ item.nickName }}
+                                                </span>
+                                            </div>
+
                                             <div style="margin-bottom: 5px;">{{ reply.content }}</div>
                                             <div
                                                 style="display: flex; align-items: center; font-size: 13px; color: #888;">
@@ -324,6 +342,7 @@
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
                                 self.nickName = data.info.nickName;
+                                console.log("어디써",data);
                             }
                         });
                         self.fnlikestatus();
