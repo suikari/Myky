@@ -325,6 +325,8 @@
 
                             // 날짜 유효성 검사
                             const date = new Date(year, month - 1, day);
+                            const today = new Date(); // 이 줄을 추가!
+
                             if (
                                 !(date.getFullYear() === year &&
                                     date.getMonth() === month - 1 &&
@@ -333,6 +335,18 @@
                                 alert("생년월일 8자리가 유효하지 않습니다. 재입력 바랍니다. ex)20050130");
                                 return;
                             }
+                                // 시험 해봐야 할 것들
+                                if (date > today) {
+                                alert("미래의 날짜는 생년월일로 사용할 수 없습니다.");
+                                return;
+                            }
+
+                            if (year < 1900) {
+                                alert("1900년 이후의 생년월일만 입력 가능합니다.");
+                                return;
+                            }
+                            // 시험 해봐야 할 것들
+
                         }
 
                         var nparmap = self.user
