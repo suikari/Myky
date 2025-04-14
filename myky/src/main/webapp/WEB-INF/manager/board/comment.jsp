@@ -472,6 +472,9 @@ ber {
                 methods: {
                 	fnCmtList : function() {
                     	var self = this;
+                    	
+                    	self.selectList = [];
+                    	
                     	var nparmap = {
                                 searchOption: self.searchOption,
                                 page: (self.page - 1) * self.pageSize,
@@ -553,7 +556,7 @@ ber {
         						console.log(data);
                                 alert(data.count + "건 삭제 완료!");
                                 self.page = 1;
-                                self.fnBoardList();
+                                self.fnCmtList();
         					}
         				});
                     },

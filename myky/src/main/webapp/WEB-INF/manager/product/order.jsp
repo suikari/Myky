@@ -334,13 +334,83 @@
 		  object-fit: cover;
 		}
 		
+        /* 로딩 화면 스타일 */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            min-height: 500px;
+        }
+
+        .loading-text {
+            font-size: 24px;
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .dog-container {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .running-dog {
+            width: 240px;
+            height: 240px;
+            background: url('/img/manager/Lodingdog.png') no-repeat center center;
+            background-size: contain;
+            position: absolute;
+            animation: runDog 2s infinite linear;
+        }
+
+        @keyframes runDog {
+            0% {
+                left: -100px;
+                transform: scaleX(1);
+            }
+            49% {
+                transform: scaleX(1);
+            }
+            50% {
+                left: 100%;
+                transform: scaleX(-1);
+            }
+            99% {
+                transform: scaleX(-1);
+            }
+            100% {
+                left: -100px;
+                transform: scaleX(1);
+            }
+        }
+
+        .dashboard-container {
+            position: relative;
+        }
+		
     </style>
     
 </head>
 <body>
     <div id="app" class="dashboard-container col-9">
+        <!-- 로딩 화면 -->
+        <div class="loading-overlay" v-if="isLoading">
+            <div class="loading-text">로딩중...</div>
+            <div class="dog-container">
+                <div class="running-dog"></div>
+            </div>
+        </div>
+
         <!-- Main Content -->
-        <div class="main-content">
+        <div class="main-content" v-show="!isLoading">
             <h2>주문 관리</h2>
             <div class="card p-3">
                 <!-- 검색 및 필터링 -->
@@ -538,6 +608,7 @@
 const app = Vue.createApp({
     data() {
         return {
+            isLoading: true,
             index: 0,
             orders: [],
             selectedOrderId: null,
@@ -554,11 +625,12 @@ const app = Vue.createApp({
     methods: {
         fnMainList() {
             var self = this;
+            self.isLoading = true;
             var params = {
-                    searchOption: self.searchOption,
-                    page: (self.page - 1) * self.pageSize,
-                    pageSize: self.pageSize,
-                    keyword: self.keyword,
+                searchOption: self.searchOption,
+                page: (self.page - 1) * self.pageSize,
+                pageSize: self.pageSize,
+                keyword: self.keyword,
             };
             $.ajax({
                 url: "/admin/selectOrderList.dox",
@@ -566,9 +638,14 @@ const app = Vue.createApp({
                 type: "POST",
                 data: params,
                 success: function (data) {
-                	console.log("dete",data);
+                    console.log("dete",data);
                     self.orders = data.order;
                     self.index = Math.ceil(data.count / self.pageSize);
+                    self.isLoading = false;
+                },
+                error: function(error) {
+                    console.error("데이터 로딩 중 오류 발생:", error);
+                    self.isLoading = false;
                 }
             });
         },

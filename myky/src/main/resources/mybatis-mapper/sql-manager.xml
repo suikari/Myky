@@ -100,123 +100,68 @@
 
 
 	<select id="selectProductList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mProduct">
-			select P.*  , 
-			(
-				SELECT COUNT(*)
-			    FROM Product P 
-			    WHERE 1=1
-				<if test="year != null and year != '' ">
-			        AND  EXTRACT(YEAR FROM P.REGISTRATION_DATE) =  #{year} 
-			    </if>
-			    <if test="month != null and month != '' ">
-			        AND  EXTRACT(MONTH FROM P.REGISTRATION_DATE) =  #{month} 
-			    </if>
-			    <if test="hour != null and hour != '' ">
-			        AND  EXTRACT(HOUR FROM P.REGISTRATION_DATE) =  #{hour} 
-			    </if>	
-		    ) AS productTotalCnt
-			FROM Product P
-			WHERE 1=1
-			<if test="year != null and year != '' ">
-		        AND  EXTRACT(YEAR FROM P.REGISTRATION_DATE) =  #{year} 
-		    </if>
-		    <if test="month != null and month != '' ">
-		        AND  EXTRACT(MONTH FROM P.REGISTRATION_DATE) =  #{month} 
-		    </if>
-		    <if test="hour != null and hour != '' ">
-		        AND  EXTRACT(HOUR FROM P.REGISTRATION_DATE) =  #{hour} 
-		    </if>	
+	    SELECT P.*,
+	           COUNT(*) OVER() AS productTotalCnt
+	    FROM Product P
+	    WHERE 1=1
+	    <if test="year != null and year != ''">
+	        AND EXTRACT(YEAR FROM P.REGISTRATION_DATE) = #{year}
+	    </if>
+	    <if test="month != null and month != ''">
+	        AND EXTRACT(MONTH FROM P.REGISTRATION_DATE) = #{month}
+	    </if>
+	    <if test="hour != null and hour != ''">
+	        AND TO_CHAR(P.REGISTRATION_DATE, 'HH24') = #{hour}
+	    </if>
 	</select>
 	
 	
 	<select id="selectPaymentList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mPay">
-			select P.*  , 
-			(
-				SELECT COUNT(*)
-		        FROM payment P 
-		        where nvl(P.subscription_period,0) = 0
-			    <if test="year != null and year != '' ">
-			        AND  EXTRACT(YEAR FROM PAYMENT_DATE) =  #{year} 
-			    </if>
-			    <if test="month != null and month != '' ">
-			        AND  EXTRACT(MONTH FROM PAYMENT_DATE) =  #{month} 
-			    </if>
-			    <if test="hour != null and hour != '' ">
-			        AND  EXTRACT(HOUR FROM PAYMENT_DATE) =  #{hour} 
-			    </if>
-		     ) AS paymentTotalCnt
-			FROM payment P
-			WHERE 1=1
-		    <if test="year != null and year != '' ">
-		        AND  EXTRACT(YEAR FROM PAYMENT_DATE) =  #{year} 
-		    </if>
-		    <if test="month != null and month != '' ">
-		        AND  EXTRACT(MONTH FROM PAYMENT_DATE) =  #{month} 
-		    </if>
-		    <if test="hour != null and hour != '' ">
-		        AND  EXTRACT(HOUR FROM PAYMENT_DATE) =  #{hour} 
-		    </if>	
-		    AND nvl(P.subscription_period,0) = 0
+	    SELECT P.*,
+	           COUNT(*) OVER() AS paymentTotalCnt
+	    FROM payment P
+	    WHERE NVL(P.subscription_period, 0) = 0
+	    <if test="year != null and year != ''">
+	        AND EXTRACT(YEAR FROM PAYMENT_DATE) = #{year}
+	    </if>
+	    <if test="month != null and month != ''">
+	        AND EXTRACT(MONTH FROM PAYMENT_DATE) = #{month}
+	    </if>
+	    <if test="hour != null and hour != ''">
+	        AND TO_CHAR(PAYMENT_DATE, 'HH24') = #{hour}
+	    </if>
 	</select>
 	
 	<select id="selectUserList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mUser">
-			select U.*  , 
-			(
-				SELECT COUNT(*)
-		        FROM USERS
-		        WHERE 1=1
-			    <if test="year != null and year != '' ">
-			        AND  EXTRACT(YEAR FROM CREATED_AT) =  #{year} 
-			    </if>
-			    <if test="month != null and month != '' ">
-			        AND  EXTRACT(MONTH FROM CREATED_AT) =  #{month} 
-			    </if>
-			    <if test="hour != null and hour != '' ">
-			        AND  EXTRACT(HOUR FROM CREATED_AT) =  #{hour} 
-			    </if>		
-		     ) AS userTotalCnt
-			FROM USERS U
-			WHERE 1=1
-		    <if test="year != null and year != '' ">
-		        AND  EXTRACT(YEAR FROM CREATED_AT) =  #{year} 
-		    </if>
-		    <if test="month != null and month != '' ">
-		        AND  EXTRACT(MONTH FROM CREATED_AT) =  #{month} 
-		    </if>
-		    <if test="hour != null and hour != '' ">
-		        AND  EXTRACT(HOUR FROM CREATED_AT) =  #{hour} 
-		    </if>	
-		    
+	    SELECT U.*,
+	           COUNT(*) OVER() AS userTotalCnt
+	    FROM USERS U
+	    WHERE 1=1
+	    <if test="year != null and year != ''">
+	        AND EXTRACT(YEAR FROM CREATED_AT) = #{year}
+	    </if>
+	    <if test="month != null and month != ''">
+	        AND EXTRACT(MONTH FROM CREATED_AT) = #{month}
+	    </if>
+	    <if test="hour != null and hour != ''">
+	        AND TO_CHAR(CREATED_AT, 'HH24') = #{hour}
+	    </if>	
 	</select>	
 	
 	<select id="selectDonationList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.mDonation">
-			select D.*  , 
-			(
-				SELECT COUNT(*)
-		    	FROM donation_history
-		    	WHERE 1=1
-			    <if test="year != null and year != '' ">
-			        AND  EXTRACT(YEAR FROM DONATION_DATE) =  #{year} 
-			    </if>
-			    <if test="month != null and month != '' ">
-			        AND  EXTRACT(MONTH FROM DONATION_DATE) =  #{month} 
-			    </if>
-			    <if test="hour != null and hour != '' ">
-			        AND  EXTRACT(HOUR FROM DONATION_DATE) =  #{hour} 
-			    </if>	
-		     ) AS donationTotalCnt
-			FROM donation_history D
-			WHERE 1=1
-		    <if test="year != null and year != '' ">
-		        AND  EXTRACT(YEAR FROM DONATION_DATE) =  #{year} 
-		    </if>
-		    <if test="month != null and month != '' ">
-		        AND  EXTRACT(MONTH FROM DONATION_DATE) =  #{month} 
-		    </if>
-		    <if test="hour != null and hour != '' ">
-		        AND  EXTRACT(HOUR FROM DONATION_DATE) =  #{hour} 
-		    </if>	
-		    
+	    SELECT D.*,
+	           COUNT(*) OVER() AS donationTotalCnt
+	    FROM donation_history D
+	    WHERE 1=1
+	    <if test="year != null and year != ''">
+	        AND EXTRACT(YEAR FROM DONATION_DATE) = #{year}
+	    </if>
+	    <if test="month != null and month != ''">
+	        AND EXTRACT(MONTH FROM DONATION_DATE) = #{month}
+	    </if>
+	    <if test="hour != null and hour != ''">
+	        AND TO_CHAR(DONATION_DATE, 'HH24') = #{hour}
+	    </if>
 	</select>	
 
 
