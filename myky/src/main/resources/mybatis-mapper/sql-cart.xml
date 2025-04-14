@@ -255,16 +255,25 @@
 		) p on od.product_id = p.product_id
 	    where o.user_id = #{userId} and o.ordered_at between #{startDate} and TO_DATE('' || #{endDate} || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
 	    <if test="orderStatuses != null and orderStatuses.size() > 0">
-			and o.order_status in 
-			<foreach collection="orderStatuses" item="status" open="(" separator="," close=")">
-				#{status}
-			</foreach>
+			and o.order_id in (
+				select distinct o2.order_id
+				from orders o2
+				where o2.order_status in 
+				<foreach collection="orderStatuses" item="status" open="(" separator="," close=")">
+					#{status}
+				</foreach>
+			)
 		</if>
 	    <if test="refundStatuses != null and refundStatuses.size() > 0">
-		    and od.refund_status in
-		    <foreach collection="refundStatuses" item="status" open="(" separator="," close=")">
-		        #{status}
-		    </foreach>
+		    and o.order_id in (
+				select distinct o2.order_id
+				from orders o2
+				join order_details od2 on o2.order_id = od2.order_id
+				where od2.refund_status in
+				<foreach collection="refundStatuses" item="status" open="(" separator="," close=")">
+					#{status}
+				</foreach>
+			)
 		</if>
 	    order by o.ordered_at desc
 	

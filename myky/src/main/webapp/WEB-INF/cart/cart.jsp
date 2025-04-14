@@ -220,8 +220,8 @@
                             console.log("cartCheckList >>> ", data.checkList);
                             self.selectCartItems = data.checkList;
                             if (self.selectCartItems.length > 0) {
-                                self.shippingFee = self.selectCartItems[0].shippingFee;
-                                self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
+                                self.shippingFee = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFee)));
+                                self.shippingFreeMinimum = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFreeMinimum)));
                             }
                             console.log("shippingFee:", self.shippingFee);
                             console.log("shippingFreeMinimum:", self.shippingFreeMinimum);
