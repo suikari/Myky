@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/user/user.css" />
         <style>
-            
+
         </style>
     </head>
 
@@ -59,16 +59,16 @@
                     <div class="main-content">
                         <aside class="sidebar">
                             <div class="sidebar-top"></div>
-                                <ul>
-                                    <div class="tab-menu">
-                                        <h3>나의 쇼핑 정보</h3>
-                                        <div v-for="tab in tabs" :key="tab.id"
-                                            :class="['tab-item', { active: activeTab === tab.id }]"
-                                            @click="changeTab(tab.id)">
-                                            {{ tab.label }}
-                                        </div>
+                            <ul>
+                                <div class="tab-menu">
+                                    <h3>나의 쇼핑 정보</h3>
+                                    <div v-for="tab in tabs" :key="tab.id"
+                                        :class="['tab-item', { active: activeTab === tab.id }]"
+                                        @click="changeTab(tab.id)">
+                                        {{ tab.label }}
                                     </div>
-                                </ul>
+                                </div>
+                            </ul>
                             <hr>
                             <ul>
                                 <div class="tab-menu">
@@ -82,9 +82,11 @@
                             </ul>
                             <hr>
                             <ul>
-                                <h3>나의 개인정보</h3>
-                                <li><a @click="fnInfo()">회원 정보 수정</a></li>
-                                <li><a @click="fnWithdraw()">회원 탈퇴</a></li>
+                                <div class="tab-menu">
+                                    <h3>나의 개인정보</h3>
+                                    <li><a @click="fnInfo()">회원 정보 수정</a></li>
+                                    <li><a @click="fnWithdraw()">회원 탈퇴</a></li>
+                                </div>
                             </ul>
                         </aside>
 
@@ -465,6 +467,8 @@
 
 
                             <div v-if="activeTab === 'subscribe'" class="cpoint-page">
+                                <div class="cpoint-title">멤버십 내역</div>
+                                <br>
                                 <table class="board-table">
                                     <tr>
                                         <th class="cpoint-header" style="text-align: center;">멤버십 내용</th>
@@ -586,13 +590,13 @@
                         tabs: [
                             { id: 'order', label: '주문 내역' },
                             { id: 'point', label: '포인트 내역' },
+                            { id: 'subscribe', label: '구독 내역' },
                             { id: 'coupon', label: '쿠폰 내역' }
                         ],
                         tabs2: [
                             { id: 'board', label: '게시글 내역' },
                             { id: 'comment', label: '댓글 내역' },
                             { id: 'vetBoard', label: '수의사 문의 내역' },
-                            { id: 'subscribe', label: '구독 내역' },
                             { id: 'donation', label: '후원금 내역' }
                         ],
                         activeTab: 'order',
@@ -902,7 +906,7 @@
                             pageSize4: self.pageSize4,
                             page4: (self.page4 - 1) * self.pageSize4,
                         };
-                        console.log('넌 왜이래', nparmap);
+
                         $.ajax({
                             url: "/user/donaInfo.dox",
                             dataType: "json",
@@ -1001,7 +1005,7 @@
                             userId: self.userId,
                             orderKey: self.orderKey
                         };
-                        console.log('오더키', nparmap);
+
                         $.ajax({
                             url: "/user/orderList.dox",
                             dataType: "json",

@@ -309,7 +309,7 @@
                             return;
                         }
                         if (!self.nickPattern.test(self.user.nickName)) {
-                            alert('닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.');
+                            alert('닉네임은 한글, 영문, 숫자(조합)만 사용할 수 있습니다.');
                             return;
                         }
 
