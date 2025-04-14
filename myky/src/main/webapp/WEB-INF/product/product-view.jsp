@@ -87,20 +87,19 @@
                         <div class="qty-box">
                             <span>수량</span>
                             <div class="qty-controller">
-                                <button @click="decreaseQty" class="qty-btn">-</button>
+                                <button @click="decreaseQty" class="qty-btn" :disabled="quantity === 0">-</button>
                                 <input type="text" :value="quantity" readonly class="qty-input" />
                                 <button @click="increaseQty" class="qty-btn">+</button>
                             </div>
                         </div>
 
-                        <!-- ✅ 수량이 2개 이상일 때 줄 나눠서 정보 표시 -->
-                        <div class="price-info" v-if="quantity > 1">
+                        <!-- ✅ 수량이 1개 이상일 때만 표시 -->
+                        <div class="price-info" v-if="quantity >= 1">
                             <p><strong>선택 수량:</strong> {{ quantity }}개</p>
                             <p><strong>상품 단가:</strong> {{ formatPrice(priceToAdd) }}원</p>
                             <p><strong>배송비:</strong> {{ isFreeShipping ? '무료' : formatPrice(shippingCost) + '원' }}</p>
                             <p><strong>총 결제 금액:</strong> {{ formattedPrice }}원</p>
                         </div>
-
 
                         <!-- 장바구니 / 구매 버튼 -->
                         <div class="action-buttons">
@@ -481,7 +480,7 @@
                         info: {},
                         imgList: [],
                         mainImage: '',
-                        quantity: 1,
+                        quantity: 0,
                         isSelected: false,
                         selectedReviewId: null,
                         alreadyClicked: {},
@@ -668,8 +667,6 @@
                             data: nparmap,
                             dataType: "json",
                             success: function (data) {
-								console.log("3333",data);
-
 								
                                 self.reviewList = data.reviewList;
                                 self.tabs[1].cmtcount = data.totalCount;
@@ -824,6 +821,10 @@
                             location.href = "/user/login.do";
                             return;
                         }
+                        if (self.quantity === 0) {
+                            alert("수량을 선택해주세요.");
+                            return;
+                        }
                         const nparmap = {
                             productId: self.productId,
                             sessionId: self.sessionId,
@@ -851,6 +852,10 @@
                             location.href = "/user/login.do";
                             return;
                         }
+                        if (self.quantity === 0) {
+                            alert("수량을 선택해주세요.");
+                            return;
+                        }
                         const nparmap = {
                             userId: self.userInfo.userId,
                             checkYn: "N"
@@ -871,6 +876,10 @@
                         if (!self.sessionId || !self.userInfo || !self.userInfo.userId) {
                             alert("로그인 후 이용해주세요.");
                             location.href = "/user/login.do";
+                            return;
+                        }
+                        if (self.quantity === 0) {
+                            alert("수량을 선택해주세요.");
                             return;
                         }
                         const nparmap = {
@@ -899,7 +908,7 @@
                             self.fnReviewList();
                         } else if (tabId === 'qna') {
                             self.fnQnaList();
-                        }
+                        }                              
                     },
                     //수량 감소
                     increaseQty() {
@@ -907,14 +916,13 @@
                     },
                     //수량 증가
                     decreaseQty() {
-                        if (this.quantity > 1) {
+                        if (this.quantity > 0) {
                             this.quantity--;
                         }
                     },
                     //수량 확인
                     confirmQuantity() {
                         this.isSelected = true;
-                        // 필요하면 서버에 확정된 수량 보내기 or 알림 띄우기 가능
                     },
                     cancelSelection() {
                         this.isSelected = false;
