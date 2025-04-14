@@ -98,7 +98,7 @@
 						data: nparmap,
 						success: function (data) {
 							if (data.result == "success") {
-								alert(data.user.userName + "님 환영해여!") //service에서 user로 정의 했으니 멤버로..
+								alert(data.user.userName + "님, 환영합니다!") //service에서 user로 정의 했으니 멤버로..
 								location.href = self.reUrl;
 							} else if (data.result == "suspended") {
 								alert("정지 혹은 탈퇴한 회원입니다.")
@@ -165,7 +165,7 @@
 									return;
 								} else {
 									if (data.count > 0) {
-										alert(data.user.userName + "님 환영해요!");
+										alert(data.user.userName + "님, 환영합니다!");
 										location.href = "/main.do";
 									} else {
 										if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {

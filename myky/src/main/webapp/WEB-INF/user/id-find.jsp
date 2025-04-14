@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue3 레이아웃 예제</title>
+    <title>idFind</title>
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
 		<link rel="stylesheet" href="/css/user/user.css" />
@@ -45,7 +45,7 @@
         </div>
 
         <div v-else class="id-result-section">
-          <h3>{{ list.userName }}님의 아이디는 {{ list.userId }} 입니다.</h3>
+          <h3>{{ list.userName }}님의 아이디는 <span style="color: rgb(110, 158, 255);">{{ list.userId }}</span> 입니다.</h3>
           <div class="id-button-group">
             <button @click="fnPasswordReset()" class="id-btn id-reset-btn">비밀번호 찾기</button>
             <button @click="fnExit()" class="id-btn id-login-btn">로그인</button>
