@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>마이페이지</title>
+        <title>myPage</title>
         <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="/css/user/user.css" />
@@ -241,14 +241,14 @@
                                         </div>
                                     </div>
                                     <div class="cpoint-pagination">
-                                        <a v-if="couponPage != 1" href="javascript:;" class="bgColer2"
-                                            @click="fnCouponPageMove('pvev')">
-                                            &lt;
-                                        </a>
-                                        <a v-if="couponIndex > 1 && couponPage != couponIndex" href="javascript:;"
-                                            class="bgColer2" @click="fnCouponPageMove('next')">
-                                            &gt;
-                                        </a>
+                                            <a v-if="couponPage != 1" href="javascript:;" class="bgColer2"
+                                                @click="fnCouponPageMove('pvev')">
+                                                &lt;
+                                            </a>
+                                            <a v-if="couponIndex > 1 && couponPage != couponIndex" href="javascript:;"
+                                                class="bgColer2" @click="fnCouponPageMove('next')">
+                                                &gt;
+                                            </a>
                                     </div>
                                 </div>
                             </div>
@@ -433,7 +433,8 @@
                                             <tr class="comment-table-row">
                                                 <td colspan="4">
                                                     <h3>작성된 댓글이 없습니다. </h3>
-                                                    <button @click="fnBoardList()" class="btn-board-write">게시판
+                                                    <button @click="fnBoardList()" class="btn-board-write"
+                                                        style="margin-bottom: 15px;">게시판
                                                         이동</button>
                                                 </td>
                                             </tr>
@@ -675,6 +676,7 @@
                             data: nparmap,
                             success: function (data) {
                                 self.user = data.user;
+                                console.log('돌발', self.user);
                             }
                         });
                     },

@@ -62,7 +62,7 @@
                         dataType: "json",
                         data: nparmap,
                         success: function (data) {
-                        	console.log(data);
+                        	//console.log(data);
 
 							self.totalSales = data.Order[0].totalSales || 0;
                             self.totalOrders = data.Order[0].totalOrders || 0;

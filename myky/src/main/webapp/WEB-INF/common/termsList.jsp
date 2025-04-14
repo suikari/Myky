@@ -94,7 +94,7 @@
                 fnView() {
                     const params = new URLSearchParams(window.location.search);
                     this.selectedType = params.get("type") || "";
-                    console.log("🌐 URL로부터 받은 selectedType:", this.selectedType);
+                    //console.log("🌐 URL로부터 받은 selectedType:", this.selectedType);
 
                     $.ajax({
                         url: "/membership/termsList.dox",

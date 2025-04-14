@@ -638,13 +638,13 @@ const app = Vue.createApp({
                 type: "POST",
                 data: params,
                 success: function (data) {
-                    console.log("dete",data);
+                    //console.log("dete",data);
                     self.orders = data.order;
                     self.index = Math.ceil(data.count / self.pageSize);
                     self.isLoading = false;
                 },
                 error: function(error) {
-                    console.error("데이터 로딩 중 오류 발생:", error);
+                    //console.error("데이터 로딩 중 오류 발생:", error);
                     self.isLoading = false;
                 }
             });
@@ -723,7 +723,7 @@ const app = Vue.createApp({
         },
 		fnEditOrderDetail(orderDetail){
         	var self = this;
-			console.log(orderDetail);
+			//console.log(orderDetail);
 			
             if (self.updateOrderDetailId === orderDetail.orderId) {
             	self.updateOrderDetailId = null;  // 같은 걸 누르면 닫힘
@@ -746,7 +746,7 @@ const app = Vue.createApp({
             		refundStatus : self.editData.refundStatus            		
             };
             
-            console.log('123',"");
+            //console.log('123',"");
             
             $.ajax({
                 url: "/admin/updateOrder.dox",
@@ -754,7 +754,7 @@ const app = Vue.createApp({
                 type: "POST",
                 data: params,
                 success: function (data) {
-                	console.log("dete",data);
+                	//console.log("dete",data);
                 	alert('수정 완료');
                 	self.fnMainList();
                     self.updateOrderId = null; 
@@ -774,7 +774,7 @@ const app = Vue.createApp({
             		message        : '주문 상세상품 정보 변경',
             };
             
-            console.log('123',"");
+            //console.log('123',"");
             
             $.ajax({
                 url: "/admin/updateOrderDetail.dox",
@@ -782,7 +782,7 @@ const app = Vue.createApp({
                 type: "POST",
                 data: params,
                 success: function (data) {
-                	console.log("dete",data);
+                	//console.log("dete",data);
                 	alert('수정 완료');
                 	self.fnMainList();
                 	self.updateOrderDetailId = null;

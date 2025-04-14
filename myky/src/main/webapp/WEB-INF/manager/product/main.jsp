@@ -626,7 +626,7 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("main",data);
+                    			//console.log("main",data);
 								self.members = data.Product;
                                 if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
@@ -638,7 +638,7 @@
 								self.isLoading = false; // 로딩 시작
                     		},
                     		error: function(error) {
-                    			console.error("데이터 로딩 중 오류 발생:", error);
+                    			//console.error("데이터 로딩 중 오류 발생:", error);
                     			self.index = 0;
                     		}
                     	});
