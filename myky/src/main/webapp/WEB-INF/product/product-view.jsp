@@ -997,7 +997,7 @@
                                 }
                             }
                         });
-                    },
+                    },                   
                     //QnA 글 수정
                     fnQnaEdit(qnaId) {
                         let self = this;
