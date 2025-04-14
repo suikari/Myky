@@ -185,7 +185,7 @@
 							type: 'POST',
 							data: nparmap,
 							success: function (data) {
-								console.log(data);
+								//console.log(data);
 
 								const map = new Map();
 								const result = [];
@@ -208,7 +208,7 @@
 									}
 								});
 
-								console.log(result);
+								//console.log(result);
 
 
 								self.categories = result;
@@ -229,7 +229,7 @@
 							type: "POST",
 							data: nparmap,
 							success: function (data) {
-								console.log("12", data);
+								//console.log("12", data);
 								self.searchList = data.Search;
 
 							}
@@ -247,7 +247,7 @@
 							type: "POST",
 							data: nparmap,
 							success: function (data) {
-								console.log("132", data);
+								//console.log("132", data);
 								self.notifications = data.list;
 								
 								setTimeout(function () {
@@ -278,7 +278,7 @@
 							self.searchQuery = query;
 						}
 
-						console.log("검색어:", self.searchQuery);
+						//console.log("검색어:", self.searchQuery);
 
 						if (self.searchQuery === '') {
 							alert("검색어를 입력해주세요.")
@@ -294,7 +294,7 @@
 							type: "POST",
 							data: nparmap,
 							success: function (data) {
-								console.log(data);
+								//console.log(data);
 							}
 						});
 
@@ -303,17 +303,17 @@
 						// 여기에 검색 로직 추가 가능 (API 호출 등)
 					},
 					myPage: function () {
-						console.log("user");
+						//console.log("user");
 						location.href = "/user/mypage.do";
 
 					},
 					myCart: function () {
-						console.log("cart");
+						//console.log("cart");
 						location.href = "/cart/list.do";
 
 					},
 					myMembership: function () {
-						console.log("membership");
+						//console.log("membership");
 						location.href = "/membership/main.do";
 
 					},
@@ -328,11 +328,11 @@
 							data: nparmap,
 							success: function (data) {
 								if (data.info == null ||data.info == "") {
-									console.log("구글 정보 없음1");
+									//console.log("구글 정보 없음1");
 									return;
 								}else{
 									self.googleInfo = data.info;
-									console.log(self.googleInfo);
+									//console.log(self.googleInfo);
 									self.fnGoogleAuth();
 								}
 							}
@@ -355,8 +355,8 @@
 							type: "POST",
 							data: nparmap,
 							success: function (data) {
-								console.log(data);
-								console.log("구글 카운트:", data); //fail1
+								//console.log(data);
+								//console.log("구글 카운트:", data); //fail1
 								sessionStorage.setItem("socialLoginConfirmed", "true"); // ✅ 확인 후 다시 안 뜨게 저장
 
 								if((data.result == "fail1")){
@@ -366,7 +366,7 @@
 										alert(data.user.userName + "님 환영해요!");
 										location.reload();
 									} else {
-										console.log("구글 카운트:", data.count);
+										//console.log("구글 카운트:", data.count);
 										if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
 											//sessionStorage.setItem("socialLoginConfirmed", "true"); 
 											//location.href = "/user/consent.do";
@@ -424,7 +424,7 @@
 					        const target = new Date(dateStr.replace(' ', 'T'));
 
 					        if (isNaN(target.getTime())) {
-					          console.warn("❗ 유효하지 않은 날짜:", dateStr);
+					          //console.warn("❗ 유효하지 않은 날짜:", dateStr);
 					          return '';
 					        }
 
@@ -440,7 +440,7 @@
 					        return Math.floor(diffSec / 86400)+'일 전';
 					        
 					      } catch (e) {
-					        console.error("❗ formatTime 에러:", e);
+					        //console.error("❗ formatTime 에러:", e);
 					        return '';
 					      }
 				  },
@@ -450,14 +450,14 @@
                           userId: self.sessionId
 
                       };
-                      console.log("파라", nparmap);
+                      //console.log("파라", nparmap);
                       $.ajax({
                           url: "/user/memberShip.dox",
                           dataType: "json",
                           type: "POST",
                           data: nparmap,
                           success: function (data) {
-                              console.log("데이타 카운트", data.count);
+                              //console.log("데이타 카운트", data.count);
                               if (data.count > 0) {
                                   self.isMembership = true;
                                   self.membershipReady = true; 

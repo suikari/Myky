@@ -119,7 +119,7 @@
 				    	    type : "POST", 
 				    	    data : nparmap,
 				    	    success : function(data) { 
-				    	    	console.log(data);
+				    	    	//console.log(data);
                                 alert("저장되었습니다.")
 
                                 if( $("#file1")[0].files.length > 0){

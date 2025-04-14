@@ -531,15 +531,15 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("main",data);
+                    			//console.log("main",data);
 								self.members = data.User;
                                 if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
-                                    console.log("1!", self.index);
+                                    //console.log("1!", self.index);
 
                                 } else {
                                     self.index = 0;
-                                    console.warn("count 정보 없음!", data);
+                                    //console.warn("count 정보 없음!", data);
                                 }		
                     		}
                     	});
@@ -547,16 +547,16 @@
                     fnEdit(userId) {
                     	var self = this;
 
-                    	console.log("1",userId);
+                    	//console.log("1",userId);
                         if (self.selectedMemberId === userId) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",userId);
+                        	//console.log("2",userId);
 
                         } else {
                             const member = self.members.find(m => m.userId === userId);
                             self.editData = { ...member };  // 수정할 데이터 채우기
                             self.selectedMemberId = userId;
-                        	console.log("3",userId);
+                        	//console.log("3",userId);
                         	self.getPoints(userId);
                         }
                     },
@@ -617,7 +617,7 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
-				        		console.log("11",data);
+				        		//console.log("11",data);
                                 self.currentPoint = data.point.currentPoint;
 				        	}
 				        });
