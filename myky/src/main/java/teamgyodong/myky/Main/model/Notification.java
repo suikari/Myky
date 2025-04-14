@@ -16,4 +16,5 @@ public class Notification {
     private String productId;
     private String commentId;
     private String parentCommentId;
+    private String reviewId;
 }
