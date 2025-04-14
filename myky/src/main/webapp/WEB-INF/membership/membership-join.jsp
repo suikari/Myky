@@ -167,7 +167,7 @@
                             if (el) {
                                 const offsetTop = el.getBoundingClientRect().top + window.pageYOffset;
                                 window.scrollTo({
-                                    top: offsetTop - 200, // ← 여기서 100은 살짝 위쪽 여백 확보
+                                    top: offsetTop - 200, 
                                     behavior: 'smooth'
                                 });
                             }
@@ -266,6 +266,9 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
+                                console.log("addmember 응답 >>>", data);
+                                console.log("isFirstJoin 값 확인 >>> ", data.isFirstJoin); 
+
                                 self.membershipId = data.membershipId;
 
                                 // ✅ 첫 가입일 경우만 포인트 적립
@@ -321,6 +324,9 @@
                             remarks: "멤버십 가입시 적립 포인트",
                             userId: self.userInfo.userId
                         };
+
+                        console.log("🔥 ajax 요청 보냄 >>", nparmap);
+
                         $.ajax({
                             url: "/point/used.dox",
                             dataType: "json",
