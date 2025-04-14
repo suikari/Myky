@@ -411,6 +411,11 @@
                     var checkboxes = document.querySelectorAll("input[name='agree']");
                     var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
 
+                    if(self.userInfo != null || self.userInfo != ''){
+                        alert("로그인이 필요한 기능입니다. \n로그인 페이지로 이동합니다.");
+                        window.location.href = "/user/login.do";
+                    }
+
                     if (!policyChecked) {
                         alert("출금 정책에 동의해야 합니다.");
                         return;
