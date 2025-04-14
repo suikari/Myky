@@ -257,8 +257,8 @@
 					fnLogin() {
 						const currentPath = window.location.pathname;
 
-						// 현재 페이지가 로그인 페이지일 경우, main.do로 이동
-						if (currentPath === "/user/login.do") {
+						// 현재 경로가 "/user/"로 시작하는 경우, main.do로 이동
+						if (currentPath.startsWith("/user/")) {
 							window.location.href = "/user/login.do?redirect=/main.do";
 						} else {
 							// 그 외엔 원래의 리다이렉트 처리
@@ -395,11 +395,19 @@
 								//console.log("12322",data);
 								
 								  if (item.boardId) {
-								    location.href = '/board/view.do?boardId='+ item.boardId;
+									if (item.commentId) {
+									  // 일반 댓글일 때
+									  location.href = '/board/view.do?boardId=' + item.boardId + '&commentId=' + item.commentId;
+									} else {
+									  // 댓글 없음
+									  location.href = '/board/view.do?boardId=' + item.boardId;
+									}
 								  } else if (item.vetBoardId) {
 								    location.href = '/board/vetBoardView.do?vetBoardId='+ item.vetBoardId;
 								  } else if (item.orderId) {
 									location.href = '/order/orderList.do?orderId='+ item.orderId;
+								  }	else if (item.productId) {
+									location.href = '/product/view.do?productId='+ item.productId + '&qnaId=' + item.qnaId;
 								  }
 								self.fnNotiList();
 							}

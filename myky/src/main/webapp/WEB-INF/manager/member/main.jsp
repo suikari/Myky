@@ -352,7 +352,7 @@
 						            <option value="all">전체</option>
 						            <option value="userId">ID</option>
 						            <option value="name">이름</option>
-   						            <option value="eamil">이메일</option>
+   						            <option value="email">이메일</option>
   						            <option value="address">주소</option>
 						        </select>
 						    </div>

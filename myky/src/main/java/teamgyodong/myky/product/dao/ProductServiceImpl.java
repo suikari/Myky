@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import teamgyodong.myky.manager.model.order;
+import teamgyodong.myky.manager.model.orderdetail;
 import teamgyodong.myky.product.mapper.ProductMapper;
 import teamgyodong.myky.product.model.Product;
 import teamgyodong.myky.product.model.Qna;
@@ -66,11 +68,16 @@ public class ProductServiceImpl implements ProductService {
 		List<Review> list = productMapper.selectReviewList(map);
 		int count = productMapper.selectReviewCount(map);
 		//리뷰 사진 가져오기
-//		List<Review> imgList = productMapper.selectReviewImg(map);
+		
+		for (Review detail : list) {
+			map.put("reviewId", detail.getReviewId());
+			List<Review> imgList =  productMapper.selectReviewImg(map);
+			detail.setReviews(imgList);
+		}
+		
 				
 				
 		resultMap.put("reviewList", list);
-//		resultMap.put("imgList", imgList);
 		resultMap.put("count", list.size());
 		resultMap.put("totalCount", count); 
 		resultMap.put("result", "success");

@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     <label>첨부파일1</label>
-                    <input type="file" id="file1" name="file1" accept=".jpg,.png">
+                    <input type="file" id="file1" name="file1" accept=".jpg,.png" multiple>
                 </div>
                 <div class="form-group">
                     <label>내용</label>

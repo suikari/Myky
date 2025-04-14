@@ -149,7 +149,7 @@
 	</update>
 	
 	<!--자유게시판 댓글 작성-->
-	<insert id="insertComment" parameterType="hashmap">
+	<insert id="insertComment" parameterType="hashmap" useGeneratedKeys="true" keyColumn="COMMENT_ID" keyProperty="commentId" >
 		INSERT INTO FREE_BOARD_COMMENT (COMMENT_ID, BOARD_ID, USER_ID, CONTENT, CREATED_AT, UPDATED_AT, IS_DELETED)
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{content}, SYSDATE, SYSDATE, 'N')
 	</insert>
@@ -192,7 +192,7 @@
 	</delete>
 
 	<!--자유게시판 대댓글 작성-->
-	<insert id="insertReply" parameterType="hashmap">
+	<insert id="insertReply" parameterType="hashmap" useGeneratedKeys="true" keyColumn="comment_id" keyProperty="commentId" >
 		INSERT INTO FREE_BOARD_COMMENT
 		VALUES(FREE_BOARD_COMMENT_SEQ.NEXTVAL, #{boardId}, #{userId}, #{parentCommentId}, #{content}, SYSDATE, SYSDATE, 'N')
 	</insert>
@@ -362,7 +362,7 @@
 	</update>
 	
 	<!--수의사 답변 등록-->
-	<insert id="insertVetAnReply" parameterType="hashmap">
+	<insert id="insertVetAnReply" parameterType="hashmap" useGeneratedKeys="true" keyColumn="REVIEW_ID" keyProperty="reviewId" >
 		INSERT INTO VET_ANSWER(REVIEW_ID, VET_BOARD_ID, RATING, REVIEW_TEXT, CREATED_AT, VET_ID, COMMENTS, IS_DELETED, ACCEPTED )
 		VALUES(VET_REVIEW_SEQ.NEXTVAL, #{vetBoardId}, 0, #{reviewText}, SYSDATE, #{vetId}, '', 'N', 'N')
 	</insert>
