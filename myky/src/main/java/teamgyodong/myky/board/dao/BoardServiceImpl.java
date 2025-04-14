@@ -93,7 +93,7 @@ public class BoardServiceImpl implements BoardService {
 	        comment.setReplies(replies); // 💥 replies를 comment 객체에 직접 세팅
 	    }
 
-	    board boardList = boardMapper.selectBoard(map);
+	    board boardList = boardMapper.selectBoard(map); 
 	    List<boardFile> fileList = boardMapper.selectBoardImg(map);
 
 	    resultMap.put("info", boardList);

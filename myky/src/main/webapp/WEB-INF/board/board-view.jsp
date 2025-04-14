@@ -334,18 +334,23 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                if (data.result != 'success') {
+                                if (!data || !data.info) {
                                     alert("잘못된 주소입니다.");
-                                    location.href = "/board/boardList.do";
+                                    window.location.replace("/board/list.do");
+                                    return;
                                 }
-                                self.info = data.info
+                                self.info = data.info;
                                 self.cmtList = data.cmtList;
                                 self.fileList = data.fileList;
-                                self.nickName = data.info.nickName;
-                                console.log("어디써",data);
+                                self.nickName = data.info ? data.info.nickName : "익명";
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Ajax 오류:", error);
+                                alert("데이터를 불러오는데 실패했습니다.");
+                                location.href = "/board/list.do";
                             }
                         });
-                        self.fnlikestatus();
+                        // self.fnlikestatus();
                     },
                     fnlikestatus() {
                         var self = this;
