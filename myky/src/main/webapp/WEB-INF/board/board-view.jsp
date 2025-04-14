@@ -183,12 +183,12 @@
                                         </div>
                                         <div v-else>
                                             <div class="fb-profile-container">
-                                                <img :src="item.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
-                                                    alt="프로필 이미지"
-                                                    class="fb-top-profile-img1">
-                                                <span class="fb-nickname">{{ item.nickName }}
-                                                </span>
-                                            </div>
+                                            <img :src="reply.profileImage || '/img/userProfile/Default-Profile-Picture.jpg'"
+                                                alt="프로필 이미지"
+                                                class="fb-top-profile-img1">
+                                            <span class="fb-nickname">{{ reply.nickName }}
+                                            </span>
+                                        </div>
 
                                             <div style="margin-bottom: 5px;">{{ reply.content }}</div>
                                             <div
