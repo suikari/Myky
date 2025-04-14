@@ -249,7 +249,10 @@
 							success: function (data) {
 								console.log("132", data);
 								self.notifications = data.list;
-
+								
+								setTimeout(function () {
+									self.fnNotiList();
+								}, 10000); //
 							}
 
 						});
@@ -403,7 +406,7 @@
 									  location.href = '/board/view.do?boardId=' + item.boardId;
 									}
 								  } else if (item.vetBoardId) {
-								    location.href = '/board/vetBoardView.do?vetBoardId='+ item.vetBoardId;
+								    location.href = '/board/vetBoardView.do?vetBoardId='+ item.vetBoardId + "&commentId=" + item.reviewId;
 								  } else if (item.orderId) {
 									location.href = '/order/orderList.do?orderId='+ item.orderId;
 								  }	else if (item.productId) {
