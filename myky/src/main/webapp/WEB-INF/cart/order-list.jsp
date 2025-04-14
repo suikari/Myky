@@ -327,15 +327,36 @@
                         if (orderStatus === 'cancel') return '주문취소';
                         if (orderStatus === 'canceled') return '환불완료';
 
-                        if (statuses.every(status => status === 'none')) return '주문접수';
-                        if (statuses.every(status => status === 'shipped')) return '배송중';
-                        if (statuses.every(status => status === 'delivered')) return '배송완료';
-                        if (statuses.some(status => status === 'exchange')) return '교환신청';
-                        if (statuses.every(status => status === 'exchanged')) return '교환완료';
-                        if (statuses.some(status => status === 'return')) return '반품신청';
-                        if (statuses.every(status => status === 'returned')) return '반품완료';
+                        const statusPriority = {
+                            'returned': 1,
+                            'exchanged': 2,
+                            'return': 3,
+                            'exchange': 4,
+                            'delivered': 5,
+                            'shipped': 6,
+                            'none': 7
+                        };
 
-                        return '주문접수';
+                        let highestPriorityStatus = 'none';
+                        let highestPriority = 7;
+
+                        statuses.forEach(status => {
+                            if (statusPriority[status] < highestPriority) {
+                                highestPriority = statusPriority[status];
+                                highestPriorityStatus = status;
+                            }
+                        });
+
+                        switch (highestPriorityStatus) {
+                            case 'none': return '주문접수';
+                            case 'shipped': return '배송중';
+                            case 'delivered': return '배송완료';
+                            case 'exchange': return '교환신청';
+                            case 'exchanged': return '교환완료';
+                            case 'return': return '반품신청';
+                            case 'returned': return '반품완료';
+                            default: return '주문접수';
+                        }
                     };
                 }
             },

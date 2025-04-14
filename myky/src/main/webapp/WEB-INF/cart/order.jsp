@@ -51,7 +51,7 @@
             </tbody>
         </table>
         <table class="discountTable">
-            <tr v-if="totalPrice < 30000">
+            <tr v-if="totalPrice < shippingFreeMinimum">
                 <th>결제 금액 (배송비 포함)</th>
                 <td>{{ formattedTotalShippingPrice }} 원</td>
             </tr>
@@ -272,8 +272,8 @@
                             self.selectCartItems = data.checkList;
                             self.cartId = data.checkList[0].cartId;
                             console.log("cartId >>> ",self.cartId);
-                            self.shippingFee = self.selectCartItems[0].shippingFee;
-                            self.shippingFreeMinimum = self.selectCartItems[0].shippingFreeMinimum;
+                            self.shippingFee = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFee)));
+                            self.shippingFreeMinimum = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFreeMinimum)));
                         }
                     });
                 },
@@ -340,7 +340,7 @@
                     let usedPoints = parseInt(self.usedPoint) || 0;
                     let userPoints = parseInt(self.userPoint) || 0;
                     let finalPrice = 0;
-                    if (parseInt(self.totalPrice) < 30000) {
+                    if (parseInt(self.totalPrice) < parseInt(self.shippingFreeMinimum)) {
                         finalPrice = parseInt(self.totalShippingPrice) || 0;
                     } else {
                         finalPrice = parseInt(self.totalPrice) || 0;
