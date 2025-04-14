@@ -444,7 +444,7 @@
                     					error: reject
                     				});
                     			}).then(data => {
-                    				console.log("main", data);
+                    				//console.log("main", data);
                     				if (data.donationCnt) self.stats[0].number = data.donationCnt;
                     				else self.stats[0].number = 0;
                     				
@@ -472,7 +472,7 @@
                     					error: reject
                     				});
                     			}).then(data => {
-                    				console.log("12", data);
+                    				//console.log("12", data);
                     				if (Array.isArray(data.Search) && data.Search.length > 0) {
                         				self.searchRanks = data.Search;
                     				} else {
@@ -492,7 +492,7 @@
                     					error: reject
                     				});
                     			}).then(data => {
-                    				console.log("123", data);
+                    				//console.log("123", data);
                     				if (data.Membership && data.Membership.membershipUserCount !== undefined) {
                     					var per = (parseInt(data.Membership.membershipUserCount) / 
                     						(parseInt(data.Membership.membershipUserCount) + 
@@ -508,7 +508,7 @@
                     			})
                     		]);
                     	} catch (error) {
-                    		console.error("데이터 로딩 중 오류 발생:", error);
+                    		//console.error("데이터 로딩 중 오류 발생:", error);
                     	} finally {
                     		// 모든 데이터 로딩이 완료되면 로딩 화면 숨기기
                     		self.isLoading = false;

@@ -929,7 +929,7 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("2", data);
+                                //console.log("2", data);
                                 self.productsN = data.list;
 
                             }
@@ -961,8 +961,8 @@
                             type: "POST",
                             data: nparmap,
                             success: function (kakaodata) {
-                                console.log(kakaodata);
-                                console.log("334", kakaodata.kakao_account.email);
+                                //console.log(kakaodata);
+                                //console.log("334", kakaodata.kakao_account.email);
 
                                 if (kakaodata.kakao_account && kakaodata.kakao_account.email) {
                                     nparmap = {
@@ -975,7 +975,7 @@
                                         type: "POST",
                                         data: nparmap,
                                         success: function (data) {
-                                            console.log(data);
+                                            //console.log(data);
 
                                             if ((data.result == "fail1")) {
                                                 return;
@@ -984,7 +984,7 @@
                                                     alert(data.user.userName + "님 환영해요!");
                                                     location.href = "/main.do";
                                                 } else {
-                                                    console.log("구글 카운트:", data.count);
+                                                    //console.log("구글 카운트:", data.count);
                                                     if (confirm("이 사이트를 이용하시려면 회원가입이 필요합니다. 회원가입하시겠습니까?")) {
                                                         //sessionStorage.setItem("socialLoginConfirmed", "true"); 
                                                         //location.href = "/user/consent.do";
