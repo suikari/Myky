@@ -18,6 +18,7 @@ public class comment {
 	private String updatedTime;
 	private String title;
 	private String nickName;
+	private String profileImage;
 
 	
     // ✅ 추가
