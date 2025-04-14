@@ -757,61 +757,79 @@
 	    
 	</select>
 	
+	<!-- 주문 목록 조회 -->
 	<select id="selectAllOrderList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.order">
 		SELECT 
-		    *
-		FROM orders 
+			o.order_id,
+			o.user_id,
+			o.total_price,
+			o.order_status,
+			o.receiver_name,
+			o.receiver_phone,
+			o.receiver_addr,
+			o.payment_method,
+			o.ordered_at,
+			o.updated_at
+		FROM orders o
 		WHERE 1=1
 		<if test="searchOption != null and searchOption == 'all'">
-			AND ( receiver_phone LIKE '%' || #{keyword} || '%' 
-					OR user_id LIKE '%' || #{keyword} || '%' )
+			AND (o.receiver_phone LIKE #{keyword} || '%'  
+				OR o.user_id LIKE #{keyword} || '%')
 		</if>
 		<if test="searchOption != null and searchOption == 'phone'">
-			AND receiver_phone LIKE '%' || #{keyword} || '%'
+			AND o.receiver_phone LIKE #{keyword} || '%'
 		</if>
 		<if test="searchOption != null and searchOption == 'userId'">
-			AND USER_ID LIKE '%' || #{keyword} || '%'
+			AND o.user_id LIKE #{keyword} || '%'
 		</if>
-		ORDER BY 
-		    order_id DESC
+		ORDER BY o.order_id DESC
 		<if test="page != null and pageSize != null" >
-		    OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+			OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 		</if>
-		
 	</select>
-	
+
+	<!-- 주문 카운트 -->
 	<select id="selectAllOrderCnt" parameterType="hashmap" resultType="int">
-		SELECT COUNT(*)
+		SELECT /*+ INDEX(orders idx_orders_search) */ 
+			COUNT(*)
 		FROM orders 
 		WHERE 1=1
 		<if test="searchOption != null and searchOption == 'all'">
-			AND ( receiver_phone LIKE '%' || #{keyword} || '%' 
-					OR user_id LIKE '%' || #{keyword} || '%' )
+			AND (receiver_phone LIKE #{keyword} || '%'
+				OR user_id LIKE #{keyword} || '%')
 		</if>
 		<if test="searchOption != null and searchOption == 'phone'">
-			AND receiver_phone LIKE '%' || #{keyword} || '%'
+			AND receiver_phone LIKE #{keyword} || '%'
 		</if>
 		<if test="searchOption != null and searchOption == 'userId'">
-			AND USER_ID LIKE '%' || #{keyword} || '%'
+			AND user_id LIKE #{keyword} || '%'
 		</if>
 	</select>
 	
-    <select id="selectOrderDetailList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.orderdetail">
-
-
+	<!-- 주문 상세 조회 -->
+	<select id="selectOrderDetailList" parameterType="hashmap" resultType="teamgyodong.myky.manager.model.orderdetail">
 		SELECT 
-		    *
+			od.order_detail_id,
+			od.order_id,
+			od.product_id,
+			od.quantity,
+			od.price,
+			od.tracking_number,
+			od.refund_status,
+			p.product_name,
+			p.product_code,
+			COALESCE(pf.filepath, '') as product_image
 		FROM order_details od
-        LEFT JOIN product p on od.product_id = p.product_id
-        LEFT JOIN product_file pf on p.product_id = pf.product_id and pf.thumbnail = 'Y'
-		WHERE 1=1
-			<if test="orderId != null and orderId != ''">
-                AND order_id = #{orderId} 
-            </if>
-		ORDER BY 
-		    order_detail_id DESC
-		
+		INNER JOIN product p ON od.product_id = p.product_id
+		LEFT JOIN (
+			SELECT product_id, filepath 
+			FROM product_file 
+			WHERE thumbnail = 'Y'
+		) pf ON p.product_id = pf.product_id
+		WHERE od.order_id = #{orderId}
+		ORDER BY od.order_detail_id DESC
 	</select>
+
 
 	<!--자유게시판 게시글 작성-->
 	<insert id="insertBoard" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARD_ID" keyProperty="boardId">
