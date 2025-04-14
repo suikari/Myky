@@ -893,9 +893,10 @@ input[type="checkbox"] {
 
 
 .sidebar {
-	width: 25%;
+	width: 20%;
 	background: #f7f7f7;
 	padding-top: 0;
+	margin-left: 20px;
 	border-radius: 10px;
 	font-family: 'Noto Sans KR', sans-serif;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
@@ -1807,5 +1808,5 @@ a {
 .badge-no {
 	background-color: #ccc;
 	/* 회색 */
-	color: #333;
+	color: white;
 }
