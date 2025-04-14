@@ -122,7 +122,7 @@
                                 }
                                 let currentPoint = data.point.currentPoint;
 
-                                if(currentPoint < self.usedPoint){
+                                if(Number(currentPoint) < Number(self.usedPoint)){
                                     alert("포인트가 부족합니다.");
                                     return;
                                 }
