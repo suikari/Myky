@@ -271,11 +271,13 @@
                                 self.membershipId = data.membershipId;
 
                                 // ✅ 첫 가입일 경우만 포인트 적립
-                                if (data.isFirstJoin === true) {
-                                    self.fnRewardPoint();
+                                if (data.isFirstJoin) {
+                                    self.fnRewardPoint(rsp);
+                                } else {
+                                	self.fnPaymentHistory(rsp);
                                 }
 
-                                self.fnPaymentHistory(rsp);
+                               
                             }
                         });
                     },
@@ -315,7 +317,7 @@
                             }
                         });
                     },
-                    fnRewardPoint: function () {
+                    fnRewardPoint: function ( rsp ) {
                         let self = this;
                         console.log("적립할 포인트 >>> ", self.rewardPoint);
 
@@ -335,8 +337,12 @@
                             success: function (data) {
                                 console.log("포인트 적립 내역 저장 >>> ", data.result);
                                 if (data.result === "success") {
-                                    alert("가입 축하 5,000포인트가 지급되었습니다!");
+                                    //alert("가입 축하 5,000포인트가 지급되었습니다!");
+                                    self.fnPaymentHistory(rsp);
+                                } else {
+                                	self.fnPaymentHistory(rsp);
                                 }
+
                             }
                         });
                     },

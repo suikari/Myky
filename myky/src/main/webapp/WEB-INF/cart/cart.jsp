@@ -159,7 +159,6 @@
             methods: {
                 fnUserInfo(){
                     var self = this;
-                    console.log("sessionId >>> ", self.sessionId);
                     var nparmap = {
                         userId : self.sessionId
                     };
@@ -169,7 +168,6 @@
                         type : "POST", 
                         data : nparmap,
                         success : function(data) { 
-                            console.log("userInfo >>> ", data.user);
                             self.userInfo = data.user;
                             self.loadCart();
                             self.loadSelectCart();
@@ -189,12 +187,10 @@
                         type : "POST", 
                         data : nparmap,
                         success : function(data) { 
-                            console.log("cartList >>> ", data.list);
                             self.cartItems = data.list;
                             self.selectCheck = self.cartItems
                             .filter(item => item.checkYn === "Y")
                             .map(item => item.productId);
-                            console.log(self.selectCheck);
 
                             self.$nextTick(() => {
                                 self.fnAllCheck({
@@ -217,14 +213,11 @@
                         type : "POST", 
                         data : nparmap,
                         success : function(data) { 
-                            console.log("cartCheckList >>> ", data.checkList);
                             self.selectCartItems = data.checkList;
                             if (self.selectCartItems.length > 0) {
                                 self.shippingFee = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFee)));
                                 self.shippingFreeMinimum = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFreeMinimum)));
                             }
-                            console.log("shippingFee:", self.shippingFee);
-                            console.log("shippingFreeMinimum:", self.shippingFreeMinimum);
                         }
                     });
                 },
@@ -237,7 +230,6 @@
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            console.log("멤버십 활성 여부 >>> ",data.result);
                             if(data.result === "success"){
                                 self.isMembership = true;
                             }
@@ -254,7 +246,6 @@
                 updateQuantity(index, change) {
                     let self = this;
                     let item = self.cartItems[index];
-                    console.log("수량 변경할 상품 >>> ",item);
                     let newQuantity = Math.max(1, parseInt(item.quantity) + change);
                     
                     var nparmap = {
@@ -303,7 +294,6 @@
                 fnCheckYn:function(item) {
                     let self = this;
                     let checkYnValue = self.selectCheck.includes(item.productId) ? "Y" : "N";
-                    console.log(checkYnValue);
 
                     let params = {
                         cartId: item.cartId,
@@ -318,7 +308,6 @@
                         dataType: "json",
                         success: function (data) {
                             if (data.result === "success") {
-                                console.log("체크 상태 업데이트 완료: ", checkYnValue);
                                 self.loadSelectCart();
                             } else {
                                 console.error("체크 상태 업데이트 실패");
@@ -347,7 +336,6 @@
                         dataType: "json",
                         success: function (data) {
                             if (data.result === "success") {
-                                console.log("모든 체크 상태 업데이트 완료: ", isChecked ? "Y" : "N");
                                 self.loadSelectCart();
                             }
                         }

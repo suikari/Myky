@@ -263,7 +263,6 @@
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            console.log("cartList >>> ", data.checkList);
                             if (!data.checkList || data.checkList.length === 0) {
                                 alert("결제할 상품이 없습니다. \n장바구니 페이지로 이동합니다.");
                                 window.location.href = "/cart/list.do";
@@ -271,7 +270,6 @@
                             }
                             self.selectCartItems = data.checkList;
                             self.cartId = data.checkList[0].cartId;
-                            console.log("cartId >>> ",self.cartId);
                             self.shippingFee = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFee)));
                             self.shippingFreeMinimum = Math.max(...self.selectCartItems.map(item => parseInt(item.shippingFreeMinimum)));
                         }
@@ -287,7 +285,6 @@
                         data: params,
                         success: function (data) {
                             self.userPoint = parseInt(data.point.currentPoint);
-                            console.log("보유포인트 >>> ",data.result);
                         }
                     });
                 },
@@ -300,7 +297,6 @@
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            console.log("멤버십 활성 여부 >>> ",data.result);
                             if(data.result === "success"){
                                 self.isMembership = true;
 
@@ -310,7 +306,6 @@
                 },
                 fnRewardPoint:function(){
                     let self = this;
-                    console.log("적립할 포인트 >>> ",self.rewardPoint);
 
                     var nparmap = {
                         usedPoint: self.rewardPoint,
@@ -323,7 +318,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("포인트 적립 내역 저장 >>> ", data.result);
 
                         }
                     });
@@ -513,7 +507,6 @@
                     let finalAddress = self.deliveryType === "default" ? self.userInfo.address : address;
                     let finalMessage = self.orderInfo.deliveryMessage === "직접 입력" ? self.orderInfo.customMessage : self.orderInfo.deliveryMessage;
     
-                    console.log(self.finalPrice);
 
                     if (self.finalPrice === 0) {
                         // 포인트 결제
@@ -553,7 +546,6 @@
                         buyer_tel: self.userInfo.phoneNumber,
                     }, function (rsp) {
                         if (rsp.success) {
-                            console.log("결제 정보 >>> ", rsp);
                             self.fnPaymentHistory(rsp, self.paid_amount, finalAddress, finalMessage);
                             self.fnRemoveCart();
                             self.fnUsePoint();
@@ -576,8 +568,6 @@
                         paymentMethod = rsp.pay_method;
                     }
 
-                    console.log("paymentMethod >>> ", paymentMethod);
-
                     var nparmap = {
                         paymentCode: rsp.merchant_uid,
                         description: rsp.name,
@@ -599,7 +589,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("결제 정보 저장 여부 >>> ", data);
                             self.fnRewardPoint();
                             self.fnOrderHistory(finalPrice, paymentMethod, finalAddress, finalMessage, data.orderId);
 
@@ -630,8 +619,6 @@
                         orderDetails: JSON.stringify(payList)
                     };
 
-                    console.log("주문 데이터 >>>", self.orderData);
-
                     var nparmap = self.orderData;
                     $.ajax({
                         url: "/cart/order.dox",
@@ -639,9 +626,7 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("주문 정보 저장 여부 >>> ", data.result);
                             if (data.result === "success") {
-                                console.log("주문 상세 정보도 저장 완료");
                                 alert("주문이 완료되었습니다.");
                                 pageChange("/order/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
                             }
@@ -659,9 +644,7 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            if (data.result === "success") {
-                                console.log("결제 후 장바구니 비우기 >>> ", data.result);
-                            }
+                            
                         }
                     });
                 },
@@ -669,7 +652,6 @@
                     let self = this;
                     let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
-                    console.log("사용 포인트 >> ", usedPoint);
                     if(usedPoint == 0){
                         return;
                     }
@@ -685,7 +667,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("포인트 사용 내역 저장 >>> ", data.result);
 
                         }
                     });
