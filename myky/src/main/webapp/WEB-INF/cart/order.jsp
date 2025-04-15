@@ -600,6 +600,7 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("결제 정보 저장 여부 >>> ", data);
+                            self.fnRewardPoint();
                             self.fnOrderHistory(finalPrice, paymentMethod, finalAddress, finalMessage, data.orderId);
 
                         }
@@ -642,7 +643,6 @@
                             if (data.result === "success") {
                                 console.log("주문 상세 정보도 저장 완료");
                                 alert("주문이 완료되었습니다.");
-                                self.fnRewardPoint();
                                 pageChange("/order/orderComplete.do",{userId:self.userInfo.userId,orderId:self.orderData.orderId});
                             }
                         }
