@@ -12,7 +12,6 @@
 		    background-color: #f8fafd;
 		    min-height: 100vh;
 		    padding: 30px 20px;
-		    font-family: 'Segoe UI', sans-serif;
 		    
 		}
 		
