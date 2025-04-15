@@ -138,15 +138,12 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("제휴처 정보 >>> ",data);
                             if(data.result == "success"){
                                 self.partners = data.partnerList;
                                 if (data.count !== undefined) {
                                     self.index = data.count ? Math.ceil(data.count / self.pageSize) : 0;
-                                    console.log("index >>> ",self.index);
                                 } else {
                                     self.index = 0;
-                                    console.log("count 정보 없음!", data);
                                 }
                             }
                         }

@@ -56,18 +56,14 @@
                 methods: {
                     fnGetCenter(){
                         var self = this;
-                        var nparmap = {
-                            
-                        };
+                        var nparmap = {};
                         $.ajax({
                             url:"/center/list.dox",
                             dataType:"json",	
                             type : "POST", 
                             data : nparmap,
                             success : function(data) { 
-                                console.log(data);
                                 self.centerList = data.list;
-                                
                             }
                         });
                     },
@@ -75,7 +71,6 @@
                         pageChange("/donation.do",{centerId:centerId});
                     },
                     fnCenterSite:function(websiteUrl){
-                        // console.log(websiteUrl); >> url 정상 출력 확인
                         window.open(websiteUrl,"_blank");
                     }
                 },
