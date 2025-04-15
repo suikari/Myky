@@ -245,7 +245,6 @@
                                 alert("멤버십 결제가 완료되었습니다! 감사합니다.");
 
                                 self.fnAddMembership(rsp);
-                                location.href = "/membership/main.do";
 
                             } else {
                                 alert("결제에 실패했습니다.");
@@ -312,6 +311,7 @@
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
+                                location.href = "/membership/main.do";
                             }
                         });
                     },
