@@ -561,7 +561,6 @@
                         data: nparmap,
                         success: function (data) {
                             console.log("결제 정보 저장 여부 >>> ", data.result);
-                            self.fnUsePoint();
                             pageChange("/donation/complete.do", { userId: self.userInfo.userId, donationId: self.donationId });
                         }
                     });
@@ -587,6 +586,7 @@
                             console.log("fnDonation >> self.donationId >>> ", self.donationId);
                             // DB 저장 후 후원ID 가져오기
                             self.fnPaymentHistory(rsp, amount);
+                            self.fnUsePoint();
 
                         }
                     });
