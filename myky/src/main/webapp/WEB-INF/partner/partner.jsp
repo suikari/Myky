@@ -65,10 +65,7 @@
             <div class="search-row">
                 <label for="keyword" style="font-weight: bold;"></label>
                
-                <select v-model="currentView" class="selectBox">
-                    <option value="hospital">병원</option>
-                    <option value="partner">제휴사</option>
-                </select>
+           
                 <input 
                 type="text" 
                 v-model="keyword" 
@@ -894,28 +891,7 @@ if (self.currentView === 'hospital' && isSearch) {
     }
 }
 
-// 제휴사 뷰일 때만 제휴사 검색 처리
-else if (self.currentView === 'partner' && isSearch) {
-    const filteredPartner = (data.partnerlist || []).filter(partner =>
-        partner.name.toLowerCase().includes(keywordText)
-    );
 
-    if (filteredPartner.length > 0) {
-        console.log('🏢 제휴사 검색 결과 처리 시작');
-        self.partnerlist = filteredPartner;
-        self.visiblePartnerList = filteredPartner;
-        self.clearMarkers();  // 병원 마커 제거
-
-        self.displayPartnerPlaces(filteredPartner, {
-            includeFavorites: true,
-            clear: true,
-        });
-
-        self.moveToLocation(filteredPartner[0]);
-    } else {
-        // alert("검색된 제휴사가 없습니다.");
-    }
-}
 
             // hoslist 업데이트 및 필터링
             if (data.hoslist && data.hoslist.length > 0) {
@@ -1056,7 +1032,7 @@ else if (self.currentView === 'partner' && isSearch) {
         }
     },
     async searchPlaces() {
-    console.log("🔍 검색 시작 - 현재 뷰:", this.currentView);
+    console.log("🔍 병원 검색 시작");
     console.log("검색어:", this.keyword);
 
     const keyword = this.keyword.trim();
@@ -1065,64 +1041,25 @@ else if (self.currentView === 'partner' && isSearch) {
         return;
     }
 
-    // 검색 전 현재 뷰 상태를 저장
-    const currentViewBeforeSearch = this.currentView;
-
     try {
         this.isSearching = true;
 
         // 마커 초기화
         this.clearMarkers();
-        this.clearPartnerMarkers();
 
-        // 뷰에 따라 병원/제휴사 구분하여 처리
-        if (currentViewBeforeSearch === 'hospital') {
-            console.log("🏥 병원 검색 시작");
+        // 병원 전용 검색 처리 - isSearch 플래그 추가
+        await this.fnPartnerList(keyword, null, null, true);
 
-            // 병원 전용 검색 처리 (AJAX 요청이나 병원 리스트 호출)
-            await this.fnPartnerList(keyword);  // 병원 리스트 로드 함수
-
-            if (this.hoslist && this.hoslist.length > 0) {
-                console.log("🏥 병원 검색 결과:", this.hoslist.length);
-                this.addMarkers();  // 병원 마커 추가
-
-                // 첫 번째 병원으로 지도 이동
-                if (this.hoslist[0]) {
-                    this.moveToLocation(this.hoslist[0]);
-                }
-            } else {
-                //alert("검색된 병원이 없습니다.");
-            }
-        } 
-        // 제휴사 뷰일 경우
-        else if (currentViewBeforeSearch === 'partner') {
-            console.log("🏢 제휴사 검색 시작");
-
-            const keywordText = keyword.toLowerCase();
-            const filteredPartner = (this.partnerlist || []).filter(partner =>
-                partner.name.toLowerCase().includes(keywordText)
-            );
-
-            if (filteredPartner.length > 0) {
-                console.log("✅ 제휴사 검색 결과:", filteredPartner.length);
-                this.visiblePartnerList = filteredPartner;
-                this.clearMarkers();
-                
-                // 제휴사 마커 표시 후 이동
-                await this.displayPartnerPlaces(filteredPartner, { clear: true, includeFavorites: true });
-
-                // 첫 번째 제휴사로 지도 이동
-                if (filteredPartner[0]) {
-                    this.moveToLocation(filteredPartner[0]);
-                }
-            } else {
-                console.log("🚫 검색된 제휴사가 없습니다.");
-                this.visiblePartnerList = [];
-                //alert("검색된 제휴사가 없습니다.");
-            }
-        } else {
-            console.error("❌ 현재 뷰가 병원도 아니고 제휴사도 아닙니다.");
-        }
+        // 👉 이 아래는 필요 없어요! 이동 및 마커 추가는 fnPartnerList 안에서 처리됨
+        // if (this.hoslist && this.hoslist.length > 0) {
+        //     console.log("🏥 병원 검색 결과:", this.hoslist.length);
+        //     this.addMarkers();
+        //     if (this.hoslist[0]) {
+        //         this.moveToLocation(this.hoslist[0]);
+        //     }
+        // } else {
+        //     console.log("🚫 검색된 병원이 없습니다.");
+        // }
 
     } catch (err) {
         console.error("❌ 검색 중 오류 발생:", err);
@@ -1131,6 +1068,8 @@ else if (self.currentView === 'partner' && isSearch) {
         this.isSearching = false;
     }
 }
+
+
 
 
 
