@@ -680,8 +680,8 @@
                     
                         <a href="/partner/list.do">
                         	<div class="shortcut-item">
-                            <img src="img/quick/vet.png" alt="병원찾기" />
-                            <span>병원찾기</span>
+                            <img src="img/quick/vet.png" alt="시설찾기" />
+                            <span>시설찾기</span>
                             </div>
                         </a>
                     
@@ -836,9 +836,9 @@
                     return {
                         alertMessage: "${alertMessage}" || "",
                         slides: [
-                            'img/banner/M.banner1-1.png',
-                            'img/banner/M.banner2.png',
                             'img/banner/M.banner4-1.png',
+                            'img/banner/M.banner2.png',
+                            'img/banner/M.banner1-1.png',
                             'img/banner/M.banner5-1.png',
                             'img/banner/M.banner6-1.png'
                         ],
