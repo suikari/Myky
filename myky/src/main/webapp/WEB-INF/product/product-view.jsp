@@ -513,7 +513,7 @@
                         qnaTotal: 0,
                         qnaPages: []
                     };
-                },
+                },           
                 computed: {
                     // 총 상품 금액 (상품 가격 × 수량)
                     totalProductPrice() {
@@ -744,29 +744,28 @@
                             location.href = "/user/login.do";
                             return;
                         }
-   
-                        location.href = "/product/review.do?productId=" + self.productId;
-                        // const nparmap = {
-                        //     userId: self.sessionId,
-                        //     productId: self.productId
-                        // };
-                        // $.ajax({
-                        //     url: "/product/checkPurchase.dox",
-                        //     type: "POST",
-                        //     data: nparmap,
-                        //     dataType: "json",
-                        //     success: function (data) {
-                        //         if (data.result === "success" && data.purchased === "Y") {
-                        //             location.href = "/product/review.do?productId=" + self.productId;
-                        //         } else {
-                        //             alert("해당 상품을 구매한 사용자만 리뷰를 작성할 수 있습니다.");
-                        //         }
-                        //     },
-                        //     error: function () {
-                        //         alert("서버와 통신 중 오류가 발생했습니다.");
-                        //     }
-                        // });
-                    },
+                        const nparmap = {
+                            userId: self.sessionId,
+                            productId: self.productId
+                        };
+                        $.ajax({
+                            url: "/product/checkPurchase.dox",
+                            type: "POST",
+                            data: nparmap,
+                            dataType: "json",
+                            success: function (data) {
+                                //구매한 사람만 리뷰 가능
+                                if (data.result === "success" && data.purchased === "Y") {
+                                    location.href = "/product/review.do?productId=" + self.productId;
+                                } else {
+                                    alert("해당 상품을 구매한 사용자만 리뷰를 작성할 수 있습니다.");
+                                }
+                            },
+                            error: function () {
+                                alert("서버와 통신 중 오류가 발생했습니다.");
+                            }
+                        });
+                    },    
                     //개인 리뷰 삭제
                     fnDelete: function (reviewId) {
                         var self = this;
@@ -997,7 +996,7 @@
                                 }
                             }
                         });
-                    },
+                    },                   
                     //QnA 글 수정
                     fnQnaEdit(qnaId) {
                         let self = this;

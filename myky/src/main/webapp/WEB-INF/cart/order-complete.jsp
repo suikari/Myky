@@ -93,7 +93,11 @@
                 },
                 computed: {
                     rewardPoint(){
-                        return +Math.floor(parseInt(this.orderInfo.totalPrice) * 0.05);
+						const productTotal = this.orderList.reduce((sum, item) => {
+						    return sum + (item.price);
+						}, 0);
+						return +Math.floor(productTotal * 0.05);
+						//return +Math.floor(parseInt(this.orderInfo.totalPrice) * 0.05);
                     },
                     formattedRewardPoints() {
                         return this.rewardPoint.toLocaleString();
@@ -105,7 +109,7 @@
                 methods: {
                     fnOrderInfo:function(){
                         let self = this;
-                        console.log("userId >>> ",self.userId," + orderId >>> ",self.orderId);
+                        //console.log("userId >>> ",self.userId," + orderId >>> ",self.orderId);
                         let params = { userId: self.userId, orderId:self.orderId };
                         $.ajax({
                             url: "/order/info.dox",
@@ -113,7 +117,7 @@
                             type: "POST",
                             data: params,
                             success: function (data) {
-                                console.log("주문 목록 >>> ",data.orderInfo);
+                                //console.log("주문 목록 >>> ",data.orderInfo);
                                 self.orderInfo = data.orderInfo;
                                 self.fnOrderList();
                                 self.fnGetCurrentPoint();
@@ -130,8 +134,10 @@
                             type: "POST",
                             data: params,
                             success: function (data) {
-                                console.log("주문 상세 목록 >>> ",data.orderList);
+                                //console.log("주문 상세 목록 >>> ",data.orderList);
                                 self.orderList = data.orderList;
+								//console.log("주문 목록 >>> ",data.orderList);
+
                             }
                         });
                     },
@@ -145,7 +151,7 @@
                             data: params,
                             success: function (data) {
                                 self.currentPoint = parseInt(data.point.currentPoint).toLocaleString();
-                                console.log("보유포인트>>> ",self.currentPoint);
+                                //console.log("보유포인트>>> ",self.currentPoint);
                             }
                         });
                     },

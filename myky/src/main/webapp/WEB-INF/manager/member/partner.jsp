@@ -674,16 +674,16 @@
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("main",data);
+                    			//console.log("main",data);
 								self.members = data.Partner;    
 								
 								if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
-                                    console.log("1!", self.index);
+                                    //console.log("1!", self.index);
 
                                 } else {
                                     self.index = 1;
-                                    console.warn("count 정보 없음!", data);
+                                    //console.warn("count 정보 없음!", data);
                                 }	
 		                    	
                     		}
@@ -692,23 +692,23 @@
                     fnEdit(Id) {
                     	var self = this;
 						
-                    	console.log("1",Id);
+                    	//console.log("1",Id);
                         if (self.selectedMemberId === Id) {
                         	self.selectedMemberId = null;  // 같은 걸 누르면 닫힘
-                        	console.log("2",Id);
+                        	//console.log("2",Id);
 
                         } else {
                             const member = self.members.find(m => m.partnerdetailId === Id);
                             self.editData = { ...member };  // 수정할 데이터 채우기
                             self.editprveid = member.partnerdetailId;
                             self.selectedMemberId = Id;
-                        	console.log("3",self.editData);
+                        	//console.log("3",self.editData);
 
                         }
                     },
                     fnSave () {
                     	var self = this;
-                    	console.log(self.editData);
+                    	//console.log(self.editData);
                     	var nparmap = self.editData;
                     	$.ajax({
                     		url: "/admin/updatePartnerDetail.dox",
@@ -764,14 +764,14 @@
                                 nx: self.newHospital.nx || 0,
                                 ny: self.newHospital.ny || 0
                         };
-                        console.log("저장할 병원 데이터:", nparmap);
+                        //console.log("저장할 병원 데이터:", nparmap);
                         $.ajax({
                             url: "/admin/insertPartnerDetail.dox",  // ← 적절한 URL로 수정
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                console.log("등록 성공:", data);
+                                //console.log("등록 성공:", data);
                                 self.newHospital = {};            // 입력 폼 초기화
                                 self.fnMainList();                // 목록 새로고침
                                 self.isCreating = false;          // 폼 닫기
@@ -810,7 +810,7 @@
         					type : "POST", 
         					data : nparmap,
         					success : function(data) { 
-        						console.log(data);
+        						//console.log(data);
                                 alert(data.count + "건 삭제 완료!");
                                 self.page = 1;
                                 self.fnMainList();

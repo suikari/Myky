@@ -490,14 +490,14 @@ ber {
                     		type: "POST",
                     		data: nparmap,
                     		success: function (data) {
-                    			console.log("main",data);
+                    			//console.log("main",data);
                     			self.commentList = data.Comment;     
                     			
                                 if (data.count && data.count.cnt !== undefined) {
                                     self.index = Math.ceil(data.count.cnt / self.pageSize);
                                 } else {
                                     self.index = 0;
-                                    console.warn("count 정보 없음!", data);
+                                    //console.warn("count 정보 없음!", data);
                                 }
                                 
                     		}
@@ -543,6 +543,10 @@ ber {
                     fnDeleteSelected : function(){
                         let self = this;
                         
+						if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+						    return false;
+						}
+						
         				var nparmap = {
                             selectList : JSON.stringify(self.selectList),
                             category : self.category,
@@ -553,7 +557,7 @@ ber {
         					type : "POST", 
         					data : nparmap,
         					success : function(data) { 
-        						console.log(data);
+        						//console.log(data);
                                 alert(data.count + "건 삭제 완료!");
                                 self.page = 1;
                                 self.fnCmtList();

@@ -216,7 +216,7 @@
                             type: "POST", // GET, POST
                             data: nparmap,   // 서버로 보낼 데이터
                             success: function(data) {
-								console.log(data);
+								//console.log(data);
 
 								  // 📌 기존 데이터 초기화
 								 self.optionsP.series = [];
@@ -281,7 +281,7 @@
                                 this.chartInstances[chartKey] = new ApexCharts(el, options);
                                 this.chartInstances[chartKey].render();
                             } else {
-                                console.warn("차트 DOM이 없습니다:", chartElementId);
+                                //console.warn("차트 DOM이 없습니다:", chartElementId);
                             }
                         });
                     } 	
