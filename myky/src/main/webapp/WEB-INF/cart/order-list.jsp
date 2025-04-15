@@ -197,7 +197,7 @@
                     <h3>주문 상품 선택</h3>
                     <div v-for="item in selectedOrder" :key="item.orderDetailId" class="exchange-return-box">
                         <label :class="{'disabled-item': item.refundStatus != 'delivered'}">
-                            <input type="checkbox" v-model="item.checked" :disabled="item.refundStatus != 'delivered'" @click="console.log(item)"> {{ item.productName }}
+                            <input type="checkbox" v-model="item.checked" :disabled="item.refundStatus != 'delivered'"> {{ item.productName }}
                         </label>
     
                         <div v-if="item.checked">
@@ -295,12 +295,10 @@
                                 month: '2-digit', 
                                 day: '2-digit' 
                             }).replace(/\. /g, '-').replace('.', '');
-                            // console.log("주문 날짜 변환: ",order.orderedAt, "→", orderDate);
 
                             return { ...order, formattedDate: orderDate };
                         })
                         .filter(order => {
-                            // console.log("필터링: ",order.formattedDate, ">=", this.startDate, "&&", order.formattedDate, "<=", this.endDate);
                             return order.formattedDate >= this.startDate && order.formattedDate <= this.endDate;
                         })
                         .reduce((groups, order) => {
@@ -314,7 +312,6 @@
                             return groups;
                         }, {});
 
-                        console.log("📌 날짜 및 주문번호별로 그룹화된 데이터:",groupedByDate);
                     return groupedByDate;
                 },isEmptyOrderList() {
                     return Object.keys(this.groupedOrders).length === 0;
@@ -386,8 +383,6 @@
                     this.startDate = this.formatDate(startDate);
                     this.endDate = this.formatDate(today);
 
-                    console.log(this.startDate,this.endDate);
-
                     this.fnOrderList();
                 },
                 fnUserInfo() {
@@ -433,15 +428,12 @@
                         params.orderStatuses = JSON.stringify(orderStatuses);
                     }
 
-                    console.log("fnOrderList >>>>> ",params);
-
                     $.ajax({
                         url: "/order/AllList.dox",
                         dataType: "json",
                         type: "POST",
                         data: params,
                         success: function (data) {
-                            console.log("주문 상세 목록 >>> ",data.orderList);
                             self.orderList = data.orderList.map(order => ({
                                 ...order,
                                 showDetails: false
@@ -450,8 +442,6 @@
                     });
                 },
                 toggleEditMode(orders) {
-                    console.log("배송정보수정 받아온 정보>>> ",orders);
-                    
                     const invalidStatuses = ['shipped', 'delivered', 'exchange', 'exchanged', 'return', 'returned'];
                     const hasInvalidStatus = orders.some(order =>
                         invalidStatuses.includes(order.refundStatus)
@@ -463,10 +453,8 @@
                     }
                     
                     let order = orders[0];
-                    console.log("배송정보수정 정보>>> ",order);
 
                     const fullAddress = order.receiverAddr; 
-                    console.log("배송지 정보>>> ",order.receiverAddr);
 
                     const addressParts = fullAddress.split(", ");
                     const zipcode = addressParts.pop().trim();
@@ -540,9 +528,7 @@
                     }
 
                     let receiverPhone = self.orderInfo.phonePrefix + self.orderInfo.phoneMiddle + self.orderInfo.phoneSuffix;
-                    console.log(receiverPhone);
                     let receiverAddr = self.orderInfo.baseAddress + ", " + self.orderInfo.detailAddress + ", " + self.orderInfo.zipcode;
-                    console.log(receiverAddr);
                     
                     let params = {
                         userId: self.userInfo.userId, 
@@ -558,7 +544,6 @@
                         data: params,
                         dataType: "json",
                         success: function (data) {
-                            console.log(data);
                             alert("주문/배송 정보가 수정되었습니다.");
                             self.isEditing = false;
                             self.fnOrderList(orderId);
@@ -600,7 +585,6 @@
                 },
                 cancelOrder(orders,orderId) {
                     let self = this;
-                    console.log("취소할 주문 번호 >>> ",orderId, "/// 주문목록 >>> ",orders);
 
                     const invalidStatuses = ['shipped', 'delivered', 'exchange', 'exchanged', 'return', 'returned'];
                     const hasInvalidStatus = orders.some(order =>
@@ -624,7 +608,6 @@
                             data: params,
                             dataType: "json",
                             success: function (data) {
-                                console.log(data);
                                 alert("주문이 취소되었습니다.");
                                 self.fnOrderList();
                             }
@@ -639,7 +622,6 @@
                                 if (order.orderId === orderIdToToggle) {
                                     order.showDetails = !order.showDetails;
                                     this.isEditing = false;
-                                    console.log("주문번호: ",orderIdToToggle,"의 showDetails: ",order.showDetails);
                                 } else {
                                     this.isEditing = false;
                                     order.showDetails = false;  // 다른 주문의 showDetails는 false로 설정
@@ -647,11 +629,9 @@
                             });
                         }
                     }
-                    console.log(this.ordersByDate);
                 },
                 fnAddCart:function(product){
                     let self = this;
-                    console.log("장바구니에 담을 상품 정보 >>> ",product);
                     let params = {
                         sessionId:self.sessionId,
                         userId: self.userInfo.userId, 
@@ -666,7 +646,6 @@
                         data: params,
                         dataType: "json",
                         success: function (data) {
-                            console.log(data);
                             if (!self.addedToCart.includes(product.productId)) {
                                 self.addedToCart.push(product.productId);
                             }
@@ -700,13 +679,11 @@
                     return this.addedToCart.includes(productId);
                 },
                 openReturnPopup(order) {
-                    console.log("주문 정보 >>> ",order);
                     this.selectedOrder = order.map(item => ({
                         ...item,
                         checked: false,
                         selectedQuantity: 1
                     }));
-                    console.log("주문 >>> ",this.selectedOrder);
                     this.isPopupVisible = true;
                 },
                 closePopup() {
@@ -726,8 +703,6 @@
                         price:(item.price/item.quantity)*item.selectedQuantity
                     }));
                     
-                    console.log(selectedItems);
-
                     if (selectedItems.length === 0) {
                         alert("상품을 선택해주세요.");
                         return;
@@ -743,14 +718,6 @@
                     
                     let refundStatus = self.isExchange === "exchange" ? "exchange" : "return";
 
-                    console.log("교환/반품 신청 데이터:", {
-                        orderId : self.selectedOrder[0].orderId,
-                        selectedItems : JSON.stringify(selectedItems),
-                        reason: self.reason,
-                        reasonDetail: self.detailedReason,
-                        refundStatus : refundStatus,
-                    });
-
                     let params = {
                         orderId : self.selectedOrder[0].orderId,
                         selectedItems : JSON.stringify(selectedItems),
@@ -764,7 +731,6 @@
                         data: params,
                         dataType: "json",
                         success: function (data) {
-                            console.log("교환/반품 접수 상태 >>> ",data);
                             if(data.result == "success"){
                                 alert("교환/반품 신청이 접수되었습니다.");
                                 self.isPopupVisible = false;
@@ -774,9 +740,7 @@
                     });
                 },
                 scrollToOrder(orderId) {
-                    console.log("🔍 scrollToOrder 실행됨. orderId:", orderId);
                     const target = document.getElementById('order-' + orderId);
-                    console.log("🎯 찾은 DOM 엘리먼트:", target);
                     if (target) {
                         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         target.classList.add('highlight-order');
@@ -793,7 +757,6 @@
                 this.fnUserInfo();
 
                 let orderId = this.focusOrderId;
-                console.log("✅ 넘어온 orderId:", orderId);
                 if (orderId) {
                     this.$nextTick(() => {
                         this.scrollToOrder(orderId);

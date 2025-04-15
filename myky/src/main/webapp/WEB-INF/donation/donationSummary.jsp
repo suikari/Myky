@@ -97,7 +97,6 @@
                             data: params,
                             success: function (data) {
                                 self.summary = data.info;
-                                console.log("도네이션 정보 >>> ", data.result);
                             }
                         });
                     },

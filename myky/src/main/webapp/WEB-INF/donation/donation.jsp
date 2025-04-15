@@ -218,7 +218,6 @@
             methods: {
                 fnCenterInfo() {
                     var self = this;
-                    console.log("centerId >>> ", self.centerId);
                     var nparmap = {
                         centerId: self.centerId
                     };
@@ -228,7 +227,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("info >>> ", data.info);
                             self.info = data.info;
 
                         }
@@ -236,7 +234,6 @@
                 },
                 fnUserInfo() {
                     var self = this;
-                    console.log("sessionId >>> ", self.sessionId);
                     var nparmap = {
                         userId: self.sessionId
                     };
@@ -246,7 +243,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("userInfo >>> ", data.user);
                             self.userInfo = data.user;
                             self.fnValidMembership();
                             self.fnGetPoint();
@@ -266,7 +262,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("validMembership >>> ", data.result);
                             if (data.result === "success") {
                                 self.fnMembership();
                             }
@@ -284,7 +279,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("membershipInfo >>> ", data.info);
                             if (data.result === "success") {
                                 self.membership = data.info;
                                 self.isMembership = true;
@@ -303,7 +297,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("termsInfo >>> ", data.list);
                             if (data.result === "success") {
                                 self.termsInfo = data.list;
                             }
@@ -320,7 +313,6 @@
                         data: params,
                         success: function (data) {
                             self.userPoint = parseInt(data.point.currentPoint);
-                            console.log("보유포인트 >>> ", data.result);
                         }
                     });
                 },
@@ -462,7 +454,6 @@
                         amount = self.remainingAmount;
                     }
 
-                    console.log("amount >>> ", amount);
 
                     let anonymousYn = self.isAnonymous ? "Y" : "N";
 
@@ -500,8 +491,6 @@
                             return;
                         }
 
-                        console.log("결제 금액 >>> ", amount);
-
                         IMP.request_pay({
                             channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
                             pg: "html5_inicis",
@@ -514,7 +503,6 @@
                             if (rsp.success) {
                                 self.fnDonation(rsp, self.totalAmount, anonymousYn);
                                 // 결제 > 후원히스토리DB에 저장 > 후원ID 가져오기 > 결제DB에 저장
-                                console.log("결제 정보 >>> ", rsp);
                             } else {
                                 alert("결제에 실패했습니다.");
                                 console.log("결제 정보 >>> ", rsp.error_msg);
@@ -533,9 +521,6 @@
                     } else {
                         paymentMethod = rsp.pay_method;
                     }
-
-                    console.log("paymentMethod >>> ", paymentMethod);
-                    console.log("fnPaymentHistory >> self.donationId >>> ", self.donationId);
 
                     var nparmap = {
                         option: "donation",
@@ -560,7 +545,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("결제 정보 저장 여부 >>> ", data.result);
                             pageChange("/donation/complete.do", { userId: self.userInfo.userId, donationId: self.donationId });
                         }
                     });
@@ -581,9 +565,7 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("후원 정보 저장 여부 >>> ", data.result);
                             self.donationId = data.donationId;
-                            console.log("fnDonation >> self.donationId >>> ", self.donationId);
                             // DB 저장 후 후원ID 가져오기
                             self.fnPaymentHistory(rsp, amount);
                             self.fnUsePoint();
@@ -609,7 +591,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("후원 정보 저장 여부 >>> ", data.result);
                             self.donationId = data.donationId;
                             self.fnPaymentHistory(paymentData, self.membershipAmount);
                         }
@@ -619,7 +600,6 @@
                     let self = this;
                     let usedPoint = -Math.abs(parseInt(self.usedPoint));
 
-                    console.log("사용 포인트 >> ", usedPoint);
                     if (usedPoint == 0) {
                         return;
                     }
@@ -635,7 +615,6 @@
                         type: "POST",
                         data: nparmap,
                         success: function (data) {
-                            console.log("포인트 사용 내역 저장 >>> ", data.result);
 
                         }
                     });
