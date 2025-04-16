@@ -4,7 +4,7 @@
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        .dashboard-container { background-color: #f8fafd; min-height: 100vh; padding: 30px 20px; font-family: 'Segoe UI', sans-serif; }
+        .dashboard-container { background-color: #f8fafd; min-height: 100vh; padding: 30px 20px;  }
         .main-content { padding: 10px 30px; }
         .card { border-radius: 20px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04); background-color: #ffffff; margin-bottom: 10px; padding: 20px; }
         .filters { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
