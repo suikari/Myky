@@ -98,9 +98,6 @@
                                     return;                                    
                                 }
                                 alert("저장되었습니다.");
-                                location.href="/board/list.do?category="+self.category;
-                                self.fnQuill();
-
 
                                 if( $("#file1")[0].files.length > 0){
                                     var form = new FormData();
