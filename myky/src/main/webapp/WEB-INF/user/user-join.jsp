@@ -103,8 +103,10 @@
                                 <option>011</option>
                                 <option>017</option>
                             </select>
-                            <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;" maxlength="4" inputmode="numeric">
-                            <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;" maxlength="4" inputmode="numeric">
+                            <input class="input-underline" v-model="num1" placeholder="1234" style="width: 80px;"
+                                maxlength="4" inputmode="numeric">
+                            <input class="input-underline" v-model="num2" placeholder="5678" style="width: 80px;"
+                                maxlength="4" inputmode="numeric">
                         </div>
                     </div>
 
@@ -394,6 +396,8 @@
                                 this.message = "인증번호가 발송되었습니다.";
                             } else {
                                 this.message = "이메일 발송 실패.";
+                                console.log(this.user.email);
+                                console.log(result);
                             }
                         } catch (error) {
                             this.message = "서버 오류 발생.";
