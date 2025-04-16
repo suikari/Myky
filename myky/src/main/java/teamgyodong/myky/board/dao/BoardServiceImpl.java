@@ -49,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 						
 			int count = boardMapper.selectBoardCnt(map);
 			
-			Map<String, Object> countMap = new HashMap<>();
+			HashMap<String, Object> countMap = new HashMap<String, Object>();
 			countMap.put("cnt", count);
 
 			resultMap.put("count", countMap);
@@ -117,6 +117,7 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.insertBoard(map);
+		
 		resultMap.put("boardId", map.get("boardId"));
 		resultMap.put("result", "success");
 		
