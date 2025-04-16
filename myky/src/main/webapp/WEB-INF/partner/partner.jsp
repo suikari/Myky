@@ -668,7 +668,8 @@ console.log("병원 수:", this.hoslist.length);
     
         this.currentView = 'partner';
     
-
+        this.isFavoritesVisible = false;
+        this.isNearbyVisible = false;
     // 카테고리에 따른 제휴사 필터링
     this.filteredPartnerlist = this.partnerlist.filter(
         partner => partner.categoryCode === this.selectedCategoryCode
@@ -1473,6 +1474,7 @@ console.log("⭐ 즐겨찾기 여부 (isFavorite):", isFavorite);
                 );
 
                 var marker = new kakao.maps.Marker({
+
                     position: position,
                     title: partner.name || partner.hosName,
                     image: favoriteMarkerImage
@@ -1486,8 +1488,8 @@ console.log("⭐ 즐겨찾기 여부 (isFavorite):", isFavorite);
             console.log("🎯 마커 클릭됨!", partner);
 
             this.showInfoWindowForCategory(marker, {
-                name: partner.hosName, // name 필드 맞춰서 전달
-                address: partner.hosAddress, // address 필드 맞추기
+                name: partner.name, // name 필드 맞춰서 전달
+                address: partner.address, // address 필드 맞추기
                 phoneNumber: partner.phone, // phone 필드 맞추기
                 NX: partner.NX,
                 NY: partner.NY,
