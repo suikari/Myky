@@ -454,7 +454,7 @@
 	                            <td>{{ member.categoryId }}</td>
 	                            <td>{{ member.productCode }}</td>	
 								<td>{{ member.price }}</td>								
-	                            <td>{{ member.productName }}</td>
+	                            <td><a href="javascript:;" @click="fnView(member.productId)">{{ member.productName }}<a></td>
 	                            <td>{{ member.registrationDate }}</td>
 	                            <td>
 	                                <span :class="member.DeleteYn === 'N' ? 'status-active' : 'status-inactive'">
@@ -704,14 +704,10 @@
                 				self.fnMainList();
         					}
         				});
-                    },
-                    
-                    
-                    
-                    fnView(boardId) {
+                    },                    
+                    fnView(productId) {
                         let self = this;
-                        localStorage.setItem("page", self.page);
-                        location.href="/board/view.do?boardId=" + boardId + "&category="+self.category;
+                        window.open("/product/view.do?productId=" + productId, "_blank");
                     },
                     fnPage(num) {
                         this.page = num;
@@ -736,7 +732,8 @@
                     },
                     fnAdd (){
                         location.href="/manager/main.do?menu="+ this.menu + "&submenu=4";
-                    }
+                    },
+                    
                     
                 },
                 mounted() {

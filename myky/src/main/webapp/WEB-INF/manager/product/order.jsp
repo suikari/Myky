@@ -638,7 +638,7 @@ const app = Vue.createApp({
                 type: "POST",
                 data: params,
                 success: function (data) {
-                    //console.log("dete",data);
+                    console.log("dete",data);
                     self.orders = data.order;
                     self.index = Math.ceil(data.count / self.pageSize);
                     self.isLoading = false;
