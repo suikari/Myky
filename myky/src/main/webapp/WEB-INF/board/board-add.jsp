@@ -123,7 +123,7 @@
                     	   , contentType : false
                     	   , data : form
                     	   , success:function(response) { 
-                            // location.href="/board/list.do?category="+self.category;
+                            location.href="/board/list.do?category="+self.category;
 
                     	   }	           
                        });
