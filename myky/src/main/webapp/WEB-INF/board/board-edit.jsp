@@ -123,6 +123,7 @@
 				        var self = this;
 				        var nparmap = {
                             boardId : self.boardId,
+                            category : self.category,
                             page: self.page,
                             option: "UPDATE"
                         };
@@ -132,6 +133,7 @@
 				        	type : "POST", 
 				        	data : nparmap,
 				        	success : function(data) { 
+                                console.log("fileList 갱신 결과:", data.fileList);
                                 self.fileList = data.fileList;
                                 self.reload += 1; 
 				        	}
@@ -219,16 +221,17 @@
                         var nparmap = {
                             fileId : fileId,
                         };
+                        if(!confirm("삭제하시겠습니까?")){
+                                    alert("취소되었습니다.");
+                                    return;                                    
+                                }
                         $.ajax({
                             url: "/board/removeFile.dox",
                             dataType: "json",
                             type: "POST",
                             data: nparmap,
                             success: function (data) {
-                                if(!confirm("삭제하시겠습니까?")){
-                                    alert("취소되었습니다.");
-                                    return;                                    
-                                }
+                                
                                 alert("삭제되었습니다");
                                 self.fnFileView();
                             }
