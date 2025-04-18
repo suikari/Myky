@@ -22,23 +22,23 @@ public interface BoardMapper {
 
 	board selectBoard(HashMap<String, Object> map);
 
-	void insertBoard(HashMap<String, Object> map);
+	int insertBoard(HashMap<String, Object> map);
 
-	void updateBoard(HashMap<String, Object> map);
+	int updateBoard(HashMap<String, Object> map);
 
 	int updateRemoveBoard(HashMap<String, Object> map);
 
-	void insertComment(HashMap<String, Object> map);
+	int insertComment(HashMap<String, Object> map);
 
 	void updateCnt(HashMap<String, Object> map);
 
 	List<comment> selectCmtList(HashMap<String, Object> map);
 
-	void commentUpdate(HashMap<String, Object> map);
+	int commentUpdate(HashMap<String, Object> map);
 
-	void deleteComment(HashMap<String, Object> map);
+	int deleteComment(HashMap<String, Object> map);
 
-	void updateComment(HashMap<String, Object> map);
+	int updateComment(HashMap<String, Object> map);
 
 	List<board> countComment(HashMap<String, Object> map);
 
@@ -58,7 +58,7 @@ public interface BoardMapper {
 
 	int deleteStatus(HashMap<String, Object> map);
 	
-	void updatelikeCntBoard (HashMap<String, Object> map);
+	int updatelikeCntBoard (HashMap<String, Object> map);
 
 	List<vetBoard> selectVetBoardList(HashMap<String, Object> map);
 
@@ -70,15 +70,15 @@ public interface BoardMapper {
 
 	void updateVetBoardCnt(HashMap<String, Object> map);
 
-	void insertVetBoard(HashMap<String, Object> map);
+	int insertVetBoard(HashMap<String, Object> map);
 
-	void updateVetBoard(HashMap<String, Object> map);
+	int updateVetBoard(HashMap<String, Object> map);
 
 	int updateRemoveVetBoard(HashMap<String, Object> map);
 
-	void insertVetAnReply(HashMap<String, Object> map);
+	int insertVetAnReply(HashMap<String, Object> map);
 
-	void updateAnEdit(HashMap<String, Object> map);
+	int updateAnEdit(HashMap<String, Object> map);
 
 	void updateVetAnSelect(HashMap<String, Object> map);
 
