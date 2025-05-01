@@ -593,7 +593,23 @@ body {
 			font-weight: bold;
 			color: #e8bb33;
 		}
-
+		
+		.view-banner-more {
+		  position: absolute;
+		  bottom : 20%;
+		  left : 5%;
+		  background-color: rgba(0,0,0,0.6);
+		  color: white;
+		  padding: 8px 12px;
+		  border-radius: 4px;
+		  text-decoration: none;
+		  font-weight: bold;
+		  transition: background-color 0.3s;
+		}
+		
+		.view-banner-more:hover {
+		  background-color: rgba(0,0,0,0.8);
+		}
 
 
 		/* ... existing code ... */
