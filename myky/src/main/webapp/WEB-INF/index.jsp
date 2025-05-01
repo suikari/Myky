@@ -665,15 +665,20 @@
 
             <main class="content">
 
-                <!-- ✅ 배너 -->
-                <div ref="swiperContainer" class="swiper hero-banner">
-                    <div class="swiper-wrapper">
-                        <img v-for="img in slides" :src="img" class="swiper-slide" />
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                </div>
+				<!-- ✅ 수정된 구조 -->
+				<div ref="swiperContainer" class="swiper hero-banner">
+				  <div class="swiper-wrapper">
+				    <template v-for="img in slides">
+				      <div class="swiper-slide slide-wrapper">
+				        <img :src="img" class="banner-img" />
+				        <a href="" class="view-banner-more">VIEW MORE ></a>
+				      </div>
+				    </template>
+				  </div>
+				  <div class="swiper-pagination"></div>
+				  <div class="swiper-button-next"></div>
+				  <div class="swiper-button-prev"></div>
+				</div>
 
                 <!-- ✅ 아이콘 4개 -->
                 <section class="shortcut-grid">
