@@ -161,7 +161,7 @@
 </html>
 <script>
 
-    const userCode = "imp40283074";
+    const userCode = "";
 
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -537,7 +537,7 @@
                     }
 
                     IMP.request_pay({
-                        channelKey: "channel-key-ab7c2410-b7df-4741-be68-1bcc35357d9b",
+                        channelKey: "",
                         pg: "html5_inicis",
                         pay_method: "card",
                         merchant_uid: "merchant_" + new Date().getTime(),
