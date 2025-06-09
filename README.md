@@ -6,6 +6,13 @@
 <img src="https://img.shields.io/badge/frontend-Vue.js-green" alt="Frontend: Vue.js">
 </p>
 
+## 📺 시연 영상
+
+[![시연 영상 바로보기](https://img.youtube.com/vi/kISqV0QYQaE/0.jpg)](https://www.youtube.com/watch?v=kISqV0QYQaE)
+
+> 영상이 보이지 않을 경우 [여기](https://www.youtube.com/watch?v=kISqV0QYQaE)를 클릭하세요.
+
+
 **Status:** 🚧 개발 중  
 **Backend:** Java + Spring Boot  
 **Frontend:** Vue.js + JSP  
