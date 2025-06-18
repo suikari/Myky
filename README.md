@@ -12,10 +12,30 @@
 
 > 영상이 보이지 않을 경우 [여기](https://www.youtube.com/watch?v=kISqV0QYQaE)를 클릭하세요.
 
+---
 
-**Status:** 🚧 개발 중  
-**Backend:** Java + Spring Boot  
-**Frontend:** Vue.js + JSP  
+
+##  📑발표 PPT
+- [한교동 프로젝트.pdf](https://github.com/user-attachments/files/19769697/default.pdf)
+
+## 💻 기술 스택
+
+### Frontend
+- **Vue.js:** SPA 구조, 동적 컴포넌트 기반 UI  
+- **JSP:** 템플릿 기반 정적 페이지  
+- **HTML/CSS, JavaScript, jQuery, AJAX**
+
+### Backend
+- **Java + Spring Boot:** REST API, 비즈니스 로직 처리  
+- **Oracle:** 관계형 DB (회원, 상품, 주문, 포인트 등)
+
+### 외부 API
+- 🗺️ **Kakao Map API:** 위치 기반 병원/편의시설 검색  
+- 💳 **PortOne API:** 결제 시스템 연동
+- 🔐 **Google 로그인 API:** Google 계정을 통한 소셜 로그인 기능
+- 📩 **Google 이메일 인증 API:** 회원가입 시 이메일 인증을 위한 Google 이메일 인증 연동
+- 🟢 **Naver 로그인 SDK:** Naver 계정을 통한 소셜 로그인 기능
+- 🟡 **Kakao 로그인 API:** Kakao 계정을 통한 소셜 로그인 기능
 
 ---
 
@@ -127,30 +147,6 @@
 - 반려동물 보호와 유기동물 지원 동시 실현  
 - 기부 연계로 사회적 가치 창출  
 - 고객 충성도 확보 및 지속 가능한 비즈니스 모델  
-
----
-
-##  📑발표 PPT
-- [한교동 프로젝트.pdf](https://github.com/user-attachments/files/19769697/default.pdf)
-
-## 💻 기술 스택
-
-### Frontend
-- **Vue.js:** SPA 구조, 동적 컴포넌트 기반 UI  
-- **JSP:** 템플릿 기반 정적 페이지  
-- **HTML/CSS, JavaScript, jQuery, AJAX**
-
-### Backend
-- **Java + Spring Boot:** REST API, 비즈니스 로직 처리  
-- **Oracle:** 관계형 DB (회원, 상품, 주문, 포인트 등)
-
-### 외부 API
-- 🗺️ **Kakao Map API:** 위치 기반 병원/편의시설 검색  
-- 💳 **PortOne API:** 결제 시스템 연동
-- 🔐 **Google 로그인 API:** Google 계정을 통한 소셜 로그인 기능
-- 📩 **Google 이메일 인증 API:** 회원가입 시 이메일 인증을 위한 Google 이메일 인증 연동
-- 🟢 **Naver 로그인 SDK:** Naver 계정을 통한 소셜 로그인 기능
-- 🟡 **Kakao 로그인 API:** Kakao 계정을 통한 소셜 로그인 기능
 
 ---
 
