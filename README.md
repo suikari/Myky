@@ -21,7 +21,7 @@
 ## 💻 기술 스택
 
 ### Frontend
-- **Vue.js:** SPA 구조, 동적 컴포넌트 기반 UI  
+- **Vue.js:** 동적 컴포넌트 기반 UI  
 - **JSP:** 템플릿 기반 정적 페이지  
 - **HTML/CSS, JavaScript, jQuery, AJAX**
 
