@@ -53,7 +53,7 @@
 |------|--------|--------|
 | **방대한** | https://github.com/suikari | suikari330@gmail.com |
 | **이 율** | https://github.com/yulyuling | yool@example.com |
-| **김성규** | https://github.com/glodstone1 | seongkyu@example.com |
+| **김성규** | https://github.com/glodstone1 | glodstone2@naver.com |
 | **신수빈** | https://github.com/PRPRSPR | s.subin.0208@gmail.com |
 | **박재원** | https://github.com/latte28 | jaewon@example.com |
 | **홍영은** | https://github.com/honggiyoung | youngeun@example.com |
