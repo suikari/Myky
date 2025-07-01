@@ -12,6 +12,9 @@
 
 > 영상이 보이지 않을 경우 [여기](https://www.youtube.com/watch?v=kISqV0QYQaE)를 클릭하세요.
 
+## 외부접속 주소 
+[외부접속주소][(http://3.39.195.250:8081/main.do)] (테스트중)
+
 ---
 
 
