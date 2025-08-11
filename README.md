@@ -59,7 +59,7 @@
 | **김성규** | https://github.com/glodstone1 | glodstone2@naver.com |
 | **신수빈** | https://github.com/PRPRSPR | s.subin.0208@gmail.com |
 | **박재원** | https://github.com/latte28 | jaewon@example.com |
-| **홍영은** | https://github.com/honggiyoung | youngeun@example.com |
+| **홍영은** | https://github.com/honggiyoung | hss0085@naver.com |
 
 ---
 ## 👥 역할 분담
